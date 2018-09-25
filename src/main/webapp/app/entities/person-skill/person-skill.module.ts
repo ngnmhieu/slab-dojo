@@ -1,18 +1,18 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    PersonSkillService,
     PersonSkillComponent,
-    PersonSkillDetailComponent,
-    PersonSkillUpdateComponent,
-    PersonSkillDeletePopupComponent,
     PersonSkillDeleteDialogComponent,
-    personSkillRoute,
+    PersonSkillDeletePopupComponent,
+    PersonSkillDetailComponent,
     personSkillPopupRoute,
     PersonSkillResolve,
-    PersonSkillResolvePagingParams
+    PersonSkillResolvePagingParams,
+    personSkillRoute,
+    PersonSkillService,
+    PersonSkillUpdateComponent
 } from './';
 
 const ENTITY_STATES = [...personSkillRoute, ...personSkillPopupRoute];
