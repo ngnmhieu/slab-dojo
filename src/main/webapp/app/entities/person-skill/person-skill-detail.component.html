@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="personSkill">
+            <h2><span jhiTranslate="teamdojoApp.personSkill.detail.title">Person Skill</span> {{personSkill.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="teamdojoApp.personSkill.completedAt">Completed At</span></dt>
+                <dd>
+                    <span>{{personSkill.completedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="teamdojoApp.personSkill.verifiedAt">Verified At</span></dt>
+                <dd>
+                    <span>{{personSkill.verifiedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="teamdojoApp.personSkill.irrelevant">Irrelevant</span></dt>
+                <dd>
+                    <span>{{personSkill.irrelevant}}</span>
+                </dd>
+                <dt><span jhiTranslate="teamdojoApp.personSkill.note">Note</span></dt>
+                <dd>
+                    <span>{{personSkill.note}}</span>
+                </dd>
+                <dt><span jhiTranslate="teamdojoApp.personSkill.skill">Skill</span></dt>
+                <dd>
+                    <div *ngIf="personSkill.skillId">
+                        <a [routerLink]="['/skill', personSkill.skillId, 'view']">{{personSkill.skillId}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="teamdojoApp.personSkill.person">Person</span></dt>
+                <dd>
+                    <div *ngIf="personSkill.personId">
+                        <a [routerLink]="['/person', personSkill.personId, 'view']">{{personSkill.personId}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/person-skill', personSkill.id, 'edit']"
+                    class="btn btn-primary">
+                <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

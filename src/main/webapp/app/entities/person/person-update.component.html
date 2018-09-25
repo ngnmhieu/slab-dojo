@@ -1,0 +1,94 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-person-heading" jhiTranslate="teamdojoApp.person.home.createOrEditLabel">Create or edit a Person</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!person.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="person.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.person.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="person.name" required minlength="2" maxlength="20"/>
+                    <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                        This field cannot be longer than 20 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.person.firstname" for="field_firstname">Firstname</label>
+                    <input type="text" class="form-control" name="firstname" id="field_firstname"
+                        [(ngModel)]="person.firstname" required minlength="2" maxlength="20"/>
+                    <div [hidden]="!(editForm.controls.firstname?.dirty && editForm.controls.firstname?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.firstname?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.firstname?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.firstname?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                        This field cannot be longer than 20 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.person.mnemonic" for="field_mnemonic">Mnemonic</label>
+                    <input type="text" class="form-control" name="mnemonic" id="field_mnemonic"
+                        [(ngModel)]="person.mnemonic" required minlength="3" maxlength="20"/>
+                    <div [hidden]="!(editForm.controls.mnemonic?.dirty && editForm.controls.mnemonic?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.mnemonic?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.mnemonic?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 3 }">
+                        This field is required to be at least 3 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.mnemonic?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                        This field cannot be longer than 20 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label jhiTranslate="teamdojoApp.person.participations" for="field_participations">Participations</label>
+                    <select class="form-control" id="field_participations" multiple name="participations" [(ngModel)]="person.participations">
+                        <option [ngValue]="getSelected(person.participations, dimensionOption)" *ngFor="let dimensionOption of dimensions; trackBy: trackDimensionById">{{dimensionOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.person.image" for="field_image">Image</label>
+                    <select class="form-control" id="field_image" name="image" [(ngModel)]="person.imageId" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="imageOption.id" *ngFor="let imageOption of images; trackBy: trackImageById">{{imageOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

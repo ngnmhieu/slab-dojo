@@ -1,0 +1,48 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "skill",
+            "otherEntityName": "skill",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "person",
+            "otherEntityName": "person",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "completedAt",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "verifiedAt",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "irrelevant",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "note",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180925052356",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "person_skill",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
