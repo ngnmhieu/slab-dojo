@@ -20,7 +20,8 @@
             "description": "Description",
             "participants": "Participants",
             "levels": "Levels",
-            "badges": "Badges"
+            "badges": "Badges",
+            "personParticipants": "Person Participants"
         }
     }
 }

@@ -19,6 +19,12 @@
             "otherEntityName": "levelSkill",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "skill"
+        },
+        {
+            "relationshipName": "persons",
+            "otherEntityName": "personSkill",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "skill"
         }
     ],
     "fields": [

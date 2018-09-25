@@ -1,10 +1,17 @@
 package de.otto.teamdojo.service.dto;
 
+import java.io.Serializable;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
-import java.io.Serializable;
+
+
+
 
 
 /**
@@ -30,6 +37,8 @@ public class DimensionCriteria implements Serializable {
     private LongFilter levelsId;
 
     private LongFilter badgesId;
+
+    private LongFilter personParticipantsId;
 
     public DimensionCriteria() {
     }
@@ -82,15 +91,24 @@ public class DimensionCriteria implements Serializable {
         this.badgesId = badgesId;
     }
 
+    public LongFilter getPersonParticipantsId() {
+        return personParticipantsId;
+    }
+
+    public void setPersonParticipantsId(LongFilter personParticipantsId) {
+        this.personParticipantsId = personParticipantsId;
+    }
+
     @Override
     public String toString() {
         return "DimensionCriteria{" +
-            (id != null ? "id=" + id + ", " : "") +
-            (name != null ? "name=" + name + ", " : "") +
-            (description != null ? "description=" + description + ", " : "") +
-            (participantsId != null ? "participantsId=" + participantsId + ", " : "") +
-            (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
-            (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
+                (id != null ? "id=" + id + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
+                (participantsId != null ? "participantsId=" + participantsId + ", " : "") +
+                (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
+                (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
+                (personParticipantsId != null ? "personParticipantsId=" + personParticipantsId + ", " : "") +
             "}";
     }
 

@@ -20,6 +20,8 @@
                 "comment": "Comment",
                 "activity": "Activity",
                 "image": "Image",
+                "person": "Person",
+                "personSkill": "Person Skill",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

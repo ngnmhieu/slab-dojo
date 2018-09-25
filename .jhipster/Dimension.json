@@ -21,6 +21,13 @@
             "relationshipType": "many-to-many",
             "ownerSide": false,
             "otherEntityRelationshipName": "dimensions"
+        },
+        {
+            "relationshipName": "personParticipants",
+            "otherEntityName": "person",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "participations"
         }
     ],
     "fields": [

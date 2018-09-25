@@ -1,9 +1,9 @@
 package de.otto.teamdojo.service.mapper;
 
-import de.otto.teamdojo.domain.Dimension;
+import de.otto.teamdojo.domain.*;
 import de.otto.teamdojo.service.dto.DimensionDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity Dimension and its DTO DimensionDTO.
@@ -15,6 +15,7 @@ public interface DimensionMapper extends EntityMapper<DimensionDTO, Dimension> {
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "levels", ignore = true)
     @Mapping(target = "badges", ignore = true)
+    @Mapping(target = "personParticipants", ignore = true)
     Dimension toEntity(DimensionDTO dimensionDTO);
 
     default Dimension fromId(Long id) {

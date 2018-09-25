@@ -1,19 +1,24 @@
 package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
-import de.otto.teamdojo.domain.Badge;
+
 import de.otto.teamdojo.domain.Dimension;
-import de.otto.teamdojo.domain.Level;
 import de.otto.teamdojo.domain.Team;
+import de.otto.teamdojo.domain.Level;
+import de.otto.teamdojo.domain.Badge;
+import de.otto.teamdojo.domain.Person;
 import de.otto.teamdojo.repository.DimensionRepository;
-import de.otto.teamdojo.service.DimensionQueryService;
 import de.otto.teamdojo.service.DimensionService;
 import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.service.mapper.DimensionMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.dto.DimensionCriteria;
+import de.otto.teamdojo.service.DimensionQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.ArrayList;
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,9 +59,10 @@ public class DimensionResourceIntTest {
     private DimensionRepository dimensionRepository;
 
 
+
     @Autowired
     private DimensionMapper dimensionMapper;
-
+    
 
     @Autowired
     private DimensionService dimensionService;
@@ -92,7 +99,7 @@ public class DimensionResourceIntTest {
 
     /**
      * Create an entity for this test.
-     * <p>
+     *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -181,7 +188,7 @@ public class DimensionResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-
+    
 
     @Test
     @Transactional
@@ -330,6 +337,25 @@ public class DimensionResourceIntTest {
 
         // Get all the dimensionList where badges equals to badgesId + 1
         defaultDimensionShouldNotBeFound("badgesId.equals=" + (badgesId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllDimensionsByPersonParticipantsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Person personParticipants = PersonResourceIntTest.createEntity(em);
+        em.persist(personParticipants);
+        em.flush();
+        dimension.addPersonParticipants(personParticipants);
+        dimensionRepository.saveAndFlush(dimension);
+        Long personParticipantsId = personParticipants.getId();
+
+        // Get all the dimensionList where personParticipants equals to personParticipantsId
+        defaultDimensionShouldBeFound("personParticipantsId.equals=" + personParticipantsId);
+
+        // Get all the dimensionList where personParticipants equals to personParticipantsId + 1
+        defaultDimensionShouldNotBeFound("personParticipantsId.equals=" + (personParticipantsId + 1));
     }
 
     /**
