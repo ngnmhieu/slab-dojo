@@ -26,19 +26,19 @@ spec:
             value: "prod,swagger"
           - name: SPRING_DATASOURCE_URL
             value: "jdbc:postgresql://postgres:5432/teamdojo"
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: slabdojo-db
+                key: user
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: slabdojo-db
+                key: password
           - name: JHIPSTER_SLEEP
             value: "10" # gives time for the database to boot before the application
   test: false
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - teamdojo
-      from:
-        kind: ImageStreamTag
-        name: teamdojo:latest
-    type: ImageChange
 ---
 apiVersion: v1
 kind: Service
@@ -68,7 +68,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: postgres
+      name: openshift/postgresql-92-centos7
     importPolicy: {}
     name: latest
     referencePolicy:
@@ -114,10 +114,18 @@ spec:
         - containerPort: 5432
           protocol: TCP
         env:
-        - name: POSTGRES_USER
+        - name: POSTGRESQL_DATABASE
           value: teamdojo
-        - name: POSTGRES_PASSWORD
-          value:
+        - name: POSTGRESQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: slabdojo-db
+              key: user
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: slabdojo-db
+              key: password
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
         volumeMounts:
