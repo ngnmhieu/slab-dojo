@@ -137,7 +137,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
-        //informMattermost(person.getFirstname() + " " + person.getName() + " hat den Skill " + skill.getTitle() + " erlernt");
+        informMattermost(person.getFirstname() + " " + person.getName() + " hat den Skill " + skill.getTitle() + " erlernt");
         return save(activityDTO);
     }
 
