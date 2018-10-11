@@ -5,6 +5,10 @@
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "person":{
+                "home": "Living Room",
+                "change": "Change Person"
+            },
             "entities": {
                 "main": "Entities",
                 "dimension": "Dimension",
