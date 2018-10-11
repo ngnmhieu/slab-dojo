@@ -6,7 +6,10 @@ import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'a
 import { ProfileService } from '../profiles/profile.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 import { TeamsSelectionComponent } from 'app/shared/teams-selection/teams-selection.component';
+import { PersonsSelectionService } from 'app/shared/persons-selection/persons-selection.service';
+import { PersonsSelectionComponent } from 'app/shared/persons-selection/persons-selection.component';
 import { ITeam, Team } from 'app/shared/model/team.model';
+import { IPerson } from 'app/shared/model/person.model';
 import { IBadge } from 'app/shared/model/badge.model';
 import { ILevel } from 'app/shared/model/level.model';
 import { IDimension } from 'app/shared/model/dimension.model';
@@ -27,11 +30,13 @@ export class NavbarComponent implements OnInit {
     organizationName: string;
     modalRef: NgbModalRef;
     isTeamSelectionOpen = false;
+    isPersonSelectionOpen = false;
 
     activeLevel: ILevel;
     activeBadge: IBadge;
     activeDimension: IDimension;
     activeTeam: ITeam;
+    activePerson: IPerson;
     activeSkill: ISkill;
     breadcrumbs: IBreadcrumb[];
 
@@ -42,6 +47,7 @@ export class NavbarComponent implements OnInit {
         private principal: Principal,
         private loginModalService: LoginModalService,
         private teamsSelectionService: TeamsSelectionService,
+        private personsSelectionService: PersonsSelectionService,
         private profileService: ProfileService,
         private modalService: NgbModal,
         private router: Router,
@@ -67,6 +73,7 @@ export class NavbarComponent implements OnInit {
             this.organizationName = profileInfo.organization.name;
         });
         this.teamsSelectionService.query().subscribe();
+        this.personsSelectionService.query().subscribe();
     }
 
     loadBreadcrumb() {
@@ -74,6 +81,7 @@ export class NavbarComponent implements OnInit {
         this.activeBadge = null;
         this.activeDimension = null;
         this.activeTeam = null;
+        this.activePerson = null;
         this.activeSkill = null;
         this.breadcrumbs = null;
         this.breadcrumbs = this.breadcrumbService.getCurrentBreadcrumb();
@@ -130,11 +138,36 @@ export class NavbarComponent implements OnInit {
         return this.activeTeam !== null && this.activeTeam !== 'undefined';
     }
 
+    selectPerson(): NgbModalRef {
+        if (this.isPersonSelectionOpen) {
+            return;
+        }
+        this.isPersonSelectionOpen = true;
+        const modalRef = this.modalService.open(PersonsSelectionComponent, { size: 'lg' });
+        modalRef.result.then(
+            result => {
+                this.isPersonSelectionOpen = false;
+            },
+            reason => {
+                this.isPersonSelectionOpen = false;
+            }
+        );
+        return modalRef;
+    }
+
+    isPersonOverview() {
+        return this.activePerson !== null && this.activePerson !== 'undefined';
+    }
+
     isSkillDetail() {
         return this.activeSkill !== null && this.activeSkill !== 'undfined';
     }
 
     get selectedTeam() {
         return this.teamsSelectionService.selectedTeam;
+    }
+
+    get selectedPerson() {
+        return this.personsSelectionService.selectedPerson;
     }
 }

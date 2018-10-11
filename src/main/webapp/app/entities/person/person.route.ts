@@ -70,7 +70,7 @@ export const personRoute: Routes = [
             person: PersonResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [],
             pageTitle: 'teamdojoApp.person.home.title'
         },
         canActivate: [UserRouteAccessService]

@@ -7,6 +7,8 @@ export interface IComment {
     creationDate?: Moment;
     teamShortName?: string;
     teamId?: number;
+    personId?: number;
+    personMnemonic?: string;
     author?: ITeam;
     skillTitle?: string;
     skillId?: number;
@@ -19,6 +21,8 @@ export class Comment implements IComment {
         public creationDate?: Moment,
         public teamShortName?: string,
         public teamId?: number,
+        public personId?: number,
+        public personMnemonic?: string,
         public author?: ITeam,
         public skillTitle?: string,
         public skillId?: number

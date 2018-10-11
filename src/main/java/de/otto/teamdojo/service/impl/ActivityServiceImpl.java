@@ -5,14 +5,13 @@ import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.domain.Team;
 import de.otto.teamdojo.domain.enumeration.ActivityType;
-import de.otto.teamdojo.repository.ActivityRepository;
-import de.otto.teamdojo.repository.BadgeRepository;
-import de.otto.teamdojo.repository.SkillRepository;
-import de.otto.teamdojo.repository.TeamRepository;
+import de.otto.teamdojo.repository.*;
 import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.dto.ActivityDTO;
 import de.otto.teamdojo.service.dto.BadgeDTO;
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
+import de.otto.teamdojo.service.dto.PersonSkillDTO;
+import de.otto.teamdojo.domain.Person;
 import de.otto.teamdojo.service.mapper.ActivityMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,18 +41,22 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final TeamRepository teamRepository;
 
+    private final PersonRepository personRepository;
+
     private final SkillRepository skillRepository;
 
     public ActivityServiceImpl(ActivityRepository activityRepository,
                                ActivityMapper activityMapper,
                                BadgeRepository badgeRepository,
                                TeamRepository teamRepository,
-                               SkillRepository skillRepository) {
+                               SkillRepository skillRepository,
+                               PersonRepository personRepository) {
         this.activityRepository = activityRepository;
         this.activityMapper = activityMapper;
         this.badgeRepository = badgeRepository;
         this.teamRepository = teamRepository;
         this.skillRepository = skillRepository;
+        this.personRepository = personRepository;
     }
 
     /**
@@ -101,6 +104,28 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
+        return save(activityDTO);
+    }
+
+    @Override
+    public ActivityDTO createForCompletedPersonSkill(PersonSkillDTO personSkill) throws JSONException {
+        Person person = personRepository.getOne(personSkill.getPersonId());
+        Skill skill = skillRepository.getOne(personSkill.getSkillId());
+
+        JSONObject data = new JSONObject();
+        data.put("personId", person.getId());
+        data.put("personMnemonic", person.getMnemonic());
+        data.put("personName", person.getName());
+        data.put("personFirstname", person.getFirstname());
+        data.put("skillId", skill.getId());
+        data.put("skillTitle", skill.getTitle());
+
+        ActivityDTO activityDTO = new ActivityDTO();
+        activityDTO.setType(ActivityType.PERSON_SKILL_COMPLETED);
+        activityDTO.setCreatedAt(Instant.now());
+        activityDTO.setData(data.toString());
+        log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
+        //informMattermost(person.getFirstname() + " " + person.getName() + " hat den Skill " + skill.getTitle() + " erlernt");
         return save(activityDTO);
     }
 

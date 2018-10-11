@@ -83,4 +83,68 @@ public interface SkillRepository extends JpaRepository<Skill, Long>, JpaSpecific
     AchievableSkillDTO findAchievableSkill(
         @Param("teamId") Long teamId,
         @Param("skillId") Long skillId);
+
+    @Query("SELECT DISTINCT" +
+        " new de.otto.teamdojo.service.dto.AchievableSkillDTO(t.id, s.id, s.title, s.description, t.completedAt, t.irrelevant, s.rateScore, s.rateCount)" +
+        " FROM Skill s" +
+        " LEFT JOIN s.persons t ON t.person.id = :personId" +
+        " WHERE s.id = :skillId")
+    AchievableSkillDTO findAchievablePersonSkill(
+        @Param("personId") Long personId,
+        @Param("skillId") Long skillId);
+
+    @Query("SELECT DISTINCT" +
+        " new de.otto.teamdojo.service.dto.AchievableSkillDTO(t.id, s.id, s.title, s.description, t.completedAt, t.irrelevant, s.rateScore, s.rateCount)" +
+        " FROM Skill s" +
+        " LEFT JOIN s.persons t ON t.person.id = :personId" +
+        " LEFT JOIN s.levels l" +
+        " LEFT JOIN s.badges b" +
+        " WHERE (l.level.id IN :levelIds" +
+        " OR b.badge.id IN :badgeIds)" +
+        " AND (" +
+        "  ( ('COMPLETE' IN :filter) AND (t.completedAt is not null) )" +
+        "   OR ( ('INCOMPLETE' IN :filter) AND (t.completedAt is null) )" +
+        " )" +
+        " ORDER BY s.title")
+    Page<AchievableSkillDTO> findAchievableSkillsByPersonAndLevelsAndBadges(
+        @Param("personId") Long personId,
+        @Param("levelIds") List<Long> levelIds,
+        @Param("badgeIds") List<Long> badgeIds,
+        @Param("filter") List<String> filter,
+        Pageable pageable);
+
+
+    @Query("SELECT DISTINCT" +
+        " new de.otto.teamdojo.service.dto.AchievableSkillDTO(t.id, s.id, s.title, s.description, t.completedAt, t.irrelevant, s.rateScore, s.rateCount)" +
+        " FROM Skill s" +
+        " LEFT JOIN s.persons t ON t.person.id = :personId" +
+        " LEFT JOIN s.levels l" +
+        " WHERE l.level.id IN :levelIds" +
+        " AND (" +
+        "  ( ('COMPLETE' IN :filter)  AND (t.completedAt is not null) )" +
+        "   OR ( ('INCOMPLETE' IN :filter) AND (t.completedAt is null) )" +
+        " )" +
+        " ORDER BY s.title")
+    Page<AchievableSkillDTO> findAchievableSkillsByPersonAndLevels(
+        @Param("personId") Long personId,
+        @Param("levelIds") List<Long> levelIds,
+        @Param("filter") List<String> filter,
+        Pageable pageable);
+
+    @Query("SELECT DISTINCT" +
+        " new de.otto.teamdojo.service.dto.AchievableSkillDTO(t.id, s.id, s.title, s.description, t.completedAt, t.irrelevant, s.rateScore, s.rateCount)" +
+        " FROM Skill s" +
+        " LEFT JOIN s.persons t ON t.person.id = :personId" +
+        " LEFT JOIN s.badges b" +
+        " WHERE b.badge.id IN :badgeIds" +
+        " AND (" +
+        "  ( ('COMPLETE' IN :filter) AND (t.completedAt is not null) )" +
+        "   OR ( ('INCOMPLETE' IN :filter) AND (t.completedAt is null) )" +
+        " )" +
+        " ORDER BY s.title")
+    Page<AchievableSkillDTO> findAchievableSkillsByPersonAndBadges(
+        @Param("personId") Long personId,
+        @Param("badgeIds") List<Long> badgeIds,
+        @Param("filter") List<String> filter,
+        Pageable pageable);
 }

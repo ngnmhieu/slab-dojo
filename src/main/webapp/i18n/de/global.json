@@ -52,6 +52,11 @@
                 "home": "Wohnzimmer",
                 "change": "Team wechseln"
             },
+            "person": {
+                "select": "Meine Person auswählen",
+                "home": "Wohnzimmer",
+                "change": "Person wechseln"
+            },
             "notification": {
                 "main": "Benachrichtigungen",
                 "activities": "Aktivitäten",

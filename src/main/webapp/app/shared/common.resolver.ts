@@ -10,8 +10,10 @@ import { BadgeSkillService } from 'app/entities/badge-skill';
 import { Skill } from 'app/shared/model/skill.model';
 import { CommentService } from 'app/entities/comment';
 import { TeamService } from 'app/entities/team';
+import { PersonService } from 'app/entities/person';
 import { Injectable } from '@angular/core';
 import { TeamsService } from 'app/teams/teams.service';
+import { PersonsService } from 'app/persons/persons.service';
 
 @Injectable()
 export class AllTeamsResolve implements Resolve<any> {
@@ -19,6 +21,15 @@ export class AllTeamsResolve implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.teamService.query();
+    }
+}
+
+@Injectable()
+export class AllPersonsResolve implements Resolve<any> {
+    constructor(private personService: PersonService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.personService.query();
     }
 }
 

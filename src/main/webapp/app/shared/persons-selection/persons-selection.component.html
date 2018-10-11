@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <h4 class="modal-title" jhiTranslate="teamdojoApp.persons.selection.title">Person Selection</h4>
+    <button type="button" class="close" aria-label="Close" (click)="cancelPersonSelection()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body container">
+
+    <div class="person-row">
+        <div class="person-item-wrapper" *ngFor="let person of persons">
+            <div class="person-item" (click)="selectPerson(person)"
+                 [ngClass]="{'selected': highlightedPerson !== null && highlightedPerson.id === person.id}">
+                <div class="person-item-row d-flex justify-content-center">
+                    <jhi-person-image [person]="person" size="80px" imageSize="medium"></jhi-person-image>
+                </div>
+                <div class="person-item-row">
+                    <div class="person-shortname">{{person.mnemonic}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-person" (click)="createNewPerson()">
+        <span class="fa fa-plus"></span>
+        <span  jhiTranslate="teamdojoApp.person.home.createLabel">
+            Create new Person
+            </span>
+    </button>
+    <button type="button" class="btn btn-outline-dark" (click)="deselectPerson()"
+            jhiTranslate="teamdojoApp.persons.selection.deselect">No Person
+    </button>
+    <button type="button" class="btn btn-outline-primary" [ngClass]="{'disabled':highlightedPerson === null}"
+            (click)="highlightedPerson !== null && confirmPerson()" jhiTranslate="teamdojoApp.persons.selection.select">Select
+        Person
+    </button>
+</div>

@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 
 export const enum ActivityType {
+    'PERSON_SKILL_COMPLETED',
     'SKILL_COMPLETED',
     'BADGE_CREATED'
 }

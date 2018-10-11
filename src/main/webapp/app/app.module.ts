@@ -17,6 +17,7 @@ import { TeamdojoAccountModule } from './account/account.module';
 import { TeamdojoEntityModule } from './entities/entity.module';
 import { OverviewModule } from 'app/overview';
 import { TeamsModule } from './teams/teams.module';
+import { PersonsModule } from './persons/persons.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
@@ -44,6 +45,7 @@ import {
         TeamdojoAccountModule,
         TeamdojoEntityModule,
         TeamsModule,
+        PersonsModule,
         FeedbackModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],

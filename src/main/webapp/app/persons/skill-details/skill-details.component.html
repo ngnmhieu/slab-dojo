@@ -1,0 +1,28 @@
+<jhi-background-component [personSkills]="selectedPerson?.skills" [badges]="badges"
+                          [skills]="skills"></jhi-background-component>
+
+<div class="row back">
+    <div class="col-20">
+        <a class="breadcrumb-item active" [routerLink]="['/persons', person.mnemonic]">
+            <i class="fa fa-angle-left"></i>
+            {{'global.menu.persons.home' | translate}}</a>
+    </div>
+</div>
+<div class="row skill-details">
+    <div class="skills-list col-20">
+        <jhi-persons-skills [iSkills]="skills" [person]="person" [skill]="achievableSkill"
+                          (onSkillClicked)="onSkillInListClicked($event)"
+                          (onSkillChanged)="onSkillInListChanged($event)"></jhi-persons-skills>
+    </div>
+    <div class="skill-info col-60">
+        <jhi-skill-details-info (onVoteSubmitted)="onVoteSubmitted($event)"
+                                (onCommentSubmitted)="onCommentSubmitted($event)"
+                                (onSkillChanged)="skillList.handleSkillChanged($event)" [skill]="skill"
+                                [person]="person" [achievableSkill]="achievableSkill"></jhi-skill-details-info>
+    </div>
+    <div class="skill-comments col-20" [ngClass]="{'same-person': isSamePerson}">
+        <jhi-skill-details-comments [skill]="skill" [comments]="skillComments" [selectedPerson]="selectedPerson"
+                                    [persons]="persons" (onCommentSubmitted)="onCommentSubmitted($event)">
+        </jhi-skill-details-comments>
+    </div>
+</div>
