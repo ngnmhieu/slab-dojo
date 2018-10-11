@@ -1,0 +1,27 @@
+
+{
+    "teamdojoApp": {
+        "personSkill" : {
+            "home": {
+                "title": "Person Skills",
+                "createLabel": "Person Skill erstellen",
+                "createOrEditLabel": "Person Skill erstellen oder bearbeiten"
+            },
+            "created": "Person Skill erstellt mit ID {{ param }}",
+            "updated": "Person Skill aktualisiert mit ID {{ param }}",
+            "deleted": "Person Skill gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll Person Skill {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Person Skill"
+            },
+            "completedAt": "Completed At",
+            "verifiedAt": "Verified At",
+            "irrelevant": "Irrelevant",
+            "note": "Note",
+            "skill": "Skill",
+            "person": "Person"
+        }
+    }
+}

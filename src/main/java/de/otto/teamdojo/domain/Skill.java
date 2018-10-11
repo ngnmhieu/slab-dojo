@@ -1,14 +1,16 @@
 package de.otto.teamdojo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.Objects;
 
 /**
  * A Skill.
@@ -54,9 +56,14 @@ public class Skill implements Serializable {
     @Column(name = "score", nullable = false)
     private Integer score;
 
-    @DecimalMin(value = "0") @DecimalMax(value = "5") @Column(name = "rate_score") private Double rateScore;
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "5")
+    @Column(name = "rate_score")
+    private Double rateScore;
 
-    @Min(value = 0) @Column(name = "rate_count") private Integer rateCount;
+    @Min(value = 0)
+    @Column(name = "rate_count")
+    private Integer rateCount;
 
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -69,6 +76,10 @@ public class Skill implements Serializable {
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LevelSkill> levels = new HashSet<>();
+
+    @OneToMany(mappedBy = "skill")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<PersonSkill> persons = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -270,6 +281,31 @@ public class Skill implements Serializable {
     public void setLevels(Set<LevelSkill> levelSkills) {
         this.levels = levelSkills;
     }
+
+    public Set<PersonSkill> getPersons() {
+        return persons;
+    }
+
+    public Skill persons(Set<PersonSkill> personSkills) {
+        this.persons = personSkills;
+        return this;
+    }
+
+    public Skill addPersons(PersonSkill personSkill) {
+        this.persons.add(personSkill);
+        personSkill.setSkill(this);
+        return this;
+    }
+
+    public Skill removePersons(PersonSkill personSkill) {
+        this.persons.remove(personSkill);
+        personSkill.setSkill(null);
+        return this;
+    }
+
+    public void setPersons(Set<PersonSkill> personSkills) {
+        this.persons = personSkills;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -303,7 +339,6 @@ public class Skill implements Serializable {
             ", expiryPeriod='" + getExpiryPeriod() + "'" +
             ", contact='" + getContact() + "'" +
             ", score=" + getScore() +
-            ", contact='" + getContact() + "'" +
             ", rateScore=" + getRateScore() +
             ", rateCount=" + getRateCount() +
             "}";

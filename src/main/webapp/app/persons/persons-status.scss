@@ -1,0 +1,87 @@
+@import '../../content/scss/colors';
+.persons-status {
+    height: inherit;
+    position: relative;
+    overflow-y: hidden;
+    padding-right: 10px;
+    .persons-status-avatar {
+        text-align: center;
+        .avatar-image-wrapper {
+            width: 31vh;
+            height: 41vh;
+            position: absolute;
+            top: 0.5rem;
+            .avatar-image {
+                width: inherit;
+                height: inherit;
+                z-index: 3;
+                &-default {
+                    background: no-repeat center/contain url('../../content/images/avatars/avatar_default.png');
+                }
+                &-level-up {
+                    background: no-repeat center/contain url('../../content/images/avatars/avatar_level_up.png');
+                }
+            }
+        }
+        .status-meta {
+            width: 100%;
+            height: 20vh;
+            position: relative;
+            margin-top: -4vh;
+            color: $dojo-text-inverse-secondary;
+            &-text {
+                position: absolute;
+                top: 8vh;
+                z-index: 4;
+                h5 {
+                    font-size: calc(10px + 1.4vh);
+                }
+                h6 {
+                    font-size: calc(6px + 0.8vh);
+                }
+                .person-slogan {
+                    margin-top: -1vh;
+                }
+                .person-score {
+                    font-size: calc(10px + 1vh);
+                    z-index: 4;
+                    &::before {
+                        content: '';
+                        width: calc(10px + 1vh);
+                        height: calc(10px + 1vh);
+                        position: absolute;
+                        background: no-repeat center/contain url('../../content/images/coin.png');
+                        margin-top: calc(2px + 0.2vh);
+                        margin-left: calc(-12px - 1.2vh);
+                        z-index: 4;
+                    }
+                }
+            }
+            &::after {
+                content: '';
+                width: inherit;
+                height: inherit;
+                max-width: 50vh;
+                min-width: 100%;
+                min-height: 90px;
+                max-height: 16vh;
+                position: absolute;
+                background: no-repeat center/contain url('../../content/images/brushstroke.png');
+                z-index: 2;
+            }
+        }
+    }
+    .persons-status-achievements {
+        .persons-status-achievements-levels {
+            h5 {
+                margin-bottom: 0;
+            }
+            /deep/ .achievement-item {
+                padding-top: 0;
+            }
+        }
+        .persons-status-achievements-badges {
+        }
+
+    }
+}

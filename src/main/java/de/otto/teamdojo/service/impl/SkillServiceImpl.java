@@ -1,12 +1,13 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.service.SkillService;
 import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.repository.SkillRepository;
-import de.otto.teamdojo.service.SkillService;
 import de.otto.teamdojo.service.dto.SkillDTO;
 import de.otto.teamdojo.service.mapper.SkillMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { INotification, Notification } from 'app/shared/notification/model/notification.model';
 import { IBadge } from 'app/shared/model/badge.model';
 import { ITeam } from 'app/shared/model/team.model';
+import { IPerson } from 'app/shared/model/person.model';
 import { TeamService } from 'app/entities/team';
 import { BadgeService } from 'app/entities/badge';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { IActivity } from 'app/shared/model/activity.model';
 import { ActivityService } from 'app/entities/activity';
 import { JhiParseLinks } from 'ng-jhipster';
+import { PersonService } from 'app/entities/person';
 
 @Component({
     selector: 'jhi-notification-menu',
@@ -17,6 +19,7 @@ import { JhiParseLinks } from 'ng-jhipster';
 export class NotificationMenuComponent implements OnInit {
     notifications: INotification[];
     teams: ITeam[];
+    persons: IPerson[];
     badges: IBadge[];
     itemsPerPage: number;
     links: any;
@@ -28,6 +31,7 @@ export class NotificationMenuComponent implements OnInit {
     constructor(
         private activityService: ActivityService,
         private teamService: TeamService,
+        private personService: PersonService,
         private badgeService: BadgeService,
         private parseLinks: JhiParseLinks
     ) {
@@ -47,6 +51,10 @@ export class NotificationMenuComponent implements OnInit {
         this.badges = [];
         this.badgeService.query().subscribe(response => {
             this.badges = response.body;
+        });
+        this.persons = [];
+        this.personService.query().subscribe(response => {
+            this.persons = response.body;
         });
     }
 

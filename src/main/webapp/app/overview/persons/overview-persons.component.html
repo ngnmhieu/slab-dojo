@@ -1,0 +1,51 @@
+<div class="overviews-persons" >
+    <div>
+        <h4 jhiTranslate="teamdojoApp.overview.persons.title"></h4>
+    </div>
+    <div class="additional-functions d-flex align-items-center">
+    </div>
+    <div class="person-list" data-simplebar="init">
+        <div class="person-list-header d-flex justify-content-between mb-3">
+            <div class="person-list-header-title d-flex align-items-end">
+                <span jhiTranslate="teamdojoApp.overview.total-score.title"></span>
+            </div>
+            <div class="person-list-header-scores d-flex flex-row ml-auto justify-content-between align-items-end">
+                    <div class="score d-flex flex-column align-items-center">
+                        <img src="../../../content/images/coin_black.png"/>
+                        <span>{{calcTotalPersonScore()}}</span>
+                    </div>
+                    <div class="score d-flex flex-column align-items-center">
+                        <img src="../../../content/images/belt_black.png"/>
+                        <span>{{calcTotalCompletedLevel()}}/{{getTotalLevelBase()}}</span>
+                    </div>
+                    <div class="score d-flex flex-column align-items-center">
+                        <img src="../../../content/images/badge_black.png"/>
+                        <span>{{calcTotalCompletedBadges()}}</span>
+                    </div>
+            </div>
+        </div>
+        <div class="person-list-body">
+            <div class="person-list-body-item d-flex align-items-center justify-content-between mb-1"
+                *ngFor="let personScore of personScores index as i"
+                [ngClass]="{irrelevant: showAsIrrelevant(personScore.person), complete: showAsComplete(personScore.person), incomplete: showAsIncomplete(personScore.person)}">
+                <div class="person-info d-flex align-items-center">
+                    <div class="person-rank">{{i+1}}</div>
+                        <div class="mr-2">
+                            <jhi-person-image [person]="personScore.person" imageSize="small"></jhi-person-image>
+                        </div>
+                    <div class="person-name">
+                        <a href="#" [routerLink]="['/persons', personScore.person.shortName]">{{personScore.person.name}}</a>
+                    </div>
+                </div>
+                <div class="person-scores d-flex flex-row ml-auto justify-content-between">
+                    <span class="score">{{personScore.score}}</span>
+                    <span class="score">{{calcCompletedLevel(personScore.person)}}/{{calcLevelBase(personScore.person)}}</span>
+                    <span class="score">{{calcCompletedBadges(personScore.person)}}</span>
+                </div>
+                <div class="person-status" [ngClass]="{complete: showAsComplete(personScore.person)}">
+                    <i *ngIf="showAsComplete(personScore.person)" class="fa fa-check fa-inverse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

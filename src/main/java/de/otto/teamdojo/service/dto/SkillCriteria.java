@@ -1,8 +1,18 @@
 package de.otto.teamdojo.service.dto;
 
-import io.github.jhipster.service.filter.*;
-
 import java.io.Serializable;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
+import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
+
+
+
+
+
 
 /**
  * Criteria class for the Skill entity. This class is used in SkillResource to
@@ -41,6 +51,8 @@ public class SkillCriteria implements Serializable {
     private LongFilter badgesId;
 
     private LongFilter levelsId;
+
+    private LongFilter personsId;
 
     public SkillCriteria() {
     }
@@ -149,22 +161,31 @@ public class SkillCriteria implements Serializable {
         this.levelsId = levelsId;
     }
 
+    public LongFilter getPersonsId() {
+        return personsId;
+    }
+
+    public void setPersonsId(LongFilter personsId) {
+        this.personsId = personsId;
+    }
+
     @Override
     public String toString() {
         return "SkillCriteria{" +
-            (id != null ? "id=" + id + ", " : "") +
-            (title != null ? "title=" + title + ", " : "") +
-            (description != null ? "description=" + description + ", " : "") +
-            (implementation != null ? "implementation=" + implementation + ", " : "") +
-            (validation != null ? "validation=" + validation + ", " : "") +
-            (expiryPeriod != null ? "expiryPeriod=" + expiryPeriod + ", " : "") +
-            (contact != null ? "contact=" + contact + ", " : "") +
-            (score != null ? "score=" + score + ", " : "") +
-            (rateScore != null ? "rateScore=" + rateScore + ", " : "") +
-            (rateCount != null ? "rateCount=" + rateCount + ", " : "") +
-            (teamsId != null ? "teamsId=" + teamsId + ", " : "") +
-            (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
-            (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
+                (id != null ? "id=" + id + ", " : "") +
+                (title != null ? "title=" + title + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
+                (implementation != null ? "implementation=" + implementation + ", " : "") +
+                (validation != null ? "validation=" + validation + ", " : "") +
+                (expiryPeriod != null ? "expiryPeriod=" + expiryPeriod + ", " : "") +
+                (contact != null ? "contact=" + contact + ", " : "") +
+                (score != null ? "score=" + score + ", " : "") +
+                (rateScore != null ? "rateScore=" + rateScore + ", " : "") +
+                (rateCount != null ? "rateCount=" + rateCount + ", " : "") +
+                (teamsId != null ? "teamsId=" + teamsId + ", " : "") +
+                (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
+                (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
+                (personsId != null ? "personsId=" + personsId + ", " : "") +
             "}";
     }
 

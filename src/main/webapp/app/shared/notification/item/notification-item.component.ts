@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { INotification } from 'app/shared/notification/model/notification.model';
 import { IBadge } from 'app/shared/model/badge.model';
 import { ITeam } from 'app/shared/model/team.model';
+import { IPerson } from 'app/shared/model/person.model';
 
 @Component({
     selector: 'jhi-notification-item',
@@ -11,9 +12,10 @@ import { ITeam } from 'app/shared/model/team.model';
 export class NotificationItemComponent implements OnInit {
     @Input() notification: INotification;
     @Input() teams: ITeam[];
+    @Input() persons: IPerson[];
     @Input() badges: IBadge[];
     picture: string;
-    item: IBadge | ITeam;
+    item: IBadge | ITeam | IPerson;
 
     constructor() {}
 
@@ -26,6 +28,9 @@ export class NotificationItemComponent implements OnInit {
         } else if (type.toString() === 'SKILL_COMPLETED') {
             const teamId = this.notification.data.teamId;
             this.item = this.teams.find((t: ITeam) => t.id === teamId);
+        } else if (type.toString() === 'PERSON_SKILL_COMPLETED') {
+            const personId = this.notification.data.personId;
+            this.item = this.persons.find((p: IPerson) => p.id === personId);
         }
     }
 }

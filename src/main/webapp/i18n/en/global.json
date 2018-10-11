@@ -5,6 +5,10 @@
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "person":{
+                "home": "Living Room",
+                "change": "Change Person"
+            },
             "entities": {
                 "main": "Entities",
                 "dimension": "Dimension",
@@ -20,6 +24,8 @@
                 "comment": "Comment",
                 "activity": "Activity",
                 "image": "Image",
+                "person": "Person",
+                "personSkill": "Person Skill",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

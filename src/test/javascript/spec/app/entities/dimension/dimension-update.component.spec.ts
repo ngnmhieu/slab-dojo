@@ -10,6 +10,7 @@ import { Dimension } from 'app/shared/model/dimension.model';
 
 import { TeamService } from 'app/entities/team';
 import { BadgeService } from 'app/entities/badge';
+import { PersonService } from 'app/entities/person';
 
 describe('Component Tests', () => {
     describe('Dimension Management Update Component', () => {
@@ -21,7 +22,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [DimensionUpdateComponent],
-                providers: [TeamService, BadgeService, DimensionService]
+                providers: [TeamService, BadgeService, PersonService, DimensionService]
             })
                 .overrideTemplate(DimensionUpdateComponent, '')
                 .compileComponents();

@@ -5,12 +5,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.Objects;
 
 /**
  * A Dimension.
@@ -49,6 +49,11 @@ public class Dimension implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Badge> badges = new HashSet<>();
+
+    @ManyToMany(mappedBy = "participations")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Person> personParticipants = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -158,6 +163,31 @@ public class Dimension implements Serializable {
 
     public void setBadges(Set<Badge> badges) {
         this.badges = badges;
+    }
+
+    public Set<Person> getPersonParticipants() {
+        return personParticipants;
+    }
+
+    public Dimension personParticipants(Set<Person> people) {
+        this.personParticipants = people;
+        return this;
+    }
+
+    public Dimension addPersonParticipants(Person person) {
+        this.personParticipants.add(person);
+        person.getParticipations().add(this);
+        return this;
+    }
+
+    public Dimension removePersonParticipants(Person person) {
+        this.personParticipants.remove(person);
+        person.getParticipations().remove(this);
+        return this;
+    }
+
+    public void setPersonParticipants(Set<Person> people) {
+        this.personParticipants = people;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,11 +1,7 @@
 package de.otto.teamdojo.service;
 
-import de.otto.teamdojo.domain.*;
-import de.otto.teamdojo.repository.DimensionRepository;
-import de.otto.teamdojo.service.dto.DimensionCriteria;
-import de.otto.teamdojo.service.dto.DimensionDTO;
-import de.otto.teamdojo.service.mapper.DimensionMapper;
-import io.github.jhipster.service.QueryService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,7 +10,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import io.github.jhipster.service.QueryService;
+
+import de.otto.teamdojo.domain.Dimension;
+import de.otto.teamdojo.domain.*; // for static metamodels
+import de.otto.teamdojo.repository.DimensionRepository;
+import de.otto.teamdojo.service.dto.DimensionCriteria;
+
+import de.otto.teamdojo.service.dto.DimensionDTO;
+import de.otto.teamdojo.service.mapper.DimensionMapper;
 
 /**
  * Service for executing complex queries for Dimension entities in the database.
@@ -39,7 +43,6 @@ public class DimensionQueryService extends QueryService<Dimension> {
 
     /**
      * Return a {@link List} of {@link DimensionDTO} which matches the criteria from the database
-     *
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -52,9 +55,8 @@ public class DimensionQueryService extends QueryService<Dimension> {
 
     /**
      * Return a {@link Page} of {@link DimensionDTO} which matches the criteria from the database
-     *
      * @param criteria The object which holds all the filters, which the entities should match.
-     * @param page     The page, which should be returned.
+     * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
@@ -88,6 +90,9 @@ public class DimensionQueryService extends QueryService<Dimension> {
             }
             if (criteria.getBadgesId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getBadgesId(), Dimension_.badges, Badge_.id));
+            }
+            if (criteria.getPersonParticipantsId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getPersonParticipantsId(), Dimension_.personParticipants, Person_.id));
             }
         }
         return specification;

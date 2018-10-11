@@ -12,7 +12,7 @@
          [infiniteScrollContainer]="'.notification-menu-items'">
         <div class="notification-menu-items">
             <li *ngFor="let notification of notifications">
-                <jhi-notification-item [notification]="notification" [teams]="teams"
+                <jhi-notification-item [notification]="notification" [teams]="teams" [persons]="persons"
                                        [badges]="badges"></jhi-notification-item>
             </li>
         </div>

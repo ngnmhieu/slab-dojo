@@ -1,0 +1,130 @@
+@import '~bootstrap/scss/bootstrap';
+@import '../../../content/scss/_colors';
+
+.overviews-teams {
+    height: inherit;
+    .additional-functions {
+        height: 75px;
+        width: 100%;
+    }
+
+    .count-item-value {
+        font-size: 1.8vh;
+    }
+
+    th, thead{
+        border-top: none;
+    }
+    thead {
+        border-bottom: 1px solid #E5E1D8;;
+    }
+
+    .person-list {
+        background: rgba($dojo-bg-gradient-from, 0.5);
+        &-header {
+            &-title {
+
+            }
+            &-scores {
+                width: 48%;
+              //  color: $dojo-text-primary;
+                img {
+                    width: 5.0vh;
+                    opacity: 0.5;
+                }
+                margin-right: 40px;
+                .score {
+                    min-width: 5em;
+                }
+            }
+            border-bottom: 1px solid #E5E1D8;
+        }
+
+        &-body {
+            &-item {
+                min-height: 70px;
+                .person-rank {
+                    min-width: 2em;
+                }
+                .person-info {
+                   width: 48%;
+                    .person-name {
+                        a {
+                            color: $dojo-text-primary;
+                            word-break: break-word;
+                            font-size: 1.0rem;
+                        }
+                    }
+                }
+                .person-scores {
+                    width: 48%;
+                    .score {
+                       // color: $dojo-text-primary;
+                        min-width: 5em;
+                        text-align: center;
+                    }
+                }
+                .person-status {
+                    padding: 10px;
+                    width: 36px;
+                    margin-left: 15px;
+                    background-color: transparent;
+                }
+                &.complete {
+                    .person-status {
+                        background-color: #a8bc66;
+                    }
+                }
+                &.irrelevant {
+                    display: none !important;
+                }
+                &.incomplete {
+                    background-color: $gray-300;
+                    opacity: 0.4;
+                }
+            }
+        }
+        /deep/ .simplebar-track {
+            bottom: 0.7em!important;
+        }
+        /deep/ .simplebar-scroll-content {
+            padding-right: 1.9em!important;
+            .simplebar-content {
+                margin-right: -0.6em!important;
+                padding-bottom: 3.1em!important;
+                overflow-x: hidden;
+            }
+        }
+    }
+
+    input#persons_search-term {
+        background-color: #e8ddb7;
+        width: 270px;
+        margin: 5px;
+    }
+
+    ::-webkit-input-placeholder {
+        font-style: italic;
+    }
+
+    :-moz-placeholder {
+        font-style: italic;
+    }
+
+    ::-moz-placeholder {
+        font-style: italic;
+    }
+
+    :-ms-input-placeholder {
+        font-style: italic;
+    }
+
+}
+@media only screen and (min-width: map-get($grid-breakpoints, lg)) {
+    .overviews-persons {
+        .person-list {
+            height: calc(100vh - 242px);
+            padding: 5px;
+        }
+    }
+}

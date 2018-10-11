@@ -1,0 +1,10 @@
+<div class="person-image-wrapper d-flex justify-content-center" [ngClass]="{'has-border': hasBorder, 'has-overlay': hasOverlay}"
+     [ngStyle]="{'width': size, 'height': size}">
+    <div class="person-image" *ngIf="person.imageId; else picturePlaceholder"
+         [ngStyle]="{'background-image': 'url(' + (person.imageId | imageUrl: imageSize) + ')'}">
+    </div>
+
+    <ng-template #picturePlaceholder>
+        <span *ngIf="hasPlaceholder" class="img-placeholder">{{person.mnemonic | truncateString}}</span>
+    </ng-template>
+</div>

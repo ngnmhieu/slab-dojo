@@ -1,0 +1,20 @@
+@import '~bootstrap/scss/bootstrap';
+
+@media only screen and (min-width: map-get($grid-breakpoints, lg)){
+    .persons {
+        height: calc(100vh - 151px);
+        overflow: hidden;
+        > * {
+            height: 100%;
+            > * {
+                height: inherit;
+                > * {
+                    height: inherit;
+                    > * {
+                        height: inherit;
+                    }
+                }
+            }
+        }
+    }
+}

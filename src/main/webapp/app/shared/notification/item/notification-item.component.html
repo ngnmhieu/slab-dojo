@@ -18,6 +18,12 @@
                 <div class="notification-body-text" jhiTranslate="teamdojoApp.notification.body.text.skillCompleted"
                      translateValues="{'skillTitle':'{{notification.data.skillTitle}}' }"></div>
             </ng-container>
+            <ng-container *ngSwitchCase="'PERSON_SKILL_COMPLETED'">
+                <i class="notification-body-icon fa fa-check fa-2x"></i>
+                <jhi-person-image class="notification-body-person-image" [person]="item" imageSize="small"></jhi-person-image>
+                <div class="notification-body-text" jhiTranslate="teamdojoApp.notification.body.text.skillCompleted"
+                     translateValues="{'skillTitle':'{{notification.data.skillTitle}}' }"></div>
+            </ng-container>
         </div>
     </div>
 </div>
