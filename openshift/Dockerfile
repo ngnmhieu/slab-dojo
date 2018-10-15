@@ -9,7 +9,7 @@ RUN ./gradlew bootWar -Pprod --info --stacktrace
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JHIPSTER_SLEEP=0 \
-    JAVA_OPTS=""
+    JAVA_OPTS="JAVA_TOOL_OPTIONS=-Xmx1G -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
 
 CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
     sleep ${JHIPSTER_SLEEP} && \
