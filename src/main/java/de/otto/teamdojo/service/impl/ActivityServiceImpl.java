@@ -95,7 +95,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for BADGE_CREATED {}", activityDTO);
-        informMattermost("Der Badge " + badge.getName() + " wurde erstellt");
+        informMattermost("Der Badge \"" + badge.getName() + "\" wurde erstellt");
         return save(activityDTO);
     }
 
@@ -115,7 +115,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
-        informMattermost(team.getName() + " hat den Skill " + skill.getTitle() + " erlernt");
+        informMattermost(team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt");
         return save(activityDTO);
     }
 
@@ -137,7 +137,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
-        informMattermost(person.getFirstname() + " " + person.getName() + " hat den Skill " + skill.getTitle() + " erlernt");
+        informMattermost(person.getFirstname() + " " + person.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt");
         return save(activityDTO);
     }
 

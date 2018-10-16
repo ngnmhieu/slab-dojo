@@ -5,6 +5,7 @@ import { OVERVIEW_ROUTE } from 'app/overview/overview.route';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OverviewComponent } from 'app/overview/overview.component';
 import { OverviewTeamsComponent } from 'app/overview/teams/overview-teams.component';
+import { OverviewPersonsComponent } from 'app/overview/persons/overview-persons.component';
 import { OverviewAchievementsComponent } from 'app/overview/achievements/overview-achievements.component';
 import { OverviewSkillsComponent } from 'app/overview/skills/overview-skills.component';
 import { OverviewSkillDetailsComponent } from 'app/overview/skills/skill-details/overview-skill-details.component';
@@ -17,6 +18,7 @@ import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } 
     declarations: [
         OverviewComponent,
         OverviewTeamsComponent,
+        OverviewPersonsComponent,
         OverviewAchievementsComponent,
         OverviewSkillsComponent,
         OverviewSkillDetailsComponent
