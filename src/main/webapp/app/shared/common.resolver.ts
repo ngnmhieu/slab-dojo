@@ -14,6 +14,7 @@ import { PersonService } from 'app/entities/person';
 import { Injectable } from '@angular/core';
 import { TeamsService } from 'app/teams/teams.service';
 import { PersonsService } from 'app/persons/persons.service';
+import { PersonSkillService } from 'app/entities/person-skill';
 
 @Injectable()
 export class AllTeamsResolve implements Resolve<any> {
@@ -38,6 +39,8 @@ export class DojoModelResolve implements Resolve<any> {
     constructor(
         private teamService: TeamService,
         private teamSkillService: TeamSkillService,
+        private personService: PersonService,
+        private personSkillService: PersonSkillService,
         private levelService: LevelService,
         private levelSkillService: LevelSkillService,
         private badgeSkillService: BadgeSkillService,
@@ -48,13 +51,17 @@ export class DojoModelResolve implements Resolve<any> {
         return Observable.combineLatest(
             this.teamService.query(),
             this.teamSkillService.query(),
+            this.personService.query(),
+            this.personSkillService.query(),
             this.levelService.query(),
             this.levelSkillService.query(),
             this.badgeService.query(),
             this.badgeSkillService.query()
-        ).map(([teamsRes, teamSkillsRes, levelsRes, levelSkillsRes, badgesRes, badgeSkillsRes]) => {
+        ).map(([teamsRes, teamSkillsRes, personsRes, personSkillsRes, levelsRes, levelSkillsRes, badgesRes, badgeSkillsRes]) => {
             const teams = teamsRes.body || [];
             const teamSkills = teamSkillsRes.body || [];
+            const persons = personsRes.body || [];
+            const personSkills = personSkillsRes.body || [];
             const levels = levelsRes.body || [];
             const levelSkills = levelSkillsRes.body || [];
             const badges = badgesRes.body || [];
@@ -64,6 +71,12 @@ export class DojoModelResolve implements Resolve<any> {
             teamSkills.forEach(teamSkill => {
                 groupedTeamSkills[teamSkill.teamId] = groupedTeamSkills[teamSkill.teamId] || [];
                 groupedTeamSkills[teamSkill.teamId].push(Object.assign(teamSkill));
+            });
+
+            const groupedPersonSkills = {};
+            personSkills.forEach(personSkill => {
+                groupedPersonSkills[personSkill.personId] = groupedPersonSkills[personSkill.personId] || [];
+                groupedPersonSkills[personSkill.personId].push(Object.assign(personSkill));
             });
 
             const groupedLevelSkills = {};
@@ -108,7 +121,14 @@ export class DojoModelResolve implements Resolve<any> {
                     dimension.badges = groupedBadges[dimension.id] || [];
                 });
             });
-            return { teams, teamSkills, levels, levelSkills, badges, badgeSkills };
+            persons.forEach(person => {
+                person.skills = groupedPersonSkills[person.id] || [];
+                person.participations.forEach(dimension => {
+                    dimension.levels = groupedLevels[dimension.id] || [];
+                    dimension.badges = groupedBadges[dimension.id] || [];
+                });
+            });
+            return { teams, teamSkills, persons, personSkills, levels, levelSkills, badges, badgeSkills };
         });
     }
 }
@@ -137,6 +157,15 @@ export class AllTeamSkillsResolve implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.teamSkillService.query();
+    }
+}
+
+@Injectable()
+export class AllPersonSkillsResolve implements Resolve<any> {
+    constructor(private personSkillService: PersonSkillService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.personSkillService.query();
     }
 }
 
