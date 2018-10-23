@@ -1,18 +1,4 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    app: postgres
-  name: pg-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 2Gi
----
-apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
@@ -68,19 +54,3 @@ spec:
         kind: ImageStreamTag
         name: postgres:latest
     type: ImageChange
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: postgres
-  name: postgres
-spec:
-  ports:
-  - name: postgres
-    port: 5432
-    protocol: TCP
-    targetPort: 5432
-  selector:
-    app: postgres
-    deploymentconfig: postgres

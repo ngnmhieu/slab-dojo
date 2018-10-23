@@ -1,36 +1,4 @@
 apiVersion: v1
-kind: ImageStream
-metadata:
-  labels:
-    app: postgres
-  name: postgres
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-  - from:
-      kind: DockerImage
-      name: openshift/postgresql-92-centos7
-    importPolicy: {}
-    name: latest
-    referencePolicy:
-      type: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    app: postgres-int
-  name: pg-data-int
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 2Gi
----
-apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
@@ -86,19 +54,3 @@ spec:
         kind: ImageStreamTag
         name: postgres:latest
     type: ImageChange
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: postgres-int
-  name: postgres-int
-spec:
-  ports:
-  - name: postgres-int
-    port: 5432
-    protocol: TCP
-    targetPort: 5432
-  selector:
-    app: postgres-int
-    deploymentconfig: postgres-int
