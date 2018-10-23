@@ -16,6 +16,6 @@ spec:
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: deployment/build/Dockerfile
+      dockerfilePath: deployment/builds/Dockerfile
     type: Docker
 
