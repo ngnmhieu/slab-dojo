@@ -1,7 +1,7 @@
 <div class="teams-achievements">
     <h4>{{'teamdojoApp.teams.achievements.title' | translate}}</h4>
     <div class="achievement-container" data-simplebar="init">
-        <ngb-accordion activeIds="achievements-general-badges">
+        <ngb-accordion>
             <ngb-panel id="achievements-general-badges">
                 <ng-template ngbPanelTitle>
                     <div class="achievement-list-header d-flex align-items-center">
@@ -36,7 +36,7 @@
             </ngb-panel>
         </ngb-accordion>
         <div class="mt-1">
-            <ngb-accordion [activeIds]="expandedDimensions">
+            <ngb-accordion>
                 <ngb-panel class="mt-1" *ngFor="let dimension of team.participations"
                            id="achievements-dimension-{{dimension.id}}">
                     <ng-template ngbPanelTitle>

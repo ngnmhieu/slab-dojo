@@ -25,7 +25,6 @@ export class OverviewAchievementsComponent implements OnInit {
     dimensions: IDimension[];
     generalBadges: IBadge[];
     activeItemIds: { [key: string]: number };
-    expandedDimensions: string[];
 
     constructor(private route: ActivatedRoute, private dimensionService: DimensionService, private router: Router) {}
 
@@ -37,7 +36,6 @@ export class OverviewAchievementsComponent implements OnInit {
             dimension: null
         };
         this.generalBadges = [];
-        this.expandedDimensions = [];
         this.dimensionService.query().subscribe((res: HttpResponse<IDimension[]>) => {
             this.dimensions = res.body;
             const levelsByDimensionId = {};
@@ -62,10 +60,6 @@ export class OverviewAchievementsComponent implements OnInit {
                 dimension.levels = (sortLevels(levelsByDimensionId[dimension.id]) || []).reverse();
                 dimension.badges = badgesByDimensionId[dimension.id] || [];
             });
-
-            this.expandedDimensions = this.dimensions
-                ? this.dimensions.map((dimension: IDimension) => `achievements-dimension-${dimension.id}`)
-                : [];
         });
 
         this.route.queryParamMap.subscribe((params: ParamMap) => {

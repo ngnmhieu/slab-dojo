@@ -24,13 +24,11 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
     @Input() skills: ISkill[];
     generalBadges: IBadge[];
     activeItemIds: { badge: number; level: number; dimension: number };
-    expandedDimensions: string[];
 
     constructor(private route: ActivatedRoute, private jhiAlertService: JhiAlertService, private router: Router) {}
 
     ngOnInit() {
         this.generalBadges = this.badges.filter((badge: IBadge) => !badge.dimensions || !badge.dimensions.length);
-        this.expandedDimensions = [];
         this.team.skills = this.teamSkills;
 
         this.route.queryParamMap.subscribe((params: ParamMap) => {
@@ -46,14 +44,12 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
                 const dimension = this.team.participations.find((d: IDimension) => d.id === dimension);
                 if (dimension) {
                     this.activeItemIds.dimension = dimensionId;
-                    this.setExpandedDimensionId(dimensionId);
                 }
             }
             if (levelId) {
                 const dimension = this.team.participations.find((d: IDimension) => d.levels.some((l: ILevel) => l.id === levelId));
                 if (dimension) {
                     this.activeItemIds.dimension = dimension.id;
-                    this.setExpandedDimensionId(dimension.id);
                     const level = dimension.levels.find((l: ILevel) => l.id === levelId);
                     if (level) {
                         this.activeItemIds.level = level.id;
@@ -64,17 +60,12 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
                 let badge;
                 if (dimension) {
                     this.activeItemIds.dimension = dimension.id;
-                    this.setExpandedDimensionId(dimension.id);
                     badge = dimension.badges.find((b: IBadge) => b.id === badgeId);
                 } else {
                     badge = this.generalBadges.find((b: IBadge) => b.id === badgeId);
                 }
                 if (badge) {
                     this.activeItemIds.badge = badge.id;
-                }
-            } else {
-                if (this.team.participations && this.team.participations.length) {
-                    this.setExpandedDimensionId(this.team.participations[0].id);
                 }
             }
         });
@@ -138,10 +129,6 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
 
     private isRelevant(item: ILevel | IBadge): boolean {
         return new RelevanceCheck(this.team).isRelevantLevelOrBadge(item);
-    }
-
-    private setExpandedDimensionId(dimensionId: number) {
-        this.expandedDimensions.push(`achievements-dimension-${dimensionId}`);
     }
 
     private onError(errorMessage: string) {

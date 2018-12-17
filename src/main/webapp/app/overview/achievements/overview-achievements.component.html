@@ -5,7 +5,7 @@
     <div class="additional-functions d-none d-xl-block">
     </div>
     <div class="achievement-container" data-simplebar="init">
-    <ngb-accordion activeIds="achievements-general-badges">
+    <ngb-accordion>
         <ngb-panel id="achievements-general-badges">
             <ng-template ngbPanelTitle>
                 <div class="achievement-list-header d-flex align-items-center">
@@ -29,7 +29,7 @@
             </ng-template>
         </ngb-panel>
     </ngb-accordion>
-    <ngb-accordion [activeIds]="expandedDimensions">
+    <ngb-accordion>
         <ngb-panel class="mt-1" *ngFor="let dimension of dimensions" id="achievements-dimension-{{dimension.id}}">
             <ng-template ngbPanelTitle>
                 <div class="achievement-list-header d-flex align-items-center">
