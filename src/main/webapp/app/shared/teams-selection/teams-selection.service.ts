@@ -23,10 +23,10 @@ export class TeamsSelectionService {
                 .do(result => {
                     this._selectedTeam = result.body || null;
                 })
-                .flatMap(result => {
+                .flatMap((result: any) => {
                     return this.teamSkillService
                         .query({ 'teamId.equals': result.body.id })
-                        .do(teamSkillRes => {
+                        .do((teamSkillRes: any) => {
                             this._selectedTeam.skills = teamSkillRes.body || [];
                         })
                         .map(() => result.body);
