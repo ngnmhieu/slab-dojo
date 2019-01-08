@@ -223,7 +223,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     isSuggestAble(s: IAchievableSkill) {
-        return !s.achievedAt && !s.irrelevant && (!s.vote || (s.vote && s.vote != 1)) && this.isTeamVoteAble(s);
+        return !s.achievedAt && !s.irrelevant && (!s.vote || (s.vote && s.vote !== 1)) && this.isTeamVoteAble(s);
     }
 
     private onError(errorMessage: string) {
