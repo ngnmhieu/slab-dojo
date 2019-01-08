@@ -23,6 +23,9 @@ export class TeamsSelectionService {
                 .do(result => {
                     this._selectedTeam = result.body || null;
                 })
+                .catch(err => {
+                    return Observable.empty();
+                })
                 .flatMap((result: any) => {
                     return this.teamSkillService
                         .query({ 'teamId.equals': result.body.id })
