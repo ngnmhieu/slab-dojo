@@ -11,6 +11,7 @@ import { RelevanceCheck, sortLevels } from 'app/shared';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
+import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-overview-achievements',
@@ -62,10 +63,6 @@ export class OverviewAchievementsComponent implements OnInit {
                 dimension.levels = (sortLevels(levelsByDimensionId[dimension.id]) || []).reverse();
                 dimension.badges = badgesByDimensionId[dimension.id] || [];
             });
-
-            this.expandedDimensions = this.dimensions
-                ? this.dimensions.map((dimension: IDimension) => `achievements-dimension-${dimension.id}`)
-                : [];
         });
 
         this.route.queryParamMap.subscribe((params: ParamMap) => {
@@ -79,10 +76,33 @@ export class OverviewAchievementsComponent implements OnInit {
 
             if (levelId) {
                 this.activeItemIds.level = levelId;
+                this.levels
+                    .filter(l => l.id === levelId)
+                    .forEach(l => this.toggleDimensionPanel(`achievements-dimension-${l.dimensionId}`, true));
             } else if (badgeId) {
                 this.activeItemIds.badge = badgeId;
+                let foundBadge = this.badges.find(b => b.id === badgeId);
+                (foundBadge ? foundBadge.dimensions : []).forEach(d => this.toggleDimensionPanel(`achievements-dimension-${d.id}`, true));
             }
         });
+    }
+
+    handleDimensionToggle(event: NgbPanelChangeEvent) {
+        this.toggleDimensionPanel(event.panelId, event.nextState);
+    }
+
+    toggleDimensionPanel(panelId: string, expanded: boolean) {
+        if (expanded) {
+            let idx = this.expandedDimensions.findIndex(d => panelId === d);
+            if (idx === -1) {
+                this.expandedDimensions.push(panelId);
+            }
+        } else {
+            let idx = this.expandedDimensions.findIndex(d => panelId === d);
+            if (idx !== -1) {
+                this.expandedDimensions.splice(idx, 1);
+            }
+        }
     }
 
     getAchievementProgress(item: ILevel | IBadge) {
