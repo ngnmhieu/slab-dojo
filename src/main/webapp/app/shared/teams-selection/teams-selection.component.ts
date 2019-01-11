@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 export class TeamsSelectionComponent implements OnInit {
     highlightedTeam: ITeam = null;
     selectedTeam: ITeam;
-
     teams: ITeam[] = [];
 
     constructor(
