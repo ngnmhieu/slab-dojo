@@ -64,7 +64,8 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="teamdojoApp.skill.expiryPeriod" for="field_expiryPeriod">Expiry Period</label>
                     <input type="text" class="form-control" name="expiryPeriod" id="field_expiryPeriod"
-                        [(ngModel)]="skill.expiryPeriod" pattern="^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$"/>
+                        [(ngModel)]="skill.expiryPeriod" pattern="^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$"
+                        [placeholder]="'teamdojoApp.skill.expiryPeriodPlaceholder' | translate"/>
                     <div [hidden]="!(editForm.controls.expiryPeriod?.dirty && editForm.controls.expiryPeriod?.invalid)">
                         <small class="form-text text-danger"
                             [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Expiry Period' }">

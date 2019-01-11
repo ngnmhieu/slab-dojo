@@ -25,6 +25,7 @@
             "implementation": "Implementation",
             "validation": "Validation",
             "expiryPeriod": "Expiry Period",
+            "expiryPeriodPlaceholder": "z.B. P1Y6M1W2D oder P6M-1D",
             "contact": "Contact",
             "score": "Score",
             "rateScore": "Rate Score",
