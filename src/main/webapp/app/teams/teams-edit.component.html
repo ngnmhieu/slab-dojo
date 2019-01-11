@@ -61,11 +61,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-control-label" jhiTranslate="teamdojoApp.team.image" for="field_image">Image</label>
-                        <select class="form-control" id="field_image" name="image" [(ngModel)]="team.imageId" >
-                            <option [ngValue]="null"></option>
-                            <option [ngValue]="imageOption.id" *ngFor="let imageOption of images; trackBy: trackImageById">{{imageOption.name}}</option>
-                        </select>
+                        <label class="form-control-label" jhiTranslate="teamdojoApp.image.large" for="field_large">Logo</label>
+                        <div>
+                            <img [src]="'data:' + image.largeContentType + ';base64,' + image.large" style="max-height: 100px;" *ngIf="image.large" alt="image image"/>
+                            <div *ngIf="image.large" class="form-text text-danger clearfix">
+                                <span class="pull-left">{{image.largeContentType}}, {{byteSize(image.large)}}</span>
+                                <button type="button" (click)="clearInputImage('large', 'largeContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                    <span class="fa fa-times"></span>
+                                </button>
+                            </div>
+                            <input type="file" id="file_large" (change)="setFileData($event, image, 'large', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                        </div>
+                        <input type="hidden" class="form-control" name="large" id="field_large"
+                               [(ngModel)]="image.large" />
+                        <input type="hidden" class="form-control" name="largeContentType" id="field_largeContentType"
+                               [(ngModel)]="image.largeContentType" />
                     </div>
                 </div>
                 <div>

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { JhiAlertService } from 'ng-jhipster';
+import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { ITeam } from 'app/shared/model/team.model';
 import { IDimension } from 'app/shared/model/dimension.model';
@@ -20,7 +20,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class TeamsEditComponent implements OnInit {
     team: ITeam;
     isSaving: boolean;
-    images: IImage[];
+    image: IImage;
 
     constructor(
         private activeModal: NgbActiveModal,
@@ -28,14 +28,15 @@ export class TeamsEditComponent implements OnInit {
         private teamService: TeamService,
         private dimensionService: DimensionService,
         private imageService: ImageService,
-        private route: ActivatedRoute
+        private dataUtils: JhiDataUtils,
+        private elementRef: ElementRef
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.imageService.query().subscribe(
-            (res: HttpResponse<IImage[]>) => {
-                this.images = res.body;
+        this.imageService.find(this.team.imageId).subscribe(
+            (res: HttpResponse<IImage>) => {
+                this.image = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
@@ -47,27 +48,47 @@ export class TeamsEditComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.subscribeToSaveResponse(this.teamService.update(this.team));
+        let imageResult: Observable<HttpResponse<IImage>>;
+        this.image.name = this.team.shortName + '-logo';
+        if (this.image.id !== undefined) {
+            imageResult = this.imageService.update(this.image);
+        } else {
+            imageResult = this.imageService.create(this.image);
+        }
+        imageResult.subscribe(
+            (res: HttpResponse<IImage>) => {
+                this.team.imageId = res.body.id;
+                this.teamService.update(this.team).subscribe(
+                    (res: HttpResponse<ITeam>) => {
+                        this.isSaving = false;
+                        this.activeModal.close(res.body);
+                    },
+                    (res: HttpErrorResponse) => {
+                        this.isSaving = false;
+                        console.log('Failed to update team', res);
+                    }
+                );
+            },
+            (res: HttpErrorResponse) => {
+                this.isSaving = false;
+                console.log('Image upload failed', res);
+            }
+        );
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ITeam>>) {
-        result.subscribe((res: HttpResponse<ITeam>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
     }
 
-    private onSaveSuccess(result: ITeam) {
-        this.isSaving = false;
-        this.activeModal.close(result);
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
-    private onSaveError() {
-        this.isSaving = false;
+    clearInputImage(field: string, fieldContentType: string, idInput: string) {
+        this.dataUtils.clearInputImage(this.image, this.elementRef, field, fieldContentType, idInput);
     }
 
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
-    }
-
-    trackImageById(index: number, item: IImage) {
-        return item.id;
     }
 }
