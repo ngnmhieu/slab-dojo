@@ -11,7 +11,7 @@
      [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
      [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
 
-    <span *ngIf="item.instantMultiplier && active" class="badge badge-pill badge-dark">
+    <span *ngIf="item.instantMultiplier && active" class="badge badge-pill multiplier-badge">
         {{('teamdojoApp.level.instantMultiplier' | translate) + ': ' + item.instantMultiplier}}
     </span>
 
@@ -32,4 +32,5 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <div *ngIf="item.completionBonus" class="completionBonus">{{'+' + item.completionBonus}}</div>
 </div>
