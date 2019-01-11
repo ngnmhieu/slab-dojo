@@ -139,6 +139,7 @@
             "minbytes": "Dieses Feld sollte mehr als {{min}} bytes haben.",
             "maxbytes": "Dieses Feld sollte nicht mehr als {{max}} bytes haben.",
             "pattern": "Dieses Feld muss das Muster {{pattern}} erfüllen.",
+            "expectedPattern": "Das erwartete Muster ist {{ regex }}.",
             "number": "Dieses Feld muss eine Zahl sein.",
             "datetimelocal": "Dieses Feld muss eine Datums- und Zeitangabe enthalten."
         }

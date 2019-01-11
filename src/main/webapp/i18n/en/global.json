@@ -139,6 +139,7 @@
             "minbytes": "This field should be at least {{ min }} bytes.",
             "maxbytes": "This field cannot be more than {{ max }} bytes.",
             "pattern": "This field should follow pattern for {{ pattern }}.",
+            "expectedPattern": "The expected pattern is {{ regex }}.",
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time.",
             "patternLogin": "This field can only contain letters, digits and e-mail addresses."
