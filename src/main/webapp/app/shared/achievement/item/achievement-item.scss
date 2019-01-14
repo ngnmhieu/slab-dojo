@@ -92,6 +92,7 @@
         background-color: $dojo-text-primary;
         position: absolute;
         margin-left: 6px;
+        z-index: 3;
     }
 
     .item-progress-wrapper {
@@ -111,7 +112,7 @@
         }
     }
 
-    .completionBonus {
+    .completion-bonus {
         color: $dojo-text-primary;
         text-align: center;
     }
