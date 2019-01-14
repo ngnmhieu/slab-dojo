@@ -84,4 +84,15 @@
         }
 
     }
+    .team-edit-btn {
+        cursor: pointer;
+        position: absolute;
+        right: -5rem;
+        top: 10px;
+        font-size: 1.3em;
+        color: #777;
+        &:hover {
+            color: #000;
+        }
+    }
 }
