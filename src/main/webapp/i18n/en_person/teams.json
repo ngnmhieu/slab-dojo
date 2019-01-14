@@ -54,6 +54,9 @@
                 "title": "Achievements",
                 "generalBadges": {
                     "title": "General Badges"
+                },
+                "item": {
+                    "multiplier": "Multiplier"
                 }
             },
             "dateFormat": "yyyy-MM-dd"

@@ -54,6 +54,9 @@
                 "title": "Errungenschaften",
                 "generalBadges": {
                     "title": "Allgemeine Badges"
+                },
+                "item": {
+                    "multiplier": "Multiplikator"
                 }
             },
             "dateFormat": "dd.MM.yyyy"
