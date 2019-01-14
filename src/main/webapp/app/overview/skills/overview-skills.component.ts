@@ -112,11 +112,9 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                     const skillId = badgeSkill.skillId;
                     this.dimensionsBySkillId[skillId] = this.dimensionsBySkillId[skillId] || [];
 
-                    this.dimensionsBySkillId[skillId].forEach(entry => {
-                        if (entry.indexOf(skillId) === -1) {
-                            this.dimensionsBySkillId[skillId].push(dimension.id);
-                        }
-                    });
+                    if (this.dimensionsBySkillId[skillId].indexOf(dimension.id) === -1) {
+                        this.dimensionsBySkillId[skillId].push(dimension.id);
+                    }
                 });
             });
         });
