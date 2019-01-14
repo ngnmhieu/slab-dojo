@@ -58,22 +58,17 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.activeBadge = null;
                 if (params.get('level')) {
                     this.activeLevel = (this.levels || []).find((level: ILevel) => level.id === Number.parseInt(params.get('level')));
-                    this.activeSkills = this.sortActiveSkills(
-                        this.activeLevel ? this.activeLevel.skills.filter(l => this.isCompleted(l)) : []
-                    );
+                    this.activeSkills = this.activeLevel ? this.sortActiveSkills(this.activeLevel.skills) : [];
                     this.updateBreadcrumb();
                 } else if (params.get('badge')) {
                     this.activeBadge = (this.badges || []).find((badge: IBadge) => badge.id === Number.parseInt(params.get('badge')));
-                    this.activeSkills = this.sortActiveSkills(
-                        this.activeBadge ? this.activeBadge.skills.filter(l => this.isCompleted(l)) : []
-                    );
+                    this.activeSkills = this.activeBadge ? this.sortActiveSkills(this.activeBadge.skills) : [];
                     this.updateBreadcrumb();
                 } else {
                     this.activeSkills = this.sortActiveSkills(
-                        (this.levelSkills.filter(l => this.isCompleted(l)) || []).concat(
-                            this.badgeSkills
-                                .filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId))
-                                .filter(l => this.isCompleted(l)) || []
+                        (this.levelSkills || []).concat(
+                            this.badgeSkills.filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId)) ||
+                                []
                         )
                     );
                     this.updateBreadcrumb();
@@ -183,16 +178,6 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
 
     findSkill(skillId: number): ISkill {
         return (this.skills || []).find(skill => skill.id === skillId);
-    }
-
-    private isCompleted(skill: ILevelSkill | IBadgeSkill): boolean {
-        for (const team of this.teams) {
-            const teamSkill = this.findTeamSkill(team, skill);
-            if (this.isTeamSkillCompleted(teamSkill)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private findTeamSkill(team: ITeam, skill: ILevelSkill | IBadgeSkill): ITeamSkill {
