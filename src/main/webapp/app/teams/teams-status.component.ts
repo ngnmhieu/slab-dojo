@@ -65,6 +65,7 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
         (<TeamsEditComponent>modalRef.componentInstance).team = Object.assign({}, this.team);
         modalRef.result.then(
             team => {
+                this.team = team;
                 this.isTeamEditOpen = false;
                 this.router.navigate(['/teams/', (<ITeam>team).shortName]);
             },
