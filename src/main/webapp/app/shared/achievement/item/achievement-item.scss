@@ -87,16 +87,13 @@
         }
     }
 
-    .item-content {
-        margin-top: -17px;
-    }
-
-    .multiplier-badge {
-        color: $dojo-text-inverse-primary;
-        background-color: $dojo-text-primary;
+    .badge-content {
+        text-align: center;
         z-index: 3;
-        display: flex;
-        justify-content: center;
+        .multiplier-badge {
+            color: $dojo-text-inverse-primary;
+            background-color: $dojo-text-primary;
+        }
     }
 
     .item-progress-wrapper {
@@ -124,6 +121,9 @@
     &.active {
         border-color: #edb900;
         background-color: rgba(237, 185, 0, 0.2);
+        .badge-content {
+            margin-bottom: -24px;
+        }
     }
     &:hover {
         cursor: pointer;

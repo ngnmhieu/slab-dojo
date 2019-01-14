@@ -7,13 +7,15 @@
         <small *ngIf="hasStatus">( {{progress | number: '1.0-2' }}% )</small>
     </div>
 </ng-template>
-<div class="achievement-item" (click)="selectItem($event)"
+<div class="d-flex flex-column achievement-item" (click)="selectItem($event)"
      [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
      [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
 
-    <span *ngIf="item.instantMultiplier && active" class="badge badge-pill multiplier-badge">
-        {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
-    </span>
+    <div class="badge-content">
+        <span *ngIf="item.instantMultiplier && active" class="badge badge-pill multiplier-badge">
+            {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
+        </span>
+    </div>
 
     <div class="item-content d-flex justify-content-center" [ngStyle]="{'width': size, 'height': size}">
 
