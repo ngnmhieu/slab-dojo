@@ -87,12 +87,16 @@
         }
     }
 
+    .item-content {
+        margin-top: -17px;
+    }
+
     .multiplier-badge {
         color: $dojo-text-inverse-primary;
         background-color: $dojo-text-primary;
-        position: absolute;
-        margin-left: 6px;
         z-index: 3;
+        display: flex;
+        justify-content: center;
     }
 
     .item-progress-wrapper {
