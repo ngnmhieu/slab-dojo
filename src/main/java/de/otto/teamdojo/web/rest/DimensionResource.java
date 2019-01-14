@@ -1,22 +1,27 @@
 package de.otto.teamdojo.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.DimensionQueryService;
 import de.otto.teamdojo.service.DimensionService;
-import de.otto.teamdojo.service.TeamService;
-import de.otto.teamdojo.service.dto.DimensionCriteria;
-import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
+import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.dto.DimensionDTO;
+import de.otto.teamdojo.service.dto.DimensionCriteria;
+import de.otto.teamdojo.service.DimensionQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -35,12 +40,9 @@ public class DimensionResource {
 
     private final DimensionQueryService dimensionQueryService;
 
-    private final TeamService teamService;
-
-    public DimensionResource(DimensionService dimensionService, DimensionQueryService dimensionQueryService, TeamService teamService) {
+    public DimensionResource(DimensionService dimensionService, DimensionQueryService dimensionQueryService) {
         this.dimensionService = dimensionService;
         this.dimensionQueryService = dimensionQueryService;
-        this.teamService = teamService;
     }
 
     /**
@@ -58,7 +60,6 @@ public class DimensionResource {
             throw new BadRequestAlertException("A new dimension cannot already have an ID", ENTITY_NAME, "idexists");
         }
         DimensionDTO result = dimensionService.save(dimensionDTO);
-        teamService.addNewDimensionForAllTeams(result);
         return ResponseEntity.created(new URI("/api/dimensions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -89,15 +90,17 @@ public class DimensionResource {
     /**
      * GET  /dimensions : get all the dimensions.
      *
+     * @param pageable the pagination information
      * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of dimensions in body
      */
     @GetMapping("/dimensions")
     @Timed
-    public ResponseEntity<List<DimensionDTO>> getAllDimensions(DimensionCriteria criteria) {
+    public ResponseEntity<List<DimensionDTO>> getAllDimensions(DimensionCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Dimensions by criteria: {}", criteria);
-        List<DimensionDTO> entityList = dimensionQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Page<DimensionDTO> page = dimensionQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/dimensions");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

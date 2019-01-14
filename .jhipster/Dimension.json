@@ -49,5 +49,5 @@
     "service": "serviceImpl",
     "entityTableName": "dimension",
     "jpaMetamodelFiltering": true,
-    "pagination": "no"
+    "pagination": "infinite-scroll"
 }
