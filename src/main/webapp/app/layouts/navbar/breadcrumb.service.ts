@@ -34,6 +34,10 @@ export class BreadcrumbService {
         this.breadcrumbChanged.emit('Breadcrumb changed');
     }
 
+    setTeam(team: ITeam) {
+        this.setBreadcrumb(team, this.dimension, this.level, this.badge, this.skill);
+    }
+
     getCurrentBreadcrumb() {
         const breadcrumbs = [];
 

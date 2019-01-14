@@ -11,6 +11,8 @@ import { TeamScoreCalculation } from 'app/shared/util/team-score-calculation';
 import { OrganizationService } from 'app/entities/organization';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TeamsEditComponent } from 'app/teams/teams-edit.component';
+import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
+import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 
 @Component({
     selector: 'jhi-teams-status',
@@ -28,7 +30,13 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     levelUpScore: number;
     isTeamEditOpen: boolean;
 
-    constructor(private organizationService: OrganizationService, private router: Router, private modalService: NgbModal) {}
+    constructor(
+        private organizationService: OrganizationService,
+        private router: Router,
+        private breadcrumbService: BreadcrumbService,
+        private teamSelectionService: TeamsSelectionService,
+        private modalService: NgbModal
+    ) {}
 
     ngOnInit(): void {
         this.team.skills = this.teamSkills;
@@ -44,6 +52,8 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.team.skills = this.teamSkills;
         this.calculateStatus();
+        this.breadcrumbService.setTeam(this.team);
+        this.teamSelectionService.query().subscribe();
     }
 
     editTeam(): NgbModalRef {
