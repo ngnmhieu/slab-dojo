@@ -5,7 +5,8 @@
             "home": {
                 "title": "Persons",
                 "createLabel": "Create a new Person",
-                "createOrEditLabel": "Create or edit a Person"
+                "createOrEditLabel": "Create or edit a Person",
+                "editLabel": "Edit person"
             },
             "created": "A new Person is created with identifier {{ param }}",
             "updated": "A Person is updated with identifier {{ param }}",

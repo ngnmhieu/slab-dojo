@@ -34,12 +34,12 @@ export class TeamsEditComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.imageService.find(this.team.imageId).subscribe(
-            (res: HttpResponse<IImage>) => {
-                this.image = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.image = {};
+        if (this.team.imageId) {
+            this.imageService
+                .find(this.team.imageId)
+                .subscribe((res: HttpResponse<IImage>) => (this.image = res.body), (res: HttpErrorResponse) => this.onError(res.message));
+        }
     }
 
     cancel() {
@@ -48,16 +48,21 @@ export class TeamsEditComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        let imageResult: Observable<HttpResponse<IImage>>;
         this.image.name = this.team.shortName + '-logo';
+        this.image.medium = this.image.large;
+        this.image.small = this.image.large;
+        this.image.mediumContentType = this.image.largeContentType;
+        this.image.smallContentType = this.image.largeContentType;
+
+        let imageResult: Observable<HttpResponse<IImage>>;
         if (this.image.id !== undefined) {
             imageResult = this.imageService.update(this.image);
         } else {
             imageResult = this.imageService.create(this.image);
         }
         imageResult.subscribe(
-            (res: HttpResponse<IImage>) => {
-                this.team.imageId = res.body.id;
+            (imgRes: HttpResponse<IImage>) => {
+                this.team.imageId = imgRes.body.id;
                 this.teamService.update(this.team).subscribe(
                     (res: HttpResponse<ITeam>) => {
                         this.isSaving = false;

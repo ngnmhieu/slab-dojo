@@ -1,6 +1,6 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
     <div class="modal-header">
-        <h4 class="modal-title" jhiTranslate="teamdojoApp.teams.selection.title">Team Selection</h4>
+        <h4 class="modal-title" jhiTranslate="teamdojoApp.team.home.editLabel">Team Selection</h4>
         <button type="button" class="close" aria-label="Close" (click)="cancel()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -9,7 +9,6 @@
 
         <div class="row justify-content-center">
             <div class="col-12">
-                <h2 id="jhi-team-heading" jhiTranslate="teamdojoApp.team.home.createOrEditLabel">Create or edit a Team</h2>
                 <div>
                     <jhi-alert-error></jhi-alert-error>
                     <div class="form-group">
@@ -61,7 +60,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-control-label" jhiTranslate="teamdojoApp.image.large" for="field_large">Logo</label>
+                        <label class="form-control-label" for="field_large">Logo</label>
                         <div>
                             <img [src]="'data:' + image.largeContentType + ';base64,' + image.large" style="max-height: 100px;" *ngIf="image.large" alt="image image"/>
                             <div *ngIf="image.large" class="form-text text-danger clearfix">
