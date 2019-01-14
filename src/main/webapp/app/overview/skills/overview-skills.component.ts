@@ -13,6 +13,7 @@ import { DimensionService } from 'app/entities/dimension';
 import { Progress } from 'app/shared/achievement/model/progress.model';
 import 'simplebar';
 import { Subject } from 'rxjs/Subject';
+import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
 
 @Component({
     selector: 'jhi-overview-skills',
@@ -35,6 +36,7 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
     generalSkillsIds: number[];
     search$: Subject<string>;
     search: string;
+    orderBy = 'title';
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -56,17 +58,23 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.activeBadge = null;
                 if (params.get('level')) {
                     this.activeLevel = (this.levels || []).find((level: ILevel) => level.id === Number.parseInt(params.get('level')));
-                    this.activeSkills = this.activeLevel ? this.activeLevel.skills.filter(l => this.isCompleted(l)) : [];
+                    this.activeSkills = this.sortActiveSkills(
+                        this.activeLevel ? this.activeLevel.skills.filter(l => this.isCompleted(l)) : []
+                    );
                     this.updateBreadcrumb();
                 } else if (params.get('badge')) {
                     this.activeBadge = (this.badges || []).find((badge: IBadge) => badge.id === Number.parseInt(params.get('badge')));
-                    this.activeSkills = this.activeBadge ? this.activeBadge.skills.filter(l => this.isCompleted(l)) : [];
+                    this.activeSkills = this.sortActiveSkills(
+                        this.activeBadge ? this.activeBadge.skills.filter(l => this.isCompleted(l)) : []
+                    );
                     this.updateBreadcrumb();
                 } else {
-                    this.activeSkills = (this.levelSkills.filter(l => this.isCompleted(l)) || []).concat(
-                        this.badgeSkills
-                            .filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId))
-                            .filter(l => this.isCompleted(l)) || []
+                    this.activeSkills = this.sortActiveSkills(
+                        (this.levelSkills.filter(l => this.isCompleted(l)) || []).concat(
+                            this.badgeSkills
+                                .filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId))
+                                .filter(l => this.isCompleted(l)) || []
+                        )
                     );
                     this.updateBreadcrumb();
                 }
@@ -82,6 +90,16 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
+    }
+
+    onSkillSort() {
+        this.activeSkills = this.sortActiveSkills(this.activeSkills);
+    }
+
+    sortActiveSkills(activeSkills = []) {
+        return (
+            new SkillSortPipe().transform((activeSkills || []).map(activeSkill => this.findSkill(activeSkill.skillId)), this.orderBy) || []
+        ).map(skill => activeSkills.find(activeSkill => activeSkill.skillId === skill.id));
     }
 
     loadAll() {
