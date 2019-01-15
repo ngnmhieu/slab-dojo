@@ -25,12 +25,12 @@ export class BreadcrumbService {
         });
     }
 
-    setBreadcrumb(team: ITeam, dimension: IDimension, level: ILevel, badge: IBadge, skill: ISkill) {
-        this.team = team;
-        this.dimension = dimension;
-        this.level = level;
-        this.badge = badge;
-        this.skill = skill;
+    setBreadcrumb(team: ITeam = null, dimension: IDimension = null, level: ILevel = null, badge: IBadge = null, skill: ISkill = null) {
+        this.team = team || this.team;
+        this.dimension = dimension || this.dimension;
+        this.level = level || this.level;
+        this.badge = badge || this.badge;
+        this.skill = skill || this.skill;
         this.breadcrumbChanged.emit('Breadcrumb changed');
     }
 

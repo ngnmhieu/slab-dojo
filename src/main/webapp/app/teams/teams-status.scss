@@ -6,6 +6,9 @@
     padding-right: 10px;
     .teams-status-avatar {
         text-align: center;
+        .team-logo-wrapper {
+            position: relative;
+        }
         .avatar-image-wrapper {
             width: 31vh;
             height: 41vh;
@@ -83,5 +86,16 @@
         .teams-status-achievements-badges {
         }
 
+    }
+    .team-edit-btn {
+        cursor: pointer;
+        position: absolute;
+        right: -5rem;
+        top: 10px;
+        font-size: 1.3em;
+        color: #777;
+        &:hover {
+            color: #000;
+        }
     }
 }

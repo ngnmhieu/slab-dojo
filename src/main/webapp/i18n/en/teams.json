@@ -53,6 +53,12 @@
                 "activities": {
                     "title": "Activities",
                     "received": "received"
+                },
+                "edit": {
+                    "label": "Edit Person",
+                    "name": "Name",
+                    "shortName": "Short Name",
+                    "slogan": "Slogan"
                 }
             },
             "achievements": {

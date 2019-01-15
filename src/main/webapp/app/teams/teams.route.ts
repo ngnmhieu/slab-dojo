@@ -7,14 +7,7 @@ import { Injectable } from '@angular/core';
 import { SkillDetailsComponent } from 'app/teams/skill-details/skill-details.component';
 import { TeamSkillService } from 'app/entities/team-skill';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
-import {
-    AllBadgesResolve,
-    AllCommentsResolve,
-    AllSkillsResolve,
-    AllTeamsResolve,
-    DojoModelResolve,
-    SkillResolve
-} from 'app/shared/common.resolver';
+import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
 
 @Injectable()
 export class TeamAndTeamSkillResolve implements Resolve<any> {
@@ -54,7 +47,8 @@ export const TEAMS_ROUTES: Route[] = [
         data: {
             authorities: [],
             pageTitle: 'teamdojoApp.teams.home.title'
-        }
+        },
+        runGuardsAndResolvers: 'always'
     },
     {
         path: 'teams/:shortName/skills/:skillId',
