@@ -12,7 +12,17 @@ spec:
       kind: DockerImage
       name: "teamdojo:latest"
     generation: null
-    importPolicy: {}
+    importPolicy:
+      scheduled: true
     name: latest
+    referencePolicy:
+      type: Source
+  - from:
+        kind: DockerImage
+        name: "teamdojo:develop"
+    generation: null
+    importPolicy:
+      scheduled: true
+    name: develop
     referencePolicy:
       type: Source
