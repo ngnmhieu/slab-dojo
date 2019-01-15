@@ -5,8 +5,7 @@
             "home": {
                 "title": "Teams",
                 "createLabel": "Team erstellen",
-                "createOrEditLabel": "Team erstellen oder bearbeiten",
-                "editLabel": "Team bearbeiten"
+                "createOrEditLabel": "Team erstellen oder bearbeiten"
             },
             "created": "Team erstellt mit ID {{ param }}",
             "updated": "Team aktualisiert mit ID {{ param }}",
@@ -18,7 +17,7 @@
                 "title": "Team"
             },
             "name": "Name",
-            "shortName": "Kurzname",
+            "shortName": "Short Name",
             "slogan": "Slogan",
             "contactPerson": "Contact Person",
             "participations": "Participations",
