@@ -92,6 +92,11 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
         });
     }
 
+    isSameTeamSelected() {
+        const selectedTeam = this.teamSelectionService.selectedTeam;
+        return selectedTeam && selectedTeam.id === this.team.id;
+    }
+
     private getCompletedBadges() {
         return this.badges.filter(
             (badge: IBadge) =>
