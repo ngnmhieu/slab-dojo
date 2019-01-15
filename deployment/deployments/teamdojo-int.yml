@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - image: "docker-registry.default.svc:5000/slabdojo/teamdojo:develop"
-        name: teamdojo
+        name: teamdojo-int
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -46,7 +46,7 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - teamdojo
+      - teamdojo-int
       from:
         kind: ImageStreamTag
         name: teamdojo:develop
