@@ -3,16 +3,16 @@ kind: ImageStream
 metadata:
   labels:
     app: teamdojo
-  name: teamdojo
+  name: teamdojo-int
 spec:
   lookupPolicy:
     local: false
   tags:
   - from:
       kind: DockerImage
-      name: "teamdojo:latest"
+      name: "teamdojo:develop"
     generation: null
     importPolicy: {}
-    name: latest
+    name: develop
     referencePolicy:
       type: Source

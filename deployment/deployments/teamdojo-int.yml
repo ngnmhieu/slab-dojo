@@ -16,7 +16,7 @@ spec:
         deploymentconfig: teamdojo-int
     spec:
       containers:
-      - image: teamdojo
+      - image: "docker-registry.default.svc:5000/slabdojo/teamdojo:develop"
         name: teamdojo
         ports:
         - containerPort: 8080
@@ -38,6 +38,8 @@ spec:
                 key: password
           - name: JHIPSTER_SLEEP
             value: "10" # gives time for the database to boot before the application
+      imagePullSecrets:
+      - name: slabdojo-registry
   test: false
   triggers:
   - type: ConfigChange
@@ -47,5 +49,5 @@ spec:
       - teamdojo
       from:
         kind: ImageStreamTag
-        name: teamdojo:latest
+        name: teamdojo:develop
     type: ImageChange
