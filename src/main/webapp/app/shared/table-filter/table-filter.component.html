@@ -1,3 +1,6 @@
 <th *ngFor="let field of fields">
-    <input *ngIf="field.filter" type="text" class="form-control" [(ngModel)]="filterInputs[field.name]" (ngModelChange)="updateFilter()">
+    <div *ngIf="field.filter" class="filter-field">
+        <input type="text" class="form-control" [(ngModel)]="filterInputs[field.name]" (ngModelChange)="updateFilter()">
+        <span class="filter-icon fa fa-search"></span>
+    </div>
 </th>

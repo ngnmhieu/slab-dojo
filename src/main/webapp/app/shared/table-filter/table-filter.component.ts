@@ -12,7 +12,8 @@ export interface FilterQuery {
 
 @Component({
     selector: 'tr[jhi-table-filter]',
-    templateUrl: './table-filter.component.html'
+    templateUrl: './table-filter.component.html',
+    styleUrls: ['./table-filter.scss']
 })
 export class TableFilterComponent {
     @Input() fields: TableField[];
