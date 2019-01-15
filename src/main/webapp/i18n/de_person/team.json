@@ -5,8 +5,7 @@
             "home": {
                 "title": "Personen",
                 "createLabel": "Person erstellen",
-                "createOrEditLabel": "Person erstellen oder bearbeiten",
-                "editLabel": "Person bearbeiten"
+                "createOrEditLabel": "Person erstellen oder bearbeiten"
             },
             "created": "Person erstellt mit ID {{ param }}",
             "updated": "Person aktualisiert mit ID {{ param }}",

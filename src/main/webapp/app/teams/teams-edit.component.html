@@ -1,6 +1,6 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
     <div class="modal-header">
-        <h4 class="modal-title" jhiTranslate="teamdojoApp.team.home.editLabel">Team Selection</h4>
+        <h4 class="modal-title" jhiTranslate="teamdojoApp.teams.status.edit.label">Edit Person</h4>
         <button type="button" class="close" aria-label="Close" (click)="cancel()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -12,7 +12,7 @@
                 <div>
                     <jhi-alert-error></jhi-alert-error>
                     <div class="form-group">
-                        <label class="form-control-label" jhiTranslate="teamdojoApp.team.name" for="field_name">Name</label>
+                        <label class="form-control-label" jhiTranslate="teamdojoApp.teams.status.edit.name" for="field_name">Name</label>
                         <input type="text" class="form-control" name="name" id="field_name"
                                [(ngModel)]="team.name" required minlength="2" maxlength="50"/>
                         <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" jhiTranslate="teamdojoApp.team.shortName" for="field_shortName">Short Name</label>
+                        <label class="form-control-label" jhiTranslate="teamdojoApp.teams.status.edit.shortName" for="field_shortName">Short Name</label>
                         <input type="text" class="form-control" name="shortName" id="field_shortName"
                                [(ngModel)]="team.shortName" required minlength="2" maxlength="20" pattern="^[a-zA-Z0-9_-]*$"/>
                         <div [hidden]="!(editForm.controls.shortName?.dirty && editForm.controls.shortName?.invalid)">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" jhiTranslate="teamdojoApp.team.slogan" for="field_slogan">Slogan</label>
+                        <label class="form-control-label" jhiTranslate="teamdojoApp.teams.status.edit.slogan" for="field_slogan">Slogan</label>
                         <input type="text" class="form-control" name="slogan" id="field_slogan"
                                [(ngModel)]="team.slogan" />
                     </div>
