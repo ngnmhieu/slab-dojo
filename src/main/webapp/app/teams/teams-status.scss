@@ -6,6 +6,9 @@
     padding-right: 10px;
     .teams-status-avatar {
         text-align: center;
+        .team-logo-wrapper {
+            position: relative;
+        }
         .avatar-image-wrapper {
             width: 31vh;
             height: 41vh;
