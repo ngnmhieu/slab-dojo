@@ -43,7 +43,7 @@ export class TeamsEditComponent implements OnInit {
     }
 
     cancel() {
-        this.activeModal.dismiss('Team edit cancelled');
+        this.activeModal.dismiss('Edit has been cancelled');
     }
 
     save() {
