@@ -1,0 +1,3 @@
+<th *ngFor="let field of fields">
+    <input *ngIf="field.filter" type="text" class="form-control" [(ngModel)]="filterInputs[field.name]" (ngModelChange)="updateFilter()">
+</th>
