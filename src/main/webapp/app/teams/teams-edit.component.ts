@@ -49,10 +49,6 @@ export class TeamsEditComponent implements OnInit {
     save() {
         this.isSaving = true;
         this.image.name = this.team.shortName + '-logo-' + Date.now();
-        this.image.medium = this.image.large;
-        this.image.small = this.image.large;
-        this.image.mediumContentType = this.image.largeContentType;
-        this.image.smallContentType = this.image.largeContentType;
 
         let imageResult: Observable<HttpResponse<IImage>>;
         if (this.image.id !== undefined) {
