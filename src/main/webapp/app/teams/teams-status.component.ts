@@ -52,7 +52,7 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.team.skills = this.teamSkills;
         this.calculateStatus();
-        this.breadcrumbService.setTeam(this.team);
+        this.breadcrumbService.setBreadcrumb(this.team);
         this.teamSelectionService.query().subscribe();
     }
 
