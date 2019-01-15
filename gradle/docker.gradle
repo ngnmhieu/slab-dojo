@@ -32,7 +32,8 @@ task copyDockerFiles(type: Copy) {
 }
 
 def dockerImageName = project.docker_repository ? project.docker_repository + "/" + project.name : project.name;
-def dockerImageNameWithTags = ["$dockerImageName:${version}".toString(), "$dockerImageName:latest".toString()];
+def dockerImageTagName = project.docker_tag ? project.docker_tag : 'latest';
+def dockerImageNameWithTags = ["$dockerImageName:${version}".toString(), "$dockerImageName:$dockerImageTagName".toString()];
 
 task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
     description = "Package application as Docker image"
@@ -47,6 +48,6 @@ task pushDockerVersion(type: DockerPushImage, dependsOn: 'buildDocker') {
 }
 
 task pushDocker(type: DockerPushImage, dependsOn: 'buildDocker') {
-    description = "Pushes the image with tag 'latest'"
+    description = "Pushes the image with tag 'latest' or the configured tag"
     imageName = dockerImageNameWithTags[1];
 }
