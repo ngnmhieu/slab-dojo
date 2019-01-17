@@ -66,6 +66,7 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
             team => {
                 this.team = team;
                 this.isTeamEditOpen = false;
+                this.teamSelectionService.query().subscribe();
                 this.router.navigate(['/teams/', (<ITeam>team).shortName]);
             },
             reason => {
