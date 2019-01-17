@@ -53,7 +53,6 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
         this.team.skills = this.teamSkills;
         this.calculateStatus();
         this.breadcrumbService.setBreadcrumb(this.team);
-        this.teamSelectionService.query().subscribe();
     }
 
     editTeam(): NgbModalRef {
@@ -67,6 +66,7 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
             team => {
                 this.team = team;
                 this.isTeamEditOpen = false;
+                this.teamSelectionService.query().subscribe();
                 this.router.navigate(['/teams/', (<ITeam>team).shortName]);
             },
             reason => {
