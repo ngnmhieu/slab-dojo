@@ -29,6 +29,7 @@ public interface LevelService {
      */
     Page<LevelDTO> findAll(Pageable pageable);
 
+    Page<LevelDTO> findByIdIn(List<Long> levelIds, Pageable pageable);
 
     /**
      * Get the "id" level.
