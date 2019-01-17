@@ -47,7 +47,7 @@ export class SkillComponent implements OnInit, OnDestroy {
 
     loadAll() {
         const query = {};
-        this.filters.forEach(filter => (query[`${filter.fieldName}.contains`] = filter.query));
+        this.filters.forEach(filter => (query[`${filter.fieldName}.${filter.operator}`] = filter.query));
 
         this.skillService
             .query({

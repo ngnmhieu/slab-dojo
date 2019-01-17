@@ -21,6 +21,11 @@
                     class="fa fa-sort"></span></th>
             <th></th>
             </tr>
+
+            <tr jhi-table-filter [fields]="[
+                {name: 'id', filter: true, operator: 'in'}
+            ]" (onFilterChanged)="applyFilter($event)"></tr>
+
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']"
                    [infiniteScrollDistance]="0">

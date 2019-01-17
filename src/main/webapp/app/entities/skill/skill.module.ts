@@ -14,20 +14,11 @@ import {
     SkillResolve
 } from './';
 
-import { TableFilterComponent } from 'app/shared/table-filter/table-filter.component';
-
 const ENTITY_STATES = [...skillRoute, ...skillPopupRoute];
 
 @NgModule({
     imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-    declarations: [
-        SkillComponent,
-        SkillDetailComponent,
-        SkillUpdateComponent,
-        SkillDeleteDialogComponent,
-        SkillDeletePopupComponent,
-        TableFilterComponent
-    ],
+    declarations: [SkillComponent, SkillDetailComponent, SkillUpdateComponent, SkillDeleteDialogComponent, SkillDeletePopupComponent],
     entryComponents: [SkillComponent, SkillUpdateComponent, SkillDeleteDialogComponent, SkillDeletePopupComponent],
     providers: [SkillService, SkillResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
