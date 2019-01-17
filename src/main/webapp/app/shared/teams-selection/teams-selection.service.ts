@@ -24,6 +24,7 @@ export class TeamsSelectionService {
                     this._selectedTeam = result.body || null;
                 })
                 .catch(err => {
+                    this.selectedTeam = null;
                     return Observable.empty();
                 })
                 .flatMap((result: any) => {
