@@ -1,12 +1,24 @@
 <ng-template #popoverContent>
     <div class="d-flex flex-column align-items-center">
         <div>{{item.name}}</div>
+        <div *ngIf="item.instantMultiplier && !active">
+            {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
+        </div>
         <small *ngIf="hasStatus">( {{progress | number: '1.0-2' }}% )</small>
     </div>
 </ng-template>
-<div class="achievement-item" (click)="selectItem($event)" [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
+<div class="d-flex flex-column achievement-item" (click)="selectItem($event)"
+     [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
      [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
+
+    <div class="badge-content">
+        <span *ngIf="item.instantMultiplier && active" class="badge badge-pill multiplier-badge">
+            {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
+        </span>
+    </div>
+
     <div class="item-content d-flex justify-content-center" [ngStyle]="{'width': size, 'height': size}">
+
         <span class="item-image">
             <img *ngIf="item.imageId ; else picturePlaceholder" [title]="item.name"
                  [src]="item.imageId | imageUrl: 'medium'" class="mx-auto"/>
@@ -22,4 +34,5 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <div *ngIf="item.completionBonus" class="completion-bonus">{{'+' + item.completionBonus}}</div>
 </div>
