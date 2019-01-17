@@ -19,7 +19,7 @@
             "name": "Name",
             "description": "Description",
             "requiredScore": "Required Score",
-            "instantMultiplier": "Skill Score Multiplikator",
+            "instantMultiplier": "Skill Score Multiplier",
             "completionBonus": "Level Completion Bonus",
             "dimension": "Dimension",
             "dependsOn": "Depends On",
