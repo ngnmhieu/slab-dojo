@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
@@ -9,55 +9,48 @@ import { IActivity } from 'app/shared/model/activity.model';
 import { ActivityService } from './activity.service';
 
 @Component({
-  selector: 'jhi-activity-update',
-  templateUrl: './activity-update.component.html'
+    selector: 'jhi-activity-update',
+    templateUrl: './activity-update.component.html'
 })
 export class ActivityUpdateComponent implements OnInit {
-  private _activity: IActivity;
-  isSaving: boolean;
-  createdAt: string;
+    activity: IActivity;
+    isSaving: boolean;
+    createdAt: string;
 
-  constructor(private activityService: ActivityService, private route: ActivatedRoute) {}
+    constructor(protected activityService: ActivityService, protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.isSaving = false;
-    this.route.data.subscribe(({ activity }) => {
-      this.activity = activity.body ? activity.body : activity;
-    });
-  }
-
-  previousState() {
-    window.history.back();
-  }
-
-  save() {
-    this.isSaving = true;
-    this.activity.createdAt = moment(this.createdAt, DATE_TIME_FORMAT);
-    if (this.activity.id !== undefined) {
-      this.subscribeToSaveResponse(this.activityService.update(this.activity));
-    } else {
-      this.subscribeToSaveResponse(this.activityService.create(this.activity));
+    ngOnInit() {
+        this.isSaving = false;
+        this.activatedRoute.data.subscribe(({ activity }) => {
+            this.activity = activity;
+            this.createdAt = this.activity.createdAt != null ? this.activity.createdAt.format(DATE_TIME_FORMAT) : null;
+        });
     }
-  }
 
-  private subscribeToSaveResponse(result: Observable<HttpResponse<IActivity>>) {
-    result.subscribe((res: HttpResponse<IActivity>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
-  }
+    previousState() {
+        window.history.back();
+    }
 
-  private onSaveSuccess(result: IActivity) {
-    this.isSaving = false;
-    this.previousState();
-  }
+    save() {
+        this.isSaving = true;
+        this.activity.createdAt = this.createdAt != null ? moment(this.createdAt, DATE_TIME_FORMAT) : null;
+        if (this.activity.id !== undefined) {
+            this.subscribeToSaveResponse(this.activityService.update(this.activity));
+        } else {
+            this.subscribeToSaveResponse(this.activityService.create(this.activity));
+        }
+    }
 
-  private onSaveError() {
-    this.isSaving = false;
-  }
-  get activity() {
-    return this._activity;
-  }
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IActivity>>) {
+        result.subscribe((res: HttpResponse<IActivity>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    }
 
-  set activity(activity: IActivity) {
-    this._activity = activity;
-    this.createdAt = moment(activity.createdAt).format();
-  }
+    protected onSaveSuccess() {
+        this.isSaving = false;
+        this.previousState();
+    }
+
+    protected onSaveError() {
+        this.isSaving = false;
+    }
 }

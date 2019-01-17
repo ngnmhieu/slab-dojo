@@ -14,7 +14,6 @@ import de.otto.teamdojo.service.ActivityQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,12 +24,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,11 +60,8 @@ public class ActivityResourceIntTest {
     @Autowired
     private ActivityRepository activityRepository;
 
-
-
     @Autowired
     private ActivityMapper activityMapper;
-    
 
     @Autowired
     private ActivityService activityService;
@@ -84,6 +81,9 @@ public class ActivityResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restActivityMockMvc;
 
     private Activity activity;
@@ -96,7 +96,8 @@ public class ActivityResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -213,7 +214,6 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
     }
     
-
     @Test
     @Transactional
     public void getActivity() throws Exception {
@@ -357,6 +357,12 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
+
+        // Check, that the count call also returns 1
+        restActivityMockMvc.perform(get("/api/activities/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -368,6 +374,12 @@ public class ActivityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restActivityMockMvc.perform(get("/api/activities/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -419,15 +431,15 @@ public class ActivityResourceIntTest {
         // Create the Activity
         ActivityDTO activityDTO = activityMapper.toDto(activity);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityMockMvc.perform(put("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Activity in the database
         List<Activity> activityList = activityRepository.findAll();
-        assertThat(activityList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(activityList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

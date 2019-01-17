@@ -3,30 +3,27 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  TeamSkillService,
-  TeamSkillComponent,
-  TeamSkillDetailComponent,
-  TeamSkillUpdateComponent,
-  TeamSkillDeletePopupComponent,
-  TeamSkillDeleteDialogComponent,
-  teamSkillRoute,
-  teamSkillPopupRoute,
-  TeamSkillResolve
+    TeamSkillComponent,
+    TeamSkillDetailComponent,
+    TeamSkillUpdateComponent,
+    TeamSkillDeletePopupComponent,
+    TeamSkillDeleteDialogComponent,
+    teamSkillRoute,
+    teamSkillPopupRoute
 } from './';
 
 const ENTITY_STATES = [...teamSkillRoute, ...teamSkillPopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    TeamSkillComponent,
-    TeamSkillDetailComponent,
-    TeamSkillUpdateComponent,
-    TeamSkillDeleteDialogComponent,
-    TeamSkillDeletePopupComponent
-  ],
-  entryComponents: [TeamSkillComponent, TeamSkillUpdateComponent, TeamSkillDeleteDialogComponent, TeamSkillDeletePopupComponent],
-  providers: [TeamSkillService, TeamSkillResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [
+        TeamSkillComponent,
+        TeamSkillDetailComponent,
+        TeamSkillUpdateComponent,
+        TeamSkillDeleteDialogComponent,
+        TeamSkillDeletePopupComponent
+    ],
+    entryComponents: [TeamSkillComponent, TeamSkillUpdateComponent, TeamSkillDeleteDialogComponent, TeamSkillDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoTeamSkillModule {}

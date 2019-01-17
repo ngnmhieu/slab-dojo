@@ -3,30 +3,27 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  BadgeSkillService,
-  BadgeSkillComponent,
-  BadgeSkillDetailComponent,
-  BadgeSkillUpdateComponent,
-  BadgeSkillDeletePopupComponent,
-  BadgeSkillDeleteDialogComponent,
-  badgeSkillRoute,
-  badgeSkillPopupRoute,
-  BadgeSkillResolve
+    BadgeSkillComponent,
+    BadgeSkillDetailComponent,
+    BadgeSkillUpdateComponent,
+    BadgeSkillDeletePopupComponent,
+    BadgeSkillDeleteDialogComponent,
+    badgeSkillRoute,
+    badgeSkillPopupRoute
 } from './';
 
 const ENTITY_STATES = [...badgeSkillRoute, ...badgeSkillPopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    BadgeSkillComponent,
-    BadgeSkillDetailComponent,
-    BadgeSkillUpdateComponent,
-    BadgeSkillDeleteDialogComponent,
-    BadgeSkillDeletePopupComponent
-  ],
-  entryComponents: [BadgeSkillComponent, BadgeSkillUpdateComponent, BadgeSkillDeleteDialogComponent, BadgeSkillDeletePopupComponent],
-  providers: [BadgeSkillService, BadgeSkillResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [
+        BadgeSkillComponent,
+        BadgeSkillDetailComponent,
+        BadgeSkillUpdateComponent,
+        BadgeSkillDeleteDialogComponent,
+        BadgeSkillDeletePopupComponent
+    ],
+    entryComponents: [BadgeSkillComponent, BadgeSkillUpdateComponent, BadgeSkillDeleteDialogComponent, BadgeSkillDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoBadgeSkillModule {}

@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Dimension.
  */
@@ -42,6 +43,7 @@ public class DimensionServiceImpl implements DimensionService {
     @Override
     public DimensionDTO save(DimensionDTO dimensionDTO) {
         log.debug("Request to save Dimension : {}", dimensionDTO);
+
         Dimension dimension = dimensionMapper.toEntity(dimensionDTO);
         dimension = dimensionRepository.save(dimension);
         return dimensionMapper.toDto(dimension);

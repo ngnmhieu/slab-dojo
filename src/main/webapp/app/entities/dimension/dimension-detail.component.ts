@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IDimension } from 'app/shared/model/dimension.model';
 
 @Component({
-  selector: 'jhi-dimension-detail',
-  templateUrl: './dimension-detail.component.html'
+    selector: 'jhi-dimension-detail',
+    templateUrl: './dimension-detail.component.html'
 })
 export class DimensionDetailComponent implements OnInit {
-  dimension: IDimension;
+    dimension: IDimension;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ dimension }) => {
-      this.dimension = dimension.body ? dimension.body : dimension;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ dimension }) => {
+            this.dimension = dimension;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

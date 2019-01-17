@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Organization.
  */
@@ -42,6 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
         log.debug("Request to save Organization : {}", organizationDTO);
+
         Organization organization = organizationMapper.toEntity(organizationDTO);
         organization = organizationRepository.save(organization);
         return organizationMapper.toDto(organization);

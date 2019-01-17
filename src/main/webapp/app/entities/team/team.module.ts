@@ -3,24 +3,21 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  TeamService,
-  TeamComponent,
-  TeamDetailComponent,
-  TeamUpdateComponent,
-  TeamDeletePopupComponent,
-  TeamDeleteDialogComponent,
-  teamRoute,
-  teamPopupRoute,
-  TeamResolve
+    TeamComponent,
+    TeamDetailComponent,
+    TeamUpdateComponent,
+    TeamDeletePopupComponent,
+    TeamDeleteDialogComponent,
+    teamRoute,
+    teamPopupRoute
 } from './';
 
 const ENTITY_STATES = [...teamRoute, ...teamPopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [TeamComponent, TeamDetailComponent, TeamUpdateComponent, TeamDeleteDialogComponent, TeamDeletePopupComponent],
-  entryComponents: [TeamComponent, TeamUpdateComponent, TeamDeleteDialogComponent, TeamDeletePopupComponent],
-  providers: [TeamService, TeamResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [TeamComponent, TeamDetailComponent, TeamUpdateComponent, TeamDeleteDialogComponent, TeamDeletePopupComponent],
+    entryComponents: [TeamComponent, TeamUpdateComponent, TeamDeleteDialogComponent, TeamDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoTeamModule {}

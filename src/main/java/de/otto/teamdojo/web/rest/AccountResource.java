@@ -9,6 +9,7 @@ import de.otto.teamdojo.repository.UserRepository;
 import de.otto.teamdojo.security.SecurityUtils;
 import de.otto.teamdojo.service.MailService;
 import de.otto.teamdojo.service.UserService;
+import de.otto.teamdojo.service.dto.PasswordChangeDTO;
 import de.otto.teamdojo.service.dto.UserDTO;
 import de.otto.teamdojo.web.rest.errors.*;
 import de.otto.teamdojo.web.rest.vm.KeyAndPasswordVM;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import de.otto.teamdojo.service.dto.PasswordChangeDTO;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -67,8 +67,6 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
-        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
@@ -136,7 +134,7 @@ public class AccountResource {
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
-   }
+    }
 
     /**
      * POST  /account/change-password : changes the current user's password
@@ -150,8 +148,8 @@ public class AccountResource {
         if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        userService.changePassword(passwordChangeDto.getCurrentPassword(),passwordChangeDto.getNewPassword());
-   }
+        userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+    }
 
     /**
      * GET  /account/sessions : get the current open sessions.

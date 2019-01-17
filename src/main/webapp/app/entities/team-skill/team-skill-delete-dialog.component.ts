@@ -8,58 +8,62 @@ import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from './team-skill.service';
 
 @Component({
-  selector: 'jhi-team-skill-delete-dialog',
-  templateUrl: './team-skill-delete-dialog.component.html'
+    selector: 'jhi-team-skill-delete-dialog',
+    templateUrl: './team-skill-delete-dialog.component.html'
 })
 export class TeamSkillDeleteDialogComponent {
-  teamSkill: ITeamSkill;
+    teamSkill: ITeamSkill;
 
-  constructor(private teamSkillService: TeamSkillService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+        protected teamSkillService: TeamSkillService,
+        public activeModal: NgbActiveModal,
+        protected eventManager: JhiEventManager
+    ) {}
 
-  clear() {
-    this.activeModal.dismiss('cancel');
-  }
+    clear() {
+        this.activeModal.dismiss('cancel');
+    }
 
-  confirmDelete(id: number) {
-    this.teamSkillService.delete(id).subscribe(response => {
-      this.eventManager.broadcast({
-        name: 'teamSkillListModification',
-        content: 'Deleted an teamSkill'
-      });
-      this.activeModal.dismiss(true);
-    });
-  }
+    confirmDelete(id: number) {
+        this.teamSkillService.delete(id).subscribe(response => {
+            this.eventManager.broadcast({
+                name: 'teamSkillListModification',
+                content: 'Deleted an teamSkill'
+            });
+            this.activeModal.dismiss(true);
+        });
+    }
 }
 
 @Component({
-  selector: 'jhi-team-skill-delete-popup',
-  template: ''
+    selector: 'jhi-team-skill-delete-popup',
+    template: ''
 })
 export class TeamSkillDeletePopupComponent implements OnInit, OnDestroy {
-  private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-  constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ teamSkill }) => {
-      setTimeout(() => {
-        this.ngbModalRef = this.modalService.open(TeamSkillDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-        this.ngbModalRef.componentInstance.teamSkill = teamSkill.body;
-        this.ngbModalRef.result.then(
-          result => {
-            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-          },
-          reason => {
-            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-          }
-        );
-      }, 0);
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ teamSkill }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(TeamSkillDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef.componentInstance.teamSkill = teamSkill;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
+        });
+    }
 
-  ngOnDestroy() {
-    this.ngbModalRef = null;
-  }
+    ngOnDestroy() {
+        this.ngbModalRef = null;
+    }
 }

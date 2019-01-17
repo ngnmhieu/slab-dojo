@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import io.github.jhipster.service.filter.InstantFilter;
-
-
-
 
 /**
  * Criteria class for the Badge entity. This class is used in BadgeResource to
@@ -23,8 +20,8 @@ import io.github.jhipster.service.filter.InstantFilter;
  * fix type specific filters.
  */
 public class BadgeCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -47,9 +44,6 @@ public class BadgeCriteria implements Serializable {
     private LongFilter dimensionsId;
 
     private LongFilter imageId;
-
-    public BadgeCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -137,6 +131,47 @@ public class BadgeCriteria implements Serializable {
 
     public void setImageId(LongFilter imageId) {
         this.imageId = imageId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final BadgeCriteria that = (BadgeCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(availableUntil, that.availableUntil) &&
+            Objects.equals(availableAmount, that.availableAmount) &&
+            Objects.equals(requiredScore, that.requiredScore) &&
+            Objects.equals(instantMultiplier, that.instantMultiplier) &&
+            Objects.equals(completionBonus, that.completionBonus) &&
+            Objects.equals(skillsId, that.skillsId) &&
+            Objects.equals(dimensionsId, that.dimensionsId) &&
+            Objects.equals(imageId, that.imageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        description,
+        availableUntil,
+        availableAmount,
+        requiredScore,
+        instantMultiplier,
+        completionBonus,
+        skillsId,
+        dimensionsId,
+        imageId
+        );
     }
 
     @Override

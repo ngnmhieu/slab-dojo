@@ -16,7 +16,6 @@ import de.otto.teamdojo.service.BadgeSkillQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +26,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,11 +50,8 @@ public class BadgeSkillResourceIntTest {
     @Autowired
     private BadgeSkillRepository badgeSkillRepository;
 
-
-
     @Autowired
     private BadgeSkillMapper badgeSkillMapper;
-    
 
     @Autowired
     private BadgeSkillService badgeSkillService;
@@ -74,6 +71,9 @@ public class BadgeSkillResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restBadgeSkillMockMvc;
 
     private BadgeSkill badgeSkill;
@@ -86,7 +86,8 @@ public class BadgeSkillResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -166,7 +167,6 @@ public class BadgeSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(badgeSkill.getId().intValue())));
     }
     
-
     @Test
     @Transactional
     public void getBadgeSkill() throws Exception {
@@ -225,6 +225,12 @@ public class BadgeSkillResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(badgeSkill.getId().intValue())));
+
+        // Check, that the count call also returns 1
+        restBadgeSkillMockMvc.perform(get("/api/badge-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -236,6 +242,12 @@ public class BadgeSkillResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restBadgeSkillMockMvc.perform(get("/api/badge-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -280,15 +292,15 @@ public class BadgeSkillResourceIntTest {
         // Create the BadgeSkill
         BadgeSkillDTO badgeSkillDTO = badgeSkillMapper.toDto(badgeSkill);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBadgeSkillMockMvc.perform(put("/api/badge-skills")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(badgeSkillDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the BadgeSkill in the database
         List<BadgeSkill> badgeSkillList = badgeSkillRepository.findAll();
-        assertThat(badgeSkillList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(badgeSkillList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

@@ -79,7 +79,7 @@ public class BadgeResource {
     public ResponseEntity<BadgeDTO> updateBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException {
         log.debug("REST request to update Badge : {}", badgeDTO);
         if (badgeDTO.getId() == null) {
-            return createBadge(badgeDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         BadgeDTO result = badgeService.save(badgeDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class BadgeResource {
         log.debug("REST request to get Badges by criteria: {}", criteria);
         Page<BadgeDTO> page = badgeQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/badges");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /badges/count : count all the badges.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/badges/count")
+    @Timed
+    public ResponseEntity<Long> countBadges(BadgeCriteria criteria) {
+        log.debug("REST request to count Badges by criteria: {}", criteria);
+        return ResponseEntity.ok().body(badgeQueryService.countByCriteria(criteria));
     }
 
     /**

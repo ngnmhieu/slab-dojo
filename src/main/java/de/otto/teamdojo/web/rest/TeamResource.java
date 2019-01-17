@@ -74,7 +74,7 @@ public class TeamResource {
     public ResponseEntity<TeamDTO> updateTeam(@Valid @RequestBody TeamDTO teamDTO) throws URISyntaxException {
         log.debug("REST request to update Team : {}", teamDTO);
         if (teamDTO.getId() == null) {
-            return createTeam(teamDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         TeamDTO result = teamService.save(teamDTO);
         return ResponseEntity.ok()
@@ -94,6 +94,19 @@ public class TeamResource {
         log.debug("REST request to get Teams by criteria: {}", criteria);
         List<TeamDTO> entityList = teamQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /teams/count : count all the teams.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/teams/count")
+    @Timed
+    public ResponseEntity<Long> countTeams(TeamCriteria criteria) {
+        log.debug("REST request to count Teams by criteria: {}", criteria);
+        return ResponseEntity.ok().body(teamQueryService.countByCriteria(criteria));
     }
 
     /**

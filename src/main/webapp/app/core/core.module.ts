@@ -4,48 +4,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import locale from '@angular/common/locales/en';
 
-import {
-  JhiTrackerService,
-  WindowRef,
-  JhiLanguageHelper,
-  LoginService,
-  LoginModalService,
-  AccountService,
-  StateStorageService,
-  Principal,
-  CSRFService,
-  AuthServerProvider,
-  UserService,
-  UserRouteAccessService
-} from './';
-
 @NgModule({
-  imports: [HttpClientModule],
-  exports: [],
-  declarations: [],
-  providers: [
-    JhiTrackerService,
-    WindowRef,
-    LoginService,
-    LoginModalService,
-    Title,
-    {
-      provide: LOCALE_ID,
-      useValue: 'en'
-    },
-    JhiLanguageHelper,
-    AccountService,
-    StateStorageService,
-    Principal,
-    CSRFService,
-    AuthServerProvider,
-    UserService,
-    DatePipe,
-    UserRouteAccessService
-  ]
+    imports: [HttpClientModule],
+    exports: [],
+    declarations: [],
+    providers: [
+        Title,
+        {
+            provide: LOCALE_ID,
+            useValue: 'en'
+        },
+        DatePipe
+    ]
 })
 export class TeamdojoCoreModule {
-  constructor() {
-    registerLocaleData(locale);
-  }
+    constructor() {
+        registerLocaleData(locale);
+    }
 }

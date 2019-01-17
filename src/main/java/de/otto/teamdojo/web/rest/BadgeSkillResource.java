@@ -79,7 +79,7 @@ public class BadgeSkillResource {
     public ResponseEntity<BadgeSkillDTO> updateBadgeSkill(@Valid @RequestBody BadgeSkillDTO badgeSkillDTO) throws URISyntaxException {
         log.debug("REST request to update BadgeSkill : {}", badgeSkillDTO);
         if (badgeSkillDTO.getId() == null) {
-            return createBadgeSkill(badgeSkillDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         BadgeSkillDTO result = badgeSkillService.save(badgeSkillDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class BadgeSkillResource {
         log.debug("REST request to get BadgeSkills by criteria: {}", criteria);
         Page<BadgeSkillDTO> page = badgeSkillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/badge-skills");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /badge-skills/count : count all the badgeSkills.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/badge-skills/count")
+    @Timed
+    public ResponseEntity<Long> countBadgeSkills(BadgeSkillCriteria criteria) {
+        log.debug("REST request to count BadgeSkills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(badgeSkillQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -68,15 +68,12 @@ public class Skill implements Serializable {
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TeamSkill> teams = new HashSet<>();
-
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BadgeSkill> badges = new HashSet<>();
-
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LevelSkill> levels = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

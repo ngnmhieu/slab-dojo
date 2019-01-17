@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.BadgeRepository;
 import de.otto.teamdojo.service.dto.BadgeCriteria;
-
 import de.otto.teamdojo.service.dto.BadgeDTO;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
 
@@ -68,6 +69,18 @@ public class BadgeQueryService extends QueryService<Badge> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(BadgeCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Badge> specification = createSpecification(criteria);
+        return badgeRepository.count(specification);
+    }
+
+    /**
      * Function to convert BadgeCriteria to a {@link Specification}
      */
     private Specification<Badge> createSpecification(BadgeCriteria criteria) {
@@ -98,16 +111,18 @@ public class BadgeQueryService extends QueryService<Badge> {
                 specification = specification.and(buildRangeSpecification(criteria.getCompletionBonus(), Badge_.completionBonus));
             }
             if (criteria.getSkillsId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillsId(), Badge_.skills, BadgeSkill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillsId(),
+                    root -> root.join(Badge_.skills, JoinType.LEFT).get(BadgeSkill_.id)));
             }
             if (criteria.getDimensionsId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getDimensionsId(), Badge_.dimensions, Dimension_.id));
+                specification = specification.and(buildSpecification(criteria.getDimensionsId(),
+                    root -> root.join(Badge_.dimensions, JoinType.LEFT).get(Dimension_.id)));
             }
             if (criteria.getImageId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getImageId(), Badge_.image, Image_.id));
+                specification = specification.and(buildSpecification(criteria.getImageId(),
+                    root -> root.join(Badge_.image, JoinType.LEFT).get(Image_.id)));
             }
         }
         return specification;
     }
-
 }

@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IOrganization } from 'app/shared/model/organization.model';
 
 @Component({
-  selector: 'jhi-organization-detail',
-  templateUrl: './organization-detail.component.html'
+    selector: 'jhi-organization-detail',
+    templateUrl: './organization-detail.component.html'
 })
 export class OrganizationDetailComponent implements OnInit {
-  organization: IOrganization;
+    organization: IOrganization;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ organization }) => {
-      this.organization = organization.body ? organization.body : organization;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ organization }) => {
+            this.organization = organization;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

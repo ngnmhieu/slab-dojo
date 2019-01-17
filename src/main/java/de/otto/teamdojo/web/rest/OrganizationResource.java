@@ -69,7 +69,7 @@ public class OrganizationResource {
     public ResponseEntity<OrganizationDTO> updateOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to update Organization : {}", organizationDTO);
         if (organizationDTO.getId() == null) {
-            return createOrganization(organizationDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.ok()

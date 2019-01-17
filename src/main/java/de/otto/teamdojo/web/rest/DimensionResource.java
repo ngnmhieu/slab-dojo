@@ -74,7 +74,7 @@ public class DimensionResource {
     public ResponseEntity<DimensionDTO> updateDimension(@Valid @RequestBody DimensionDTO dimensionDTO) throws URISyntaxException {
         log.debug("REST request to update Dimension : {}", dimensionDTO);
         if (dimensionDTO.getId() == null) {
-            return createDimension(dimensionDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         DimensionDTO result = dimensionService.save(dimensionDTO);
         return ResponseEntity.ok()
@@ -94,6 +94,19 @@ public class DimensionResource {
         log.debug("REST request to get Dimensions by criteria: {}", criteria);
         List<DimensionDTO> entityList = dimensionQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /dimensions/count : count all the dimensions.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/dimensions/count")
+    @Timed
+    public ResponseEntity<Long> countDimensions(DimensionCriteria criteria) {
+        log.debug("REST request to count Dimensions by criteria: {}", criteria);
+        return ResponseEntity.ok().body(dimensionQueryService.countByCriteria(criteria));
     }
 
     /**

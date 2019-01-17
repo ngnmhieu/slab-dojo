@@ -79,7 +79,7 @@ public class ActivityResource {
     public ResponseEntity<ActivityDTO> updateActivity(@Valid @RequestBody ActivityDTO activityDTO) throws URISyntaxException {
         log.debug("REST request to update Activity : {}", activityDTO);
         if (activityDTO.getId() == null) {
-            return createActivity(activityDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ActivityDTO result = activityService.save(activityDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class ActivityResource {
         log.debug("REST request to get Activities by criteria: {}", criteria);
         Page<ActivityDTO> page = activityQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/activities");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /activities/count : count all the activities.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/activities/count")
+    @Timed
+    public ResponseEntity<Long> countActivities(ActivityCriteria criteria) {
+        log.debug("REST request to count Activities by criteria: {}", criteria);
+        return ResponseEntity.ok().body(activityQueryService.countByCriteria(criteria));
     }
 
     /**

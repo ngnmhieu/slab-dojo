@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Level.
  */
@@ -42,6 +43,7 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public LevelDTO save(LevelDTO levelDTO) {
         log.debug("Request to save Level : {}", levelDTO);
+
         Level level = levelMapper.toEntity(levelDTO);
         level = levelRepository.save(level);
         return levelMapper.toDto(level);

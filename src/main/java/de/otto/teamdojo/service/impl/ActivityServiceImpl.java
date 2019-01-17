@@ -42,6 +42,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ActivityDTO save(ActivityDTO activityDTO) {
         log.debug("Request to save Activity : {}", activityDTO);
+
         Activity activity = activityMapper.toEntity(activityDTO);
         activity = activityRepository.save(activity);
         return activityMapper.toDto(activity);

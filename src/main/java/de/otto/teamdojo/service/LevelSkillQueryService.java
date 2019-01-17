@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.LevelSkill;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.LevelSkillRepository;
 import de.otto.teamdojo.service.dto.LevelSkillCriteria;
-
 import de.otto.teamdojo.service.dto.LevelSkillDTO;
 import de.otto.teamdojo.service.mapper.LevelSkillMapper;
 
@@ -68,6 +69,18 @@ public class LevelSkillQueryService extends QueryService<LevelSkill> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(LevelSkillCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<LevelSkill> specification = createSpecification(criteria);
+        return levelSkillRepository.count(specification);
+    }
+
+    /**
      * Function to convert LevelSkillCriteria to a {@link Specification}
      */
     private Specification<LevelSkill> createSpecification(LevelSkillCriteria criteria) {
@@ -77,13 +90,14 @@ public class LevelSkillQueryService extends QueryService<LevelSkill> {
                 specification = specification.and(buildSpecification(criteria.getId(), LevelSkill_.id));
             }
             if (criteria.getSkillId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillId(), LevelSkill_.skill, Skill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillId(),
+                    root -> root.join(LevelSkill_.skill, JoinType.LEFT).get(Skill_.id)));
             }
             if (criteria.getLevelId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getLevelId(), LevelSkill_.level, Level_.id));
+                specification = specification.and(buildSpecification(criteria.getLevelId(),
+                    root -> root.join(LevelSkill_.level, JoinType.LEFT).get(Level_.id)));
             }
         }
         return specification;
     }
-
 }

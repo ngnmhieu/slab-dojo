@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITeam } from 'app/shared/model/team.model';
 
 @Component({
-  selector: 'jhi-team-detail',
-  templateUrl: './team-detail.component.html'
+    selector: 'jhi-team-detail',
+    templateUrl: './team-detail.component.html'
 })
 export class TeamDetailComponent implements OnInit {
-  team: ITeam;
+    team: ITeam;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ team }) => {
-      this.team = team.body ? team.body : team;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ team }) => {
+            this.team = team;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

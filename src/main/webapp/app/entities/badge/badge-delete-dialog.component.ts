@@ -8,58 +8,58 @@ import { IBadge } from 'app/shared/model/badge.model';
 import { BadgeService } from './badge.service';
 
 @Component({
-  selector: 'jhi-badge-delete-dialog',
-  templateUrl: './badge-delete-dialog.component.html'
+    selector: 'jhi-badge-delete-dialog',
+    templateUrl: './badge-delete-dialog.component.html'
 })
 export class BadgeDeleteDialogComponent {
-  badge: IBadge;
+    badge: IBadge;
 
-  constructor(private badgeService: BadgeService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(protected badgeService: BadgeService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
-  clear() {
-    this.activeModal.dismiss('cancel');
-  }
+    clear() {
+        this.activeModal.dismiss('cancel');
+    }
 
-  confirmDelete(id: number) {
-    this.badgeService.delete(id).subscribe(response => {
-      this.eventManager.broadcast({
-        name: 'badgeListModification',
-        content: 'Deleted an badge'
-      });
-      this.activeModal.dismiss(true);
-    });
-  }
+    confirmDelete(id: number) {
+        this.badgeService.delete(id).subscribe(response => {
+            this.eventManager.broadcast({
+                name: 'badgeListModification',
+                content: 'Deleted an badge'
+            });
+            this.activeModal.dismiss(true);
+        });
+    }
 }
 
 @Component({
-  selector: 'jhi-badge-delete-popup',
-  template: ''
+    selector: 'jhi-badge-delete-popup',
+    template: ''
 })
 export class BadgeDeletePopupComponent implements OnInit, OnDestroy {
-  private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-  constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ badge }) => {
-      setTimeout(() => {
-        this.ngbModalRef = this.modalService.open(BadgeDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-        this.ngbModalRef.componentInstance.badge = badge.body;
-        this.ngbModalRef.result.then(
-          result => {
-            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-          },
-          reason => {
-            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-          }
-        );
-      }, 0);
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ badge }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(BadgeDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef.componentInstance.badge = badge;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
+        });
+    }
 
-  ngOnDestroy() {
-    this.ngbModalRef = null;
-  }
+    ngOnDestroy() {
+        this.ngbModalRef = null;
+    }
 }

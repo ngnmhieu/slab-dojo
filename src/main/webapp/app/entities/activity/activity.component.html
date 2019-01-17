@@ -2,7 +2,7 @@
     <h2 id="page-heading">
         <span jhiTranslate="teamdojoApp.activity.home.title">Activities</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-activity" [routerLink]="['/activity/new']">
-            <span class="fa fa-plus"></span>
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="teamdojoApp.activity.home.createLabel">
             Create new Activity
             </span>
@@ -14,10 +14,10 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="type"><span jhiTranslate="teamdojoApp.activity.type">Type</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="data"><span jhiTranslate="teamdojoApp.activity.data">Data</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="createdAt"><span jhiTranslate="teamdojoApp.activity.createdAt">Created At</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="type"><span jhiTranslate="teamdojoApp.activity.type">Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="data"><span jhiTranslate="teamdojoApp.activity.data">Data</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdAt"><span jhiTranslate="teamdojoApp.activity.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -32,13 +32,13 @@
                         <button type="submit"
                                 [routerLink]="['/activity', activity.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/activity', activity.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -46,7 +46,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

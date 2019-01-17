@@ -5,11 +5,17 @@ import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import { TeamdojoSharedLibsModule, TeamdojoSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
 
 @NgModule({
-  imports: [TeamdojoSharedLibsModule, TeamdojoSharedCommonModule],
-  declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
-  entryComponents: [JhiLoginModalComponent],
-  exports: [TeamdojoSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedLibsModule, TeamdojoSharedCommonModule],
+    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
+    providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
+    entryComponents: [JhiLoginModalComponent],
+    exports: [TeamdojoSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class TeamdojoSharedModule {}
+export class TeamdojoSharedModule {
+    static forRoot() {
+        return {
+            ngModule: TeamdojoSharedModule
+        };
+    }
+}

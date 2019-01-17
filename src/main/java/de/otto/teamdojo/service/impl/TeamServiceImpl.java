@@ -13,10 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Team.
  */
@@ -44,6 +45,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamDTO save(TeamDTO teamDTO) {
         log.debug("Request to save Team : {}", teamDTO);
+
         Team team = teamMapper.toEntity(teamDTO);
         team = teamRepository.save(team);
         return teamMapper.toDto(team);

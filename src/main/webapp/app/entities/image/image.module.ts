@@ -3,24 +3,21 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  ImageService,
-  ImageComponent,
-  ImageDetailComponent,
-  ImageUpdateComponent,
-  ImageDeletePopupComponent,
-  ImageDeleteDialogComponent,
-  imageRoute,
-  imagePopupRoute,
-  ImageResolve
+    ImageComponent,
+    ImageDetailComponent,
+    ImageUpdateComponent,
+    ImageDeletePopupComponent,
+    ImageDeleteDialogComponent,
+    imageRoute,
+    imagePopupRoute
 } from './';
 
 const ENTITY_STATES = [...imageRoute, ...imagePopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [ImageComponent, ImageDetailComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
-  entryComponents: [ImageComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
-  providers: [ImageService, ImageResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [ImageComponent, ImageDetailComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
+    entryComponents: [ImageComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoImageModule {}

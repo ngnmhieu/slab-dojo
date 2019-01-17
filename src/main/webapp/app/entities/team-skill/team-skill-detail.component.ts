@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 
 @Component({
-  selector: 'jhi-team-skill-detail',
-  templateUrl: './team-skill-detail.component.html'
+    selector: 'jhi-team-skill-detail',
+    templateUrl: './team-skill-detail.component.html'
 })
 export class TeamSkillDetailComponent implements OnInit {
-  teamSkill: ITeamSkill;
+    teamSkill: ITeamSkill;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ teamSkill }) => {
-      this.teamSkill = teamSkill.body ? teamSkill.body : teamSkill;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ teamSkill }) => {
+            this.teamSkill = teamSkill;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
 import { ILevel } from 'app/shared/model/level.model';
@@ -12,107 +12,100 @@ import { IImage } from 'app/shared/model/image.model';
 import { ImageService } from 'app/entities/image';
 
 @Component({
-  selector: 'jhi-level-update',
-  templateUrl: './level-update.component.html'
+    selector: 'jhi-level-update',
+    templateUrl: './level-update.component.html'
 })
 export class LevelUpdateComponent implements OnInit {
-  private _level: ILevel;
-  isSaving: boolean;
+    level: ILevel;
+    isSaving: boolean;
 
-  dimensions: IDimension[];
+    dimensions: IDimension[];
 
-  dependsons: ILevel[];
+    dependsons: ILevel[];
 
-  images: IImage[];
+    images: IImage[];
 
-  constructor(
-    private jhiAlertService: JhiAlertService,
-    private levelService: LevelService,
-    private dimensionService: DimensionService,
-    private imageService: ImageService,
-    private route: ActivatedRoute
-  ) {}
+    constructor(
+        protected jhiAlertService: JhiAlertService,
+        protected levelService: LevelService,
+        protected dimensionService: DimensionService,
+        protected imageService: ImageService,
+        protected activatedRoute: ActivatedRoute
+    ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
-    this.route.data.subscribe(({ level }) => {
-      this.level = level.body ? level.body : level;
-    });
-    this.dimensionService.query().subscribe(
-      (res: HttpResponse<IDimension[]>) => {
-        this.dimensions = res.body;
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-    this.levelService.query({ filter: 'level-is-null' }).subscribe(
-      (res: HttpResponse<ILevel[]>) => {
-        if (!this.level.dependsOnId) {
-          this.dependsons = res.body;
-        } else {
-          this.levelService.find(this.level.dependsOnId).subscribe(
-            (subRes: HttpResponse<ILevel>) => {
-              this.dependsons = [subRes.body].concat(res.body);
+    ngOnInit() {
+        this.isSaving = false;
+        this.activatedRoute.data.subscribe(({ level }) => {
+            this.level = level;
+        });
+        this.dimensionService.query().subscribe(
+            (res: HttpResponse<IDimension[]>) => {
+                this.dimensions = res.body;
             },
-            (subRes: HttpErrorResponse) => this.onError(subRes.message)
-          );
-        }
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-    this.imageService.query().subscribe(
-      (res: HttpResponse<IImage[]>) => {
-        this.images = res.body;
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-  }
-
-  previousState() {
-    window.history.back();
-  }
-
-  save() {
-    this.isSaving = true;
-    if (this.level.id !== undefined) {
-      this.subscribeToSaveResponse(this.levelService.update(this.level));
-    } else {
-      this.subscribeToSaveResponse(this.levelService.create(this.level));
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.levelService.query({ 'levelId.specified': 'false' }).subscribe(
+            (res: HttpResponse<ILevel[]>) => {
+                if (!this.level.dependsOnId) {
+                    this.dependsons = res.body;
+                } else {
+                    this.levelService.find(this.level.dependsOnId).subscribe(
+                        (subRes: HttpResponse<ILevel>) => {
+                            this.dependsons = [subRes.body].concat(res.body);
+                        },
+                        (subRes: HttpErrorResponse) => this.onError(subRes.message)
+                    );
+                }
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.imageService.query().subscribe(
+            (res: HttpResponse<IImage[]>) => {
+                this.images = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
-  }
 
-  private subscribeToSaveResponse(result: Observable<HttpResponse<ILevel>>) {
-    result.subscribe((res: HttpResponse<ILevel>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
-  }
+    previousState() {
+        window.history.back();
+    }
 
-  private onSaveSuccess(result: ILevel) {
-    this.isSaving = false;
-    this.previousState();
-  }
+    save() {
+        this.isSaving = true;
+        if (this.level.id !== undefined) {
+            this.subscribeToSaveResponse(this.levelService.update(this.level));
+        } else {
+            this.subscribeToSaveResponse(this.levelService.create(this.level));
+        }
+    }
 
-  private onSaveError() {
-    this.isSaving = false;
-  }
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ILevel>>) {
+        result.subscribe((res: HttpResponse<ILevel>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    }
 
-  private onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
+    protected onSaveSuccess() {
+        this.isSaving = false;
+        this.previousState();
+    }
 
-  trackDimensionById(index: number, item: IDimension) {
-    return item.id;
-  }
+    protected onSaveError() {
+        this.isSaving = false;
+    }
 
-  trackLevelById(index: number, item: ILevel) {
-    return item.id;
-  }
+    protected onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
 
-  trackImageById(index: number, item: IImage) {
-    return item.id;
-  }
-  get level() {
-    return this._level;
-  }
+    trackDimensionById(index: number, item: IDimension) {
+        return item.id;
+    }
 
-  set level(level: ILevel) {
-    this._level = level;
-  }
+    trackLevelById(index: number, item: ILevel) {
+        return item.id;
+    }
+
+    trackImageById(index: number, item: IImage) {
+        return item.id;
+    }
 }

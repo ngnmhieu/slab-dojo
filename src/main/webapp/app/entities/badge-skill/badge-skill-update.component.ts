@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
 import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
@@ -12,86 +12,79 @@ import { ISkill } from 'app/shared/model/skill.model';
 import { SkillService } from 'app/entities/skill';
 
 @Component({
-  selector: 'jhi-badge-skill-update',
-  templateUrl: './badge-skill-update.component.html'
+    selector: 'jhi-badge-skill-update',
+    templateUrl: './badge-skill-update.component.html'
 })
 export class BadgeSkillUpdateComponent implements OnInit {
-  private _badgeSkill: IBadgeSkill;
-  isSaving: boolean;
+    badgeSkill: IBadgeSkill;
+    isSaving: boolean;
 
-  badges: IBadge[];
+    badges: IBadge[];
 
-  skills: ISkill[];
+    skills: ISkill[];
 
-  constructor(
-    private jhiAlertService: JhiAlertService,
-    private badgeSkillService: BadgeSkillService,
-    private badgeService: BadgeService,
-    private skillService: SkillService,
-    private route: ActivatedRoute
-  ) {}
+    constructor(
+        protected jhiAlertService: JhiAlertService,
+        protected badgeSkillService: BadgeSkillService,
+        protected badgeService: BadgeService,
+        protected skillService: SkillService,
+        protected activatedRoute: ActivatedRoute
+    ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
-    this.route.data.subscribe(({ badgeSkill }) => {
-      this.badgeSkill = badgeSkill.body ? badgeSkill.body : badgeSkill;
-    });
-    this.badgeService.query().subscribe(
-      (res: HttpResponse<IBadge[]>) => {
-        this.badges = res.body;
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-    this.skillService.query().subscribe(
-      (res: HttpResponse<ISkill[]>) => {
-        this.skills = res.body;
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-  }
-
-  previousState() {
-    window.history.back();
-  }
-
-  save() {
-    this.isSaving = true;
-    if (this.badgeSkill.id !== undefined) {
-      this.subscribeToSaveResponse(this.badgeSkillService.update(this.badgeSkill));
-    } else {
-      this.subscribeToSaveResponse(this.badgeSkillService.create(this.badgeSkill));
+    ngOnInit() {
+        this.isSaving = false;
+        this.activatedRoute.data.subscribe(({ badgeSkill }) => {
+            this.badgeSkill = badgeSkill;
+        });
+        this.badgeService.query().subscribe(
+            (res: HttpResponse<IBadge[]>) => {
+                this.badges = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.skillService.query().subscribe(
+            (res: HttpResponse<ISkill[]>) => {
+                this.skills = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
-  }
 
-  private subscribeToSaveResponse(result: Observable<HttpResponse<IBadgeSkill>>) {
-    result.subscribe((res: HttpResponse<IBadgeSkill>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
-  }
+    previousState() {
+        window.history.back();
+    }
 
-  private onSaveSuccess(result: IBadgeSkill) {
-    this.isSaving = false;
-    this.previousState();
-  }
+    save() {
+        this.isSaving = true;
+        if (this.badgeSkill.id !== undefined) {
+            this.subscribeToSaveResponse(this.badgeSkillService.update(this.badgeSkill));
+        } else {
+            this.subscribeToSaveResponse(this.badgeSkillService.create(this.badgeSkill));
+        }
+    }
 
-  private onSaveError() {
-    this.isSaving = false;
-  }
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IBadgeSkill>>) {
+        result.subscribe((res: HttpResponse<IBadgeSkill>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    }
 
-  private onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
+    protected onSaveSuccess() {
+        this.isSaving = false;
+        this.previousState();
+    }
 
-  trackBadgeById(index: number, item: IBadge) {
-    return item.id;
-  }
+    protected onSaveError() {
+        this.isSaving = false;
+    }
 
-  trackSkillById(index: number, item: ISkill) {
-    return item.id;
-  }
-  get badgeSkill() {
-    return this._badgeSkill;
-  }
+    protected onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
 
-  set badgeSkill(badgeSkill: IBadgeSkill) {
-    this._badgeSkill = badgeSkill;
-  }
+    trackBadgeById(index: number, item: IBadge) {
+        return item.id;
+    }
+
+    trackSkillById(index: number, item: ISkill) {
+        return item.id;
+    }
 }

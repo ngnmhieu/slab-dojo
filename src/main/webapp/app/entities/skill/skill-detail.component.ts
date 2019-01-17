@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ISkill } from 'app/shared/model/skill.model';
 
 @Component({
-  selector: 'jhi-skill-detail',
-  templateUrl: './skill-detail.component.html'
+    selector: 'jhi-skill-detail',
+    templateUrl: './skill-detail.component.html'
 })
 export class SkillDetailComponent implements OnInit {
-  skill: ISkill;
+    skill: ISkill;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ skill }) => {
-      this.skill = skill.body ? skill.body : skill;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ skill }) => {
+            this.skill = skill;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

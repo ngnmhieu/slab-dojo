@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Report.
  */
@@ -42,6 +43,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportDTO save(ReportDTO reportDTO) {
         log.debug("Request to save Report : {}", reportDTO);
+
         Report report = reportMapper.toEntity(reportDTO);
         report = reportRepository.save(report);
         return reportMapper.toDto(report);

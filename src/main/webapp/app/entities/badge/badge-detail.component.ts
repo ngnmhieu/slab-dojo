@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IBadge } from 'app/shared/model/badge.model';
 
 @Component({
-  selector: 'jhi-badge-detail',
-  templateUrl: './badge-detail.component.html'
+    selector: 'jhi-badge-detail',
+    templateUrl: './badge-detail.component.html'
 })
 export class BadgeDetailComponent implements OnInit {
-  badge: IBadge;
+    badge: IBadge;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ badge }) => {
-      this.badge = badge.body ? badge.body : badge;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ badge }) => {
+            this.badge = badge;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-
-
-
-
 
 /**
  * Criteria class for the Skill entity. This class is used in SkillResource to
@@ -23,8 +19,8 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class SkillCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -51,9 +47,6 @@ public class SkillCriteria implements Serializable {
     private LongFilter badgesId;
 
     private LongFilter levelsId;
-
-    public SkillCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -157,6 +150,51 @@ public class SkillCriteria implements Serializable {
 
     public void setLevelsId(LongFilter levelsId) {
         this.levelsId = levelsId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final SkillCriteria that = (SkillCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(implementation, that.implementation) &&
+            Objects.equals(validation, that.validation) &&
+            Objects.equals(expiryPeriod, that.expiryPeriod) &&
+            Objects.equals(contact, that.contact) &&
+            Objects.equals(score, that.score) &&
+            Objects.equals(rateScore, that.rateScore) &&
+            Objects.equals(rateCount, that.rateCount) &&
+            Objects.equals(teamsId, that.teamsId) &&
+            Objects.equals(badgesId, that.badgesId) &&
+            Objects.equals(levelsId, that.levelsId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        title,
+        description,
+        implementation,
+        validation,
+        expiryPeriod,
+        contact,
+        score,
+        rateScore,
+        rateCount,
+        teamsId,
+        badgesId,
+        levelsId
+        );
     }
 
     @Override

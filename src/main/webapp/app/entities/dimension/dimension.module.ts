@@ -3,30 +3,27 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  DimensionService,
-  DimensionComponent,
-  DimensionDetailComponent,
-  DimensionUpdateComponent,
-  DimensionDeletePopupComponent,
-  DimensionDeleteDialogComponent,
-  dimensionRoute,
-  dimensionPopupRoute,
-  DimensionResolve
+    DimensionComponent,
+    DimensionDetailComponent,
+    DimensionUpdateComponent,
+    DimensionDeletePopupComponent,
+    DimensionDeleteDialogComponent,
+    dimensionRoute,
+    dimensionPopupRoute
 } from './';
 
 const ENTITY_STATES = [...dimensionRoute, ...dimensionPopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    DimensionComponent,
-    DimensionDetailComponent,
-    DimensionUpdateComponent,
-    DimensionDeleteDialogComponent,
-    DimensionDeletePopupComponent
-  ],
-  entryComponents: [DimensionComponent, DimensionUpdateComponent, DimensionDeleteDialogComponent, DimensionDeletePopupComponent],
-  providers: [DimensionService, DimensionResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [
+        DimensionComponent,
+        DimensionDetailComponent,
+        DimensionUpdateComponent,
+        DimensionDeleteDialogComponent,
+        DimensionDeletePopupComponent
+    ],
+    entryComponents: [DimensionComponent, DimensionUpdateComponent, DimensionDeleteDialogComponent, DimensionDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoDimensionModule {}

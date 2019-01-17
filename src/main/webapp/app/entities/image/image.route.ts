@@ -1,87 +1,93 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Image } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 import { ImageComponent } from './image.component';
 import { ImageDetailComponent } from './image-detail.component';
 import { ImageUpdateComponent } from './image-update.component';
 import { ImageDeletePopupComponent } from './image-delete-dialog.component';
+import { IImage } from 'app/shared/model/image.model';
 
-@Injectable()
-export class ImageResolve implements Resolve<any> {
-  constructor(private service: ImageService) {}
+@Injectable({ providedIn: 'root' })
+export class ImageResolve implements Resolve<IImage> {
+    constructor(private service: ImageService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const id = route.params['id'] ? route.params['id'] : null;
-    if (id) {
-      return this.service.find(id);
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Image> {
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Image>) => response.ok),
+                map((image: HttpResponse<Image>) => image.body)
+            );
+        }
+        return of(new Image());
     }
-    return new Image();
-  }
 }
 
 export const imageRoute: Routes = [
-  {
-    path: 'image',
-    component: ImageComponent,
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.image.home.title'
+    {
+        path: 'image',
+        component: ImageComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.image.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'image/:id/view',
-    component: ImageDetailComponent,
-    resolve: {
-      image: ImageResolve
+    {
+        path: 'image/:id/view',
+        component: ImageDetailComponent,
+        resolve: {
+            image: ImageResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.image.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.image.home.title'
+    {
+        path: 'image/new',
+        component: ImageUpdateComponent,
+        resolve: {
+            image: ImageResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.image.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'image/new',
-    component: ImageUpdateComponent,
-    resolve: {
-      image: ImageResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.image.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'image/:id/edit',
-    component: ImageUpdateComponent,
-    resolve: {
-      image: ImageResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.image.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }
+    {
+        path: 'image/:id/edit',
+        component: ImageUpdateComponent,
+        resolve: {
+            image: ImageResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.image.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }
 ];
 
 export const imagePopupRoute: Routes = [
-  {
-    path: 'image/:id/delete',
-    component: ImageDeletePopupComponent,
-    resolve: {
-      image: ImageResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.image.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+    {
+        path: 'image/:id/delete',
+        component: ImageDeletePopupComponent,
+        resolve: {
+            image: ImageResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.image.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

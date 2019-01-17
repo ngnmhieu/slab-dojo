@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Comment.
  */
@@ -42,6 +43,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
+
         Comment comment = commentMapper.toEntity(commentDTO);
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);

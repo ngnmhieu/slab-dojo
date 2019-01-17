@@ -42,6 +42,7 @@ public class TeamSkillServiceImpl implements TeamSkillService {
     @Override
     public TeamSkillDTO save(TeamSkillDTO teamSkillDTO) {
         log.debug("Request to save TeamSkill : {}", teamSkillDTO);
+
         TeamSkill teamSkill = teamSkillMapper.toEntity(teamSkillDTO);
         teamSkill = teamSkillRepository.save(teamSkill);
         return teamSkillMapper.toDto(teamSkill);

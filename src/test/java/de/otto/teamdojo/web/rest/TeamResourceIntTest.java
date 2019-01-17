@@ -30,10 +30,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +73,7 @@ public class TeamResourceIntTest {
 
     @Autowired
     private TeamMapper teamMapper;
-    
+
     @Mock
     private TeamService teamServiceMock;
 
@@ -93,6 +95,9 @@ public class TeamResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restTeamMockMvc;
 
     private Team team;
@@ -105,7 +110,8 @@ public class TeamResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -225,6 +231,7 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
     public void getAllTeamsWithEagerRelationshipsIsEnabled() throws Exception {
         TeamResource teamResource = new TeamResource(teamServiceMock, teamQueryService);
         when(teamServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -241,6 +248,7 @@ public class TeamResourceIntTest {
         verify(teamServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllTeamsWithEagerRelationshipsIsNotEnabled() throws Exception {
         TeamResource teamResource = new TeamResource(teamServiceMock, teamQueryService);
             when(teamServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -497,6 +505,12 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME.toString())))
             .andExpect(jsonPath("$.[*].slogan").value(hasItem(DEFAULT_SLOGAN.toString())))
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())));
+
+        // Check, that the count call also returns 1
+        restTeamMockMvc.perform(get("/api/teams/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -508,6 +522,12 @@ public class TeamResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTeamMockMvc.perform(get("/api/teams/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -561,15 +581,15 @@ public class TeamResourceIntTest {
         // Create the Team
         TeamDTO teamDTO = teamMapper.toDto(team);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTeamMockMvc.perform(put("/api/teams")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Team in the database
         List<Team> teamList = teamRepository.findAll();
-        assertThat(teamList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(teamList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

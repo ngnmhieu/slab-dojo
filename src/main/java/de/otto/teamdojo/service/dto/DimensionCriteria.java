@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-
-
-
-
 
 /**
  * Criteria class for the Dimension entity. This class is used in DimensionResource to
@@ -23,8 +19,8 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class DimensionCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -37,9 +33,6 @@ public class DimensionCriteria implements Serializable {
     private LongFilter levelsId;
 
     private LongFilter badgesId;
-
-    public DimensionCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -87,6 +80,37 @@ public class DimensionCriteria implements Serializable {
 
     public void setBadgesId(LongFilter badgesId) {
         this.badgesId = badgesId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final DimensionCriteria that = (DimensionCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(participantsId, that.participantsId) &&
+            Objects.equals(levelsId, that.levelsId) &&
+            Objects.equals(badgesId, that.badgesId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        description,
+        participantsId,
+        levelsId,
+        badgesId
+        );
     }
 
     @Override

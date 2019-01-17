@@ -42,6 +42,7 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public SkillDTO save(SkillDTO skillDTO) {
         log.debug("Request to save Skill : {}", skillDTO);
+
         Skill skill = skillMapper.toEntity(skillDTO);
         skill = skillRepository.save(skill);
         return skillMapper.toDto(skill);

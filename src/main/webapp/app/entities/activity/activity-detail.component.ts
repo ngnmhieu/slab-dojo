@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IActivity } from 'app/shared/model/activity.model';
 
 @Component({
-  selector: 'jhi-activity-detail',
-  templateUrl: './activity-detail.component.html'
+    selector: 'jhi-activity-detail',
+    templateUrl: './activity-detail.component.html'
 })
 export class ActivityDetailComponent implements OnInit {
-  activity: IActivity;
+    activity: IActivity;
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(({ activity }) => {
-      this.activity = activity.body ? activity.body : activity;
-    });
-  }
+    ngOnInit() {
+        this.activatedRoute.data.subscribe(({ activity }) => {
+            this.activity = activity;
+        });
+    }
 
-  previousState() {
-    window.history.back();
-  }
+    previousState() {
+        window.history.back();
+    }
 }

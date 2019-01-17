@@ -1,87 +1,93 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { BadgeSkill } from 'app/shared/model/badge-skill.model';
 import { BadgeSkillService } from './badge-skill.service';
 import { BadgeSkillComponent } from './badge-skill.component';
 import { BadgeSkillDetailComponent } from './badge-skill-detail.component';
 import { BadgeSkillUpdateComponent } from './badge-skill-update.component';
 import { BadgeSkillDeletePopupComponent } from './badge-skill-delete-dialog.component';
+import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
 
-@Injectable()
-export class BadgeSkillResolve implements Resolve<any> {
-  constructor(private service: BadgeSkillService) {}
+@Injectable({ providedIn: 'root' })
+export class BadgeSkillResolve implements Resolve<IBadgeSkill> {
+    constructor(private service: BadgeSkillService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const id = route.params['id'] ? route.params['id'] : null;
-    if (id) {
-      return this.service.find(id);
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<BadgeSkill> {
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<BadgeSkill>) => response.ok),
+                map((badgeSkill: HttpResponse<BadgeSkill>) => badgeSkill.body)
+            );
+        }
+        return of(new BadgeSkill());
     }
-    return new BadgeSkill();
-  }
 }
 
 export const badgeSkillRoute: Routes = [
-  {
-    path: 'badge-skill',
-    component: BadgeSkillComponent,
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.badgeSkill.home.title'
+    {
+        path: 'badge-skill',
+        component: BadgeSkillComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.badgeSkill.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'badge-skill/:id/view',
-    component: BadgeSkillDetailComponent,
-    resolve: {
-      badgeSkill: BadgeSkillResolve
+    {
+        path: 'badge-skill/:id/view',
+        component: BadgeSkillDetailComponent,
+        resolve: {
+            badgeSkill: BadgeSkillResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.badgeSkill.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.badgeSkill.home.title'
+    {
+        path: 'badge-skill/new',
+        component: BadgeSkillUpdateComponent,
+        resolve: {
+            badgeSkill: BadgeSkillResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.badgeSkill.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'badge-skill/new',
-    component: BadgeSkillUpdateComponent,
-    resolve: {
-      badgeSkill: BadgeSkillResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.badgeSkill.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'badge-skill/:id/edit',
-    component: BadgeSkillUpdateComponent,
-    resolve: {
-      badgeSkill: BadgeSkillResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.badgeSkill.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }
+    {
+        path: 'badge-skill/:id/edit',
+        component: BadgeSkillUpdateComponent,
+        resolve: {
+            badgeSkill: BadgeSkillResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.badgeSkill.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }
 ];
 
 export const badgeSkillPopupRoute: Routes = [
-  {
-    path: 'badge-skill/:id/delete',
-    component: BadgeSkillDeletePopupComponent,
-    resolve: {
-      badgeSkill: BadgeSkillResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'teamdojoApp.badgeSkill.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+    {
+        path: 'badge-skill/:id/delete',
+        component: BadgeSkillDeletePopupComponent,
+        resolve: {
+            badgeSkill: BadgeSkillResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'teamdojoApp.badgeSkill.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

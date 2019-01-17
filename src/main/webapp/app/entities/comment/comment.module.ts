@@ -3,30 +3,27 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-  CommentService,
-  CommentComponent,
-  CommentDetailComponent,
-  CommentUpdateComponent,
-  CommentDeletePopupComponent,
-  CommentDeleteDialogComponent,
-  commentRoute,
-  commentPopupRoute,
-  CommentResolve
+    CommentComponent,
+    CommentDetailComponent,
+    CommentUpdateComponent,
+    CommentDeletePopupComponent,
+    CommentDeleteDialogComponent,
+    commentRoute,
+    commentPopupRoute
 } from './';
 
 const ENTITY_STATES = [...commentRoute, ...commentPopupRoute];
 
 @NgModule({
-  imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    CommentComponent,
-    CommentDetailComponent,
-    CommentUpdateComponent,
-    CommentDeleteDialogComponent,
-    CommentDeletePopupComponent
-  ],
-  entryComponents: [CommentComponent, CommentUpdateComponent, CommentDeleteDialogComponent, CommentDeletePopupComponent],
-  providers: [CommentService, CommentResolve],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [
+        CommentComponent,
+        CommentDetailComponent,
+        CommentUpdateComponent,
+        CommentDeleteDialogComponent,
+        CommentDeletePopupComponent
+    ],
+    entryComponents: [CommentComponent, CommentUpdateComponent, CommentDeleteDialogComponent, CommentDeletePopupComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoCommentModule {}

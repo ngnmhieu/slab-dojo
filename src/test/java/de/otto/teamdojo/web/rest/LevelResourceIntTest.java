@@ -18,7 +18,6 @@ import de.otto.teamdojo.service.LevelQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,10 +28,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,11 +67,8 @@ public class LevelResourceIntTest {
     @Autowired
     private LevelRepository levelRepository;
 
-
-
     @Autowired
     private LevelMapper levelMapper;
-    
 
     @Autowired
     private LevelService levelService;
@@ -91,6 +88,9 @@ public class LevelResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restLevelMockMvc;
 
     private Level level;
@@ -103,7 +103,8 @@ public class LevelResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -250,7 +251,6 @@ public class LevelResourceIntTest {
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
     }
     
-
     @Test
     @Transactional
     public void getLevel() throws Exception {
@@ -579,6 +579,12 @@ public class LevelResourceIntTest {
             .andExpect(jsonPath("$.[*].requiredScore").value(hasItem(DEFAULT_REQUIRED_SCORE.doubleValue())))
             .andExpect(jsonPath("$.[*].instantMultiplier").value(hasItem(DEFAULT_INSTANT_MULTIPLIER.doubleValue())))
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
+
+        // Check, that the count call also returns 1
+        restLevelMockMvc.perform(get("/api/levels/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -590,6 +596,12 @@ public class LevelResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restLevelMockMvc.perform(get("/api/levels/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -645,15 +657,15 @@ public class LevelResourceIntTest {
         // Create the Level
         LevelDTO levelDTO = levelMapper.toDto(level);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLevelMockMvc.perform(put("/api/levels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(levelDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Level in the database
         List<Level> levelList = levelRepository.findAll();
-        assertThat(levelList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(levelList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

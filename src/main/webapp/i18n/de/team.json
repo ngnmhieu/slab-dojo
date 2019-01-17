@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "team" : {
+        "team": {
             "home": {
                 "title": "Teams",
                 "createLabel": "Team erstellen",

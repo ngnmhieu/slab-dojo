@@ -1,11 +1,12 @@
 package de.otto.teamdojo.repository;
 
 import de.otto.teamdojo.domain.Activity;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+
 
 /**
- * Spring Data JPA repository for the Activity entity.
+ * Spring Data  repository for the Activity entity.
  */
 @SuppressWarnings("unused")
 @Repository

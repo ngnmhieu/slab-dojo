@@ -17,7 +17,6 @@ import de.otto.teamdojo.service.SkillQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,10 +27,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,8 +60,8 @@ public class SkillResourceIntTest {
     private static final String DEFAULT_VALIDATION = "AAAAAAAAAA";
     private static final String UPDATED_VALIDATION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EXPIRY_PERIOD = "P59W";
-    private static final String UPDATED_EXPIRY_PERIOD = "P01Y-63M";
+    private static final String DEFAULT_EXPIRY_PERIOD = "P+4Y";
+    private static final String UPDATED_EXPIRY_PERIOD = "P-62W-96D";
 
     private static final String DEFAULT_CONTACT = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT = "BBBBBBBBBB";
@@ -78,11 +78,8 @@ public class SkillResourceIntTest {
     @Autowired
     private SkillRepository skillRepository;
 
-
-
     @Autowired
     private SkillMapper skillMapper;
-    
 
     @Autowired
     private SkillService skillService;
@@ -102,6 +99,9 @@ public class SkillResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restSkillMockMvc;
 
     private Skill skill;
@@ -114,7 +114,8 @@ public class SkillResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -249,7 +250,6 @@ public class SkillResourceIntTest {
             .andExpect(jsonPath("$.[*].rateCount").value(hasItem(DEFAULT_RATE_COUNT)));
     }
     
-
     @Test
     @Transactional
     public void getSkill() throws Exception {
@@ -750,6 +750,12 @@ public class SkillResourceIntTest {
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
             .andExpect(jsonPath("$.[*].rateScore").value(hasItem(DEFAULT_RATE_SCORE.doubleValue())))
             .andExpect(jsonPath("$.[*].rateCount").value(hasItem(DEFAULT_RATE_COUNT)));
+
+        // Check, that the count call also returns 1
+        restSkillMockMvc.perform(get("/api/skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -761,6 +767,12 @@ public class SkillResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restSkillMockMvc.perform(get("/api/skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -824,15 +836,15 @@ public class SkillResourceIntTest {
         // Create the Skill
         SkillDTO skillDTO = skillMapper.toDto(skill);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSkillMockMvc.perform(put("/api/skills")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(skillDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Skill in the database
         List<Skill> skillList = skillRepository.findAll();
-        assertThat(skillList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(skillList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
