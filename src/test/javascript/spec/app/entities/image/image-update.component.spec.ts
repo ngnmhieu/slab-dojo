@@ -1,7 +1,7 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { ImageUpdateComponent } from 'app/entities/image/image-update.component';
@@ -17,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [ImageUpdateComponent],
-                providers: [ImageService]
+                declarations: [ImageUpdateComponent]
             })
                 .overrideTemplate(ImageUpdateComponent, '')
                 .compileComponents();
@@ -34,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Image(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.image = entity;
                     // WHEN
                     comp.save();
@@ -51,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Image();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.image = entity;
                     // WHEN
                     comp.save();

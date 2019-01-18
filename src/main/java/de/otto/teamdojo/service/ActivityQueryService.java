@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.Activity;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.ActivityRepository;
 import de.otto.teamdojo.service.dto.ActivityCriteria;
-
 import de.otto.teamdojo.service.dto.ActivityDTO;
 import de.otto.teamdojo.service.mapper.ActivityMapper;
 
@@ -68,6 +69,18 @@ public class ActivityQueryService extends QueryService<Activity> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(ActivityCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Activity> specification = createSpecification(criteria);
+        return activityRepository.count(specification);
+    }
+
+    /**
      * Function to convert ActivityCriteria to a {@link Specification}
      */
     private Specification<Activity> createSpecification(ActivityCriteria criteria) {
@@ -88,5 +101,4 @@ public class ActivityQueryService extends QueryService<Activity> {
         }
         return specification;
     }
-
 }

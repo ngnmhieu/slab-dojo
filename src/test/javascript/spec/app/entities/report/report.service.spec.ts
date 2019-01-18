@@ -1,91 +1,130 @@
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { take, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { ReportService } from 'app/entities/report/report.service';
-import { Report } from 'app/shared/model/report.model';
-import { SERVER_API_URL } from 'app/app.constants';
+import { IReport, Report, ReportType } from 'app/shared/model/report.model';
 
 describe('Service Tests', () => {
     describe('Report Service', () => {
         let injector: TestBed;
         let service: ReportService;
         let httpMock: HttpTestingController;
-
+        let elemDefault: IReport;
+        let currentDate: moment.Moment;
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [HttpClientTestingModule],
-                providers: [ReportService]
+                imports: [HttpClientTestingModule]
             });
             injector = getTestBed();
             service = injector.get(ReportService);
             httpMock = injector.get(HttpTestingController);
+            currentDate = moment();
+
+            elemDefault = new Report(0, 'AAAAAAA', 'AAAAAAA', ReportType.BUG, currentDate);
         });
 
-        describe('Service methods', () => {
-            it('should call correct URL', () => {
-                service.find(123).subscribe(() => {});
+        describe('Service methods', async () => {
+            it('should find an element', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        creationDate: currentDate.format(DATE_TIME_FORMAT)
+                    },
+                    elemDefault
+                );
+                service
+                    .find(123)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: elemDefault }));
 
                 const req = httpMock.expectOne({ method: 'GET' });
-
-                const resourceUrl = SERVER_API_URL + 'api/reports';
-                expect(req.request.url).toEqual(resourceUrl + '/' + 123);
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should create a Report', () => {
-                service.create(new Report(null)).subscribe(received => {
-                    expect(received.body.id).toEqual(null);
-                });
-
+            it('should create a Report', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        id: 0,
+                        creationDate: currentDate.format(DATE_TIME_FORMAT)
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign(
+                    {
+                        creationDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .create(new Report(null))
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
                 const req = httpMock.expectOne({ method: 'POST' });
-                req.flush({ id: null });
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should update a Report', () => {
-                service.update(new Report(123)).subscribe(received => {
-                    expect(received.body.id).toEqual(123);
-                });
+            it('should update a Report', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        title: 'BBBBBB',
+                        description: 'BBBBBB',
+                        type: 'BBBBBB',
+                        creationDate: currentDate.format(DATE_TIME_FORMAT)
+                    },
+                    elemDefault
+                );
 
+                const expected = Object.assign(
+                    {
+                        creationDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .update(expected)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
                 const req = httpMock.expectOne({ method: 'PUT' });
-                req.flush({ id: 123 });
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should return a Report', () => {
-                service.find(123).subscribe(received => {
-                    expect(received.body.id).toEqual(123);
-                });
-
+            it('should return a list of Report', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        title: 'BBBBBB',
+                        description: 'BBBBBB',
+                        type: 'BBBBBB',
+                        creationDate: currentDate.format(DATE_TIME_FORMAT)
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign(
+                    {
+                        creationDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .query(expected)
+                    .pipe(
+                        take(1),
+                        map(resp => resp.body)
+                    )
+                    .subscribe(body => expect(body).toContainEqual(expected));
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush({ id: 123 });
+                req.flush(JSON.stringify([returnedFromService]));
+                httpMock.verify();
             });
 
-            it('should return a list of Report', () => {
-                service.query(null).subscribe(received => {
-                    expect(received.body[0].id).toEqual(123);
-                });
-
-                const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([new Report(123)]);
-            });
-
-            it('should delete a Report', () => {
-                service.delete(123).subscribe(received => {
-                    expect(received.url).toContain('/' + 123);
-                });
+            it('should delete a Report', async () => {
+                const rxPromise = service.delete(123).subscribe(resp => expect(resp.ok));
 
                 const req = httpMock.expectOne({ method: 'DELETE' });
-                req.flush(null);
-            });
-
-            it('should propagate not found response', () => {
-                service.find(123).subscribe(null, (_error: any) => {
-                    expect(_error.status).toEqual(404);
-                });
-
-                const req = httpMock.expectOne({ method: 'GET' });
-                req.flush('Invalid request parameters', {
-                    status: 404,
-                    statusText: 'Bad Request'
-                });
+                req.flush({ status: 200 });
             });
         });
 

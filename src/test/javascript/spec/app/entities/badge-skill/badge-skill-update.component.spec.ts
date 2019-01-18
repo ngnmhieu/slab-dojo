@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { BadgeSkillUpdateComponent } from 'app/entities/badge-skill/badge-skill-update.component';
 import { BadgeSkillService } from 'app/entities/badge-skill/badge-skill.service';
 import { BadgeSkill } from 'app/shared/model/badge-skill.model';
-
-import { BadgeService } from 'app/entities/badge';
-import { SkillService } from 'app/entities/skill';
 
 describe('Component Tests', () => {
     describe('BadgeSkill Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [BadgeSkillUpdateComponent],
-                providers: [BadgeService, SkillService, BadgeSkillService]
+                declarations: [BadgeSkillUpdateComponent]
             })
                 .overrideTemplate(BadgeSkillUpdateComponent, '')
                 .compileComponents();
@@ -37,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new BadgeSkill(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.badgeSkill = entity;
                     // WHEN
                     comp.save();
@@ -54,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new BadgeSkill();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.badgeSkill = entity;
                     // WHEN
                     comp.save();

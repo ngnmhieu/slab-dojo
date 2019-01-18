@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -52,10 +53,8 @@ public class DimensionResourceIntTest {
     @Autowired
     private DimensionRepository dimensionRepository;
 
-
     @Autowired
     private DimensionMapper dimensionMapper;
-
 
     @Autowired
     private DimensionService dimensionService;
@@ -75,6 +74,9 @@ public class DimensionResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restDimensionMockMvc;
 
     private Dimension dimension;
@@ -87,7 +89,8 @@ public class DimensionResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -181,7 +184,6 @@ public class DimensionResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-
 
     @Test
     @Transactional
@@ -342,6 +344,12 @@ public class DimensionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(dimension.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+
+        // Check, that the count call also returns 1
+        restDimensionMockMvc.perform(get("/api/dimensions/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -353,6 +361,12 @@ public class DimensionResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDimensionMockMvc.perform(get("/api/dimensions/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -402,15 +416,15 @@ public class DimensionResourceIntTest {
         // Create the Dimension
         DimensionDTO dimensionDTO = dimensionMapper.toDto(dimension);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDimensionMockMvc.perform(put("/api/dimensions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(dimensionDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Dimension in the database
         List<Dimension> dimensionList = dimensionRepository.findAll();
-        assertThat(dimensionList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(dimensionList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

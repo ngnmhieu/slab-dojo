@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
@@ -18,7 +18,7 @@ import { ImageService } from 'app/entities/image';
     templateUrl: './badge-update.component.html'
 })
 export class BadgeUpdateComponent implements OnInit {
-    private _badge: IBadge;
+    badge: IBadge;
     isSaving: boolean;
 
     dimensions: IDimension[];
@@ -27,17 +27,18 @@ export class BadgeUpdateComponent implements OnInit {
     availableUntil: string;
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private badgeService: BadgeService,
-        private dimensionService: DimensionService,
-        private imageService: ImageService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected badgeService: BadgeService,
+        protected dimensionService: DimensionService,
+        protected imageService: ImageService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ badge }) => {
-            this.badge = badge.body ? badge.body : badge;
+        this.activatedRoute.data.subscribe(({ badge }) => {
+            this.badge = badge;
+            this.availableUntil = this.badge.availableUntil != null ? this.badge.availableUntil.format(DATE_TIME_FORMAT) : null;
         });
         this.dimensionService.query().subscribe(
             (res: HttpResponse<IDimension[]>) => {
@@ -59,7 +60,7 @@ export class BadgeUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.badge.availableUntil = moment(this.availableUntil, DATE_TIME_FORMAT);
+        this.badge.availableUntil = this.availableUntil != null ? moment(this.availableUntil, DATE_TIME_FORMAT) : null;
         if (this.badge.id !== undefined) {
             this.subscribeToSaveResponse(this.badgeService.update(this.badge));
         } else {
@@ -67,20 +68,20 @@ export class BadgeUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IBadge>>) {
-        result.subscribe((res: HttpResponse<IBadge>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IBadge>>) {
+        result.subscribe((res: HttpResponse<IBadge>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: IBadge) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -101,13 +102,5 @@ export class BadgeUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-    get badge() {
-        return this._badge;
-    }
-
-    set badge(badge: IBadge) {
-        this._badge = badge;
-        this.availableUntil = moment(badge.availableUntil).format();
     }
 }

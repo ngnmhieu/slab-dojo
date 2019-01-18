@@ -79,7 +79,7 @@ public class SkillResource {
     public ResponseEntity<SkillDTO> updateSkill(@Valid @RequestBody SkillDTO skillDTO) throws URISyntaxException {
         log.debug("REST request to update Skill : {}", skillDTO);
         if (skillDTO.getId() == null) {
-            return createSkill(skillDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         SkillDTO result = skillService.save(skillDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class SkillResource {
         log.debug("REST request to get Skills by criteria: {}", criteria);
         Page<SkillDTO> page = skillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/skills");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /skills/count : count all the skills.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/skills/count")
+    @Timed
+    public ResponseEntity<Long> countSkills(SkillCriteria criteria) {
+        log.debug("REST request to count Skills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(skillQueryService.countByCriteria(criteria));
     }
 
     /**

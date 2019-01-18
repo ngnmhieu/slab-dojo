@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { TeamSkillUpdateComponent } from 'app/entities/team-skill/team-skill-update.component';
 import { TeamSkillService } from 'app/entities/team-skill/team-skill.service';
 import { TeamSkill } from 'app/shared/model/team-skill.model';
-
-import { SkillService } from 'app/entities/skill';
-import { TeamService } from 'app/entities/team';
 
 describe('Component Tests', () => {
     describe('TeamSkill Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [TeamSkillUpdateComponent],
-                providers: [SkillService, TeamService, TeamSkillService]
+                declarations: [TeamSkillUpdateComponent]
             })
                 .overrideTemplate(TeamSkillUpdateComponent, '')
                 .compileComponents();
@@ -37,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new TeamSkill(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.teamSkill = entity;
                     // WHEN
                     comp.save();
@@ -54,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new TeamSkill();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.teamSkill = entity;
                     // WHEN
                     comp.save();

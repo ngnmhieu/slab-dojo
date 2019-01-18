@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { DimensionUpdateComponent } from 'app/entities/dimension/dimension-update.component';
 import { DimensionService } from 'app/entities/dimension/dimension.service';
 import { Dimension } from 'app/shared/model/dimension.model';
-
-import { TeamService } from 'app/entities/team';
-import { BadgeService } from 'app/entities/badge';
 
 describe('Component Tests', () => {
     describe('Dimension Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [DimensionUpdateComponent],
-                providers: [TeamService, BadgeService, DimensionService]
+                declarations: [DimensionUpdateComponent]
             })
                 .overrideTemplate(DimensionUpdateComponent, '')
                 .compileComponents();
@@ -37,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Dimension(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.dimension = entity;
                     // WHEN
                     comp.save();
@@ -54,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Dimension();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.dimension = entity;
                     // WHEN
                     comp.save();

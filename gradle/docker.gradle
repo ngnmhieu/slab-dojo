@@ -1,14 +1,15 @@
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
     }
 
     dependencies {
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.11"
         classpath 'com.bmuschko:gradle-docker-plugin:3.2.5'
     }
 }
 
-apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
@@ -22,6 +23,24 @@ docker {
     }
 }
 
+jib {
+    from {
+        image = 'openjdk:8-jre-alpine'
+    }
+    to {
+        image = 'teamdojo:latest'
+    }
+    container {
+        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && sync && /entrypoint.sh']
+        ports = ['8080']
+        environment = [
+            SPRING_OUTPUT_ANSI_ENABLED: 'ALWAYS',
+            JHIPSTER_SLEEP: '0'
+        ]
+        useCurrentTimestamp = true
+    }
+}
+
 task copyDockerFiles(type: Copy) {
     description = "Copy Dockerfile and required data to build directory"
     from 'src/main/docker'
@@ -30,6 +49,7 @@ task copyDockerFiles(type: Copy) {
     include "*"
     exclude "**/*.yml"
 }
+
 def dockerImageName = project.docker_repository ? project.docker_repository + "/otto/teamdojo" : "otto/teamdojo";
 ext.getDockerImageNameWithTags = {
     def dockerTags = ["$dockerImageName:${version}".toString()]
@@ -58,3 +78,11 @@ task pushDocker(type: DockerPushImage, dependsOn: 'pushDockerVersion') {
     description = "Pushes the image with tag 'latest' or 'next'"
     imageName = dockerImageNameWithTags[1];
 }
+
+
+task copyWwwIntoStatic (type: Copy) {
+    from 'build/www/'
+    into 'build/resources/main/static'
+}
+
+jibDockerBuild.dependsOn copyWwwIntoStatic

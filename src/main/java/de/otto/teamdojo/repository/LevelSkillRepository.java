@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Spring Data JPA repository for the LevelSkill entity.
+ * Spring Data  repository for the LevelSkill entity.
  */
 @SuppressWarnings("unused")
 @Repository

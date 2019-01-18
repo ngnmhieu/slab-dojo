@@ -20,6 +20,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
+
+// nur in dev, jetzt woanders?
 public class ProfileInfoResource {
 
     static final String DEFAULT_ORGANIZATION_NAME = "Organization";

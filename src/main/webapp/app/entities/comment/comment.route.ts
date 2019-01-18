@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Comment } from 'app/shared/model/comment.model';
 import { CommentService } from './comment.service';
 import { CommentComponent } from './comment.component';
 import { CommentDetailComponent } from './comment-detail.component';
 import { CommentUpdateComponent } from './comment-update.component';
 import { CommentDeletePopupComponent } from './comment-delete-dialog.component';
+import { IComment } from 'app/shared/model/comment.model';
 
-@Injectable()
-export class CommentResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class CommentResolve implements Resolve<IComment> {
     constructor(private service: CommentService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Comment> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Comment>) => response.ok),
+                map((comment: HttpResponse<Comment>) => comment.body)
+            );
         }
-        return new Comment();
+        return of(new Comment());
     }
 }
 

@@ -1,5 +1,5 @@
-import { IDimension } from './dimension.model';
-import { ITeamSkill } from './team-skill.model';
+import { IDimension } from 'app/shared/model//dimension.model';
+import { ITeamSkill } from 'app/shared/model//team-skill.model';
 
 export interface ITeam {
     id?: number;

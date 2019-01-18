@@ -61,6 +61,7 @@ Navbar
             white-space: nowrap;
         }
     }
+
     a.nav-link {
         font-weight: 400;
         display: flex;
@@ -119,7 +120,7 @@ Logo styles
             width: 190px;
             display: inline-block;
             vertical-align: middle;
-            background: url("../../../content/images/team-dojo.png") no-repeat center center;
+            background: url('../../../content/images/team-dojo.png') no-repeat center center;
             background-size: contain;
         }
     }

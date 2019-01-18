@@ -73,7 +73,7 @@ public class LevelSkillResource {
     public ResponseEntity<LevelSkillDTO> updateLevelSkill(@Valid @RequestBody LevelSkillDTO levelSkillDTO) throws URISyntaxException {
         log.debug("REST request to update LevelSkill : {}", levelSkillDTO);
         if (levelSkillDTO.getId() == null) {
-            return createLevelSkill(levelSkillDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         LevelSkillDTO result = levelSkillService.save(levelSkillDTO);
         return ResponseEntity.ok()
@@ -93,6 +93,19 @@ public class LevelSkillResource {
         log.debug("REST request to get LevelSkills by criteria: {}", criteria);
         List<LevelSkillDTO> entityList = levelSkillQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /level-skills/count : count all the levelSkills.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/level-skills/count")
+    @Timed
+    public ResponseEntity<Long> countLevelSkills(LevelSkillCriteria criteria) {
+        log.debug("REST request to count LevelSkills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(levelSkillQueryService.countByCriteria(criteria));
     }
 
     /**

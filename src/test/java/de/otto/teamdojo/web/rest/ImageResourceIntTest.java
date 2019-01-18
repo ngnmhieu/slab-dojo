@@ -12,10 +12,8 @@ import de.otto.teamdojo.service.dto.ImageCriteria;
 import de.otto.teamdojo.service.ImageQueryService;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +25,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Test class for the ImageResource REST controller.
  *
  * @see ImageResource
+ *
+ * ??? tests to ignore?
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TeamdojoApp.class)
@@ -51,28 +51,25 @@ public class ImageResourceIntTest {
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final byte[] DEFAULT_SMALL = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_SMALL = TestUtil.createByteArray(2, "1");
+    private static final byte[] UPDATED_SMALL = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_SMALL_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_SMALL_CONTENT_TYPE = "image/png";
 
     private static final byte[] DEFAULT_MEDIUM = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_MEDIUM = TestUtil.createByteArray(2, "1");
+    private static final byte[] UPDATED_MEDIUM = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_MEDIUM_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_MEDIUM_CONTENT_TYPE = "image/png";
 
     private static final byte[] DEFAULT_LARGE = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_LARGE = TestUtil.createByteArray(2, "1");
+    private static final byte[] UPDATED_LARGE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_LARGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_LARGE_CONTENT_TYPE = "image/png";
 
     @Autowired
     private ImageRepository imageRepository;
 
-
-
     @Autowired
     private ImageMapper imageMapper;
-
 
     @Autowired
     private ImageService imageService;
@@ -92,6 +89,9 @@ public class ImageResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restImageMockMvc;
 
     private Image image;
@@ -104,7 +104,8 @@ public class ImageResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -131,7 +132,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void createImage() throws Exception {
         int databaseSizeBeforeCreate = imageRepository.findAll().size();
@@ -177,7 +177,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = imageRepository.findAll().size();
@@ -215,7 +214,6 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
     }
-
 
     @Test
     @Transactional
@@ -290,6 +288,12 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.[*].medium").value(hasItem(Base64Utils.encodeToString(DEFAULT_MEDIUM))))
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
+
+        // Check, that the count call also returns 1
+        restImageMockMvc.perform(get("/api/images/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -301,6 +305,12 @@ public class ImageResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restImageMockMvc.perform(get("/api/images/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -313,7 +323,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void updateImage() throws Exception {
         // Initialize the database
@@ -354,7 +363,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void updateNonExistingImage() throws Exception {
         int databaseSizeBeforeUpdate = imageRepository.findAll().size();
@@ -362,15 +370,15 @@ public class ImageResourceIntTest {
         // Create the Image
         ImageDTO imageDTO = imageMapper.toDto(image);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restImageMockMvc.perform(put("/api/images")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(imageDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Image in the database
         List<Image> imageList = imageRepository.findAll();
-        assertThat(imageList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(imageList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

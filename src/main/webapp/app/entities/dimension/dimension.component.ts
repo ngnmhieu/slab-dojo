@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { IDimension } from 'app/shared/model/dimension.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 import { DimensionService } from './dimension.service';
 
 @Component({
@@ -17,10 +17,10 @@ export class DimensionComponent implements OnInit, OnDestroy {
     eventSubscriber: Subscription;
 
     constructor(
-        private dimensionService: DimensionService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private principal: Principal
+        protected dimensionService: DimensionService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected accountService: AccountService
     ) {}
 
     loadAll() {
@@ -34,7 +34,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then(account => {
+        this.accountService.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInDimensions();
@@ -52,7 +52,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe('dimensionListModification', response => this.loadAll());
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }

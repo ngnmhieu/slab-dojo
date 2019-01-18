@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { BadgeUpdateComponent } from 'app/entities/badge/badge-update.component';
 import { BadgeService } from 'app/entities/badge/badge.service';
 import { Badge } from 'app/shared/model/badge.model';
-
-import { DimensionService } from 'app/entities/dimension';
-import { ImageService } from 'app/entities/image';
 
 describe('Component Tests', () => {
     describe('Badge Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [BadgeUpdateComponent],
-                providers: [DimensionService, ImageService, BadgeService]
+                declarations: [BadgeUpdateComponent]
             })
                 .overrideTemplate(BadgeUpdateComponent, '')
                 .compileComponents();
@@ -37,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Badge(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.badge = entity;
                     // WHEN
                     comp.save();
@@ -54,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Badge();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.badge = entity;
                     // WHEN
                     comp.save();

@@ -84,7 +84,7 @@ public class LevelResource {
     public ResponseEntity<LevelDTO> updateLevel(@Valid @RequestBody LevelDTO levelDTO) throws URISyntaxException {
         log.debug("REST request to update Level : {}", levelDTO);
         if (levelDTO.getId() == null) {
-            return createLevel(levelDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         LevelDTO result = levelService.save(levelDTO);
         return ResponseEntity.ok()
@@ -133,6 +133,19 @@ public class LevelResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+    /**
+    * GET  /levels/count : count all the levels.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/levels/count")
+    @Timed
+    public ResponseEntity<Long> countLevels(LevelCriteria criteria) {
+        log.debug("REST request to count Levels by criteria: {}", criteria);
+        return ResponseEntity.ok().body(levelQueryService.countByCriteria(criteria));
+    }
 
     /**
      * GET  /levels/:id : get the "id" level.

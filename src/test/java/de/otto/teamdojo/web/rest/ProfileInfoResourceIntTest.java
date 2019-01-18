@@ -1,10 +1,8 @@
 package de.otto.teamdojo.web.rest;
 
 import com.google.common.collect.Lists;
-import de.otto.teamdojo.TeamdojoApp;
-import de.otto.teamdojo.service.OrganizationService;
-import de.otto.teamdojo.service.dto.OrganizationDTO;
 import io.github.jhipster.config.JHipsterProperties;
+import de.otto.teamdojo.TeamdojoApp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +19,7 @@ import static de.otto.teamdojo.web.rest.ProfileInfoResource.DEFAULT_ORGANIZATION
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * Test class for the ProfileInfoResource REST controller.
@@ -29,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TeamdojoApp.class)
+
+//??? nur in dev
 public class ProfileInfoResourceIntTest {
 
     @Mock
@@ -45,7 +46,7 @@ public class ProfileInfoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        String mockProfile[] = {"test"};
+        String mockProfile[] = { "test" };
         JHipsterProperties.Ribbon ribbon = new JHipsterProperties.Ribbon();
         ribbon.setDisplayOnActiveProfiles(mockProfile);
         when(jHipsterProperties.getRibbon()).thenReturn(ribbon);
@@ -54,7 +55,7 @@ public class ProfileInfoResourceIntTest {
         when(environment.getDefaultProfiles()).thenReturn(activeProfiles);
         when(environment.getActiveProfiles()).thenReturn(activeProfiles);
 
-        ProfileInfoResource profileInfoResource = new ProfileInfoResource(environment, jHipsterProperties, organizationService);
+        ProfileInfoResource profileInfoResource = new ProfileInfoResource(environment, jHipsterProperties);
         this.restProfileMockMvc = MockMvcBuilders
             .standaloneSetup(profileInfoResource)
             .build();
@@ -89,6 +90,7 @@ public class ProfileInfoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
     }
 
+    //??? aus dev
     @Test
     public void getProfileWithOrganization() throws Exception {
         String customOrganizationName = "My Org";

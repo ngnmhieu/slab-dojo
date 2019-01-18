@@ -44,6 +44,7 @@ public class BadgeSkillServiceImpl implements BadgeSkillService {
     @Override
     public BadgeSkillDTO save(BadgeSkillDTO badgeSkillDTO) {
         log.debug("Request to save BadgeSkill : {}", badgeSkillDTO);
+
         BadgeSkill badgeSkill = badgeSkillMapper.toEntity(badgeSkillDTO);
         badgeSkill = badgeSkillRepository.save(badgeSkill);
         return badgeSkillMapper.toDto(badgeSkill);

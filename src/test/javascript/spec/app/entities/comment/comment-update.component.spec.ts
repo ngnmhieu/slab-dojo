@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { CommentUpdateComponent } from 'app/entities/comment/comment-update.component';
 import { CommentService } from 'app/entities/comment/comment.service';
 import { Comment } from 'app/shared/model/comment.model';
-
-import { TeamService } from 'app/entities/team';
-import { SkillService } from 'app/entities/skill';
 
 describe('Component Tests', () => {
     describe('Comment Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [CommentUpdateComponent],
-                providers: [TeamService, SkillService, CommentService]
+                declarations: [CommentUpdateComponent]
             })
                 .overrideTemplate(CommentUpdateComponent, '')
                 .compileComponents();
@@ -37,7 +33,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Comment(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.comment = entity;
                     // WHEN
                     comp.save();
@@ -54,7 +50,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Comment();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.comment = entity;
                     // WHEN
                     comp.save();

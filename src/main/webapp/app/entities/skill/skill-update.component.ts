@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { ISkill } from 'app/shared/model/skill.model';
 import { SkillService } from './skill.service';
@@ -11,15 +11,15 @@ import { SkillService } from './skill.service';
     templateUrl: './skill-update.component.html'
 })
 export class SkillUpdateComponent implements OnInit {
-    private _skill: ISkill;
+    skill: ISkill;
     isSaving: boolean;
 
-    constructor(private skillService: SkillService, private route: ActivatedRoute) {}
+    constructor(protected skillService: SkillService, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ skill }) => {
-            this.skill = skill.body ? skill.body : skill;
+        this.activatedRoute.data.subscribe(({ skill }) => {
+            this.skill = skill;
         });
     }
 
@@ -36,23 +36,16 @@ export class SkillUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ISkill>>) {
-        result.subscribe((res: HttpResponse<ISkill>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ISkill>>) {
+        result.subscribe((res: HttpResponse<ISkill>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ISkill) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
-    }
-    get skill() {
-        return this._skill;
-    }
-
-    set skill(skill: ISkill) {
-        this._skill = skill;
     }
 }

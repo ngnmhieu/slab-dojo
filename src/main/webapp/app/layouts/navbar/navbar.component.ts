@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'app/core';
+import { SessionStorageService } from 'ngx-webstorage';
+
+import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 import { TeamsSelectionComponent } from 'app/shared/teams-selection/teams-selection.component';
@@ -39,7 +41,8 @@ export class NavbarComponent implements OnInit {
         private loginService: LoginService,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper,
-        private principal: Principal,
+        private sessionStorage: SessionStorageService,
+        private accountService: AccountService,
         private loginModalService: LoginModalService,
         private teamsSelectionService: TeamsSelectionService,
         private profileService: ProfileService,
@@ -80,6 +83,7 @@ export class NavbarComponent implements OnInit {
     }
 
     changeLanguage(languageKey: string) {
+        this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
 
@@ -88,7 +92,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -106,7 +110,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 
     selectTeam(): NgbModalRef {

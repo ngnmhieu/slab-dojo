@@ -14,4 +14,10 @@ import { TeamsStatusComponent } from 'app/teams/teams-status.component';
     exports: [TeamdojoSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, BackgroundComponent, TeamsStatusComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class TeamdojoSharedModule {}
+export class TeamdojoSharedModule {
+    static forRoot() {
+        return {
+            ngModule: TeamdojoSharedModule
+        };
+    }
+}

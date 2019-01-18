@@ -12,8 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 /**
- * Spring Data JPA repository for the Skill entity.
+ * Spring Data  repository for the Skill entity.
  */
 @SuppressWarnings("unused")
 @Repository

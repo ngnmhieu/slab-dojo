@@ -7,7 +7,6 @@
 Bootstrap tweaks
 ===============================================================*/
 
-
 body, h1, h2, h3, h4 {
     font-weight: 300;
 }
@@ -20,6 +19,8 @@ a {
 a:hover {
     color: $dojo-text-primary;
     font-weight: bold;
+    /* make sure browsers use the pointer cursor for anchors, even with no href */
+    cursor: pointer;
 }
 
 /* ==========================================================================
@@ -192,11 +193,11 @@ entity tables helpers
     }
 }
 
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
+@include no-padding('left');
+@include no-padding('right');
+@include no-padding('top');
+@include no-padding('bottom');
+@include no-padding('all');
 
 /* bootstrap 3 input-group 100% width
    http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
@@ -240,7 +241,10 @@ entity detail page css
 /* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
-.nav, .pagination, .carousel, .panel-title a {
+.nav,
+.pagination,
+.carousel,
+.panel-title a {
     cursor: pointer;
 }
 

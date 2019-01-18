@@ -21,11 +21,11 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="completed_at" type="timestamp">
+            <column name="completed_at" type="datetime">
                 <constraints nullable="true" />
             </column>
 
-            <column name="verified_at" type="timestamp">
+            <column name="verified_at" type="datetime">
                 <constraints nullable="true" />
             </column>
 

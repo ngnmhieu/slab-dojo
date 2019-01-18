@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { ILevelSkill } from 'app/shared/model/level-skill.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 import { LevelSkillService } from './level-skill.service';
 
 @Component({
@@ -17,10 +17,10 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     eventSubscriber: Subscription;
 
     constructor(
-        private levelSkillService: LevelSkillService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private principal: Principal
+        protected levelSkillService: LevelSkillService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected accountService: AccountService
     ) {}
 
     loadAll() {
@@ -34,7 +34,7 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then(account => {
+        this.accountService.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInLevelSkills();
@@ -52,7 +52,7 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe('levelSkillListModification', response => this.loadAll());
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }

@@ -5,19 +5,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CookieModule } from 'ngx-cookie';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-    imports: [
-        NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({
-            // set below to true to make alerts look like toast
-            alertAsToast: false,
-            i18nEnabled: true,
-            defaultI18nLang: 'en'
-        }),
-        InfiniteScrollModule,
-        CookieModule.forRoot()
-    ],
-    exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule]
+    imports: [NgbModule.forRoot(), InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule],
+    exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule]
 })
-export class TeamdojoSharedLibsModule {}
+export class TeamdojoSharedLibsModule {
+    // ??? alle imports korrekt? inkl configuration
+    static forRoot() {
+        return {
+            ngModule: TeamdojoSharedLibsModule
+        };
+    }
+}
