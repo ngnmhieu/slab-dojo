@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class SkillSortPipe implements PipeTransform {
     transform(skills = [], sortProperty) {
         const sortPropertyNullSafe = this._defaultString(sortProperty);
-        const reverse = ['rateScore', 'rateCount'].includes(sortPropertyNullSafe) ? -1 : 1;
+        const reverse = ['score', 'rateCount'].includes(sortPropertyNullSafe) ? -1 : 1;
         return sortProperty
             ? Array.from(skills).sort((skill1, skill2) => {
                   return (

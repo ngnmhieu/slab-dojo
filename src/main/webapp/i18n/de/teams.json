@@ -20,7 +20,7 @@
                     },
                     "orderBy": {
                         "title": "Titel",
-                        "rateScore": "Punkte",
+                        "score": "Punkte",
                         "rateCount": "Anzahl Bewertungen"
                     }
                 },
