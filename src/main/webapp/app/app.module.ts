@@ -32,6 +32,7 @@ import {
     PageRibbonComponent,
     ProfileService
 } from './layouts';
+import * as moment from 'moment';
 
 // ???
 @NgModule({

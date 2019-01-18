@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IBadge } from 'app/shared/model/badge.model';
 import { ILevel } from 'app/shared/model/level.model';
+import { map } from 'rxjs/operators';
 
 export type EntityBadgeArrayResponseType = HttpResponse<IBadge[]>;
 export type EntityLevelArrayResponseType = HttpResponse<ILevel[]>;
@@ -22,14 +23,14 @@ export class TeamsAchievementsService {
         const options = createRequestOption(req);
         return this.http
             .get<IBadge[]>(this.badgeResourceUrl, { params: options, observe: 'response' })
-            .map((res: EntityBadgeArrayResponseType) => this.convertBadgeArrayResponse(res));
+            .pipe(map((res: EntityBadgeArrayResponseType) => this.convertBadgeArrayResponse(res)));
     }
 
     queryLevels(req?: any): Observable<EntityLevelArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
             .get<ILevel[]>(this.levelResourceUrl, { params: options, observe: 'response' })
-            .map((res: EntityLevelArrayResponseType) => this.convertLevelArrayResponse(res));
+            .pipe(map((res: EntityLevelArrayResponseType) => this.convertLevelArrayResponse(res)));
     }
 
     private convertBadgeArrayResponse(res: EntityBadgeArrayResponseType): EntityBadgeArrayResponseType {

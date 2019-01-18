@@ -19,7 +19,8 @@ import { IBadge } from 'app/shared/model/badge.model';
 import { IDimension } from 'app/shared/model/dimension.model';
 import { DimensionService } from 'app/entities/dimension';
 import 'simplebar';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-teams-skills',
@@ -73,8 +74,10 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         this.search = '';
         this.search$ = new Subject<string>();
         this.search$
-            .debounceTime(400)
-            .distinctUntilChanged()
+            .pipe(
+                debounceTime(400),
+                distinctUntilChanged()
+            )
             .subscribe(value => {
                 this.search = value;
                 return value;

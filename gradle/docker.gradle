@@ -10,10 +10,10 @@ buildscript {
 }
 
 apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
 
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
-import com.bmuschko.gradle.docker.tasks.image.DockerTagImage
 
 docker {
     registryCredentials {

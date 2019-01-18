@@ -12,8 +12,9 @@ import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { DimensionService } from 'app/entities/dimension';
 import { Progress } from 'app/shared/achievement/model/progress.model';
 import 'simplebar';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-overview-skills',
@@ -84,8 +85,10 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
         this.search = '';
         this.search$ = new Subject<string>();
         this.search$
-            .debounceTime(400)
-            .distinctUntilChanged()
+            .pipe(
+                debounceTime(400),
+                distinctUntilChanged()
+            )
             .subscribe(value => {
                 this.search = value;
                 return value;
