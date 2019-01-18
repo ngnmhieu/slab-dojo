@@ -47,6 +47,9 @@
     width: 100%;
     padding-right: 13px;
     padding-left: 2px;
+    .skill-sort select {
+        background-color: transparent;
+    }
 }
 
 ::-webkit-input-placeholder {
