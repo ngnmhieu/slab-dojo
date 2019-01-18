@@ -28,13 +28,7 @@
         <div class="teams-skills-list list-group" data-simplebar="init">
             <li class="list-group-item list-group-item-action flex-column align-items-start mb-3 skill-list-item"
                 [ngClass]="{'active-skill':isActiveSkill(skill), 'irrelevant-skill': skill.irrelevant, 'in-skill-details': isInSkillDetails()}"
-                *ngFor="let skill of skills | skillFilter:search | skillSort:orderBy"
-                [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top" container="body">
-                <ng-template #popoverContent>
-                    <div class="d-flex flex-column align-items-center">
-                        <small jhiTranslate="teamdojoApp.skill.detail.score" translateValues="{score: '{{skill.score}}'}"></small>
-                    </div>
-                </ng-template>
+                *ngFor="let skill of skills | skillFilter:search | skillSort:orderBy">
                 <div class="d-flex flex-column">
                     <div class="d-flex">
                         <div class="skill-title d-flex flex-column" [ngClass]="{'irrelevant': skill.irrelevant}">
@@ -56,15 +50,18 @@
                                     </span>
                                     </ng-template>
                                 </div>
-                                <div class="skill-score ml-auto" [ngbPopover]="editScore" popover-class="score-popover" placement="top" container="body" triggers="manual" #p="ngbPopover" (click)="openPopover(p)">
-                                    <span class="mb-auto">{{skill.score}}</span>
-                                </div>
-                                <ng-template #editScore>
-                                    <form name="scoreEditing" class="score-editing" (ngSubmit)="updateScore(p, skill)">
+                                <span class="badge badge-pill skill-score" [ngbPopover]="scorePopoverTpl" popover-class="score-popover"
+                                      placement="top" container="body" #scorePopover="ngbPopover" triggers="" (click)="onPopupEnter(scorePopover, skill.skillId, true)"
+                                      (mouseenter)="onPopupEnter(scorePopover, skill.skillId, false)" (mouseleave)="onPopupLeave(scorePopover, skill.skillId)">
+                                    {{skill.score}}
+                                </span>
+                                <ng-template #scorePopoverTpl>
+                                    <small *ngIf="!isEditingScore[skill.skillId]" jhiTranslate="teamdojoApp.skill.detail.score" translateValues="{score: '{{skill.score}}'}"></small>
+                                    <form *ngIf="isEditingScore[skill.skillId]" name="scoreEditing" class="score-editing" (ngSubmit)="updateScore(scorePopover, skill)">
                                         <input class="input" type="number" name="score" [(ngModel)]="skill.score" [ngModelOptions]="{ allowInvalid: false, updateOn: 'submit' }" [min]="0" [required]="true">
                                         <button class="button" type="submit" jhiTranslate="teamdojoApp.teamSkill.save">
                                         </button>
-                                        <button class="button" type="button" (click)="p.close()" jhiTranslate="teamdojoApp.teamSkill.cancel">
+                                        <button class="button" type="button" (click)="scorePopover.close()" jhiTranslate="teamdojoApp.teamSkill.cancel">
                                         </button>
                                     </form>
                                 </ng-template>

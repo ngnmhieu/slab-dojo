@@ -45,6 +45,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     search$: Subject<string>;
     search: string;
     orderBy = 'title';
+    isEditingScore = {};
 
     constructor(
         private teamsSkillsService: TeamsSkillsService,
@@ -84,6 +85,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
+        this.principalService.identity();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -306,15 +308,15 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     updateScore(popover, s: IAchievableSkill) {
-        popover.close();
-        console.log(s.score);
-        this.skillService.find(s.skillId).subscribe(skill => {
+        this.skillService.find(s.skillId).subscribe(
+            skill => {
                 skill.body.score = s.score;
                 this.skillService.update(skill.body).subscribe((res: HttpResponse<ISkill>) => {
                     this.onSkillChanged.emit({
                         iSkill: res.body,
                         aSkill: s
                     });
+                    popover.close();
                 });
             },
             (res: HttpErrorResponse) => {
@@ -323,9 +325,16 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         );
     }
 
-    openPopover(popover) {
-        if (this.principalService.hasAnyAuthorityDirect(['ROLE_ADMIN'])) {
+    onPopupEnter(popover, skillId, isEditing) {
+        this.isEditingScore[skillId] = isEditing && this.principalService.hasAnyAuthorityDirect(['ROLE_ADMIN']);
+        if (!popover.isOpen()) {
             popover.open();
+        }
+    }
+
+    onPopupLeave(popover, skillId) {
+        if (!this.isEditingScore[skillId]) {
+            popover.close();
         }
     }
 }
