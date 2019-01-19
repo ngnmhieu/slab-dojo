@@ -16,10 +16,4 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 8080
 
-#???
-# von JHipster 5.7.2
 ADD *.war app.war
-
-# von dev
-#ADD *.war /
-#RUN mv /*.war /app.war

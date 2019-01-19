@@ -2,6 +2,7 @@ package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
 import de.otto.teamdojo.domain.Badge;
+import de.otto.teamdojo.domain.BadgeSkill;
 import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.repository.BadgeSkillRepository;
 import de.otto.teamdojo.service.BadgeSkillQueryService;

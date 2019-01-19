@@ -11,7 +11,6 @@ import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 
-/*???*/
 @NgModule({
     imports: [TeamdojoSharedLibsModule],
     declarations: [
@@ -25,7 +24,8 @@ import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selectio
         AchievementItemComponent,
         TeamImageComponent,
         NotificationMenuComponent,
-        NotificationItemComponent],
+        NotificationItemComponent
+    ],
     providers: [TeamsSelectionService, TeamsSelectionResolve],
     exports: [
         TeamdojoSharedLibsModule,

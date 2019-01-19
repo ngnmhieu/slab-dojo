@@ -35,4 +35,8 @@ export class OrganizationService {
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
+
+    findCurrent(): Observable<EntityResponseType> {
+        return this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
+    }
 }

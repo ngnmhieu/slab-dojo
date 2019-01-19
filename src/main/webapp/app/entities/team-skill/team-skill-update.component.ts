@@ -18,7 +18,6 @@ import { TeamService } from 'app/entities/team';
     templateUrl: './team-skill-update.component.html'
 })
 export class TeamSkillUpdateComponent implements OnInit {
-    //??? es wurde completedAt & verifiedAt geupdatet, wenn teamSkill gesestzt wurde.
     teamSkill: ITeamSkill;
     isSaving: boolean;
 

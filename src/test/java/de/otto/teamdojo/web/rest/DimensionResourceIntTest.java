@@ -1,16 +1,18 @@
-package de.otto.teamdojo.web.rest;
+    package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
-import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.Dimension;
-import de.otto.teamdojo.domain.Level;
 import de.otto.teamdojo.domain.Team;
+import de.otto.teamdojo.domain.Level;
+import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.repository.DimensionRepository;
-import de.otto.teamdojo.service.DimensionQueryService;
 import de.otto.teamdojo.service.DimensionService;
+import de.otto.teamdojo.service.TeamService;
 import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.service.mapper.DimensionMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.DimensionQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,10 +83,14 @@ public class DimensionResourceIntTest {
 
     private Dimension dimension;
 
+    @Autowired
+    private TeamService teamService;
+
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DimensionResource dimensionResource = new DimensionResource(dimensionService, dimensionQueryService);
+        final DimensionResource dimensionResource = new DimensionResource(dimensionService, dimensionQueryService, teamService);
         this.restDimensionMockMvc = MockMvcBuilders.standaloneSetup(dimensionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

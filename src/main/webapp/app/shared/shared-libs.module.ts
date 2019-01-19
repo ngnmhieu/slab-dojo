@@ -12,7 +12,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule]
 })
 export class TeamdojoSharedLibsModule {
-    // ??? alle imports korrekt? inkl configuration
     static forRoot() {
         return {
             ngModule: TeamdojoSharedLibsModule

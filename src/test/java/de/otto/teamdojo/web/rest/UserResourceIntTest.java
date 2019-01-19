@@ -521,7 +521,6 @@ public class UserResourceIntTest {
         assertThat(user1).isNotEqualTo(user2);
     }
 
-    // ??? test noch benötigt?
     @Test
     public void testUserFromId() {
         assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);

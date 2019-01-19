@@ -34,7 +34,6 @@ import {
 } from './layouts';
 import * as moment from 'moment';
 
-// ???
 @NgModule({
     imports: [
         StarRatingModule.forRoot(),

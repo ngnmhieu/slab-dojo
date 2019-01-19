@@ -30,7 +30,6 @@ export class ProfileService {
                             pi.inProduction = pi.activeProfiles.includes('prod');
                             pi.swaggerEnabled = pi.activeProfiles.includes('swagger');
                         }
-                        pi.organization = data.organization; // ??? hier oder 'pi.organization = data.organization;'' 2 zeilen weiter drüber?
                         return pi;
                     })
                 )

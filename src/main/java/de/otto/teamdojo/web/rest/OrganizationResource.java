@@ -29,6 +29,8 @@ public class OrganizationResource {
 
     private static final String ENTITY_NAME = "organization";
 
+    static final String DEFAULT_ORGANIZATION_NAME = "Organization";
+
     private final OrganizationService organizationService;
 
     public OrganizationResource(OrganizationService organizationService) {
@@ -115,5 +117,31 @@ public class OrganizationResource {
         log.debug("REST request to delete Organization : {}", id);
         organizationService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /organization : get the only organization - assuming, there is only one.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the organization in body
+     */
+    @GetMapping("/organizations/current")
+    @Timed
+    public OrganizationDTO getCurrentOrganization() {
+        log.debug("REST request to get current Organizations");
+        List<OrganizationDTO> organizations = organizationService.findAll();
+        if (organizations.isEmpty()) {
+            return getDefaultOrganization();
+        } else {
+            if (organizations.size() > 1) {
+                log.warn("There exists more than one organization");
+            }
+            return organizations.get(0);
+        }
+    }
+
+    private OrganizationDTO getDefaultOrganization() {
+        OrganizationDTO organization = new OrganizationDTO();
+        organization.setName(DEFAULT_ORGANIZATION_NAME);
+        return organization;
     }
 }

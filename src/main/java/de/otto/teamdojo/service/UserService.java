@@ -93,8 +93,6 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-
-        //??? sind die nächsten 2 Prüfungen gewollt/ benötigt?
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -107,10 +105,6 @@ public class UserService {
                 throw new EmailAlreadyUsedException();
             }
         });
-
-
-
-
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());

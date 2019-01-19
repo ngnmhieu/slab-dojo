@@ -590,7 +590,6 @@ public class LevelResourceIntTest {
         defaultLevelShouldNotBeFound("imageId.equals=" + (imageId + 1));
     }
 
-    // ??? sollte dieser test eher getAllLevelsByImageIsEqualToSomething überschreiben?
     @Test
     @Transactional
     public void getAllLevelsBySkillId() throws Exception {

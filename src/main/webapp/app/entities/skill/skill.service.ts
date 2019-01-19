@@ -37,7 +37,6 @@ export class SkillService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    // ???
     createVote(skillRate: ISkillRate): Observable<EntityResponseType> {
         return this.http.post<ISkill>(`${this.resourceUrl}/${skillRate.skillId}/vote`, skillRate, { observe: 'response' });
     }
