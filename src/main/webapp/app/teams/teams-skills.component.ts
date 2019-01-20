@@ -91,7 +91,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     private getParamAsNumber(name: string, params: ParamMap) {
-        return Number.parseInt(params.get(name));
+        return Number.parseInt(params.get(name), 10);
     }
 
     loadAll() {
@@ -227,7 +227,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     isSuggestAble(s: IAchievableSkill) {
-        return !s.achievedAt && !s.irrelevant && (!s.vote || (s.vote && s.vote != 1)) && this.isTeamVoteAble(s);
+        return !s.achievedAt && !s.irrelevant && (!s.vote || (s.vote && s.vote !== 1)) && this.isTeamVoteAble(s);
     }
 
     private onError(errorMessage: string) {
