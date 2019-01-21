@@ -11,7 +11,7 @@ import { Skill } from 'app/shared/model/skill.model';
 import { CommentService } from 'app/entities/comment';
 import { TeamService } from 'app/entities/team';
 import { Injectable } from '@angular/core';
-import { TeamsService } from 'app/teams/teams.service';
+import { TrainingService } from 'app/entities/training';
 
 @Injectable()
 export class AllTeamsResolve implements Resolve<any> {
@@ -180,5 +180,20 @@ export class SkillResolve implements Resolve<any> {
             });
         }
         return new Skill();
+    }
+}
+
+@Injectable()
+export class AllTrainingsResolve implements Resolve<any> {
+    constructor(private trainingService: TrainingService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const skillId = route.params['skillId'] ? route.params['skillId'] : null;
+        if (skillId) {
+            return this.trainingService.query({ 'skillId.equals': skillId }).map(res => {
+                return res.body;
+            });
+        }
+        return this.trainingService.query();
     }
 }

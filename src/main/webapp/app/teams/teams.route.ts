@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import { SkillDetailsComponent } from 'app/teams/skill-details/skill-details.component';
 import { TeamSkillService } from 'app/entities/team-skill';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
-import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
+import { AllCommentsResolve, AllSkillsResolve, AllTrainingsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
 
 @Injectable()
 export class TeamAndTeamSkillResolve implements Resolve<any> {
@@ -59,7 +59,8 @@ export const TEAMS_ROUTES: Route[] = [
             skill: SkillResolve,
             skills: AllSkillsResolve,
             comments: AllCommentsResolve,
-            selectedTeam: TeamsSelectionResolve
+            selectedTeam: TeamsSelectionResolve,
+            trainings: AllTrainingsResolve
         },
         data: {
             authorities: [],
