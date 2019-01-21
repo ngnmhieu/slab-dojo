@@ -2,8 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export interface TableField {
+    // name of the field
     name: string;
+    // if filter for the field be displayed
     filter: boolean;
+    // operator applied against the field ('contains', 'equals')
     operator?: string;
 }
 

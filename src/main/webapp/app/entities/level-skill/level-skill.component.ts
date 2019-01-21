@@ -27,6 +27,7 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     totalItems: number;
 
     private filters: FilterQuery[] = [];
+    filteredLevelSkills: ILevelSkill[] = [];
 
     constructor(
         private levelSkillService: LevelSkillService,
@@ -46,25 +47,37 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        const query = {};
-        this.filters.forEach(filter => (query[`${filter.fieldName}.${filter.operator}`] = filter.query));
-
         this.levelSkillService
             .query({
-                ...query,
-                page: this.page,
-                size: this.itemsPerPage,
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<ILevelSkill[]>) => this.paginateLevelSkills(res.body, res.headers),
+                (res: HttpResponse<ILevelSkill[]>) => {
+                    this.paginateLevelSkills(res.body, res.headers);
+                    this.applyFilter();
+                },
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
 
-    applyFilter(query: FilterQuery[]) {
+    applyFilter(query: FilterQuery[] = this.filters) {
         this.filters = query;
-        this.reset();
+
+        this.filteredLevelSkills = this.levelSkills;
+        for (const filter of this.filters) {
+            this.filteredLevelSkills = this.filteredLevelSkills.filter(ls => {
+                const fieldVal = (ls[filter.fieldName] + '').toLowerCase().trim();
+                const queryVal = filter.query.toLowerCase().trim();
+                switch (filter.operator) {
+                    case 'contains':
+                        return fieldVal.includes(queryVal);
+                    case 'equals':
+                        return fieldVal === queryVal;
+                    default:
+                        return false;
+                }
+            });
+        }
     }
 
     reset() {
