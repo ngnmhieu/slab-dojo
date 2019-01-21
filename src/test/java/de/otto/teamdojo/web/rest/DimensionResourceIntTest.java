@@ -90,7 +90,7 @@ public class DimensionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DimensionResource dimensionResource = new DimensionResource(dimensionService, dimensionQueryService, teamService);
+        final DimensionResource dimensionResource = new DimensionResource(dimensionService, dimensionQueryService);
         this.restDimensionMockMvc = MockMvcBuilders.standaloneSetup(dimensionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
