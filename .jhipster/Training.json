@@ -1,0 +1,58 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "skill",
+            "otherEntityName": "skill",
+            "relationshipType": "many-to-many",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "trainings",
+            "otherEntityField": "title"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 80
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "contactPerson",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "link",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "validUntil",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "isOfficial",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+
+    ],
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "training",
+    "jpaMetamodelFiltering": true,
+    "pagination": "infinite-scroll"
+}
