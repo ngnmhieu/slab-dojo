@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { JhiAlertService } from 'ng-jhipster';
 
 import { ISkill } from 'app/shared/model/skill.model';
 import { SkillService } from './skill.service';
+import { ITraining } from 'app/shared/model/training.model';
+import { TrainingService } from 'app/entities/training';
 
 @Component({
     selector: 'jhi-skill-update',
@@ -14,13 +17,26 @@ export class SkillUpdateComponent implements OnInit {
     private _skill: ISkill;
     isSaving: boolean;
 
-    constructor(private skillService: SkillService, private route: ActivatedRoute) {}
+    trainings: ITraining[];
+
+    constructor(
+        private jhiAlertService: JhiAlertService,
+        private skillService: SkillService,
+        private trainingService: TrainingService,
+        private route: ActivatedRoute
+    ) {}
 
     ngOnInit() {
         this.isSaving = false;
         this.route.data.subscribe(({ skill }) => {
             this.skill = skill.body ? skill.body : skill;
         });
+        this.trainingService.query().subscribe(
+            (res: HttpResponse<ITraining[]>) => {
+                this.trainings = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
 
     previousState() {
@@ -47,6 +63,25 @@ export class SkillUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    trackTrainingById(index: number, item: ITraining) {
+        return item.id;
+    }
+
+    getSelected(selectedVals: Array<any>, option: any) {
+        if (selectedVals) {
+            for (let i = 0; i < selectedVals.length; i++) {
+                if (option.id === selectedVals[i].id) {
+                    return selectedVals[i];
+                }
+            }
+        }
+        return option;
     }
     get skill() {
         return this._skill;

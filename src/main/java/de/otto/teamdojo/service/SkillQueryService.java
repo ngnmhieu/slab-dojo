@@ -1,11 +1,7 @@
 package de.otto.teamdojo.service;
 
-import de.otto.teamdojo.domain.*;
-import de.otto.teamdojo.repository.SkillRepository;
-import de.otto.teamdojo.service.dto.SkillCriteria;
-import de.otto.teamdojo.service.dto.SkillDTO;
-import de.otto.teamdojo.service.mapper.SkillMapper;
-import io.github.jhipster.service.QueryService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,7 +10,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import io.github.jhipster.service.QueryService;
+
+import de.otto.teamdojo.domain.Skill;
+import de.otto.teamdojo.domain.*; // for static metamodels
+import de.otto.teamdojo.repository.SkillRepository;
+import de.otto.teamdojo.service.dto.SkillCriteria;
+
+import de.otto.teamdojo.service.dto.SkillDTO;
+import de.otto.teamdojo.service.mapper.SkillMapper;
 
 /**
  * Service for executing complex queries for Skill entities in the database.
@@ -107,6 +111,9 @@ public class SkillQueryService extends QueryService<Skill> {
             }
             if (criteria.getLevelsId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getLevelsId(), Skill_.levels, LevelSkill_.id));
+            }
+            if (criteria.getTrainingsId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getTrainingsId(), Skill_.trainings, Training_.id));
             }
         }
         return specification;

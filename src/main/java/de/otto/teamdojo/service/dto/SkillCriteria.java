@@ -1,8 +1,15 @@
 package de.otto.teamdojo.service.dto;
 
-import io.github.jhipster.service.filter.*;
-
 import java.io.Serializable;
+
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
+import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
+
 
 /**
  * Criteria class for the Skill entity. This class is used in SkillResource to
@@ -41,6 +48,8 @@ public class SkillCriteria implements Serializable {
     private LongFilter badgesId;
 
     private LongFilter levelsId;
+
+    private LongFilter trainingsId;
 
     public SkillCriteria() {
     }
@@ -149,6 +158,14 @@ public class SkillCriteria implements Serializable {
         this.levelsId = levelsId;
     }
 
+    public LongFilter getTrainingsId() {
+        return trainingsId;
+    }
+
+    public void setTrainingsId(LongFilter trainingsId) {
+        this.trainingsId = trainingsId;
+    }
+
     @Override
     public String toString() {
         return "SkillCriteria{" +
@@ -165,6 +182,7 @@ public class SkillCriteria implements Serializable {
             (teamsId != null ? "teamsId=" + teamsId + ", " : "") +
             (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
             (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
+            (trainingsId != null ? "trainingsId=" + trainingsId + ", " : "") +
             "}";
     }
 
