@@ -16,7 +16,7 @@ spec:
         deploymentconfig: teamdojo-int
     spec:
       containers:
-      - image: "docker-registry.default.svc:5000/slabdojo/teamdojo:develop"
+      - image: "docker.iteratec.io/teamdojo:develop"
         name: teamdojo-int
         ports:
         - containerPort: 8080
@@ -41,13 +41,3 @@ spec:
       imagePullSecrets:
       - name: slabdojo-registry
   test: false
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - teamdojo-int
-      from:
-        kind: ImageStreamTag
-        name: teamdojo:develop
-    type: ImageChange

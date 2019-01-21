@@ -16,7 +16,7 @@ spec:
         deploymentconfig: teamdojo
     spec:
       containers:
-      - image: "docker-registry.default.svc:5000/slabdojo/teamdojo:latest"
+      - image: "docker.iteratec.io/teamdojo:latest"
         name: teamdojo
         ports:
         - containerPort: 8080
@@ -41,13 +41,3 @@ spec:
       imagePullSecrets:
       - name: slabdojo-registry
   test: false
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-        automatic: true
-        containerNames:
-        - teamdojo
-        from:
-            kind: ImageStreamTag
-            name: teamdojo:latest
-    type: ImageChange
