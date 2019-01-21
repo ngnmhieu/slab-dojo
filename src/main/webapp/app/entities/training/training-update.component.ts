@@ -33,6 +33,9 @@ export class TrainingUpdateComponent implements OnInit {
         this.isSaving = false;
         this.route.data.subscribe(({ training }) => {
             this.training = training.body ? training.body : training;
+            if (!this.training.id) {
+                this.training.isOfficial = true;
+            }
         });
         this.skillService.query().subscribe(
             (res: HttpResponse<ISkill[]>) => {
