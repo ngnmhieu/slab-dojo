@@ -15,6 +15,8 @@ import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
 import { ILevelSkill } from 'app/shared/model/level-skill.model';
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from 'app/entities/team-skill';
+import { ITraining } from 'app/shared/model/training.model';
+import { TrainingService } from 'app/entities/training';
 
 @Component({
     selector: 'jhi-skill-details-info',
@@ -48,6 +50,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
     private _levelSkills: ILevelSkill[] = [];
     private _badgeSkills: IBadgeSkill[] = [];
     private _teamSkills: ITeamSkill[] = [];
+    private trainings: ITraining[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -56,13 +59,14 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
     ) {}
 
     ngOnInit(): void {
-        this.route.data.subscribe(({ dojoModel: { teams, teamSkills, levels, badges, levelSkills, badgeSkills } }) => {
+        this.route.data.subscribe(({ dojoModel: { teams, teamSkills, levels, badges, levelSkills, badgeSkills }, trainings }) => {
             this._levels = (levels && levels.body ? levels.body : levels) || [];
             this._badges = (badges && badges.body ? badges.body : badges) || [];
             this._teams = (teams && teams.body ? teams.body : teams) || [];
             this._levelSkills = (levelSkills && levelSkills.body ? levelSkills.body : levelSkills) || [];
             this._badgeSkills = (badgeSkills && badgeSkills.body ? badgeSkills.body : badgeSkills) || [];
             this._teamSkills = (teamSkills && teamSkills.body ? teamSkills.body : teamSkills) || [];
+            this.trainings = (trainings && trainings.body ? trainings.body : trainings) || [];
             this.loadData();
         });
     }
