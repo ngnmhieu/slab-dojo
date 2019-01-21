@@ -26,6 +26,20 @@
             <th jhiSortBy="rateCount"><span jhiTranslate="teamdojoApp.skill.rateCount">Rate Count</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
+
+            <tr jhi-table-filter [fields]="[
+                {name: 'id', filter: true, operator: 'equals'},
+                {name: 'title', filter: true},
+                {name: 'description', filter: true},
+                {name: 'implementation', filter: true},
+                {name: 'validation', filter: true},
+                {name: 'expiryPeriod', filter: false},
+                {name: 'contact', filter: false},
+                {name: 'score', filter: false},
+                {name: 'rateScore', filter: false},
+                {name: 'rateCount', filter: false}
+            ]" (onFilterChanged)="applyFilter($event)"></tr>
+
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let skill of skills ;trackBy: trackId">

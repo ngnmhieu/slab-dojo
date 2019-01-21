@@ -8,6 +8,7 @@ import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { SkillService } from './skill.service';
+import { FilterQuery } from 'app/shared/table-filter/table-filter.component';
 
 @Component({
     selector: 'jhi-skill',
@@ -24,6 +25,8 @@ export class SkillComponent implements OnInit, OnDestroy {
     queryCount: any;
     reverse: any;
     totalItems: number;
+
+    private filters: FilterQuery[] = [];
 
     constructor(
         private skillService: SkillService,
@@ -43,8 +46,12 @@ export class SkillComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
+        const query = {};
+        this.filters.forEach(filter => (query[`${filter.fieldName}.${filter.operator}`] = filter.query));
+
         this.skillService
             .query({
+                ...query,
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.sort()
@@ -53,6 +60,11 @@ export class SkillComponent implements OnInit, OnDestroy {
                 (res: HttpResponse<ISkill[]>) => this.paginateSkills(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
+    }
+
+    applyFilter(query: FilterQuery[]) {
+        this.filters = query;
+        this.reset();
     }
 
     reset() {
@@ -103,6 +115,6 @@ export class SkillComponent implements OnInit, OnDestroy {
     }
 
     private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
+        console.error(errorMessage);
     }
 }

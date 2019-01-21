@@ -8,6 +8,7 @@ import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { LevelSkillService } from './level-skill.service';
+import { FilterQuery } from 'app/shared/table-filter/table-filter.component';
 
 @Component({
     selector: 'jhi-level-skill',
@@ -24,6 +25,9 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     queryCount: any;
     reverse: any;
     totalItems: number;
+
+    private filters: FilterQuery[] = [];
+    filteredLevelSkills: ILevelSkill[] = [];
 
     constructor(
         private levelSkillService: LevelSkillService,
@@ -45,14 +49,35 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     loadAll() {
         this.levelSkillService
             .query({
-                page: this.page,
-                size: this.itemsPerPage,
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<ILevelSkill[]>) => this.paginateLevelSkills(res.body, res.headers),
+                (res: HttpResponse<ILevelSkill[]>) => {
+                    this.paginateLevelSkills(res.body, res.headers);
+                    this.applyFilter();
+                },
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
+    }
+
+    applyFilter(query: FilterQuery[] = this.filters) {
+        this.filters = query;
+
+        this.filteredLevelSkills = this.levelSkills;
+        for (const filter of this.filters) {
+            this.filteredLevelSkills = this.filteredLevelSkills.filter(ls => {
+                const fieldVal = (ls[filter.fieldName] + '').toLowerCase().trim();
+                const queryVal = filter.query.toLowerCase().trim();
+                switch (filter.operator) {
+                    case 'contains':
+                        return fieldVal.includes(queryVal);
+                    case 'equals':
+                        return fieldVal === queryVal;
+                    default:
+                        return false;
+                }
+            });
+        }
     }
 
     reset() {
@@ -103,6 +128,6 @@ export class LevelSkillComponent implements OnInit, OnDestroy {
     }
 
     private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
+        console.error(errorMessage);
     }
 }

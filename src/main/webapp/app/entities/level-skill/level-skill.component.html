@@ -21,10 +21,17 @@
                     class="fa fa-sort"></span></th>
             <th></th>
             </tr>
+
+            <tr jhi-table-filter [fields]="[
+                {name: 'id', filter: true, operator: 'equals'},
+                {name: 'skillTitle', filter: true, operator: 'contains'},
+                {name: 'levelName', filter: true, operator: 'contains'}
+            ]" (onFilterChanged)="applyFilter($event)"></tr>
+
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']"
                    [infiniteScrollDistance]="0">
-            <tr *ngFor="let levelSkill of levelSkills ;trackBy: trackId">
+            <tr *ngFor="let levelSkill of filteredLevelSkills ;trackBy: trackId">
                 <td><a [routerLink]="['/level-skill', levelSkill.id, 'view' ]">{{levelSkill.id}}</a></td>
                 <td>
                     <div *ngIf="levelSkill.skillId">
