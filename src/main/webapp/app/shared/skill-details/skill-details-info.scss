@@ -84,12 +84,14 @@
 }
 
 .avatar-team {
+    flex: 0 0 16%;
     box-sizing: border-box;
-    margin: 12px;
+    margin: 2px 0;
 }
 
 .achieved-by-teams, .needed-for-levels, .needed-for-badges {
     display: flex;
+    flex-wrap: wrap;
     > * {
         display: inline-flex;
     }
