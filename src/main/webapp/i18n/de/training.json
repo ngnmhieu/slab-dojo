@@ -21,6 +21,7 @@
             "contactPerson": "Contact Person",
             "link": "Link",
             "validUntil": "Valid Until",
+            "validUntilPlaceholder": "z.B. 2029-01-01T00:00:00+01:00",
             "isOfficial": "Is Official",
             "skill": "Skill"
         }

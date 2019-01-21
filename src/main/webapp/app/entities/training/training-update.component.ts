@@ -96,6 +96,6 @@ export class TrainingUpdateComponent implements OnInit {
 
     set training(training: ITraining) {
         this._training = training;
-        this.validUntil = moment(training.validUntil).format();
+        this.validUntil = training.validUntil ? moment(training.validUntil).format() : undefined;
     }
 }

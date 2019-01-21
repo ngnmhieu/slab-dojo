@@ -50,8 +50,7 @@
                            for="field_validUntil">Valid Until</label>
                     <div class="d-flex">
                         <input id="field_validUntil" type="datetime-local" class="form-control" name="validUntil"
-                               [(ngModel)]="validUntil"
-                        />
+                               [(ngModel)]="validUntil" [placeholder]="'teamdojoApp.training.validUntilPlaceholder' | translate"/>
                     </div>
                 </div>
                 <div class="form-group">
