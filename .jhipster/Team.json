@@ -64,5 +64,5 @@
     "service": "serviceImpl",
     "entityTableName": "team",
     "jpaMetamodelFiltering": true,
-    "pagination": "no"
+    "pagination": "infinite-scroll"
 }

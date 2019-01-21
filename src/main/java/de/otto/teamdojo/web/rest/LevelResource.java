@@ -106,8 +106,9 @@ public class LevelResource {
         if(criteria != null && criteria.getSkillsId() != null && criteria.getSkillsId().getIn() != null)
             return getAllLevelsBySkills(criteria.getSkillsId().getIn(), pageable);
 
-        List<LevelDTO> entityList = levelQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Page<LevelDTO> page = levelQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/levels");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 

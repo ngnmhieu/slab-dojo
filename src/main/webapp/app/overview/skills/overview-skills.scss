@@ -1,7 +1,7 @@
 @import '../../../content/scss/_colors.scss';
 @import '~bootstrap/scss/bootstrap';
 @import '../../../content/scss/bootstrap-variables';
-@import "../../../content/scss/mixins";
+@import '../../../content/scss/mixins';
 @import '../../teams/skill-details/skill-details-rating/skill-details-rating';
 
 .overviews-skills {
@@ -47,6 +47,9 @@
     width: 100%;
     padding-right: 13px;
     padding-left: 2px;
+    .skill-sort select {
+        background-color: transparent;
+    }
 }
 
 ::-webkit-input-placeholder {
@@ -71,6 +74,5 @@
             height: calc(100vh - 242px);
             padding-right: 5px;
         }
-
     }
 }

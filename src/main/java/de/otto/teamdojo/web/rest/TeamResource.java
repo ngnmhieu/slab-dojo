@@ -1,21 +1,27 @@
 package de.otto.teamdojo.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.TeamQueryService;
 import de.otto.teamdojo.service.TeamService;
-import de.otto.teamdojo.service.dto.TeamCriteria;
-import de.otto.teamdojo.service.dto.TeamDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
+import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.dto.TeamDTO;
+import de.otto.teamdojo.service.dto.TeamCriteria;
+import de.otto.teamdojo.service.TeamQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -84,15 +90,17 @@ public class TeamResource {
     /**
      * GET  /teams : get all the teams.
      *
+     * @param pageable the pagination information
      * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of teams in body
      */
     @GetMapping("/teams")
     @Timed
-    public ResponseEntity<List<TeamDTO>> getAllTeams(TeamCriteria criteria) {
+    public ResponseEntity<List<TeamDTO>> getAllTeams(TeamCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Teams by criteria: {}", criteria);
-        List<TeamDTO> entityList = teamQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Page<TeamDTO> page = teamQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

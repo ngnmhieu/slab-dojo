@@ -7,7 +7,7 @@
             <select class="form-control" name="orderBy" id="field_orderBy"
                     [(ngModel)]="orderBy" (ngModelChange)="onSkillSort()">
                 <option value="title">{{'teamdojoApp.teams.skills.search.orderBy.title' | translate}}</option>
-                <option value="rateScore">{{'teamdojoApp.teams.skills.search.orderBy.rateScore' | translate}}</option>
+                <option value="score">{{'teamdojoApp.teams.skills.search.orderBy.score' | translate}}</option>
                 <option value="rateCount">{{'teamdojoApp.teams.skills.search.orderBy.rateCount' | translate}}</option>
             </select>
         </div>
@@ -20,16 +20,16 @@
         <li class="list-group-item list-group-item-action flex-column align-items-start mb-2 skill-container"
             [ngClass]="{'active-skill':isActiveSkill(skill)}"
             *ngFor="let skill of activeSkills | skillFilter:search"
-            [routerLink]="['/overview', 'skills', skill.skillId]" [queryParams]="{level: activeLevel?.id, badge: activeBadge?.id}">
+            [routerLink]="['/overview', 'skills', skill.id]" [queryParams]="{level: activeLevel?.id, badge: activeBadge?.id}">
             <div class="d-flex justify-content-between">
-                <a class="#" class="text-dark mb-1 skill-title" >{{ skill.skillTitle }}</a>
+                <a class="#" class="text-dark mb-1 skill-title" >{{ skill.title }}</a>
                 <div class="d-flex align-items-end ml-auto count-teams">
                     <span class="mb-auto">{{getRelevantTeams(skill)}}</span>
                 </div>
             </div>
-            <ngb-rating [(rate)]="findSkill(skill.skillId).rateScore" max="5" [readonly]="true" [starTemplate]="stars">
+            <ngb-rating [(rate)]="findSkill(skill.id).rateScore" max="5" [readonly]="true" [starTemplate]="stars">
             </ngb-rating>
-            {{getRateCount(findSkill(skill.skillId).rateCount)}} <span class="rating-text" jhiTranslate="teamdojoApp.skill.detail.rateCount"></span>
+            {{getRateCount(findSkill(skill.id).rateCount)}} <span class="rating-text" jhiTranslate="teamdojoApp.skill.detail.rateCount"></span>
 
             <ng-template #stars let-fill="fill" let-index="index">
                 <span class="star star-sm" [class.full]="fill === 100">

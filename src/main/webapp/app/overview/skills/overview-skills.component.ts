@@ -30,7 +30,8 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
     badges: IBadge[];
     badgeSkills: IBadgeSkill[];
     skills: ISkill[];
-    activeSkills: ILevelSkill[] | IBadgeSkill[];
+    activeSkills: ISkill[];
+    itemSkills: ILevelSkill[] | IBadgeSkill[];
     activeLevel: ILevel;
     activeBadge: IBadge;
     dimensionsBySkillId: any;
@@ -59,23 +60,19 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.activeBadge = null;
                 if (params.get('level')) {
                     this.activeLevel = (this.levels || []).find((level: ILevel) => level.id === Number.parseInt(params.get('level'), 10));
-                    this.activeSkills = this.sortActiveSkills(
-                        this.activeLevel ? this.activeLevel.skills.filter(l => this.isCompleted(l)) : []
-                    );
+                    this.activeSkills = this.activeLevel ? this.sortActiveSkills(this.findSkills(this.activeLevel.skills)) : [];
+                    this.itemSkills = this.activeLevel.skills || [];
                     this.updateBreadcrumb();
                 } else if (params.get('badge')) {
                     this.activeBadge = (this.badges || []).find((badge: IBadge) => badge.id === Number.parseInt(params.get('badge'), 10));
-                    this.activeSkills = this.sortActiveSkills(
-                        this.activeBadge ? this.activeBadge.skills.filter(l => this.isCompleted(l)) : []
-                    );
+                    this.activeSkills = this.activeBadge ? this.sortActiveSkills(this.findSkills(this.activeBadge.skills)) : [];
+                    this.itemSkills = this.activeBadge.skills || [];
                     this.updateBreadcrumb();
                 } else {
-                    this.activeSkills = this.sortActiveSkills(
-                        (this.levelSkills.filter(l => this.isCompleted(l)) || []).concat(
-                            this.badgeSkills
-                                .filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId))
-                                .filter(l => this.isCompleted(l)) || []
-                        )
+                    this.activeSkills = this.sortActiveSkills(this.skills);
+                    this.itemSkills = (this.levelSkills || []).concat(
+                        this.badgeSkills.filter((b: IBadgeSkill) => !this.levelSkills.find((l: ILevelSkill) => l.skillId === b.skillId)) ||
+                            []
                     );
                     this.updateBreadcrumb();
                 }
@@ -93,16 +90,6 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
-    }
-
-    onSkillSort() {
-        this.activeSkills = this.sortActiveSkills(this.activeSkills);
-    }
-
-    sortActiveSkills(activeSkills = []) {
-        return (
-            new SkillSortPipe().transform((activeSkills || []).map(activeSkill => this.findSkill(activeSkill.skillId)), this.orderBy) || []
-        ).map(skill => activeSkills.find(activeSkill => activeSkill.skillId === skill.id));
     }
 
     loadAll() {
@@ -128,11 +115,9 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                     const skillId = badgeSkill.skillId;
                     this.dimensionsBySkillId[skillId] = this.dimensionsBySkillId[skillId] || [];
 
-                    this.dimensionsBySkillId[skillId].forEach(entry => {
-                        if (entry.indexOf(skillId) === -1) {
-                            this.dimensionsBySkillId[skillId].push(dimension.id);
-                        }
-                    });
+                    if (this.dimensionsBySkillId[skillId].indexOf(dimension.id) === -1) {
+                        this.dimensionsBySkillId[skillId].push(dimension.id);
+                    }
                 });
             });
         });
@@ -157,28 +142,28 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    getRelevantTeams(itemSkill: ILevelSkill | IBadgeSkill): string {
+    getRelevantTeams(skill: ISkill): string {
         const countProgress = new Progress(0, 0);
         for (const team of this.teams) {
-            const teamSkill = this.findTeamSkill(team, itemSkill);
-            if (this.isRelevantSkill(team, teamSkill, itemSkill)) {
+            const teamSkill = this.findTeamSkill(team, skill);
+            if (this.isRelevantSkill(team, teamSkill, skill)) {
                 countProgress.required++;
                 if (this.isTeamSkillCompleted(teamSkill)) {
                     countProgress.achieved++;
                 }
             }
         }
-        if (this.generalSkillsIds.indexOf(itemSkill.id) !== -1) {
+        if (this.generalSkillsIds.indexOf(skill.id) !== -1) {
             countProgress.required = this.teams.length;
         }
         return `${countProgress.achieved}  / ${countProgress.required}`;
     }
 
-    private isRelevantSkill(team: ITeam, teamSkill: ITeamSkill, itemSkill: ILevelSkill | IBadgeSkill) {
+    private isRelevantSkill(team: ITeam, teamSkill: ITeamSkill, skill: ISkill) {
         if (teamSkill && teamSkill.irrelevant) {
             return false;
         }
-        const skillDimensionIds = this.dimensionsBySkillId[itemSkill.skillId] || [];
+        const skillDimensionIds = this.dimensionsBySkillId[skill.id] || [];
         return team.participations.some(dimension => {
             return skillDimensionIds.indexOf(dimension.id) !== -1;
         });
@@ -188,29 +173,35 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
         return (this.skills || []).find(skill => skill.id === skillId);
     }
 
-    private isCompleted(skill: ILevelSkill | IBadgeSkill): boolean {
-        for (const team of this.teams) {
-            const teamSkill = this.findTeamSkill(team, skill);
-            if (this.isTeamSkillCompleted(teamSkill)) {
-                return true;
-            }
-        }
-        return false;
+    findSkills(itemSkills): ISkill[] {
+        return (itemSkills || []).map((itemSkill: ILevelSkill | IBadgeSkill) =>
+            (this.skills || []).find(skill => itemSkill.skillId === skill.id)
+        );
     }
 
-    private findTeamSkill(team: ITeam, skill: ILevelSkill | IBadgeSkill): ITeamSkill {
-        return team.skills ? team.skills.find((teamSkill: ITeamSkill) => teamSkill.skillId === skill.skillId) : null;
+    private findTeamSkill(team: ITeam, skill: ISkill): ITeamSkill {
+        return team.skills ? team.skills.find((teamSkill: ITeamSkill) => teamSkill.skillId === skill.id) : null;
     }
 
     private isTeamSkillCompleted(teamSkill: ITeamSkill): boolean {
         return teamSkill && !!teamSkill.completedAt;
     }
 
-    isActiveSkill(iLevelSkill: ILevelSkill) {
-        return typeof this.activeSkill !== 'undefined' && this.activeSkill !== null && this.activeSkill.id === iLevelSkill.skillId;
+    isActiveSkill(skill: ISkill) {
+        return typeof this.activeSkill !== 'undefined' && this.activeSkill !== null && this.activeSkill.id === skill.id;
     }
 
     getRateCount(rateCount: number) {
         return rateCount !== null && typeof rateCount !== 'undefined' ? rateCount : 0;
+    }
+
+    onSkillSort() {
+        this.activeSkills = this.sortActiveSkills(this.activeSkills);
+    }
+
+    sortActiveSkills(activeSkills = []) {
+        return (
+            new SkillSortPipe().transform((activeSkills || []).map(activeSkill => this.findSkill(activeSkill.id)), this.orderBy) || []
+        ).map(skill => activeSkills.find(activeSkill => activeSkill.id === skill.id));
     }
 }

@@ -20,7 +20,7 @@
                     },
                     "orderBy": {
                         "title": "Title",
-                        "rateScore": "Score",
+                        "score": "Score",
                         "rateCount": "Rate count"
                     }
                 },
@@ -39,7 +39,7 @@
                     "implementation": "Implementation",
                     "validation": "Validation",
                     "achievedBy": "Achieved by",
-                    "achievedByNone" : "No teams have achieved this skill yet!",
+                    "achievedByNone": "No teams have achieved this skill yet!",
                     "neededFor": "Needed for",
                     "3of5": "3 out of 5 stars",
                     "contact": "Contact"
@@ -65,6 +65,9 @@
                 "title": "Achievements",
                 "generalBadges": {
                     "title": "General Badges"
+                },
+                "item": {
+                    "multiplier": "Multiplier"
                 }
             },
             "dateFormat": "yyyy-MM-dd"

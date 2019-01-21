@@ -3,8 +3,8 @@ import { ITeam } from 'app/shared/model/team.model';
 import { TeamsService } from 'app/teams/teams.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { TeamSkillService } from 'app/entities/team-skill';
-import { Observable, of } from 'rxjs';
-import { flatMap, map, tap } from 'rxjs/operators';
+import { Observable, empty, of } from 'rxjs';
+import { catchError, flatMap, map, tap } from 'rxjs/operators';
 
 const TEAM_STORAGE_KEY = 'selectedTeamId';
 
@@ -23,9 +23,13 @@ export class TeamsSelectionService {
                 tap(result => {
                     this._selectedTeam = result.body || null;
                 }),
-                flatMap(result => {
+                catchError(err => {
+                    this.selectedTeam = null;
+                    return empty();
+                }),
+                flatMap((result: any) => {
                     return this.teamSkillService.query({ 'teamId.equals': result.body.id }).pipe(
-                        tap(teamSkillRes => {
+                        tap((teamSkillRes: any) => {
                             this._selectedTeam.skills = teamSkillRes.body || [];
                         }),
                         map(() => result.body)

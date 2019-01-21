@@ -13,14 +13,14 @@
     <div class="table-responsive" *ngIf="dimensions">
         <table class="table table-striped">
             <thead>
-            <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="teamdojoApp.dimension.name">Name</span></th>
-            <th><span jhiTranslate="teamdojoApp.dimension.description">Description</span></th>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="name"><span jhiTranslate="teamdojoApp.dimension.name">Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="description"><span jhiTranslate="teamdojoApp.dimension.description">Description</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let dimension of dimensions ;trackBy: trackId">
                 <td><a [routerLink]="['/dimension', dimension.id, 'view' ]">{{dimension.id}}</a></td>
                 <td>{{dimension.name}}</td>

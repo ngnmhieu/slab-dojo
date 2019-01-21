@@ -1,23 +1,19 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.service.TeamService;
 import de.otto.teamdojo.domain.Team;
 import de.otto.teamdojo.repository.TeamRepository;
-import de.otto.teamdojo.service.TeamService;
-import de.otto.teamdojo.service.TeamSkillService;
-import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.service.dto.TeamDTO;
 import de.otto.teamdojo.service.mapper.TeamMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Team.
@@ -32,12 +28,9 @@ public class TeamServiceImpl implements TeamService {
 
     private final TeamMapper teamMapper;
 
-    private final TeamSkillService teamSkillService;
-
-    public TeamServiceImpl(TeamRepository teamRepository, TeamMapper teamMapper, TeamSkillService teamSkillService) {
+    public TeamServiceImpl(TeamRepository teamRepository, TeamMapper teamMapper) {
         this.teamRepository = teamRepository;
         this.teamMapper = teamMapper;
-        this.teamSkillService = teamSkillService;
     }
 
     /**
@@ -58,15 +51,15 @@ public class TeamServiceImpl implements TeamService {
     /**
      * Get all the teams.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
     @Override
     @Transactional(readOnly = true)
-    public List<TeamDTO> findAll() {
+    public Page<TeamDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Teams");
-        return teamRepository.findAllWithEagerRelationships().stream()
-            .map(teamMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return teamRepository.findAll(pageable)
+            .map(teamMapper::toDto);
     }
 
     /**
@@ -77,7 +70,7 @@ public class TeamServiceImpl implements TeamService {
     public Page<TeamDTO> findAllWithEagerRelationships(Pageable pageable) {
         return teamRepository.findAllWithEagerRelationships(pageable).map(teamMapper::toDto);
     }
-
+    
 
     /**
      * Get one team by id.
@@ -101,16 +94,6 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Team : {}", id);
-        Team team = teamRepository.findById(id).get();
-        team.getSkills().forEach(skill -> teamSkillService.delete(skill.getId()));
         teamRepository.deleteById(id);
-    }
-
-    @Override
-    public void addNewDimensionForAllTeams(DimensionDTO dimensionDTO){
-        this.findAll().forEach(team ->{
-            team.getParticipations().add(dimensionDTO);
-            this.save(team);
-        });
     }
 }

@@ -1,8 +1,9 @@
 package de.otto.teamdojo.service;
 
 import de.otto.teamdojo.service.dto.ImageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,9 +22,10 @@ public interface ImageService {
     /**
      * Get all the images.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
-    List<ImageDTO> findAll();
+    Page<ImageDTO> findAll(Pageable pageable);
 
 
     /**
