@@ -45,7 +45,18 @@
                     "contact": "Ansprechpartner",
                     "trainings": {
                         "label": "Hilfreiche Weiterbildungsangebote",
-                        "absent": "Keine hilfreichen Weiterbildungsangebote verfügbar"
+                        "absent": "Keine hilfreichen Weiterbildungsangebote verfügbar",
+                        "add": {
+                            "label": "Hinzufügen eines Trainings",
+                            "action": "Hinzufügen",
+                            "title": "Titel",
+                            "description": "Beschreibung",
+                            "contactPerson": "Ansprechpartner",
+                            "link": "Link",
+                            "validUntil": "Gültig bis",
+                            "validUntilPlaceholder": "z.B. 2029-01-01T00:00:00+01:00",
+                            "skill": "Skill"
+                        }
                     }
                 },
                 "comments": {

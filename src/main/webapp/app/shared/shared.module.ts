@@ -6,12 +6,20 @@ import { HasAnyAuthorityDirective, JhiLoginModalComponent, TeamdojoSharedCommonM
 import { BackgroundComponent } from 'app/shared/background/background.component';
 import { TeamsStatusComponent } from 'app/teams/teams-status.component';
 import { TableFilterComponent } from 'app/shared/table-filter/table-filter.component';
+import { TrainingsAddComponent } from 'app/shared/trainings/trainings-add.component';
 
 @NgModule({
     imports: [TeamdojoSharedLibsModule, TeamdojoSharedCommonModule],
-    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective, BackgroundComponent, TeamsStatusComponent, TableFilterComponent],
+    declarations: [
+        JhiLoginModalComponent,
+        HasAnyAuthorityDirective,
+        BackgroundComponent,
+        TeamsStatusComponent,
+        TableFilterComponent,
+        TrainingsAddComponent
+    ],
     providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
-    entryComponents: [JhiLoginModalComponent],
+    entryComponents: [JhiLoginModalComponent, TrainingsAddComponent],
     exports: [
         TeamdojoSharedCommonModule,
         JhiLoginModalComponent,
