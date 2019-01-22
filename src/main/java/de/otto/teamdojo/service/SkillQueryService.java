@@ -2,8 +2,6 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.JoinType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +16,7 @@ import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.SkillRepository;
 import de.otto.teamdojo.service.dto.SkillCriteria;
+
 import de.otto.teamdojo.service.dto.SkillDTO;
 import de.otto.teamdojo.service.mapper.SkillMapper;
 
@@ -127,6 +126,9 @@ public class SkillQueryService extends QueryService<Skill> {
             if (criteria.getLevelsId() != null) {
                 specification = specification.and(buildSpecification(criteria.getLevelsId(),
                     root -> root.join(Skill_.levels, JoinType.LEFT).get(LevelSkill_.id)));
+            }
+            if (criteria.getTrainingsId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getTrainingsId(), Skill_.trainings, Training_.id));
             }
         }
         return specification;

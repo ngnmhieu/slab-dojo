@@ -1,14 +1,14 @@
 package de.otto.teamdojo.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.SkillQueryService;
 import de.otto.teamdojo.service.SkillService;
-import de.otto.teamdojo.service.dto.SkillCriteria;
-import de.otto.teamdojo.service.dto.SkillDTO;
 import de.otto.teamdojo.service.dto.SkillRateDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
 import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.dto.SkillDTO;
+import de.otto.teamdojo.service.dto.SkillCriteria;
+import de.otto.teamdojo.service.SkillQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

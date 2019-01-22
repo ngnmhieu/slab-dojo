@@ -2,10 +2,8 @@ package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -47,6 +45,11 @@ public class SkillCriteria implements Serializable {
     private LongFilter badgesId;
 
     private LongFilter levelsId;
+
+    private LongFilter trainingsId;
+
+    public SkillCriteria() {
+    }
 
     public LongFilter getId() {
         return id;
@@ -152,6 +155,14 @@ public class SkillCriteria implements Serializable {
         this.levelsId = levelsId;
     }
 
+    public LongFilter getTrainingsId() {
+        return trainingsId;
+    }
+
+    public void setTrainingsId(LongFilter trainingsId) {
+        this.trainingsId = trainingsId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -175,7 +186,9 @@ public class SkillCriteria implements Serializable {
             Objects.equals(rateCount, that.rateCount) &&
             Objects.equals(teamsId, that.teamsId) &&
             Objects.equals(badgesId, that.badgesId) &&
-            Objects.equals(levelsId, that.levelsId);
+            Objects.equals(levelsId, that.levelsId) &&
+            Objects.equals(trainingsId, that.trainingsId);
+
     }
 
     @Override
@@ -193,7 +206,8 @@ public class SkillCriteria implements Serializable {
         rateCount,
         teamsId,
         badgesId,
-        levelsId
+        levelsId,
+        trainingsId
         );
     }
 
@@ -213,6 +227,7 @@ public class SkillCriteria implements Serializable {
             (teamsId != null ? "teamsId=" + teamsId + ", " : "") +
             (badgesId != null ? "badgesId=" + badgesId + ", " : "") +
             (levelsId != null ? "levelsId=" + levelsId + ", " : "") +
+            (trainingsId != null ? "trainingsId=" + trainingsId + ", " : "") +
             "}";
     }
 

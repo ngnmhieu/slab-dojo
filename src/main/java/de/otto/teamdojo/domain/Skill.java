@@ -1,14 +1,16 @@
 package de.otto.teamdojo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.Objects;
 
 /**
  * A Skill.
@@ -54,19 +56,32 @@ public class Skill implements Serializable {
     @Column(name = "score", nullable = false)
     private Integer score;
 
-    @DecimalMin(value = "0") @DecimalMax(value = "5") @Column(name = "rate_score") private Double rateScore;
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "5")
+    @Column(name = "rate_score")
+    private Double rateScore;
 
-    @Min(value = 0) @Column(name = "rate_count") private Integer rateCount;
+    @Min(value = 0)
+    @Column(name = "rate_count")
+    private Integer rateCount;
 
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TeamSkill> teams = new HashSet<>();
+
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BadgeSkill> badges = new HashSet<>();
+
     @OneToMany(mappedBy = "skill")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LevelSkill> levels = new HashSet<>();
+
+    @ManyToMany(mappedBy = "skills")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Training> trainings = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -267,6 +282,31 @@ public class Skill implements Serializable {
     public void setLevels(Set<LevelSkill> levelSkills) {
         this.levels = levelSkills;
     }
+
+    public Set<Training> getTrainings() {
+        return trainings;
+    }
+
+    public Skill trainings(Set<Training> trainings) {
+        this.trainings = trainings;
+        return this;
+    }
+
+    public Skill addTrainings(Training training) {
+        this.trainings.add(training);
+        training.getSkills().add(this);
+        return this;
+    }
+
+    public Skill removeTrainings(Training training) {
+        this.trainings.remove(training);
+        training.getSkills().remove(this);
+        return this;
+    }
+
+    public void setTrainings(Set<Training> trainings) {
+        this.trainings = trainings;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -300,7 +340,6 @@ public class Skill implements Serializable {
             ", expiryPeriod='" + getExpiryPeriod() + "'" +
             ", contact='" + getContact() + "'" +
             ", score=" + getScore() +
-            ", contact='" + getContact() + "'" +
             ", rateScore=" + getRateScore() +
             ", rateCount=" + getRateCount() +
             "}";

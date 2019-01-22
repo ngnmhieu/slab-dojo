@@ -41,6 +41,8 @@
                     "achievedBy": "Erfüllt von",
                     "achievedByNone": "Dieser Skill wurde noch von keinem Team erfüllt!",
                     "neededFor": "Benötigt für",
+                    "trainings": "Hilfreiche Weiterbildungsangebote",
+                    "noTrainings": "Keine hilfreichen Weiterbildungsangebote verfügbar",
                     "3of5": "3 von 5 Sternen",
                     "contact": "Ansprechpartner"
                 },

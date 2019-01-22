@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import { OverviewComponent } from './';
 import { OverviewSkillDetailsComponent } from 'app/overview/skills/skill-details/overview-skill-details.component';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
-import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
+import { AllCommentsResolve, AllSkillsResolve, AllTrainingsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
 
 export const OVERVIEW_ROUTE: Route[] = [
     {
@@ -26,7 +26,8 @@ export const OVERVIEW_ROUTE: Route[] = [
             skill: SkillResolve,
             comments: AllCommentsResolve,
             selectedTeam: TeamsSelectionResolve,
-            skills: AllSkillsResolve
+            skills: AllSkillsResolve,
+            trainings: AllTrainingsResolve
         },
         data: {
             authorities: [],
