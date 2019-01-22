@@ -78,8 +78,19 @@
             </div>
         </div>
         <div class="col-lg-6 col-md-12">
-            <h5 *ngIf="trainings.length" jhiTranslate="teamdojoApp.teams.skills.details.trainings.label"></h5>
-            <h5 *ngIf="!trainings.length" jhiTranslate="teamdojoApp.teams.skills.details.trainings.absent"></h5>
+            <h5>
+                <span *ngIf="trainings.length" jhiTranslate="teamdojoApp.teams.skills.details.trainings.label">
+                    Helpful trainings
+                </span>
+                <span *ngIf="!trainings.length" jhiTranslate="teamdojoApp.teams.skills.details.trainings.absent">
+                    No helpful trainings available
+                </span>
+
+                <button type="button" class="btn btn-primary btn-sm ml-3 trainings-add-btn" (click)="addTraining()">
+                    <span class="fa fa-plus"></span>
+                    <span jhiTranslate="teamdojoApp.teams.skills.details.trainings.add.action">Add</span>
+                </button>
+            </h5>
             <div class="available-trainings">
                 <div *ngFor="let training of trainings">
                     <h6>
