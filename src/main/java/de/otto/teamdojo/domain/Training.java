@@ -36,10 +36,12 @@ public class Training implements Serializable {
     @Column(name = "description", length = 100)
     private String description;
 
-    @Column(name = "contact_person")
+    @Size(max = 255)
+    @Column(name = "contact_person", length = 255)
     private String contactPerson;
 
-    @Column(name = "jhi_link")
+    @Size(max = 255)
+    @Column(name = "jhi_link", length = 255)
     private String link;
 
     @Column(name = "valid_until")

@@ -21,8 +21,10 @@ public class TrainingDTO implements Serializable {
     @Size(max = 100)
     private String description;
 
+    @Size(max = 255)
     private String contactPerson;
 
+    @Size(max = 255)
     private String link;
 
     private Instant validUntil;

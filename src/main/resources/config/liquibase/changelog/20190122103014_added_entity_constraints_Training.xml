@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity Training.
     -->
-    <changeSet id="20190121142418-2" author="jhipster">
+    <changeSet id="20190122103014-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="trainings_id"
                                  baseTableName="training_skill"
