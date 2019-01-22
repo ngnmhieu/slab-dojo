@@ -41,10 +41,12 @@
                     "achievedBy": "Achieved by",
                     "achievedByNone" : "No Persons have achieved this skill yet!",
                     "neededFor": "Needed for",
-                    "trainings": "Helpful trainings",
-                    "noTrainings": "No helpful trainings available",
                     "3of5": "3 out of 5 stars",
-                    "contact": "Contact"
+                    "contact": "Contact",
+                    "trainings": {
+                        "label": "Helpful trainings",
+                        "absent": "No helpful trainings available"
+                    }
                 },
                 "comments": {
                     "title": "Comments",
