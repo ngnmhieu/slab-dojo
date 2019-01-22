@@ -20,6 +20,7 @@
                 "comment": "Comment",
                 "activity": "Activity",
                 "image": "Image",
+                "training": "Training",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

@@ -19,6 +19,13 @@
             "otherEntityName": "levelSkill",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "skill"
+        },
+        {
+            "relationshipName": "trainings",
+            "otherEntityName": "training",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "skill"
         }
     ],
     "fields": [

@@ -8,6 +8,8 @@ import { SkillUpdateComponent } from 'app/entities/skill/skill-update.component'
 import { SkillService } from 'app/entities/skill/skill.service';
 import { Skill } from 'app/shared/model/skill.model';
 
+import { TrainingService } from 'app/entities/training';
+
 describe('Component Tests', () => {
     describe('Skill Management Update Component', () => {
         let comp: SkillUpdateComponent;
@@ -18,7 +20,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [SkillUpdateComponent],
-                providers: [SkillService]
+                providers: [TrainingService, SkillService]
             })
                 .overrideTemplate(SkillUpdateComponent, '')
                 .compileComponents();
