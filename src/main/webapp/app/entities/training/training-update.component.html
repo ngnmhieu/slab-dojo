@@ -64,6 +64,11 @@
                                jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Link' }">
                             This field should follow pattern for "Link".
                         </small>
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.link?.errors?.pattern" jhiTranslate="entity.validation.expectedPattern"
+                               [translateValues]="{ regex: '/^(?:http(s)?:\/\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:\/?#\\[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$/' }">
+                            The expected pattern is /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:\/?#\[\]@!\$&\'\(\)\*\+,;=.]+$/.
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
