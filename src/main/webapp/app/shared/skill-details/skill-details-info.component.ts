@@ -44,13 +44,14 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
 
     neededForBadges: IBadge[] = [];
 
+    trainings: ITraining[] = [];
+
     private _levels: ILevel[] = [];
     private _badges: IBadge[] = [];
     private _teams: ITeam[] = [];
     private _levelSkills: ILevelSkill[] = [];
     private _badgeSkills: IBadgeSkill[] = [];
     private _teamSkills: ITeamSkill[] = [];
-    private trainings: ITraining[] = [];
 
     constructor(
         private route: ActivatedRoute,
