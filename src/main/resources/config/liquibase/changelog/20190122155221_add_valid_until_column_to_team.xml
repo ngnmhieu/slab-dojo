@@ -1,0 +1,9 @@
+<databaseChangeLog>
+    <changeSet id="20190122155221-1" author="mhi">
+        <addColumn tableName="team">
+            <column name="valid_until" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
