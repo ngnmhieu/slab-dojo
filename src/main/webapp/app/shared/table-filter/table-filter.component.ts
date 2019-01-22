@@ -17,7 +17,7 @@ export interface FilterQuery {
 }
 
 @Component({
-    selector: 'tr[jhi-table-filter]',
+    selector: 'tr[jhi-table-filter]', // tslint:disable-line component-selector
     templateUrl: './table-filter.component.html',
     styleUrls: ['./table-filter.scss']
 })
