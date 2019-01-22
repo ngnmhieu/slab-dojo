@@ -158,6 +158,8 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
         modalRef.result.then(
             training => {
                 this.isTrainingPopupOpen = false;
+                this._allTrainings = (this._allTrainings || []).concat(training);
+                this.trainings = (this.trainings || []).concat(training);
             },
             reason => {
                 this.isTrainingPopupOpen = false;
