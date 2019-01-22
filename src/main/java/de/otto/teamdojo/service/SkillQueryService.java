@@ -20,6 +20,8 @@ import de.otto.teamdojo.service.dto.SkillCriteria;
 import de.otto.teamdojo.service.dto.SkillDTO;
 import de.otto.teamdojo.service.mapper.SkillMapper;
 
+import javax.persistence.criteria.JoinType;
+
 /**
  * Service for executing complex queries for Skill entities in the database.
  * The main input is a {@link SkillCriteria} which gets converted to {@link Specification},

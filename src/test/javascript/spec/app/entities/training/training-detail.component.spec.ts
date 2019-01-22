@@ -1,11 +1,11 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs/observable/of';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { TrainingDetailComponent } from 'app/entities/training/training-detail.component';
 import { Training } from 'app/shared/model/training.model';
+import { of } from 'rxjs';
 
 describe('Component Tests', () => {
     describe('Training Management Detail Component', () => {

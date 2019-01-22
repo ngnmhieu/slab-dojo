@@ -1,7 +1,7 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { TrainingUpdateComponent } from 'app/entities/training/training-update.component';
@@ -34,7 +34,7 @@ describe('Component Tests', () => {
             it('Should call update service on save for existing entity', fakeAsync(() => {
                 // GIVEN
                 const entity = new Training(123);
-                spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                 comp.training = entity;
                 // WHEN
                 comp.save();
@@ -48,7 +48,7 @@ describe('Component Tests', () => {
             it('Should call create service on save for new entity', fakeAsync(() => {
                 // GIVEN
                 const entity = new Training();
-                spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
+                spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                 comp.training = entity;
                 // WHEN
                 comp.save();

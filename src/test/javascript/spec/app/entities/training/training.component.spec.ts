@@ -1,6 +1,5 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
@@ -8,6 +7,7 @@ import { TeamdojoTestModule } from '../../../test.module';
 import { TrainingComponent } from 'app/entities/training/training.component';
 import { TrainingService } from 'app/entities/training/training.service';
 import { Training } from 'app/shared/model/training.model';
+import { of } from 'rxjs';
 
 describe('Component Tests', () => {
     describe('Training Management Component', () => {
@@ -50,7 +50,7 @@ describe('Component Tests', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
             spyOn(service, 'query').and.returnValue(
-                Observable.of(
+                of(
                     new HttpResponse({
                         body: [new Training(123)],
                         headers
@@ -70,7 +70,7 @@ describe('Component Tests', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
             spyOn(service, 'query').and.returnValue(
-                Observable.of(
+                of(
                     new HttpResponse({
                         body: [new Training(123)],
                         headers
@@ -90,7 +90,7 @@ describe('Component Tests', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
             spyOn(service, 'query').and.returnValue(
-                Observable.of(
+                of(
                     new HttpResponse({
                         body: [new Training(123)],
                         headers

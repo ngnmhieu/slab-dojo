@@ -1,7 +1,7 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { TeamdojoTestModule } from '../../../test.module';
@@ -36,7 +36,7 @@ describe('Component Tests', () => {
                 [],
                 fakeAsync(() => {
                     // GIVEN
-                    spyOn(service, 'delete').and.returnValue(Observable.of({}));
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
                     // WHEN
                     comp.confirmDelete(123);
