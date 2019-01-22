@@ -60,8 +60,8 @@ public class TrainingResourceIntTest {
     private static final String DEFAULT_CONTACT_PERSON = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT_PERSON = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LINK = "AAAAAAAAAA";
-    private static final String UPDATED_LINK = "BBBBBBBBBB";
+    private static final String DEFAULT_LINK = "https://9V.Nd.wHd";
+    private static final String UPDATED_LINK = "E.Mg.VDR";
 
     private static final Instant DEFAULT_VALID_UNTIL = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_VALID_UNTIL = Instant.now().truncatedTo(ChronoUnit.MILLIS);

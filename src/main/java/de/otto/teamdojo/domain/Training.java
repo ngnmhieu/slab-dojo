@@ -41,6 +41,7 @@ public class Training implements Serializable {
     private String contactPerson;
 
     @Size(max = 255)
+    @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
     @Column(name = "jhi_link", length = 255)
     private String link;
 

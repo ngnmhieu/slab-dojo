@@ -25,6 +25,7 @@ public class TrainingDTO implements Serializable {
     private String contactPerson;
 
     @Size(max = 255)
+    @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
     private String link;
 
     private Instant validUntil;

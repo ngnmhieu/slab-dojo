@@ -41,9 +41,11 @@
             "fieldName": "link",
             "fieldType": "String",
             "fieldValidateRules": [
-                "maxlength"
+                "maxlength",
+                "pattern"
             ],
-            "fieldValidateRulesMaxlength": 255
+            "fieldValidateRulesMaxlength": 255,
+            "fieldValidateRulesPattern": "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
         },
         {
             "fieldName": "validUntil",

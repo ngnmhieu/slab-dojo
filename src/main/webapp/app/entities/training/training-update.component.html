@@ -51,12 +51,18 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="teamdojoApp.training.link" for="field_link">Link</label>
                     <input type="text" class="form-control" name="link" id="field_link"
-                           [(ngModel)]="training.link" maxlength="255"/>
+                           [(ngModel)]="training.link" maxlength="255"
+                           pattern="^(?:http(s)?://)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#\[\]@!\$&'\(\)\*\+,;=.]+$"/>
                     <div [hidden]="!(editForm.controls.link?.dirty && editForm.controls.link?.invalid)">
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.link?.errors?.maxlength"
                                jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
                             This field cannot be longer than 255 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.link?.errors?.pattern"
+                               jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Link' }">
+                            This field should follow pattern for "Link".
                         </small>
                     </div>
                 </div>
