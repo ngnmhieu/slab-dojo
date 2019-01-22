@@ -28,7 +28,7 @@ export class TableFilterComponent implements OnInit {
 
     filterChanged: Subject<FilterQuery[]> = new Subject();
 
-    private filterInputs: { [k: string]: string } = {};
+    filterInputs: { [k: string]: string } = {};
 
     private filterOperators: { [k: string]: string } = {};
 
