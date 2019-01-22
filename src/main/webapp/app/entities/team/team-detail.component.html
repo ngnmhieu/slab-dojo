@@ -21,6 +21,10 @@
                 <dd>
                     <span>{{team.contactPerson}}</span>
                 </dd>
+                <dt><span jhiTranslate="teamdojoApp.team.validUntil">Valid Until</span></dt>
+                <dd>
+                    <span>{{team.validUntil}}</span>
+                </dd>
                 <dt><span jhiTranslate="teamdojoApp.team.participations">Participations</span></dt>
                 <dd>
                     <span *ngFor="let participations of team.participations; let last = last">

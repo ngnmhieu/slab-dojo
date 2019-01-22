@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { IDimension } from 'app/shared/model//dimension.model';
 import { ITeamSkill } from 'app/shared/model//team-skill.model';
 
@@ -7,6 +8,7 @@ export interface ITeam {
     shortName?: string;
     slogan?: string;
     contactPerson?: string;
+    validUntil?: Moment;
     participations?: IDimension[];
     skills?: ITeamSkill[];
     imageName?: string;
@@ -20,6 +22,7 @@ export class Team implements ITeam {
         public shortName?: string,
         public slogan?: string,
         public contactPerson?: string,
+        public validUntil?: Moment,
         public participations?: IDimension[],
         public skills?: ITeamSkill[],
         public imageName?: string,

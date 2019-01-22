@@ -1,5 +1,6 @@
 package de.otto.teamdojo.service.dto;
 
+import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -25,6 +26,8 @@ public class TeamDTO implements Serializable {
     private String slogan;
 
     private String contactPerson;
+
+    private Instant validUntil;
 
     private Set<DimensionDTO> participations = new HashSet<>();
 
@@ -70,6 +73,14 @@ public class TeamDTO implements Serializable {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public Instant getValidUntil() {
+        return validUntil;
+    }
+
+    public void setValidUntil(Instant validUntil) {
+        this.validUntil = validUntil;
     }
 
     public Set<DimensionDTO> getParticipations() {
@@ -125,6 +136,7 @@ public class TeamDTO implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", slogan='" + getSlogan() + "'" +
             ", contactPerson='" + getContactPerson() + "'" +
+            ", validUntil='" + getValidUntil() + "'" +
             ", image=" + getImageId() +
             ", image='" + getImageName() + "'" +
             "}";
