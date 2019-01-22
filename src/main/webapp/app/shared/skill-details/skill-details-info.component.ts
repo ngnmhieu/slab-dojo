@@ -55,6 +55,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
     private _levelSkills: ILevelSkill[] = [];
     private _badgeSkills: IBadgeSkill[] = [];
     private _teamSkills: ITeamSkill[] = [];
+    private _allTrainings: ITraining[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -71,7 +72,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
             this._levelSkills = (levelSkills && levelSkills.body ? levelSkills.body : levelSkills) || [];
             this._badgeSkills = (badgeSkills && badgeSkills.body ? badgeSkills.body : badgeSkills) || [];
             this._teamSkills = (teamSkills && teamSkills.body ? teamSkills.body : teamSkills) || [];
-            this.trainings = (trainings && trainings.body ? trainings.body : trainings) || [];
+            this._allTrainings = (trainings && trainings.body ? trainings.body : trainings) || [];
             this.loadData();
         });
     }
@@ -92,6 +93,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
         this.neededForBadges = this._badges.filter((badge: IBadge) =>
             this._badgeSkills.some((badgeSkill: IBadgeSkill) => badge.id === badgeSkill.badgeId && badgeSkill.skillId === this.skill.id)
         );
+        this.trainings = (this._allTrainings || []).filter(training => (training.skills || []).find(skill => skill.id === this.skill.id));
     }
 
     onVoteSubmittedFromChild(vote: ISkillRate) {
@@ -156,7 +158,6 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
         modalRef.result.then(
             training => {
                 this.isTrainingPopupOpen = false;
-                this.trainings = (this.trainings || []).concat(training);
             },
             reason => {
                 this.isTrainingPopupOpen = false;
