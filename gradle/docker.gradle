@@ -30,17 +30,10 @@ task copyDockerFiles(type: Copy) {
     include "*"
     exclude "**/*.yml"
 }
-def dockerImageName = project.docker_repository ? project.docker_repository + "/otto/teamdojo" : "otto/teamdojo";
-ext.getDockerImageNameWithTags = {
-    def dockerTags = ["$dockerImageName:${version}".toString()]
-    if (version.toString().contains('SNAPSHOT')) {
-        dockerTags.push("$dockerImageName:next".toString());
-    } else {
-        dockerTags.push("$dockerImageName:latest".toString());
-    }
-    return dockerTags;
-}
-def dockerImageNameWithTags = getDockerImageNameWithTags();
+
+def dockerImageName = project.docker_repository ? project.docker_repository + "/" + project.name : project.name;
+def dockerImageTagName = project.docker_tag ? project.docker_tag : 'latest';
+def dockerImageNameWithTags = ["$dockerImageName:${version}".toString(), "$dockerImageName:$dockerImageTagName".toString()];
 
 task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
     description = "Package application as Docker image"
@@ -54,7 +47,7 @@ task pushDockerVersion(type: DockerPushImage, dependsOn: 'buildDocker') {
     imageName = dockerImageNameWithTags[0];
 }
 
-task pushDocker(type: DockerPushImage, dependsOn: 'pushDockerVersion') {
-    description = "Pushes the image with tag 'latest' or 'next'"
+task pushDocker(type: DockerPushImage, dependsOn: 'buildDocker') {
+    description = "Pushes the image with tag 'latest' or the configured tag"
     imageName = dockerImageNameWithTags[1];
 }

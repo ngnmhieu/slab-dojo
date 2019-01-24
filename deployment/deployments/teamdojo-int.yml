@@ -16,8 +16,8 @@ spec:
         deploymentconfig: teamdojo-int
     spec:
       containers:
-      - image: teamdojo
-        name: teamdojo
+      - image: "docker.iteratec.io/teamdojo:develop"
+        name: teamdojo-int
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -38,14 +38,6 @@ spec:
                 key: password
           - name: JHIPSTER_SLEEP
             value: "10" # gives time for the database to boot before the application
+      imagePullSecrets:
+      - name: slabdojo-registry
   test: false
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - teamdojo
-      from:
-        kind: ImageStreamTag
-        name: teamdojo:latest
-    type: ImageChange
