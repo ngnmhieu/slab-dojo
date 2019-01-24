@@ -16,7 +16,7 @@ spec:
         deploymentconfig: teamdojo
     spec:
       containers:
-      - image: docker-registry.default.svc:5000/slabdojo/teamdojo
+      - image: "docker.iteratec.io/teamdojo:latest"
         name: teamdojo
         ports:
         - containerPort: 8080
@@ -38,4 +38,6 @@ spec:
                 key: password
           - name: JHIPSTER_SLEEP
             value: "10" # gives time for the database to boot before the application
+      imagePullSecrets:
+      - name: slabdojo-registry
   test: false
