@@ -28,12 +28,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,7 +79,7 @@ public class TrainingResourceIntTest {
 
     @Autowired
     private TrainingMapper trainingMapper;
-    
+
     @Mock
     private TrainingService trainingServiceMock;
 
@@ -99,6 +101,9 @@ public class TrainingResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restTrainingMockMvc;
 
     private Training training;
@@ -111,7 +116,8 @@ public class TrainingResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -237,6 +243,7 @@ public class TrainingResourceIntTest {
             .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())));
     }
     
+    @SuppressWarnings({"unchecked"})
     public void getAllTrainingsWithEagerRelationshipsIsEnabled() throws Exception {
         TrainingResource trainingResource = new TrainingResource(trainingServiceMock, trainingQueryService);
         when(trainingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -253,6 +260,7 @@ public class TrainingResourceIntTest {
         verify(trainingServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllTrainingsWithEagerRelationshipsIsNotEnabled() throws Exception {
         TrainingResource trainingResource = new TrainingResource(trainingServiceMock, trainingQueryService);
             when(trainingServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -553,6 +561,12 @@ public class TrainingResourceIntTest {
             .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK.toString())))
             .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())))
             .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())));
+
+        // Check, that the count call also returns 1
+        restTrainingMockMvc.perform(get("/api/trainings/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -564,6 +578,12 @@ public class TrainingResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTrainingMockMvc.perform(get("/api/trainings/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -621,15 +641,15 @@ public class TrainingResourceIntTest {
         // Create the Training
         TrainingDTO trainingDTO = trainingMapper.toDto(training);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTrainingMockMvc.perform(put("/api/trainings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(trainingDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Training in the database
         List<Training> trainingList = trainingRepository.findAll();
-        assertThat(trainingList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(trainingList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

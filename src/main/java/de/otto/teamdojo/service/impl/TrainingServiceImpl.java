@@ -42,6 +42,7 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public TrainingDTO save(TrainingDTO trainingDTO) {
         log.debug("Request to save Training : {}", trainingDTO);
+
         Training training = trainingMapper.toEntity(trainingDTO);
         training = trainingRepository.save(training);
         return trainingMapper.toDto(training);

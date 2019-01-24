@@ -26,11 +26,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
     totalItems: number;
 
     constructor(
-        private trainingService: TrainingService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
-        private accountService: AccountService
+        protected trainingService: TrainingService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected parseLinks: JhiParseLinks,
+        protected accountService: AccountService
     ) {
         this.trainings = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -94,7 +94,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateTrainings(data: ITraining[], headers: HttpHeaders) {
+    protected paginateTrainings(data: ITraining[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
@@ -102,7 +102,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
         }
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }

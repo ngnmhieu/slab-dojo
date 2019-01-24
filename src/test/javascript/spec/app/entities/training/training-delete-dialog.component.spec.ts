@@ -1,7 +1,7 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { TeamdojoTestModule } from '../../../test.module';
@@ -19,8 +19,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [TrainingDeleteDialogComponent],
-                providers: [TrainingService]
+                declarations: [TrainingDeleteDialogComponent]
             })
                 .overrideTemplate(TrainingDeleteDialogComponent, '')
                 .compileComponents();

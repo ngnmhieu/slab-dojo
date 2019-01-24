@@ -16,26 +16,27 @@ import { SkillService } from 'app/entities/skill';
     templateUrl: './training-update.component.html'
 })
 export class TrainingUpdateComponent implements OnInit {
-    private _training: ITraining;
+    training: ITraining;
     isSaving: boolean;
 
     skills: ISkill[];
     validUntil: string;
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private trainingService: TrainingService,
-        private skillService: SkillService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected trainingService: TrainingService,
+        protected skillService: SkillService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ training }) => {
-            this.training = training.body ? training.body : training;
+        this.activatedRoute.data.subscribe(({ training }) => {
+            this.training = training;
             if (!this.training.id) {
                 this.training.isOfficial = true;
             }
+            this.validUntil = this.training.validUntil != null ? this.training.validUntil.format(DATE_TIME_FORMAT) : null;
         });
         this.skillService.query().subscribe(
             (res: HttpResponse<ISkill[]>) => {
@@ -51,7 +52,7 @@ export class TrainingUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.training.validUntil = moment(this.validUntil, DATE_TIME_FORMAT);
+        this.training.validUntil = this.validUntil != null ? moment(this.validUntil, DATE_TIME_FORMAT) : null;
         if (this.training.id !== undefined) {
             this.subscribeToSaveResponse(this.trainingService.update(this.training));
         } else {
@@ -59,20 +60,20 @@ export class TrainingUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ITraining>>) {
-        result.subscribe((res: HttpResponse<ITraining>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ITraining>>) {
+        result.subscribe((res: HttpResponse<ITraining>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ITraining) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -89,13 +90,5 @@ export class TrainingUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-    get training() {
-        return this._training;
-    }
-
-    set training(training: ITraining) {
-        this._training = training;
-        this.validUntil = training.validUntil ? moment(training.validUntil).format() : undefined;
     }
 }

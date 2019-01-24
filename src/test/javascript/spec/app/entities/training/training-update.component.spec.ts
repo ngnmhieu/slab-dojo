@@ -1,14 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { TrainingUpdateComponent } from 'app/entities/training/training-update.component';
 import { TrainingService } from 'app/entities/training/training.service';
 import { Training } from 'app/shared/model/training.model';
-
-import { SkillService } from 'app/entities/skill';
 
 describe('Component Tests', () => {
     describe('Training Management Update Component', () => {
@@ -19,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [TrainingUpdateComponent],
-                providers: [SkillService, TrainingService]
+                declarations: [TrainingUpdateComponent]
             })
                 .overrideTemplate(TrainingUpdateComponent, '')
                 .compileComponents();

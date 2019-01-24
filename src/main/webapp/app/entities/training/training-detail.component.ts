@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITraining } from 'app/shared/model/training.model';
@@ -10,11 +10,11 @@ import { ITraining } from 'app/shared/model/training.model';
 export class TrainingDetailComponent implements OnInit {
     training: ITraining;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ training }) => {
-            this.training = training.body ? training.body : training;
+        this.activatedRoute.data.subscribe(({ training }) => {
+            this.training = training;
         });
     }
 

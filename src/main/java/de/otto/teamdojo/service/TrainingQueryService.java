@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.Training;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.TrainingRepository;
 import de.otto.teamdojo.service.dto.TrainingCriteria;
-
 import de.otto.teamdojo.service.dto.TrainingDTO;
 import de.otto.teamdojo.service.mapper.TrainingMapper;
 
@@ -68,6 +69,18 @@ public class TrainingQueryService extends QueryService<Training> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(TrainingCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Training> specification = createSpecification(criteria);
+        return trainingRepository.count(specification);
+    }
+
+    /**
      * Function to convert TrainingCriteria to a {@link Specification}
      */
     private Specification<Training> createSpecification(TrainingCriteria criteria) {
@@ -95,10 +108,10 @@ public class TrainingQueryService extends QueryService<Training> {
                 specification = specification.and(buildSpecification(criteria.getIsOfficial(), Training_.isOfficial));
             }
             if (criteria.getSkillId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillId(), Training_.skills, Skill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillId(),
+                    root -> root.join(Training_.skills, JoinType.LEFT).get(Skill_.id)));
             }
         }
         return specification;
     }
-
 }
