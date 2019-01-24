@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { Observable } from 'rxjs';
@@ -19,10 +18,11 @@ import { ImageService } from 'app/entities/image';
     templateUrl: './team-update.component.html'
 })
 export class TeamUpdateComponent implements OnInit {
-    team: ITeam;
+    _team: ITeam;
     isSaving: boolean;
     dimensions: IDimension[];
     images: IImage[];
+
     validUntil: string;
 
     constructor(
@@ -32,8 +32,6 @@ export class TeamUpdateComponent implements OnInit {
         protected imageService: ImageService,
         protected activatedRoute: ActivatedRoute
     ) {}
-
-    private _team: ITeam;
 
     get team() {
         return this._team;
@@ -111,22 +109,5 @@ export class TeamUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ITeam>>) {
-        result.subscribe((res: HttpResponse<ITeam>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
-    }
-
-    private onSaveSuccess(result: ITeam) {
-        this.isSaving = false;
-        this.previousState();
-    }
-
-    private onSaveError() {
-        this.isSaving = false;
-    }
-
-    private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

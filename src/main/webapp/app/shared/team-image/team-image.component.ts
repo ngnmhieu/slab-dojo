@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ITeam } from 'app/shared/model/team.model';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-team-image',
@@ -14,4 +15,12 @@ export class TeamImageComponent {
     @Input() hasBorder = true;
     @Input() hasOverlay = false;
     constructor() {}
+
+    getDaysUntilExpiration(team: ITeam): number {
+        return moment(team.validUntil).diff(moment(), 'days');
+    }
+
+    isExpired(team: ITeam): boolean {
+        return team.validUntil && this.getDaysUntilExpiration(team) < 1;
+    }
 }
