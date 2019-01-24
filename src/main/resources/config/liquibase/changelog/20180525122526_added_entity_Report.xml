@@ -33,7 +33,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="creation_date" type="datetime">
+            <column name="creation_date" type="timestamp">
                 <constraints nullable="false" />
             </column>
 

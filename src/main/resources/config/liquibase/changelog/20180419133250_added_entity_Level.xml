@@ -45,7 +45,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="depends_on_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_level_depends_on_id" />
+                <constraints unique="true" nullable="true" />
             </column>
             <column name="image_id" type="bigint">
                 <constraints nullable="true" />

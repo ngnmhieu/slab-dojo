@@ -29,7 +29,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="available_until" type="datetime">
+            <column name="available_until" type="timestamp">
                 <constraints nullable="true" />
             </column>
 
