@@ -10,6 +10,7 @@ import { TeamScore } from 'app/shared/model/team-score.model';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
 import { TeamScoreCalculation } from 'app/shared/util/team-score-calculation';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-overview-teams',
@@ -104,6 +105,14 @@ export class OverviewTeamsComponent implements OnInit {
 
     showAsIrrelevant(team: ITeam): boolean {
         return this.filtered && !this.isRelevant(team);
+    }
+
+    getDaysUntilExpiration(team: ITeam): number {
+        return moment(team.validUntil).diff(moment(), 'days');
+    }
+
+    expirationDaysVisible(team: ITeam): boolean {
+        return team.validUntil && this.getDaysUntilExpiration(team) > 0 && this.getDaysUntilExpiration(team) < 31;
     }
 
     private isRelevant(team: ITeam): boolean {

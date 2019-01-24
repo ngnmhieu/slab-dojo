@@ -35,6 +35,9 @@
                         </div>
                     <div class="team-name">
                         <a href="#" [routerLink]="['/teams', teamScore.team.shortName]">{{teamScore.team.name}}</a>
+                        <div *ngIf="expirationDaysVisible(teamScore.team)" class="expiration-date">expires in
+                            {{getDaysUntilExpiration(teamScore.team)}} days
+                        </div>
                     </div>
                 </div>
                 <div class="team-scores d-flex flex-row ml-auto justify-content-between">
