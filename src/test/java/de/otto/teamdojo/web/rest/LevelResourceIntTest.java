@@ -772,6 +772,7 @@ public class LevelResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -779,6 +780,7 @@ public class LevelResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -791,6 +793,7 @@ public class LevelResourceIntTest {
         teamSkill.setTeam(team2);
         teamSkill.setSkill(softwareUpdates);
         teamSkill.setCompletedAt(new Date().toInstant());
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team2.addSkills(teamSkill);
         em.persist(team2);

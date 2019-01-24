@@ -10,6 +10,7 @@ import de.otto.teamdojo.domain.Training;
 import de.otto.teamdojo.repository.SkillRepository;
 import de.otto.teamdojo.service.SkillService;
 import de.otto.teamdojo.service.dto.SkillDTO;
+import de.otto.teamdojo.service.dto.SkillRateDTO;
 import de.otto.teamdojo.service.mapper.SkillMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
 import de.otto.teamdojo.service.dto.SkillCriteria;

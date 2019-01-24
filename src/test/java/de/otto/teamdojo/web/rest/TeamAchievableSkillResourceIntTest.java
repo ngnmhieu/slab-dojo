@@ -282,6 +282,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -313,6 +314,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -345,6 +347,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill.setTeam(team);
         teamSkill.setIrrelevant(Boolean.TRUE);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -389,6 +392,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
