@@ -24,6 +24,8 @@ export interface FilterQuery {
 export class TableFilterComponent implements OnInit {
     @Input() fields: TableField[];
 
+    @Input() entityName: string;
+
     @Output() onFilterChanged = new EventEmitter<FilterQuery[]>();
 
     filterChanged: Subject<FilterQuery[]> = new Subject();
@@ -32,17 +34,23 @@ export class TableFilterComponent implements OnInit {
 
     private filterOperators: { [k: string]: string } = {};
 
+    // constructor(private storage: Storage) {
     constructor() {
         this.filterChanged.debounceTime(500).subscribe(query => this.onFilterChanged.emit(query));
     }
 
     ngOnInit(): void {
-        this.fields.forEach(f => {
-            this.filterOperators[f.name] = f.operator;
-        });
+        this.fields.forEach(f => (this.filterOperators[f.name] = f.operator));
+        this.loadFilters();
+        this.emitFilters();
     }
 
-    updateFilter() {
+    updateFilters() {
+        this.saveFilters();
+        this.emitFilters();
+    }
+
+    emitFilters() {
         const query: FilterQuery[] = Object.keys(this.filterInputs)
             .filter(field => this.filterInputs[field] && this.filterInputs[field] !== '')
             .map(
@@ -54,5 +62,19 @@ export class TableFilterComponent implements OnInit {
                     }
             );
         this.filterChanged.next(query);
+    }
+
+    loadFilters() {
+        let filters = {};
+        try {
+            filters = JSON.parse(localStorage.getItem(`TABLE_FILTER_${this.entityName}`)) || {};
+        } catch (e) {
+            console.log(`Filters for entity ${this.entityName} could not be parsed.`);
+        }
+        Object.keys(filters).forEach(field => (this.filterInputs[field] = filters[field]));
+    }
+
+    saveFilters() {
+        localStorage.setItem(`TABLE_FILTER_${this.entityName}`, JSON.stringify(this.filterInputs));
     }
 }
