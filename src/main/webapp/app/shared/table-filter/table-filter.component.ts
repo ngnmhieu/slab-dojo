@@ -77,4 +77,9 @@ export class TableFilterComponent implements OnInit {
     saveFilters() {
         localStorage.setItem(`TABLE_FILTER_${this.entityName}`, JSON.stringify(this.filterInputs));
     }
+
+    clearField(field: TableField) {
+        this.filterInputs[field.name] = '';
+        this.updateFilters();
+    }
 }
