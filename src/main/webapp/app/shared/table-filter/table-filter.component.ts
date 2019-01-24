@@ -34,7 +34,6 @@ export class TableFilterComponent implements OnInit {
 
     private filterOperators: { [k: string]: string } = {};
 
-    // constructor(private storage: Storage) {
     constructor() {
         this.filterChanged.debounceTime(500).subscribe(query => this.onFilterChanged.emit(query));
     }
