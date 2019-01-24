@@ -78,27 +78,28 @@ export class OverviewAchievementsComponent implements OnInit {
                 this.activeItemIds.level = levelId;
                 this.levels
                     .filter(l => l.id === levelId)
-                    .forEach(l => this.toggleDimensionPanel(`achievements-dimension-${l.dimensionId}`, true));
+                    .forEach(l => this.setDimensionPanelActiveState(`achievements-dimension-${l.dimensionId}`, true));
             } else if (badgeId) {
                 this.activeItemIds.badge = badgeId;
-                let foundBadge = this.badges.find(b => b.id === badgeId);
-                (foundBadge ? foundBadge.dimensions : []).forEach(d => this.toggleDimensionPanel(`achievements-dimension-${d.id}`, true));
+                const foundBadge = this.badges.find(b => b.id === badgeId);
+                if (foundBadge) {
+                    foundBadge.dimensions.forEach(d => this.setDimensionPanelActiveState(`achievements-dimension-${d.id}`, true));
+                }
             }
         });
     }
 
     handleDimensionToggle(event: NgbPanelChangeEvent) {
-        this.toggleDimensionPanel(event.panelId, event.nextState);
+        this.setDimensionPanelActiveState(event.panelId, event.nextState);
     }
 
-    toggleDimensionPanel(panelId: string, expanded: boolean) {
+    setDimensionPanelActiveState(panelId: string, expanded: boolean) {
         if (expanded) {
-            let idx = this.expandedDimensions.findIndex(d => panelId === d);
-            if (idx === -1) {
+            if (!this.expandedDimensions.includes(panelId)) {
                 this.expandedDimensions.push(panelId);
             }
         } else {
-            let idx = this.expandedDimensions.findIndex(d => panelId === d);
+            const idx = this.expandedDimensions.findIndex(d => panelId === d);
             if (idx !== -1) {
                 this.expandedDimensions.splice(idx, 1);
             }
