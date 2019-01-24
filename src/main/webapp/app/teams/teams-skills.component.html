@@ -61,21 +61,21 @@
                     <div *ngIf="isSameTeamSelected()"
                          class="skill-action-bar d-flex flex-wrap justify-content-between">
                         <a *ngIf="!skill.irrelevant" class="skill-action-bar-item"
-                           (click)="setIrrelevant(skill)"><i class="fa fa-thumbs-o-down"></i>
+                           (click)="setIrrelevant(skill)"><fa-icon icon="thumbs-down"></fa-icon>
                             <small jhiTranslate="teamdojoApp.teams.skills.action.irrelevant"></small>
                         </a>
                         <a *ngIf="skill.irrelevant" class="skill-action-bar-item"
-                           (click)="setRelevant(skill)"><i class="fa fa-thumbs-o-up"></i>
+                           (click)="setRelevant(skill)"><fa-icon icon="thumbs-up"></fa-icon>
                             <small jhiTranslate="teamdojoApp.teams.skills.action.relevant"></small>
                         </a>
                         <a *ngIf="!skill.achievedAt" class="skill-action-bar-item"
                            [ngClass]="{'disabled': skill.irrelevant}"
-                           (click)="setComplete(skill)"><i class="fa fa-check"></i>
+                           (click)="setComplete(skill)"><fa-icon icon="check"></fa-icon>
                             <small jhiTranslate="teamdojoApp.teams.skills.action.complete"></small>
                         </a>
                         <a *ngIf="skill.achievedAt" class="skill-action-bar-item"
                            [ngClass]="{'disabled': skill.irrelevant}"
-                           (click)="setIncomplete(skill)"><i class="fa fa-check"></i>
+                           (click)="setIncomplete(skill)"><fa-icon icon="check"></fa-icon>
                             <small jhiTranslate="teamdojoApp.teams.skills.action.incomplete"></small>
                         </a>
                     </div>
@@ -83,21 +83,21 @@
                         <div *jhiHasAnyAuthority="'ROLE_ADMIN'"
                              class="skill-action-bar d-flex flex-wrap justify-content-between">
                             <a *ngIf="!skill.irrelevant" class="skill-action-bar-item"
-                               (click)="setIrrelevant(skill)"><i class="fa fa-thumbs-o-down"></i>
+                               (click)="setIrrelevant(skill)"><fa-icon icon="thumbs-down"></fa-icon>
                                 <small jhiTranslate="teamdojoApp.teams.skills.action.irrelevant"></small>
                             </a>
                             <a *ngIf="skill.irrelevant" class="skill-action-bar-item"
-                               (click)="setRelevant(skill)"><i class="fa fa-thumbs-o-up"></i>
+                               (click)="setRelevant(skill)"><fa-icon icon="thumbs-up"></fa-icon>
                                 <small jhiTranslate="teamdojoApp.teams.skills.action.relevant"></small>
                             </a>
                             <a *ngIf="!skill.achievedAt" class="skill-action-bar-item"
                                [ngClass]="{'disabled': skill.irrelevant}"
-                               (click)="setComplete(skill)"><i class="fa fa-check"></i>
+                               (click)="setComplete(skill)"><fa-icon icon="check"></fa-icon>
                                 <small jhiTranslate="teamdojoApp.teams.skills.action.complete"></small>
                             </a>
                             <a *ngIf="skill.achievedAt" class="skill-action-bar-item"
                                [ngClass]="{'disabled': skill.irrelevant}"
-                               (click)="setIncomplete(skill)"><i class="fa fa-check"></i>
+                               (click)="setIncomplete(skill)"><fa-icon icon="check"></fa-icon>
                                 <small jhiTranslate="teamdojoApp.teams.skills.action.incomplete"></small>
                             </a>
                         </div>
@@ -107,11 +107,11 @@
                                 <small jhiTranslate="teamdojoApp.teams.skills.action.vote" translateValues="{team: '{{team.name}}'}"></small>
                             </p>
                             <p><a (click)="downVote(skill)">
-                                <i class="fa fa-angle-down"></i>
+                                <fa-icon icon="angle-down"></fa-icon>
                             </a>
                             <p>{{skill.vote}}</p>
                             <a (click)="upVote(skill)">
-                                <i class="fa fa-angle-up"></i>
+                                <fa-icon icon="angle-up"></fa-icon>
                             </a></p>
                         </div>
                         <div *ngIf="isSuggestAble(skill)"

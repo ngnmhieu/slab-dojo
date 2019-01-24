@@ -3,22 +3,22 @@
 <div class="skill-actions" *ngIf="isSameTeamSelected()">
     <button class="irrelevant action-btn" *ngIf="achievableSkill.irrelevant; else skillNotIrrelevant"
             (click)="onToggleIrrelevance(false)">
-        <i class="fa fa-thumbs-o-up"></i> <span jhiTranslate="teamdojoApp.teams.skills.action.relevant"></span>
+        <fa-icon icon="thumbs-up"></fa-icon> <span jhiTranslate="teamdojoApp.teams.skills.action.relevant"></span>
     </button>
 
     <ng-template #skillNotIrrelevant>
         <button class="irrelevant action-btn" (click)="onToggleIrrelevance(true)">
-            <i class="fa fa-thumbs-o-down"></i> <span jhiTranslate="teamdojoApp.teams.skills.action.irrelevant"></span>
+            <fa-icon icon="thumbs-down"></fa-icon> <span jhiTranslate="teamdojoApp.teams.skills.action.irrelevant"></span>
         </button>
 
         <span>
             <button *ngIf="isSkillAchieved; else skillNotAchieved" class="activation action-btn" (click)="onToggleSkill(false)">
-                <i class="fa fa-circle-o"></i> <span jhiTranslate="teamdojoApp.teams.skills.action.incomplete"></span>
+                <fa-icon icon="circle"></fa-icon><span jhiTranslate="teamdojoApp.teams.skills.action.incomplete"></span>
             </button>
 
             <ng-template #skillNotAchieved>
                 <button class="activation action-btn" (click)="onToggleSkill(true)">
-                    <i class="fa fa-check"></i> <span jhiTranslate="teamdojoApp.teams.skills.action.complete"></span>
+                    <fa-icon icon="check"></fa-icon> <span jhiTranslate="teamdojoApp.teams.skills.action.complete"></span>
                 </button>
             </ng-template>
         </span>

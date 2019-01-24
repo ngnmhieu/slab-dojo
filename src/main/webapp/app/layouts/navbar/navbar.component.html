@@ -3,7 +3,7 @@
         <a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse"
            data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
            aria-label="Toggle navigation" (click)="toggleNavbar()">
-            <i class="fa fa-bars"></i>
+            <fa-icon icon="bars"></fa-icon>
         </a>
         <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
             <span class="logo-img"></span>
@@ -28,7 +28,7 @@
                 <a class="nav-link dropdown-toggle nav-info" ngbDropdownToggle href="javascript:void(0);"
                    id="notificationnavBarDropdown">
                     <span class="icon">
-                        <i class="fa fa-comment fa-4 mr-1"></i>
+                        <fa-icon icon="comment" class="fa-4 mr-1"></fa-icon>
                         <span class="nav-info" jhiTranslate="global.menu.notification.main"></span>
                     </span>
                 </a>
@@ -39,7 +39,7 @@
             <li class="nav-item" *ngIf="!selectedTeam">
                 <a class="nav-link" (click)="selectTeam()">
                      <span class="icon">
-                         <i class="fa fa-users fa-2"></i>
+                         <fa-icon icon="users" class="fa-2"></fa-icon>
                          <span class="nav-info" jhiTranslate="global.menu.teams.select"></span>
                      </span>
                 </a>
@@ -56,7 +56,7 @@
                     <li>
                         <a class="dropdown-item"
                            [routerLink]="['/teams', selectedTeam.shortName]">
-                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <fa-icon icon="home"></fa-icon>
                             <span jhiTranslate="global.menu.teams.home">Living Room</span>
                         </a>
                         <a class="dropdown-item" href="javascript:void(0);" (click)="selectTeam()">
@@ -159,7 +159,7 @@
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="training" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.entities.training">Training</span>
                         </a>
                     </li>
@@ -229,7 +229,7 @@
             <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
                 <a class="nav-link dropdown-toggle nav-info" ngbDropdownToggle href="javascript:void(0);"
                    id="languagesnavBarDropdown">
-                    <span class="navbar-icon"><i class="fa fa-globe"></i></span>
+                    <span class="navbar-icon"><fa-icon icon="globe"></fa-icon></span>
                     <span class="nav-info" jhiTranslate="global.menu.language"></span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu *ngIf="languages.length > 1" aria-labelledby="languagesnavBarDropdown">
