@@ -8,15 +8,15 @@ Before you can build this project, you must install and configure the following 
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
+2. [npm][]: We use NPM to manage Node dependencies.
+   Depending on your system, you can install NPM either from source or as a pre-packaged bundle.
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    yarn install
+    npm install
 
-We use yarn scripts and [Webpack][] as our build system.
+We use npm scripts and [Webpack][] as our build system.
 And postgresql as our database. For the database we use a standard docker-compose file.
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
@@ -24,13 +24,13 @@ auto-refreshes when files change on your hard drive.
 
     docker-compose -f src/main/docker/postgresql.yml up
     ./gradlew
-    yarn start
+    npm start
 
-[Yarn][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies
-by specifying a newer version in [package.json](package.json). You can also run `yarn update` and `yarn install` to
-manage dependencies. Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
+[npm][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies
+by specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to
+manage dependencies. Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
 
-The `yarn run` command will list all of the scripts available to run for this project.
+The `npm run` command will list all of the scripts available to run for this project.
 
 ### Code Formatting
 
@@ -40,7 +40,7 @@ Install the IntelliJ IDE EditorConfig Plugin and enable EditorConfig support
 Format your Java code by using the IntelliJ IDE Default Code Style and organize imports before committing.
 
 **Type Script**
-Run prettier before committing (`npm run prettier:format` or `yarn prettier --write **/*.ts`)
+Run prettier before committing (`npm run prettier:format` or `npm prettier --write **/*.ts`)
 Install IntelliJ IDE Prettier Plugin and use the action `Reformat with Prettier` to format the code
 
 **Line Separators**
@@ -69,11 +69,11 @@ Note: workbox creates the respective service worker and dynamically generates th
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run the following command:
 
-    yarn add --exact leaflet
+    npm add --exact leaflet
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] in development, you would run the following command:
 
-    yarn add --dev --exact @types/leaflet
+    npm add --dev --exact @types/leaflet
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] can pick them up:
 
@@ -151,7 +151,7 @@ To launch your application's tests, run:
 Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/)
 and can be run with:
 
-    yarn test
+    npm test
 
 For more information, refer to the [Running tests page][].
 
@@ -230,7 +230,7 @@ These files have to kept in sync. The following script can help with that.
 [running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/running-tests/
 [setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/setting-up-ci/
 [node.js]: https://nodejs.org/
-[yarn]: https://yarnpkg.org/
+[npm]: https://www.npmjs.com/
 [webpack]: https://webpack.github.io/
 [angular cli]: https://cli.angular.io/
 [browsersync]: http://www.browsersync.io/

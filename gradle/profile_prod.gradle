@@ -19,29 +19,17 @@ bootRun {
     args = []
 }
 
-task webpack_test(type: YarnTask, dependsOn: 'yarn_install') {
+task webpack_test(type: NpmTask, dependsOn: 'npm_install') {
     args = ["run", "webpack:test"]
 }
 
-task cleanup(type: YarnTask, dependsOn: 'yarn_install') {
-    args = ["run", "cleanup"]
-}
-
-task webpack(type: YarnTask, dependsOn: 'cleanup') {
-    args = ["run", "webpack:prod:main", "--version=$version"]
-}
-
-task cleanwww(type: YarnTask, dependsOn: 'webpack') {
-    args = ["run", "clean-www"]
+task webpack(type: NpmTask, dependsOn: 'npm_install') {
+    args = ["run", "webpack:prod"]
 }
 
 task copyIntoStatic (type: Copy) {
     from 'build/www/'
     into 'build/resources/main/static'
-}
-
-war {
-    webAppDirName = 'build/www/'
 }
 
 processResources {
@@ -66,6 +54,6 @@ gitProperties {
 }
 
 test.dependsOn webpack_test
-processResources.dependsOn cleanwww
+processResources.dependsOn webpack
 copyIntoStatic.dependsOn processResources
 bootJar.dependsOn copyIntoStatic
