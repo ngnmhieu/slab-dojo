@@ -77,6 +77,8 @@ ext.getDependsOn = { name, order ->
 }
 
 task liquibaseDataImportFromYaml {
+    group = 'liquibase'
+    description = 'Generate changelog for data described in YAML files under \'skills/\''
     doLast {
         def order = ['yellow', 'orange', 'green', 'blue', 'brown', 'black'];
         List levelPaths = []
