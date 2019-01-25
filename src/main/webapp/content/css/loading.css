@@ -108,8 +108,8 @@ body {
 .app-loading .lds-pacman {
     position: relative;
     margin: auto;
-    width: 500px !important;
-    height: 500px !important;
+    width: 200px !important;
+    height: 200px !important;
     -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
     transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
 }
@@ -132,7 +132,7 @@ body {
 }
 .app-loading .lds-pacman > div:nth-child(1) div {
     position: absolute;
-    top: 97px;
+    top: 92px;
     left: -8px;
     width: 48px;
     height: 20px;
