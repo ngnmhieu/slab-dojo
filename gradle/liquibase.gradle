@@ -1,4 +1,5 @@
-import org.gradle.internal.os.OperatingSystem
+import org.yaml.snakeyaml.Yaml
+import groovy.xml.MarkupBuilder
 
 buildscript {
     repositories {
@@ -15,7 +16,7 @@ ext.getLiquibaseXml = { dimension, levels, order ->
     def setCount = 1
     def getSetId = { "${timestamp}-${setCount++}" }
     def writer = new StringWriter()
-    def xml = new groovy.xml.MarkupBuilder(writer)
+    def xml = new MarkupBuilder(writer)
     xml.databaseChangeLog(xmlns: 'http://www.liquibase.org/xml/ns/dbchangelog',
         'xmlns:ext': 'http://www.liquibase.org/xml/ns/dbchangelog-ext',
         'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -66,7 +67,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd''') {
 
 ext.loadYaml = { file ->
     System.out.println(file.name);
-    org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml()
+    Yaml yaml = new Yaml()
     yaml.load(file.text)
 }
 
