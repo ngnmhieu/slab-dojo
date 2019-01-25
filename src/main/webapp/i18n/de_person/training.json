@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "training" : {
+        "training": {
             "home": {
                 "title": "Trainings",
                 "createLabel": "Training erstellen",

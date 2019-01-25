@@ -1,10 +1,10 @@
 import { Moment } from 'moment';
 
 export const enum ReportType {
-    'BUG',
-    'WISH',
-    'REVIEW',
-    'COMPLIMENT'
+    BUG = 'BUG',
+    WISH = 'WISH',
+    REVIEW = 'REVIEW',
+    COMPLIMENT = 'COMPLIMENT'
 }
 
 export interface IReport {

@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "teamSkill" : {
+        "teamSkill": {
             "home": {
                 "title": "Personen Skills",
                 "createLabel": "Personen Skill erstellen",

@@ -13,6 +13,7 @@ import de.otto.teamdojo.service.dto.UserDTO;
 import de.otto.teamdojo.web.rest.errors.*;
 import de.otto.teamdojo.web.rest.vm.KeyAndPasswordVM;
 import de.otto.teamdojo.web.rest.vm.ManagedUserVM;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,12 +67,6 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {
-            throw new LoginAlreadyUsedException();
-        });
-        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {
-            throw new EmailAlreadyUsedException();
-        });
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }

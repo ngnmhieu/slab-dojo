@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    TrainingService,
     TrainingComponent,
     TrainingDetailComponent,
     TrainingUpdateComponent,
     TrainingDeletePopupComponent,
     TrainingDeleteDialogComponent,
     trainingRoute,
-    trainingPopupRoute,
-    TrainingResolve
+    trainingPopupRoute
 } from './';
 
 const ENTITY_STATES = [...trainingRoute, ...trainingPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...trainingRoute, ...trainingPopupRoute];
         TrainingDeletePopupComponent
     ],
     entryComponents: [TrainingComponent, TrainingUpdateComponent, TrainingDeleteDialogComponent, TrainingDeletePopupComponent],
-    providers: [TrainingService, TrainingResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoTrainingModule {}

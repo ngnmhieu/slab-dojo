@@ -12,7 +12,6 @@ import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +22,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,11 +52,8 @@ public class OrganizationResourceIntTest {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-
-
     @Autowired
     private OrganizationMapper organizationMapper;
-    
 
     @Autowired
     private OrganizationService organizationService;
@@ -73,6 +70,9 @@ public class OrganizationResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restOrganizationMockMvc;
 
     private Organization organization;
@@ -85,7 +85,8 @@ public class OrganizationResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -180,7 +181,6 @@ public class OrganizationResourceIntTest {
             .andExpect(jsonPath("$.[*].levelUpScore").value(hasItem(DEFAULT_LEVEL_UP_SCORE)));
     }
     
-
     @Test
     @Transactional
     public void getOrganization() throws Exception {
@@ -242,15 +242,15 @@ public class OrganizationResourceIntTest {
         // Create the Organization
         OrganizationDTO organizationDTO = organizationMapper.toDto(organization);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganizationMockMvc.perform(put("/api/organizations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Organization in the database
         List<Organization> organizationList = organizationRepository.findAll();
-        assertThat(organizationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(organizationList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

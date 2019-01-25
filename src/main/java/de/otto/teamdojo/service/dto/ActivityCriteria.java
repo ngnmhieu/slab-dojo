@@ -1,15 +1,12 @@
 package de.otto.teamdojo.service.dto;
 
+import java.io.Serializable;
+import java.util.Objects;
 import de.otto.teamdojo.domain.enumeration.ActivityType;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-import java.io.Serializable;
-
-
-
+import io.github.jhipster.service.filter.InstantFilter;
 
 /**
  * Criteria class for the Activity entity. This class is used in ActivityResource to
@@ -28,7 +25,6 @@ public class ActivityCriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     private LongFilter id;
 
     private ActivityTypeFilter type;
@@ -36,9 +32,6 @@ public class ActivityCriteria implements Serializable {
     private StringFilter data;
 
     private InstantFilter createdAt;
-
-    public ActivityCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -70,6 +63,32 @@ public class ActivityCriteria implements Serializable {
 
     public void setCreatedAt(InstantFilter createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ActivityCriteria that = (ActivityCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(type, that.type) &&
+            Objects.equals(data, that.data) &&
+            Objects.equals(createdAt, that.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        type,
+        data,
+        createdAt
+        );
     }
 
     @Override

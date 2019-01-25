@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IBadge } from 'app/shared/model/badge.model';
@@ -10,11 +10,11 @@ import { IBadge } from 'app/shared/model/badge.model';
 export class BadgeDetailComponent implements OnInit {
     badge: IBadge;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ badge }) => {
-            this.badge = badge.body ? badge.body : badge;
+        this.activatedRoute.data.subscribe(({ badge }) => {
+            this.badge = badge;
         });
     }
 

@@ -13,8 +13,9 @@ import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
 
+
 /**
- * Spring Data JPA repository for the Skill entity.
+ * Spring Data  repository for the Skill entity.
  */
 @SuppressWarnings("unused")
 @Repository

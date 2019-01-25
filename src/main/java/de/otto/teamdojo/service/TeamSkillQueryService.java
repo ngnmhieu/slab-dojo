@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.TeamSkill;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.TeamSkillRepository;
 import de.otto.teamdojo.service.dto.TeamSkillCriteria;
-
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
 import de.otto.teamdojo.service.mapper.TeamSkillMapper;
 
@@ -68,6 +69,18 @@ public class TeamSkillQueryService extends QueryService<TeamSkill> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(TeamSkillCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<TeamSkill> specification = createSpecification(criteria);
+        return teamSkillRepository.count(specification);
+    }
+
+    /**
      * Function to convert TeamSkillCriteria to a {@link Specification}
      */
     private Specification<TeamSkill> createSpecification(TeamSkillCriteria criteria) {
@@ -95,13 +108,14 @@ public class TeamSkillQueryService extends QueryService<TeamSkill> {
                 specification = specification.and(buildStringSpecification(criteria.getVoters(), TeamSkill_.voters));
             }
             if (criteria.getSkillId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillId(), TeamSkill_.skill, Skill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillId(),
+                    root -> root.join(TeamSkill_.skill, JoinType.LEFT).get(Skill_.id)));
             }
             if (criteria.getTeamId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getTeamId(), TeamSkill_.team, Team_.id));
+                specification = specification.and(buildSpecification(criteria.getTeamId(),
+                    root -> root.join(TeamSkill_.team, JoinType.LEFT).get(Team_.id)));
             }
         }
         return specification;
     }
-
 }

@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    BadgeSkillService,
     BadgeSkillComponent,
     BadgeSkillDetailComponent,
     BadgeSkillUpdateComponent,
     BadgeSkillDeletePopupComponent,
     BadgeSkillDeleteDialogComponent,
     badgeSkillRoute,
-    badgeSkillPopupRoute,
-    BadgeSkillResolve
+    badgeSkillPopupRoute
 } from './';
 
 const ENTITY_STATES = [...badgeSkillRoute, ...badgeSkillPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...badgeSkillRoute, ...badgeSkillPopupRoute];
         BadgeSkillDeletePopupComponent
     ],
     entryComponents: [BadgeSkillComponent, BadgeSkillUpdateComponent, BadgeSkillDeleteDialogComponent, BadgeSkillDeletePopupComponent],
-    providers: [BadgeSkillService, BadgeSkillResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoBadgeSkillModule {}

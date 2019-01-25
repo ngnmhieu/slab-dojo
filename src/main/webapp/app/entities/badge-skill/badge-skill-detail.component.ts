@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
@@ -10,11 +10,11 @@ import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
 export class BadgeSkillDetailComponent implements OnInit {
     badgeSkill: IBadgeSkill;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ badgeSkill }) => {
-            this.badgeSkill = badgeSkill.body ? badgeSkill.body : badgeSkill;
+        this.activatedRoute.data.subscribe(({ badgeSkill }) => {
+            this.badgeSkill = badgeSkill;
         });
     }
 

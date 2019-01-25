@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { BadgeSkillService } from './badge-skill.service';
@@ -26,11 +26,11 @@ export class BadgeSkillComponent implements OnInit, OnDestroy {
     totalItems: number;
 
     constructor(
-        private badgeSkillService: BadgeSkillService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
-        private principal: Principal
+        protected badgeSkillService: BadgeSkillService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected parseLinks: JhiParseLinks,
+        protected accountService: AccountService
     ) {
         this.badgeSkills = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -68,7 +68,7 @@ export class BadgeSkillComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then(account => {
+        this.accountService.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInBadgeSkills();
@@ -94,7 +94,7 @@ export class BadgeSkillComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateBadgeSkills(data: IBadgeSkill[], headers: HttpHeaders) {
+    protected paginateBadgeSkills(data: IBadgeSkill[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
@@ -102,7 +102,7 @@ export class BadgeSkillComponent implements OnInit, OnDestroy {
         }
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }

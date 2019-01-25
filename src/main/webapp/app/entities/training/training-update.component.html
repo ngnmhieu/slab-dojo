@@ -38,30 +38,25 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="teamdojoApp.training.contactPerson" for="field_contactPerson">Contact Person</label>
                     <input type="text" class="form-control" name="contactPerson" id="field_contactPerson"
-                           [(ngModel)]="training.contactPerson" maxlength="255"/>
-                    <div
-                        [hidden]="!(editForm.controls.contactPerson?.dirty && editForm.controls.contactPerson?.invalid)">
+                        [(ngModel)]="training.contactPerson" maxlength="255"/>
+                    <div [hidden]="!(editForm.controls.contactPerson?.dirty && editForm.controls.contactPerson?.invalid)">
                         <small class="form-text text-danger"
-                               [hidden]="!editForm.controls.contactPerson?.errors?.maxlength"
-                               jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
-                            This field cannot be longer than 255 characters.
+                        [hidden]="!editForm.controls.contactPerson?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
+                        This field cannot be longer than 255 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="teamdojoApp.training.link" for="field_link">Link</label>
                     <input type="text" class="form-control" name="link" id="field_link"
-                           [(ngModel)]="training.link" maxlength="255"
-                           pattern="^(?:http(s)?://)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#\[\]@!\$&'\(\)\*\+,;=.]+$"/>
+                        [(ngModel)]="training.link" maxlength="255" pattern="^(?:http(s)?://)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#\[\]@!\$&'\(\)\*\+,;=.]+$"/>
                     <div [hidden]="!(editForm.controls.link?.dirty && editForm.controls.link?.invalid)">
                         <small class="form-text text-danger"
-                               [hidden]="!editForm.controls.link?.errors?.maxlength"
-                               jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
-                            This field cannot be longer than 255 characters.
+                        [hidden]="!editForm.controls.link?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
+                        This field cannot be longer than 255 characters.
                         </small>
                         <small class="form-text text-danger"
-                               [hidden]="!editForm.controls.link?.errors?.pattern"
-                               jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Link' }">
+                            [hidden]="!editForm.controls.link?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Link' }">
                             This field should follow pattern for "Link".
                         </small>
                         <small class="form-text text-danger"
@@ -72,11 +67,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.training.validUntil"
-                           for="field_validUntil">Valid Until</label>
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.training.validUntil" for="field_validUntil">Valid Until</label>
                     <div class="d-flex">
-                        <input id="field_validUntil" type="datetime-local" class="form-control" name="validUntil"
-                               [(ngModel)]="validUntil" [placeholder]="'teamdojoApp.training.validUntilPlaceholder' | translate"/>
+                        <input id="field_validUntil" type="datetime-local" class="form-control" name="validUntil" [(ngModel)]="validUntil"
+                               [placeholder]="'teamdojoApp.training.validUntilPlaceholder' | translate"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -100,10 +94,10 @@
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
         </form>

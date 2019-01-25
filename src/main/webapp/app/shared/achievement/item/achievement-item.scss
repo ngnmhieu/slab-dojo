@@ -1,12 +1,13 @@
 @import '~bootstrap/scss/bootstrap';
-@import "../../../../content/scss/mixins";
-@import "../../../../content/scss/_colors";
+@import '../../../../content/scss/mixins';
+@import '../../../../content/scss/_colors';
 
 .achievement-item {
     border: 2px solid transparent;
     padding: 0.5rem 0;
 
-    &.item-badge, &.item-level {
+    &.item-badge,
+    &.item-level {
         .item-image {
             @include achievement-image();
             width: inherit;
@@ -38,7 +39,8 @@
             }
         }
         &-disabled {
-            .item-image, .item-progress-wrapper {
+            .item-image,
+            .item-progress-wrapper {
                 filter: opacity(50%);
             }
         }
@@ -73,10 +75,11 @@
                     background: no-repeat center/72% url('/api/images/name/Default_Level');
                 }
             }
-
         }
         &-disabled {
-            img, .item-image::before, .item-progress-wrapper {
+            img,
+            .item-image::before,
+            .item-progress-wrapper {
                 filter: brightness(0%) invert(82%);
             }
         }
@@ -108,7 +111,7 @@
         }
         .item-irrelevance {
             height: 100%;
-            background: #D1D1D1;
+            background: #d1d1d1;
             float: left;
         }
     }

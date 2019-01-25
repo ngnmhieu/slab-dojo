@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITeam } from 'app/shared/model/team.model';
@@ -10,11 +10,11 @@ import { ITeam } from 'app/shared/model/team.model';
 export class TeamDetailComponent implements OnInit {
     team: ITeam;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ team }) => {
-            this.team = team.body ? team.body : team;
+        this.activatedRoute.data.subscribe(({ team }) => {
+            this.team = team;
         });
     }
 

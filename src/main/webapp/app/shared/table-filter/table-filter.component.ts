@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 export interface TableField {
     // name of the field
@@ -33,7 +34,7 @@ export class TableFilterComponent implements OnInit {
     private filterOperators: { [k: string]: string } = {};
 
     constructor() {
-        this.filterChanged.debounceTime(500).subscribe(query => this.onFilterChanged.emit(query));
+        this.filterChanged.pipe(debounceTime(500)).subscribe(query => this.onFilterChanged.emit(query));
     }
 
     ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ILevelSkill } from 'app/shared/model/level-skill.model';
@@ -10,11 +10,11 @@ import { ILevelSkill } from 'app/shared/model/level-skill.model';
 export class LevelSkillDetailComponent implements OnInit {
     levelSkill: ILevelSkill;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ levelSkill }) => {
-            this.levelSkill = levelSkill.body ? levelSkill.body : levelSkill;
+        this.activatedRoute.data.subscribe(({ levelSkill }) => {
+            this.levelSkill = levelSkill;
         });
     }
 

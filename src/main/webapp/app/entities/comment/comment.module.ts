@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    CommentService,
     CommentComponent,
     CommentDetailComponent,
     CommentUpdateComponent,
     CommentDeletePopupComponent,
     CommentDeleteDialogComponent,
     commentRoute,
-    commentPopupRoute,
-    CommentResolve
+    commentPopupRoute
 } from './';
 
 const ENTITY_STATES = [...commentRoute, ...commentPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...commentRoute, ...commentPopupRoute];
         CommentDeletePopupComponent
     ],
     entryComponents: [CommentComponent, CommentUpdateComponent, CommentDeleteDialogComponent, CommentDeletePopupComponent],
-    providers: [CommentService, CommentResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoCommentModule {}

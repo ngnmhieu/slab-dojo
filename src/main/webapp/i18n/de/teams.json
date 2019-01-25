@@ -39,7 +39,7 @@
                     "implementation": "Implementation",
                     "validation": "Validation",
                     "achievedBy": "Erfüllt von",
-                    "achievedByNone" : "Dieser Skill wurde noch von keinem Team erfüllt!",
+                    "achievedByNone": "Dieser Skill wurde noch von keinem Team erfüllt!",
                     "neededFor": "Benötigt für",
                     "trainings": "Hilfreiche Weiterbildungsangebote",
                     "noTrainings": "Keine hilfreichen Weiterbildungsangebote verfügbar",

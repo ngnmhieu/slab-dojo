@@ -79,7 +79,7 @@ public class DimensionResource {
     public ResponseEntity<DimensionDTO> updateDimension(@Valid @RequestBody DimensionDTO dimensionDTO) throws URISyntaxException {
         log.debug("REST request to update Dimension : {}", dimensionDTO);
         if (dimensionDTO.getId() == null) {
-            return createDimension(dimensionDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         DimensionDTO result = dimensionService.save(dimensionDTO);
         return ResponseEntity.ok()
@@ -101,6 +101,19 @@ public class DimensionResource {
         Page<DimensionDTO> page = dimensionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/dimensions");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+    * GET  /dimensions/count : count all the dimensions.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/dimensions/count")
+    @Timed
+    public ResponseEntity<Long> countDimensions(DimensionCriteria criteria) {
+        log.debug("REST request to count Dimensions by criteria: {}", criteria);
+        return ResponseEntity.ok().body(dimensionQueryService.countByCriteria(criteria));
     }
 
     /**

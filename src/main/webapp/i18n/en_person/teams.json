@@ -39,7 +39,7 @@
                     "implementation": "Implementation",
                     "validation": "Validation",
                     "achievedBy": "Achieved by",
-                    "achievedByNone" : "No Persons have achieved this skill yet!",
+                    "achievedByNone": "No Persons have achieved this skill yet!",
                     "neededFor": "Needed for",
                     "trainings": "Helpful trainings",
                     "noTrainings": "No helpful trainings available",

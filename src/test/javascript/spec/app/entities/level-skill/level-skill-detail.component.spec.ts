@@ -1,7 +1,7 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { LevelSkillDetailComponent } from 'app/entities/level-skill/level-skill-detail.component';
