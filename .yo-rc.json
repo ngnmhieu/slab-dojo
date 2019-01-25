@@ -25,7 +25,7 @@
         "rememberMeKey": "36da5c4bc5f87176faee6e8e4570cd40b1a84c0aa781b02e71cf5cdd24b0e3a43a97f055386a8620e59667ba1fdea1c99da5",
         "clientFramework": "angularX",
         "useSass": true,
-        "clientPackageManager": "yarn",
+        "clientPackageManager": "npm",
         "testFrameworks": [],
         "jhiPrefix": "jhi",
         "otherModules": [],

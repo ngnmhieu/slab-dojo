@@ -19,7 +19,7 @@ bootRun {
     args = []
 }
 
-task webpackBuildDev(type: YarnTask, dependsOn: 'yarn_install') {
+task webpackBuildDev(type: NpmTask, dependsOn: 'npm_install') {
     inputs.dir("src/main/webapp/")
     inputs.files(fileTree('src/main/webapp/'))
     outputs.dir("build/www/")
