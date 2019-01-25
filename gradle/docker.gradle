@@ -15,10 +15,10 @@ jib {
         image = 'openjdk:8-jre-alpine'
     }
     to {
-        image = 'teamdojo:latest'
+        image = System.getProperty('jib.to.image') ?: 'teamdojo:latest'
     }
     container {
-        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && sync && /entrypoint.sh']
+        entrypoint = ['sh', '/entrypoint.sh']
         ports = ['8080']
         environment = [
             SPRING_OUTPUT_ANSI_ENABLED: 'ALWAYS',
@@ -34,3 +34,6 @@ task copyWwwIntoStatic (type: Copy) {
 }
 
 jibDockerBuild.dependsOn copyWwwIntoStatic
+jibDockerBuild.dependsOn bootWar
+tasks.jib.dependsOn copyWwwIntoStatic
+tasks.jib.dependsOn bootWar
