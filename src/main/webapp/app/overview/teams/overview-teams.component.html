@@ -43,7 +43,7 @@
                     <span class="score">{{calcCompletedBadges(teamScore.team)}}</span>
                 </div>
                 <div class="team-status" [ngClass]="{complete: showAsComplete(teamScore.team)}">
-                    <i *ngIf="showAsComplete(teamScore.team)" class="fa fa-check fa-inverse"></i>
+                    <fa-icon *ngIf="showAsComplete(teamScore.team)" icon="check" inverse="true"></fa-icon>
                 </div>
             </div>
         </div>
