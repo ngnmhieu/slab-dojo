@@ -200,6 +200,28 @@ and applied by Liquibase in the ascending order of the date declaration in their
 The custom gradle task 'liquibaseDataImportFromYaml' creates a liquibase script out of \*.yaml files, placed in folder 'skills'.
 This can be useful to load test data into a database instance.
 
+## i18n handling for person- & team-mode
+
+The application can be run in 2 different modes. One for teams & one for individuals/persons. These 2 mode differentiate
+in the usage of i18n-files in folder ./src/main/webapp/i18n. See the usage of the MergeJsonWebpackPlugin in
+webpack.common.js file.
+These files have to kept in sync. The following script can help with that.
+
+    #!/bin/bash
+
+    dir=$1
+    from=$2
+    to=$3
+    cd $dir
+    for file in $(echo $dir'/src/main/webapp/i18n/'$from'/*.json')
+    do
+    git diff --no-prefix dev $file > patch.patch
+    patch $( echo $file | sed -e 's/\/'$from'\//\/'$to'\//g') patch.patch
+    done
+    rm patch.patch
+
+    command for example: $./i18n.sh ~/projects/slab-dojo en en_person
+
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
 [jhipster 5.0.0-beta.0 archive]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0
 [using jhipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/development/
