@@ -15,7 +15,7 @@ jib {
         image = 'openjdk:8-jre-alpine'
     }
     to {
-        image = 'teamdojo:latest'
+        image = System.getProperty('jib.to.image') ?: 'teamdojo:latest'
     }
     container {
         entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && sync && /entrypoint.sh']
