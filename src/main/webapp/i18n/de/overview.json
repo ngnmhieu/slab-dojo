@@ -21,8 +21,8 @@
             "skills": {
                 "title": "Kompetenzen"
             },
-            "navigation" : {
-                "text" : "Teamübersicht"
+            "navigation": {
+                "text": "Teamübersicht"
             },
             "total-score": {
                 "title": "Insgesamt"
