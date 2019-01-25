@@ -20,7 +20,7 @@
                     },
                     "orderBy": {
                         "title": "Title",
-                        "score": "Score",
+                        "rateScore": "Score",
                         "rateCount": "Rate count"
                     }
                 },
