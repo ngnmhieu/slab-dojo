@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 /**
  * A DTO for the Team entity.
  */
@@ -105,6 +107,10 @@ public class TeamDTO implements Serializable {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Long getDaysUntilExpiration() {
+        return this.validUntil != null ? DAYS.between(Instant.now(), this.validUntil) : Long.MAX_VALUE;
     }
 
     @Override
