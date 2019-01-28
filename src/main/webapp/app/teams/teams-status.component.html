@@ -1,8 +1,11 @@
 <div class="teams-status">
     <div class="teams-status-avatar d-flex flex-column justify-content-center">
         <div class="team-logo-wrapper mx-auto mt-3">
-            <div class="team-edit-btn" *ngIf="isSameTeamSelected()" (click)="editTeam()"><fa-icon icon="ellipsis-v"></fa-icon></div>
-            <jhi-team-image [team]="team" [hasPlaceholder]="false" [hasBorder]="false" [hasOverlay]="true" size="35vh" imageSize="large">
+            <div class="team-edit-btn" *ngIf="isSameTeamSelected()" (click)="editTeam()">
+                <fa-icon icon="ellipsis-v"></fa-icon>
+            </div>
+            <jhi-team-image [team]="team" [hasPlaceholder]="false" [hasBorder]="false" [hasOverlay]="true"
+                            [showExpiredLabel]="false" size="35vh" imageSize="large">
             </jhi-team-image>
         </div>
         <div class="avatar-image-wrapper d-flex align-self-center">
@@ -10,9 +13,15 @@
         </div>
         <div class="status-meta d-flex justify-content-center mx-auto">
             <div class="status-meta-text d-flex flex-column justify-content-center align-items-center">
-                <h5 *ngIf="!team.slogan; else sloganWithTitle" class="team-title mb-0">{{team.name}}</h5>
+                <h5 *ngIf="!team.slogan; else sloganWithTitle" class="team-title mb-0">{{team.name}}
+                    <span
+                        *ngIf="team.daysUntilExpiration < 1">({{'teamdojoApp.teams.status.expired' | translate}})</span>
+                </h5>
                 <ng-template #sloganWithTitle>
-                    <h5 class="team-title team-title-with-slogan mb-0">{{team.name}}</h5>
+                    <h5 class="team-title team-title-with-slogan mb-0">{{team.name}}
+                        <span
+                            *ngIf="team.daysUntilExpiration < 1">({{'teamdojoApp.teams.status.expired' | translate}})</span>
+                    </h5>
                     <h6 class="team-slogan mb-0">{{team.slogan}}</h6>
                 </ng-template>
                 <div class="team-score"><span>{{teamScore}}</span></div>
