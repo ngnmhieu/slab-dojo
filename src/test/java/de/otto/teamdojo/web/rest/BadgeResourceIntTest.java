@@ -1,17 +1,21 @@
 package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
+import de.otto.teamdojo.config.ApplicationProperties;
 import de.otto.teamdojo.domain.*;
 import de.otto.teamdojo.repository.BadgeRepository;
+import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.BadgeQueryService;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.service.BadgeSkillService;
 import de.otto.teamdojo.service.dto.BadgeDTO;
+import de.otto.teamdojo.service.impl.BadgeServiceImpl;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +91,7 @@ public class BadgeResourceIntTest {
     private BadgeRepository badgeRepository;
 
     @Mock
-    private BadgeRepository badgeRepositoryMock;
+    private ActivityService activityServiceMock;
 
     @Autowired
     private BadgeMapper badgeMapper;
@@ -95,7 +99,7 @@ public class BadgeResourceIntTest {
     @Mock
     private BadgeService badgeServiceMock;
 
-    @Autowired
+//    @InjectMocks
     private BadgeService badgeService;
 
     @Autowired
@@ -138,6 +142,7 @@ public class BadgeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        badgeService = new BadgeServiceImpl(badgeRepository, badgeMapper, activityServiceMock);
         final BadgeResource badgeResource = new BadgeResource(badgeService, badgeQueryService, badgeSkillService);
         this.restBadgeMockMvc = MockMvcBuilders.standaloneSetup(badgeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
