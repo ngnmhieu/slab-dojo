@@ -16,11 +16,7 @@ export class TeamImageComponent {
     @Input() hasOverlay = false;
     constructor() {}
 
-    getDaysUntilExpiration(team: ITeam): number {
-        return moment(team.validUntil).diff(moment(), 'days');
-    }
-
     isExpired(team: ITeam): boolean {
-        return team.validUntil && this.getDaysUntilExpiration(team) < 1;
+        return team.daysUntilExpiration < 1;
     }
 }

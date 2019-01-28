@@ -107,12 +107,8 @@ export class OverviewTeamsComponent implements OnInit {
         return this.filtered && !this.isRelevant(team);
     }
 
-    getDaysUntilExpiration(team: ITeam): number {
-        return moment(team.validUntil).diff(moment(), 'days');
-    }
-
     expirationDaysVisible(team: ITeam): boolean {
-        return team.validUntil && this.getDaysUntilExpiration(team) > 0 && this.getDaysUntilExpiration(team) < 31;
+        return team.daysUntilExpiration > 0 && team.daysUntilExpiration < 31;
     }
 
     private isRelevant(team: ITeam): boolean {

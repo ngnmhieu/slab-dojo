@@ -36,7 +36,7 @@
                     <div class="team-name">
                         <a href="#" [routerLink]="['/teams', teamScore.team.shortName]">{{teamScore.team.name}}</a>
                         <div *ngIf="expirationDaysVisible(teamScore.team)" class="expiration-date">expires in
-                            {{getDaysUntilExpiration(teamScore.team)}} days
+                            {{teamScore.team.daysUntilExpiration}} days
                         </div>
                     </div>
                 </div>
