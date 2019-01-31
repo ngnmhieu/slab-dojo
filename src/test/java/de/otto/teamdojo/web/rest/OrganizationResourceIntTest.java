@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import de.otto.teamdojo.domain.enumeration.UserMode;
 /**
  * Test class for the OrganizationResource REST controller.
  *
@@ -48,6 +49,9 @@ public class OrganizationResourceIntTest {
 
     private static final Integer DEFAULT_LEVEL_UP_SCORE = 1;
     private static final Integer UPDATED_LEVEL_UP_SCORE = 2;
+
+    private static final UserMode DEFAULT_USER_MODE = UserMode.PERSON;
+    private static final UserMode UPDATED_USER_MODE = UserMode.TEAM;
 
     @Autowired
     private OrganizationRepository organizationRepository;
@@ -98,7 +102,8 @@ public class OrganizationResourceIntTest {
     public static Organization createEntity(EntityManager em) {
         Organization organization = new Organization()
             .name(DEFAULT_NAME)
-            .levelUpScore(DEFAULT_LEVEL_UP_SCORE);
+            .levelUpScore(DEFAULT_LEVEL_UP_SCORE)
+            .userMode(DEFAULT_USER_MODE);
         return organization;
     }
 
@@ -125,6 +130,7 @@ public class OrganizationResourceIntTest {
         Organization testOrganization = organizationList.get(organizationList.size() - 1);
         assertThat(testOrganization.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(DEFAULT_LEVEL_UP_SCORE);
+        assertThat(testOrganization.getUserMode()).isEqualTo(DEFAULT_USER_MODE);
     }
 
     @Test
@@ -168,6 +174,25 @@ public class OrganizationResourceIntTest {
 
     @Test
     @Transactional
+    public void checkUserModeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = organizationRepository.findAll().size();
+        // set the field null
+        organization.setUserMode(null);
+
+        // Create the Organization, which fails.
+        OrganizationDTO organizationDTO = organizationMapper.toDto(organization);
+
+        restOrganizationMockMvc.perform(post("/api/organizations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Organization> organizationList = organizationRepository.findAll();
+        assertThat(organizationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllOrganizations() throws Exception {
         // Initialize the database
         organizationRepository.saveAndFlush(organization);
@@ -178,7 +203,8 @@ public class OrganizationResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(organization.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].levelUpScore").value(hasItem(DEFAULT_LEVEL_UP_SCORE)));
+            .andExpect(jsonPath("$.[*].levelUpScore").value(hasItem(DEFAULT_LEVEL_UP_SCORE)))
+            .andExpect(jsonPath("$.[*].userMode").value(hasItem(DEFAULT_USER_MODE.toString())));
     }
     
     @Test
@@ -193,7 +219,8 @@ public class OrganizationResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.levelUpScore").value(DEFAULT_LEVEL_UP_SCORE));
+            .andExpect(jsonPath("$.levelUpScore").value(DEFAULT_LEVEL_UP_SCORE))
+            .andExpect(jsonPath("$.userMode").value(DEFAULT_USER_MODE.toString()));
     }
 
     @Test
@@ -218,7 +245,8 @@ public class OrganizationResourceIntTest {
         em.detach(updatedOrganization);
         updatedOrganization
             .name(UPDATED_NAME)
-            .levelUpScore(UPDATED_LEVEL_UP_SCORE);
+            .levelUpScore(UPDATED_LEVEL_UP_SCORE)
+            .userMode(UPDATED_USER_MODE);
         OrganizationDTO organizationDTO = organizationMapper.toDto(updatedOrganization);
 
         restOrganizationMockMvc.perform(put("/api/organizations")
@@ -232,6 +260,7 @@ public class OrganizationResourceIntTest {
         Organization testOrganization = organizationList.get(organizationList.size() - 1);
         assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(UPDATED_LEVEL_UP_SCORE);
+        assertThat(testOrganization.getUserMode()).isEqualTo(UPDATED_USER_MODE);
     }
 
     @Test

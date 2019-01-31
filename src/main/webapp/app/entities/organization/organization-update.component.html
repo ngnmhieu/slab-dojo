@@ -25,6 +25,22 @@
                     <input type="number" class="form-control" name="levelUpScore" id="field_levelUpScore"
                         [(ngModel)]="organization.levelUpScore" />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.organization.userMode"
+                           for="field_userMode">User Mode</label>
+                    <select class="form-control" name="userMode" [(ngModel)]="organization.userMode" id="field_userMode"
+                            required>
+                        <option value="PERSON">{{'teamdojoApp.UserMode.PERSON' | translate}}</option>
+                        <option value="TEAM">{{'teamdojoApp.UserMode.TEAM' | translate}}</option>
+                    </select>
+                    <div [hidden]="!(editForm.controls.userMode?.dirty && editForm.controls.userMode?.invalid)">
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.userMode?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
 
             </div>
             <div>

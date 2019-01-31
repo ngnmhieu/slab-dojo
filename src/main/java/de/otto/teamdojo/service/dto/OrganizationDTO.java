@@ -4,6 +4,8 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+import de.otto.teamdojo.domain.enumeration.UserMode;
+
 /**
  * A DTO for the Organization entity.
  */
@@ -15,6 +17,9 @@ public class OrganizationDTO implements Serializable {
     private String name;
 
     private Integer levelUpScore;
+
+    @NotNull
+    private UserMode userMode;
 
     public Long getId() {
         return id;
@@ -38,6 +43,14 @@ public class OrganizationDTO implements Serializable {
 
     public void setLevelUpScore(Integer levelUpScore) {
         this.levelUpScore = levelUpScore;
+    }
+
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
     }
 
     @Override
@@ -67,6 +80,7 @@ public class OrganizationDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", levelUpScore=" + getLevelUpScore() +
+            ", userMode='" + getUserMode() + "'" +
             "}";
     }
 }

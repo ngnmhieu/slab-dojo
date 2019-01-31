@@ -13,6 +13,14 @@
         {
             "fieldName": "levelUpScore",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "userMode",
+            "fieldType": "UserMode",
+            "fieldValues": "PERSON,TEAM",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20180517074753",
