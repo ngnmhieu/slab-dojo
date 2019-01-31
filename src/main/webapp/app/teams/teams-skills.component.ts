@@ -18,10 +18,10 @@ import { BadgeService } from 'app/entities/badge';
 import { IBadge } from 'app/shared/model/badge.model';
 import { IDimension } from 'app/shared/model/dimension.model';
 import { DimensionService } from 'app/entities/dimension';
-import { Principal } from 'app/core/auth/principal.service';
 import 'simplebar';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AccountService } from 'app/core';
 
 @Component({
     selector: 'jhi-teams-skills',
@@ -61,7 +61,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         private levelService: LevelService,
         private badgeService: BadgeService,
         private dimensionService: DimensionService,
-        private principalService: Principal
+        private accountService: AccountService
     ) {}
 
     ngOnInit() {
@@ -85,7 +85,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
-        this.principalService.identity();
+        this.accountService.identity();
     }
 
     ngOnChanges(changes: SimpleChanges) {
