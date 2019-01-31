@@ -1,16 +1,22 @@
 package de.otto.teamdojo.service.impl;
 
-import de.otto.teamdojo.domain.*;
+import de.otto.teamdojo.config.ApplicationProperties;
+import de.otto.teamdojo.domain.Activity;
+import de.otto.teamdojo.domain.Badge;
+import de.otto.teamdojo.domain.Skill;
+import de.otto.teamdojo.domain.Team;
 import de.otto.teamdojo.domain.enumeration.ActivityType;
 import de.otto.teamdojo.repository.ActivityRepository;
 import de.otto.teamdojo.repository.BadgeRepository;
 import de.otto.teamdojo.repository.SkillRepository;
 import de.otto.teamdojo.repository.TeamRepository;
 import de.otto.teamdojo.service.ActivityService;
+import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.service.dto.ActivityDTO;
 import de.otto.teamdojo.service.dto.BadgeDTO;
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
 import de.otto.teamdojo.service.mapper.ActivityMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import de.otto.teamdojo.config.ApplicationProperties;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -52,18 +57,22 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ApplicationProperties properties;
 
+    private final OrganizationService organizationService;
+
     public ActivityServiceImpl(ActivityRepository activityRepository,
                                ActivityMapper activityMapper,
                                BadgeRepository badgeRepository,
                                TeamRepository teamRepository,
                                SkillRepository skillRepository,
-                               ApplicationProperties properties) {
+                               ApplicationProperties properties,
+                               OrganizationService organizationService) {
         this.activityRepository = activityRepository;
         this.activityMapper = activityMapper;
         this.badgeRepository = badgeRepository;
         this.teamRepository = teamRepository;
         this.skillRepository = skillRepository;
         this.properties = properties;
+        this.organizationService = organizationService;
     }
 
     /**
@@ -113,7 +122,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
-        informMattermost(team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt! <" + properties.getFrontend() + "team-skill/"+teamSkill.getId()+"/vote|Traust du das "+team.getName()+" zu?>", Optional.empty());
+        informMattermost(team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt! <" + properties.getFrontend() + "team-skill/" + teamSkill.getId() + "/vote|Traust du das " + team.getName() + " zu?>", Optional.empty());
         return save(activityDTO);
     }
 
@@ -122,7 +131,7 @@ public class ActivityServiceImpl implements ActivityService {
         Team team = teamRepository.getOne(teamSkill.getTeamId());
         Skill skill = skillRepository.getOne(teamSkill.getSkillId());
 
-        informMattermost("Dir wird der Skill \"" + skill.getTitle() + "\" vorgeschlagen! <" + properties.getFrontend() + "teams/" + team.getShortName() + "/skills/" + skill.getId() + "|Skill jetzt zuweisen?>", Optional.of("@"+team.getShortName()));
+        informMattermost("Dir wird der Skill \"" + skill.getTitle() + "\" vorgeschlagen! <" + properties.getFrontend() + "teams/" + team.getShortName() + "/skills/" + skill.getId() + "|Skill jetzt zuweisen?>", Optional.of("@" + team.getShortName()));
     }
 
     /**
@@ -174,13 +183,19 @@ public class ActivityServiceImpl implements ActivityService {
         headers.setAll(map);
         Map req_body = new HashMap();
         req_body.put("text", message);
-        if(username.isPresent()){
+        if (username.isPresent()) {
             req_body.put("channel", username.get());
         }
         HttpEntity<?> request = new HttpEntity<>(req_body, headers);
-        ResponseEntity<?> response = new RestTemplate().postForEntity(properties.getMattermost(), request, String.class);
+
+        String mattermostUrl = organizationService.getCurrentOrganization().getMattermostUrl();
+        if (StringUtils.isBlank(mattermostUrl)) {
+            mattermostUrl = properties.getMattermost();
+        }
+
+        ResponseEntity<?> response = new RestTemplate().postForEntity(mattermostUrl, request, String.class);
         if (response.getStatusCodeValue() != 200) {
-            log.warn("Could not post to Mattermost");
+            log.warn("Could not post to Mattermost url " + mattermostUrl);
         }
     }
 }
