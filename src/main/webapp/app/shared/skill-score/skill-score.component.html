@@ -1,5 +1,5 @@
 <span class="badge badge-pill skill-score" [ngbPopover]="scorePopoverTpl" popoverClass="score-popover"
-      placement="top" container="body" #scorePopover="ngbPopover" triggers="" (click)="onPopupEnter(scorePopover, skill.skillId, true)"
+      placement="top-right" container="body" #scorePopover="ngbPopover" triggers="" (click)="onPopupEnter(scorePopover, skill.skillId, true)"
       (mouseenter)="onPopupEnter(scorePopover, skill.skillId, false)" (mouseleave)="onPopupLeave(scorePopover, skill.skillId)"
       autoClose="outside">
     {{skill.score}}
