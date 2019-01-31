@@ -21,6 +21,16 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "mattermostUrl",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "pattern"
+            ],
+            "fieldValidateRulesMaxlength": 255,
+            "fieldValidateRulesPattern": "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
         }
     ],
     "changelogDate": "20180517074753",

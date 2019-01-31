@@ -53,6 +53,9 @@ public class OrganizationResourceIntTest {
     private static final UserMode DEFAULT_USER_MODE = UserMode.PERSON;
     private static final UserMode UPDATED_USER_MODE = UserMode.TEAM;
 
+    private static final String DEFAULT_MATTERMOST_URL = "-.u.CoT5";
+    private static final String UPDATED_MATTERMOST_URL = "http://V.Zt.rPmr";
+
     @Autowired
     private OrganizationRepository organizationRepository;
 
@@ -103,7 +106,8 @@ public class OrganizationResourceIntTest {
         Organization organization = new Organization()
             .name(DEFAULT_NAME)
             .levelUpScore(DEFAULT_LEVEL_UP_SCORE)
-            .userMode(DEFAULT_USER_MODE);
+            .userMode(DEFAULT_USER_MODE)
+            .mattermostUrl(DEFAULT_MATTERMOST_URL);
         return organization;
     }
 
@@ -131,6 +135,7 @@ public class OrganizationResourceIntTest {
         assertThat(testOrganization.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(DEFAULT_LEVEL_UP_SCORE);
         assertThat(testOrganization.getUserMode()).isEqualTo(DEFAULT_USER_MODE);
+        assertThat(testOrganization.getMattermostUrl()).isEqualTo(DEFAULT_MATTERMOST_URL);
     }
 
     @Test
@@ -204,7 +209,8 @@ public class OrganizationResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(organization.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].levelUpScore").value(hasItem(DEFAULT_LEVEL_UP_SCORE)))
-            .andExpect(jsonPath("$.[*].userMode").value(hasItem(DEFAULT_USER_MODE.toString())));
+            .andExpect(jsonPath("$.[*].userMode").value(hasItem(DEFAULT_USER_MODE.toString())))
+            .andExpect(jsonPath("$.[*].mattermostUrl").value(hasItem(DEFAULT_MATTERMOST_URL.toString())));
     }
     
     @Test
@@ -220,7 +226,8 @@ public class OrganizationResourceIntTest {
             .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.levelUpScore").value(DEFAULT_LEVEL_UP_SCORE))
-            .andExpect(jsonPath("$.userMode").value(DEFAULT_USER_MODE.toString()));
+            .andExpect(jsonPath("$.userMode").value(DEFAULT_USER_MODE.toString()))
+            .andExpect(jsonPath("$.mattermostUrl").value(DEFAULT_MATTERMOST_URL.toString()));
     }
 
     @Test
@@ -246,7 +253,8 @@ public class OrganizationResourceIntTest {
         updatedOrganization
             .name(UPDATED_NAME)
             .levelUpScore(UPDATED_LEVEL_UP_SCORE)
-            .userMode(UPDATED_USER_MODE);
+            .userMode(UPDATED_USER_MODE)
+            .mattermostUrl(UPDATED_MATTERMOST_URL);
         OrganizationDTO organizationDTO = organizationMapper.toDto(updatedOrganization);
 
         restOrganizationMockMvc.perform(put("/api/organizations")
@@ -261,6 +269,7 @@ public class OrganizationResourceIntTest {
         assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(UPDATED_LEVEL_UP_SCORE);
         assertThat(testOrganization.getUserMode()).isEqualTo(UPDATED_USER_MODE);
+        assertThat(testOrganization.getMattermostUrl()).isEqualTo(UPDATED_MATTERMOST_URL);
     }
 
     @Test

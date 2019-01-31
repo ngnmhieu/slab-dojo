@@ -17,7 +17,8 @@
             },
             "name": "Name",
             "levelUpScore": "Level Up Score",
-            "userMode": "User Mode"
+            "userMode": "User Mode",
+            "mattermostUrl": "Mattermost Url"
         }
     }
 }

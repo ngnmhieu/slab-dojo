@@ -8,8 +8,15 @@ export interface IOrganization {
     name?: string;
     levelUpScore?: number;
     userMode?: UserMode;
+    mattermostUrl?: string;
 }
 
 export class Organization implements IOrganization {
-    constructor(public id?: number, public name?: string, public levelUpScore?: number, public userMode?: UserMode) {}
+    constructor(
+        public id?: number,
+        public name?: string,
+        public levelUpScore?: number,
+        public userMode?: UserMode,
+        public mattermostUrl?: string
+    ) {}
 }

@@ -3,7 +3,6 @@ package de.otto.teamdojo.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
-
 import de.otto.teamdojo.domain.enumeration.UserMode;
 
 /**
@@ -20,6 +19,10 @@ public class OrganizationDTO implements Serializable {
 
     @NotNull
     private UserMode userMode;
+
+    @Size(max = 255)
+    @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
+    private String mattermostUrl;
 
     public Long getId() {
         return id;
@@ -53,6 +56,14 @@ public class OrganizationDTO implements Serializable {
         this.userMode = userMode;
     }
 
+    public String getMattermostUrl() {
+        return mattermostUrl;
+    }
+
+    public void setMattermostUrl(String mattermostUrl) {
+        this.mattermostUrl = mattermostUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,6 +92,7 @@ public class OrganizationDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", levelUpScore=" + getLevelUpScore() +
             ", userMode='" + getUserMode() + "'" +
+            ", mattermostUrl='" + getMattermostUrl() + "'" +
             "}";
     }
 }

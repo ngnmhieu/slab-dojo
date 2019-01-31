@@ -37,4 +37,6 @@
     <include file="config/liquibase/changelog/20190124121700_jhipster_update.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190131112230_extend_organization_userMode.xml"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190131154030_extend_organization_mattermostUrl.xml"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>

@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(OrganizationService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Organization(0, 'AAAAAAA', 0, UserMode.PERSON);
+            elemDefault = new Organization(0, 'AAAAAAA', 0, UserMode.PERSON, 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -57,7 +57,8 @@ describe('Service Tests', () => {
                     {
                         name: 'BBBBBB',
                         levelUpScore: 1,
-                        userMode: 'BBBBBB'
+                        userMode: 'BBBBBB',
+                        mattermostUrl: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -76,7 +77,8 @@ describe('Service Tests', () => {
                     {
                         name: 'BBBBBB',
                         levelUpScore: 1,
-                        userMode: 'BBBBBB'
+                        userMode: 'BBBBBB',
+                        mattermostUrl: 'BBBBBB'
                     },
                     elemDefault
                 );
