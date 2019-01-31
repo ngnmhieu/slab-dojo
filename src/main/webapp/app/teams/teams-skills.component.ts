@@ -21,6 +21,9 @@ import { DimensionService } from 'app/entities/dimension';
 import 'simplebar';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-teams-skills',
@@ -44,6 +47,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     search$: Subject<string>;
     search: string;
     orderBy = 'title';
+    hasAuthority = false;
 
     constructor(
         private teamsSkillsService: TeamsSkillsService,
@@ -58,7 +62,8 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         private breadcrumbService: BreadcrumbService,
         private levelService: LevelService,
         private badgeService: BadgeService,
-        private dimensionService: DimensionService
+        private dimensionService: DimensionService,
+        private accountService: AccountService
     ) {}
 
     ngOnInit() {
@@ -82,6 +87,9 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
+        this.accountService.identity().then(identity => {
+            this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {

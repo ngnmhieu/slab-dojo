@@ -3,9 +3,6 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ISkill } from 'app/shared/model/skill.model';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { SkillService } from 'app/entities/skill';
-import { AccountService } from 'app/core';
-
-const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-skill-score',
@@ -14,10 +11,11 @@ const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 })
 export class SkillScoreComponent {
     @Input() skill: ISkill;
+    @Input() hasAuthority: false;
     @Output() onSkillChanged = new EventEmitter<{ iSkill: ISkill; aSkill: AchievableSkill }>();
     isEditingScore = {};
 
-    constructor(private skillService: SkillService, private accountService: AccountService) {}
+    constructor(private skillService: SkillService) {}
 
     updateScore(popover, s: IAchievableSkill) {
         this.skillService.find(s.skillId).subscribe(
@@ -38,7 +36,7 @@ export class SkillScoreComponent {
     }
 
     onPopupEnter(popover, skillId, isEditing) {
-        this.isEditingScore[skillId] = isEditing && this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+        this.isEditingScore[skillId] = isEditing && this.hasAuthority;
         if (this.isEditingScore[skillId]) {
             popover.close();
         }
