@@ -17,8 +17,7 @@
                 "rateCount": "Votes",
                 "modalTitle": "Vote for it",
                 "modalClose": "Close",
-                "modalSubmit": "Submit your voting",
-                "score": "Score: {{ score }}"
+                "modalSubmit": "Submit your voting"
             },
             "title": "Title",
             "description": "Description",

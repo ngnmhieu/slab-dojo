@@ -45,23 +45,32 @@
                                     {{getRateCount(skill.rateCount)}} <span class="rating-text" jhiTranslate="teamdojoApp.skill.detail.rateCount"></span>
 
                                     <ng-template #stars let-fill="fill" let-index="index">
-                                    <span class="star star-sm" [class.full]="fill === 100">
-                                        <span class="half star-sm" [style.width.%]="fill">&#9733;</span>&#9733;
-                                    </span>
+                                        <span class="star star-sm" [class.full]="fill === 100">
+                                            <span class="half star-sm" [style.width.%]="fill">&#9733;</span>&#9733;
+                                        </span>
                                     </ng-template>
                                 </div>
-                                <span class="badge badge-pill skill-score" [ngbPopover]="scorePopoverTpl" popover-class="score-popover"
+                                <span class="badge badge-pill skill-score" [ngbPopover]="scorePopoverTpl" popoverClass="score-popover"
                                       placement="top" container="body" #scorePopover="ngbPopover" triggers="" (click)="onPopupEnter(scorePopover, skill.skillId, true)"
-                                      (mouseenter)="onPopupEnter(scorePopover, skill.skillId, false)" (mouseleave)="onPopupLeave(scorePopover, skill.skillId)">
+                                      (mouseenter)="onPopupEnter(scorePopover, skill.skillId, false)" (mouseleave)="onPopupLeave(scorePopover, skill.skillId)"
+                                      autoClose="outside">
                                     {{skill.score}}
                                 </span>
                                 <ng-template #scorePopoverTpl>
-                                    <small *ngIf="!isEditingScore[skill.skillId]" jhiTranslate="teamdojoApp.skill.detail.score" translateValues="{score: '{{skill.score}}'}"></small>
-                                    <form *ngIf="isEditingScore[skill.skillId]" name="scoreEditing" class="score-editing" (ngSubmit)="updateScore(scorePopover, skill)">
-                                        <input class="input" type="number" name="score" [(ngModel)]="skill.score" [ngModelOptions]="{ allowInvalid: false, updateOn: 'submit' }" [min]="0" [required]="true">
-                                        <button class="button" type="submit" jhiTranslate="teamdojoApp.teamSkill.save">
+                                    <small *ngIf="!isEditingScore[skill.skillId]" jhiTranslate="teamdojoApp.teams.skills.score.title" translateValues="{score: '{{skill.score}}'}">
+                                        Score: {{skill.score}}
+                                    </small>
+                                    <form *ngIf="isEditingScore[skill.skillId]" name="scoreEditing" (ngSubmit)="updateScore(scorePopover, skill)"
+                                          class="form-inline d-flex flex-nowrap score-editing">
+                                        <label class="sr-only" for="score-input">Score</label>
+                                        <input id="score-input" class="form-control score-input" type="number" name="score"
+                                               [(ngModel)]="skill.score" [ngModelOptions]="{ allowInvalid: false, updateOn: 'submit' }"
+                                               [min]="0" [required]="true">
+                                        <button class="btn ml-1" type="submit" jhiTranslate="teamdojoApp.teams.skills.score.save">
+                                            OK
                                         </button>
-                                        <button class="button" type="button" (click)="scorePopover.close()" jhiTranslate="teamdojoApp.teamSkill.cancel">
+                                        <button class="btn ml-1" type="button" (click)="scorePopover.close()" jhiTranslate="teamdojoApp.teams.skills.score.cancel">
+                                            Cancel
                                         </button>
                                     </form>
                                 </ng-template>

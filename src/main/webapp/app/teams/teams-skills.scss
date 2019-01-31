@@ -24,21 +24,9 @@
     }
 }
 
-.score-popover{
-    background-color: $dojo-text-primary;
-}
-
-.score-editing {
-    display: flex;
-    justify-content: space-between;
-    width: 12rem;
-    .input {
-        width: 3rem;
-        text-align: center;
-    }
-
-    .button {
-
+/deep/ .score-popover {
+    #score-input {
+        width: 60px;
     }
 }
 
@@ -81,7 +69,6 @@
             line-height: 1rem;
             color: $dojo-text-inverse-primary;
             background-color: $dojo-text-primary;
-
         }
 
         .teams-skills-badge {

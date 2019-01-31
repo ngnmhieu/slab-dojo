@@ -326,10 +326,11 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     onPopupEnter(popover, skillId, isEditing) {
-        this.isEditingScore[skillId] = isEditing && this.principalService.hasAnyAuthorityDirect(['ROLE_ADMIN']);
-        if (!popover.isOpen()) {
-            popover.open();
+        this.isEditingScore[skillId] = isEditing && this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+        if (this.isEditingScore[skillId]) {
+            popover.close();
         }
+        popover.open();
     }
 
     onPopupLeave(popover, skillId) {
