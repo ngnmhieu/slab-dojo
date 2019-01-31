@@ -13,6 +13,12 @@
                 "title": "Kompetenzen",
                 "notAchieved": "Noch nicht erreicht",
                 "achievedOn": "Erreicht am",
+                "votes": "Votes",
+                "score": {
+                    "title": "Score: {{ score }}",
+                    "save": "OK",
+                    "cancel": "Abbrechen"
+                },
                 "search": {
                     "placeholder": "Suche",
                     "filter": {

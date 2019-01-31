@@ -15,6 +15,9 @@ import 'simplebar';
 import { Subject } from 'rxjs';
 import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-overview-skills',
@@ -39,12 +42,14 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
     search$: Subject<string>;
     search: string;
     orderBy = 'title';
+    hasAuthority = false;
 
     constructor(
         private jhiAlertService: JhiAlertService,
         private route: ActivatedRoute,
         private breadcrumbService: BreadcrumbService,
-        private dimensionService: DimensionService
+        private dimensionService: DimensionService,
+        private accountService: AccountService
     ) {}
 
     ngOnInit() {
@@ -90,6 +95,9 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
+        this.accountService.identity().then(identity => {
+            this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+        });
     }
 
     loadAll() {

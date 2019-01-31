@@ -13,6 +13,12 @@
                 "title": "Skills",
                 "notAchieved": "Not yet achieved",
                 "achievedOn": "Achieved on",
+                "votes": "Votes",
+                "score": {
+                    "title": "Score: {{ score }}",
+                    "save": "OK",
+                    "cancel": "Cancel"
+                },
                 "search": {
                     "placeholder": "Search",
                     "filter": {

@@ -51,6 +51,7 @@
         .skill-title {
             padding: 5px 5px 5px 20px;
             word-break: break-word;
+            flex-grow: 1;
 
             &.irrelevant {
                 opacity: 0.3;

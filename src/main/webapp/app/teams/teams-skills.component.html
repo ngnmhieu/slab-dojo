@@ -28,27 +28,29 @@
         <div class="teams-skills-list list-group" data-simplebar="init">
             <li class="list-group-item list-group-item-action flex-column align-items-start mb-3 skill-list-item"
                 [ngClass]="{'active-skill':isActiveSkill(skill), 'irrelevant-skill': skill.irrelevant, 'in-skill-details': isInSkillDetails()}"
-                *ngFor="let skill of skills | skillFilter:search | skillSort:orderBy"
-                (click)="handleSkillClicked(skill)">
+                *ngFor="let skill of skills | skillFilter:search | skillSort:orderBy">
                 <div class="d-flex flex-column">
                     <div class="d-flex">
                         <div class="skill-title d-flex flex-column" [ngClass]="{'irrelevant': skill.irrelevant}">
-                            <div>
+                            <div class="d-flex flex-row" (click)="handleSkillClicked(skill)">
                                 <a *ngIf="isInSkillDetails()" class="mb-1">{{skill.title}}</a>
                                 <a *ngIf="!isInSkillDetails()"
                                    (click)="goToDetails(skill)"
                                    class="mb-1">{{skill.title}}</a>
                             </div>
-                            <div>
-                                <ngb-rating [(rate)]="skill.rateScore" max="5" [readonly]="true" [starTemplate]="stars">
-                                </ngb-rating>
-                                {{getRateCount(skill.rateCount)}} <span class="rating-text" jhiTranslate="teamdojoApp.skill.detail.rateCount"></span>
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <div>
+                                    <ngb-rating [(rate)]="skill.rateScore" max="5" [readonly]="true" [starTemplate]="stars">
+                                    </ngb-rating>
+                                    {{getRateCount(skill.rateCount)}} <span class="rating-text" jhiTranslate="teamdojoApp.teams.skills.votes">Votes</span>
 
-                                <ng-template #stars let-fill="fill" let-index="index">
-                                    <span class="star star-sm" [class.full]="fill === 100">
-                                        <span class="half star-sm" [style.width.%]="fill">&#9733;</span>&#9733;
-                                    </span>
-                                </ng-template>
+                                    <ng-template #stars let-fill="fill" let-index="index">
+                                        <span class="star star-sm" [class.full]="fill === 100">
+                                            <span class="half star-sm" [style.width.%]="fill">&#9733;</span>&#9733;
+                                        </span>
+                                    </ng-template>
+                                </div>
+                                <jhi-skill-score [skill]="skill" [hasAuthority]="hasAuthority"></jhi-skill-score>
                             </div>
                         </div>
                         <div class="skill-status ml-auto"
