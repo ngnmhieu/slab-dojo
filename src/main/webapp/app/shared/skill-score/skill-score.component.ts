@@ -5,6 +5,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { SkillService } from 'app/entities/skill';
 import { AccountService } from 'app/core';
 
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
+
 @Component({
     selector: 'jhi-skill-score',
     templateUrl: './skill-score.component.html',
@@ -36,7 +38,7 @@ export class SkillScoreComponent {
     }
 
     onPopupEnter(popover, skillId, isEditing) {
-        this.isEditingScore[skillId] = isEditing && this.accountService.hasAnyAuthority(['ROLE_ADMIN']);
+        this.isEditingScore[skillId] = isEditing && this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
         if (this.isEditingScore[skillId]) {
             popover.close();
         }
