@@ -24,12 +24,6 @@
     }
 }
 
-/deep/ .score-popover {
-    #score-input {
-        width: 60px;
-    }
-}
-
 .teams-skills {
     h4 {
         color: $dojo-text-primary;
@@ -62,13 +56,6 @@
             &.irrelevant {
                 opacity: 0.3;
             }
-        }
-        .skill-score {
-            height: 1.3rem;
-            width: 2.8rem;
-            line-height: 1rem;
-            color: $dojo-text-inverse-primary;
-            background-color: $dojo-text-primary;
         }
 
         .teams-skills-badge {
