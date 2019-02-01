@@ -20,6 +20,8 @@ import de.otto.teamdojo.service.dto.SkillCriteria;
 import de.otto.teamdojo.service.dto.SkillDTO;
 import de.otto.teamdojo.service.mapper.SkillMapper;
 
+import javax.persistence.criteria.JoinType;
+
 /**
  * Service for executing complex queries for Skill entities in the database.
  * The main input is a {@link SkillCriteria} which gets converted to {@link Specification},
@@ -68,6 +70,18 @@ public class SkillQueryService extends QueryService<Skill> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(SkillCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Skill> specification = createSpecification(criteria);
+        return skillRepository.count(specification);
+    }
+
+    /**
      * Function to convert SkillCriteria to a {@link Specification}
      */
     private Specification<Skill> createSpecification(SkillCriteria criteria) {
@@ -104,13 +118,16 @@ public class SkillQueryService extends QueryService<Skill> {
                 specification = specification.and(buildRangeSpecification(criteria.getRateCount(), Skill_.rateCount));
             }
             if (criteria.getTeamsId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getTeamsId(), Skill_.teams, TeamSkill_.id));
+                specification = specification.and(buildSpecification(criteria.getTeamsId(),
+                    root -> root.join(Skill_.teams, JoinType.LEFT).get(TeamSkill_.id)));
             }
             if (criteria.getBadgesId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getBadgesId(), Skill_.badges, BadgeSkill_.id));
+                specification = specification.and(buildSpecification(criteria.getBadgesId(),
+                    root -> root.join(Skill_.badges, JoinType.LEFT).get(BadgeSkill_.id)));
             }
             if (criteria.getLevelsId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getLevelsId(), Skill_.levels, LevelSkill_.id));
+                specification = specification.and(buildSpecification(criteria.getLevelsId(),
+                    root -> root.join(Skill_.levels, JoinType.LEFT).get(LevelSkill_.id)));
             }
             if (criteria.getTrainingsId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getTrainingsId(), Skill_.trainings, Training_.id));
@@ -118,5 +135,4 @@ public class SkillQueryService extends QueryService<Skill> {
         }
         return specification;
     }
-
 }

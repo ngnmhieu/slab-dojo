@@ -79,7 +79,7 @@ public class TrainingResource {
     public ResponseEntity<TrainingDTO> updateTraining(@Valid @RequestBody TrainingDTO trainingDTO) throws URISyntaxException {
         log.debug("REST request to update Training : {}", trainingDTO);
         if (trainingDTO.getId() == null) {
-            return createTraining(trainingDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         TrainingDTO result = trainingService.save(trainingDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class TrainingResource {
         log.debug("REST request to get Trainings by criteria: {}", criteria);
         Page<TrainingDTO> page = trainingQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/trainings");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /trainings/count : count all the trainings.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/trainings/count")
+    @Timed
+    public ResponseEntity<Long> countTrainings(TrainingCriteria criteria) {
+        log.debug("REST request to count Trainings by criteria: {}", criteria);
+        return ResponseEntity.ok().body(trainingQueryService.countByCriteria(criteria));
     }
 
     /**

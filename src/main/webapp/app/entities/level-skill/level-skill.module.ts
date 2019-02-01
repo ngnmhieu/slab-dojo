@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    LevelSkillService,
     LevelSkillComponent,
     LevelSkillDetailComponent,
     LevelSkillUpdateComponent,
     LevelSkillDeletePopupComponent,
     LevelSkillDeleteDialogComponent,
     levelSkillRoute,
-    levelSkillPopupRoute,
-    LevelSkillResolve
+    levelSkillPopupRoute
 } from './';
 
 const ENTITY_STATES = [...levelSkillRoute, ...levelSkillPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...levelSkillRoute, ...levelSkillPopupRoute];
         LevelSkillDeletePopupComponent
     ],
     entryComponents: [LevelSkillComponent, LevelSkillUpdateComponent, LevelSkillDeleteDialogComponent, LevelSkillDeletePopupComponent],
-    providers: [LevelSkillService, LevelSkillResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoLevelSkillModule {}

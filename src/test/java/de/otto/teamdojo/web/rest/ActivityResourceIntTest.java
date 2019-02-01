@@ -1,14 +1,16 @@
 package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
+
 import de.otto.teamdojo.domain.Activity;
-import de.otto.teamdojo.domain.enumeration.ActivityType;
 import de.otto.teamdojo.repository.ActivityRepository;
-import de.otto.teamdojo.service.ActivityQueryService;
 import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.dto.ActivityDTO;
 import de.otto.teamdojo.service.mapper.ActivityMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.dto.ActivityCriteria;
+import de.otto.teamdojo.service.ActivityQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,17 +24,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import de.otto.teamdojo.domain.enumeration.ActivityType;
 /**
  * Test class for the ActivityResource REST controller.
  *
@@ -54,11 +60,8 @@ public class ActivityResourceIntTest {
     @Autowired
     private ActivityRepository activityRepository;
 
-
-
     @Autowired
     private ActivityMapper activityMapper;
-
 
     @Autowired
     private ActivityService activityService;
@@ -78,6 +81,9 @@ public class ActivityResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restActivityMockMvc;
 
     private Activity activity;
@@ -90,7 +96,8 @@ public class ActivityResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -206,7 +213,6 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
     }
-
 
     @Test
     @Transactional
@@ -351,6 +357,12 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
+
+        // Check, that the count call also returns 1
+        restActivityMockMvc.perform(get("/api/activities/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -362,6 +374,12 @@ public class ActivityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restActivityMockMvc.perform(get("/api/activities/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -413,15 +431,15 @@ public class ActivityResourceIntTest {
         // Create the Activity
         ActivityDTO activityDTO = activityMapper.toDto(activity);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityMockMvc.perform(put("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Activity in the database
         List<Activity> activityList = activityRepository.findAll();
-        assertThat(activityList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(activityList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

@@ -1,10 +1,14 @@
 package de.otto.teamdojo.service.dto;
 
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LongFilter;
-
 import java.io.Serializable;
-
+import java.util.Objects;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
+import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 
 /**
  * Criteria class for the BadgeSkill entity. This class is used in BadgeSkillResource to
@@ -15,17 +19,14 @@ import java.io.Serializable;
  * fix type specific filters.
  */
 public class BadgeSkillCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
     private LongFilter badgeId;
 
     private LongFilter skillId;
-
-    public BadgeSkillCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -49,6 +50,31 @@ public class BadgeSkillCriteria implements Serializable {
 
     public void setSkillId(LongFilter skillId) {
         this.skillId = skillId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final BadgeSkillCriteria that = (BadgeSkillCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(badgeId, that.badgeId) &&
+            Objects.equals(skillId, that.skillId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        badgeId,
+        skillId
+        );
     }
 
     @Override

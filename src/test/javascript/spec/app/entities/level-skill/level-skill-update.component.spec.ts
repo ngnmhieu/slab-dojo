@@ -1,15 +1,12 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { LevelSkillUpdateComponent } from 'app/entities/level-skill/level-skill-update.component';
 import { LevelSkillService } from 'app/entities/level-skill/level-skill.service';
 import { LevelSkill } from 'app/shared/model/level-skill.model';
-
-import { SkillService } from 'app/entities/skill';
-import { LevelService } from 'app/entities/level';
 
 describe('Component Tests', () => {
     describe('LevelSkill Management Update Component', () => {
@@ -20,8 +17,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [LevelSkillUpdateComponent],
-                providers: [SkillService, LevelService, LevelSkillService]
+                declarations: [LevelSkillUpdateComponent]
             })
                 .overrideTemplate(LevelSkillUpdateComponent, '')
                 .compileComponents();
@@ -32,39 +28,33 @@ describe('Component Tests', () => {
         });
 
         describe('save', () => {
-            it(
-                'Should call update service on save for existing entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const entity = new LevelSkill(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
-                    comp.levelSkill = entity;
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+            it('Should call update service on save for existing entity', fakeAsync(() => {
+                // GIVEN
+                const entity = new LevelSkill(123);
+                spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
+                comp.levelSkill = entity;
+                // WHEN
+                comp.save();
+                tick(); // simulate async
 
-                    // THEN
-                    expect(service.update).toHaveBeenCalledWith(entity);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(service.update).toHaveBeenCalledWith(entity);
+                expect(comp.isSaving).toEqual(false);
+            }));
 
-            it(
-                'Should call create service on save for new entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const entity = new LevelSkill();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
-                    comp.levelSkill = entity;
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+            it('Should call create service on save for new entity', fakeAsync(() => {
+                // GIVEN
+                const entity = new LevelSkill();
+                spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
+                comp.levelSkill = entity;
+                // WHEN
+                comp.save();
+                tick(); // simulate async
 
-                    // THEN
-                    expect(service.create).toHaveBeenCalledWith(entity);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(service.create).toHaveBeenCalledWith(entity);
+                expect(comp.isSaving).toEqual(false);
+            }));
         });
     });
 });

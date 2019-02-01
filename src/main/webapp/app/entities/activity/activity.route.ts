@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Activity } from 'app/shared/model/activity.model';
 import { ActivityService } from './activity.service';
 import { ActivityComponent } from './activity.component';
 import { ActivityDetailComponent } from './activity-detail.component';
 import { ActivityUpdateComponent } from './activity-update.component';
 import { ActivityDeletePopupComponent } from './activity-delete-dialog.component';
+import { IActivity } from 'app/shared/model/activity.model';
 
-@Injectable()
-export class ActivityResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class ActivityResolve implements Resolve<IActivity> {
     constructor(private service: ActivityService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Activity> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Activity>) => response.ok),
+                map((activity: HttpResponse<Activity>) => activity.body)
+            );
         }
-        return new Activity();
+        return of(new Activity());
     }
 }
 

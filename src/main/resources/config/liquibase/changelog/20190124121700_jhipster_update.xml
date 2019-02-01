@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20191218000000-1" author="sbe">
+        <modifyDataType tableName="activity" columnName="created_at" newDataType="datetime"/>
+        <modifyDataType tableName="badge" columnName="available_until" newDataType="datetime"/>
+        <modifyDataType tableName="comment" columnName="creation_date" newDataType="datetime"/>
+        <modifyDataType tableName="report" columnName="creation_date" newDataType="datetime"/>
+        <modifyDataType tableName="team_skill" columnName="completed_at" newDataType="datetime"/>
+        <modifyDataType tableName="team_skill" columnName="verified_at" newDataType="datetime"/>
+        <modifyDataType tableName="training" columnName="valid_until" newDataType="datetime"/>
+    </changeSet>
+    <changeSet id="20191218000000-2" author="sbe">
+        <addNotNullConstraint columnDataType="timestamp" columnName="created_date" tableName="jhi_user"/>
+        <dropNotNullConstraint columnDataType="varchar(60)" columnName="password_hash" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet id="20191218000000-3" author="sbe">
+        <dropIndex tableName="jhi_user" indexName="idx_user_login"/>
+        <dropIndex tableName="jhi_user" indexName="idx_user_email"/>
+    </changeSet>
+    <changeSet id="20191218000000-4" author="sbe" context="test">
+        <createTable tableName="jhi_date_time_wrapper">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
+            </column>
+            <column name="instant" type="timestamp"/>
+            <column name="local_date_time" type="timestamp"/>
+            <column name="offset_date_time" type="timestamp"/>
+            <column name="zoned_date_time" type="timestamp"/>
+            <column name="local_time" type="time"/>
+            <column name="offset_time" type="time"/>
+            <column name="local_date" type="date"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

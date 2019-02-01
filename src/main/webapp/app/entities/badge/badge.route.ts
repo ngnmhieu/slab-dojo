@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Badge } from 'app/shared/model/badge.model';
 import { BadgeService } from './badge.service';
 import { BadgeComponent } from './badge.component';
 import { BadgeDetailComponent } from './badge-detail.component';
 import { BadgeUpdateComponent } from './badge-update.component';
 import { BadgeDeletePopupComponent } from './badge-delete-dialog.component';
+import { IBadge } from 'app/shared/model/badge.model';
 
-@Injectable()
-export class BadgeResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class BadgeResolve implements Resolve<IBadge> {
     constructor(private service: BadgeService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Badge> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Badge>) => response.ok),
+                map((badge: HttpResponse<Badge>) => badge.body)
+            );
         }
-        return new Badge();
+        return of(new Badge());
     }
 }
 

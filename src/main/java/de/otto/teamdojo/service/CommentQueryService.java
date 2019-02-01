@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.Comment;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.CommentRepository;
 import de.otto.teamdojo.service.dto.CommentCriteria;
-
 import de.otto.teamdojo.service.dto.CommentDTO;
 import de.otto.teamdojo.service.mapper.CommentMapper;
 
@@ -43,6 +44,7 @@ public class CommentQueryService extends QueryService<Comment> {
 
     /**
      * Return a {@link List} of {@link CommentDTO} which matches the criteria from the database
+     *
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -55,8 +57,9 @@ public class CommentQueryService extends QueryService<Comment> {
 
     /**
      * Return a {@link Page} of {@link CommentDTO} which matches the criteria from the database
+     *
      * @param criteria The object which holds all the filters, which the entities should match.
-     * @param page The page, which should be returned.
+     * @param page     The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
@@ -65,6 +68,18 @@ public class CommentQueryService extends QueryService<Comment> {
         final Specification<Comment> specification = createSpecification(criteria);
         return commentRepository.findAll(specification, page)
             .map(commentMapper::toDto);
+    }
+
+    /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(CommentCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Comment> specification = createSpecification(criteria);
+        return commentRepository.count(specification);
     }
 
     /**
@@ -83,13 +98,14 @@ public class CommentQueryService extends QueryService<Comment> {
                 specification = specification.and(buildRangeSpecification(criteria.getCreationDate(), Comment_.creationDate));
             }
             if (criteria.getTeamId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getTeamId(), Comment_.team, Team_.id));
+                specification = specification.and(buildSpecification(criteria.getTeamId(),
+                    root -> root.join(Comment_.team, JoinType.LEFT).get(Team_.id)));
             }
             if (criteria.getSkillId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillId(), Comment_.skill, Skill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillId(),
+                    root -> root.join(Comment_.skill, JoinType.LEFT).get(Skill_.id)));
             }
         }
         return specification;
     }
-
 }

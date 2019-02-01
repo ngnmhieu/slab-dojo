@@ -3,7 +3,8 @@ import { ITeam } from 'app/shared/model/team.model';
 import { TeamsService } from 'app/teams/teams.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { TeamSkillService } from 'app/entities/team-skill';
-import { Observable } from 'rxjs/Observable';
+import { Observable, empty, of } from 'rxjs';
+import { catchError, flatMap, map, tap } from 'rxjs/operators';
 
 const TEAM_STORAGE_KEY = 'selectedTeamId';
 
@@ -18,25 +19,25 @@ export class TeamsSelectionService {
     query(): Observable<ITeam> {
         const teamIdStr = this.storage.retrieve(TEAM_STORAGE_KEY);
         if (teamIdStr !== null && !isNaN(Number(teamIdStr))) {
-            return this.teamsService
-                .find(teamIdStr)
-                .do(result => {
+            return this.teamsService.find(teamIdStr).pipe(
+                tap(result => {
                     this._selectedTeam = result.body || null;
-                })
-                .catch(err => {
+                }),
+                catchError(err => {
                     this.selectedTeam = null;
-                    return Observable.empty();
-                })
-                .flatMap((result: any) => {
-                    return this.teamSkillService
-                        .query({ 'teamId.equals': result.body.id })
-                        .do((teamSkillRes: any) => {
+                    return empty();
+                }),
+                flatMap((result: any) => {
+                    return this.teamSkillService.query({ 'teamId.equals': result.body.id }).pipe(
+                        tap((teamSkillRes: any) => {
                             this._selectedTeam.skills = teamSkillRes.body || [];
-                        })
-                        .map(() => result.body);
-                });
+                        }),
+                        map(() => result.body)
+                    );
+                })
+            );
         }
-        return Observable.of(this._selectedTeam);
+        return of(this._selectedTeam);
     }
 
     get selectedTeam() {

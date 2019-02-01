@@ -48,14 +48,13 @@ public class Team implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "team_participations",
-               joinColumns = @JoinColumn(name="teams_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="participations_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "participations_id", referencedColumnName = "id"))
     private Set<Dimension> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "team")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TeamSkill> skills = new HashSet<>();
-
     @ManyToOne
     @JsonIgnoreProperties("")
     private Image image;

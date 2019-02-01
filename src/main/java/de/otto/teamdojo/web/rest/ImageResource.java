@@ -80,7 +80,7 @@ public class ImageResource {
     public ResponseEntity<ImageDTO> updateImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
         log.debug("REST request to update Image : {}", imageDTO);
         if (imageDTO.getId() == null) {
-            return createImage(imageDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ImageDTO result = imageService.save(imageDTO);
         return ResponseEntity.ok()
@@ -102,6 +102,19 @@ public class ImageResource {
         Page<ImageDTO> page = imageQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/images");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+    * GET  /images/count : count all the images.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/images/count")
+    @Timed
+    public ResponseEntity<Long> countImages(ImageCriteria criteria) {
+        log.debug("REST request to count Images by criteria: {}", criteria);
+        return ResponseEntity.ok().body(imageQueryService.countByCriteria(criteria));
     }
 
     /**

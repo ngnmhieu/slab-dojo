@@ -56,14 +56,12 @@ public class Level implements Serializable {
     @JsonIgnoreProperties()
     private Dimension dimension;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @OneToOne    @JoinColumn(unique = true)
     private Level dependsOn;
 
     @OneToMany(mappedBy = "level")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LevelSkill> skills = new HashSet<>();
-
     @ManyToOne
     @JsonIgnoreProperties("")
     private Image image;

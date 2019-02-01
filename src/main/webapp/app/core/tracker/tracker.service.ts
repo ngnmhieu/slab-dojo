@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs/Rx';
+import { Observable, Observer, Subscription } from 'rxjs';
 
 import { CSRFService } from '../auth/csrf.service';
 import { WindowRef } from './window.service';
@@ -8,7 +8,7 @@ import { WindowRef } from './window.service';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class JhiTrackerService {
     stompClient = null;
     subscriber = null;
@@ -41,19 +41,22 @@ export class JhiTrackerService {
         this.stompClient = Stomp.over(socket);
         const headers = {};
         headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
-        this.stompClient.connect(headers, () => {
-            this.connectedPromise('success');
-            this.connectedPromise = null;
-            this.sendActivity();
-            if (!this.alreadyConnectedOnce) {
-                this.subscription = this.router.events.subscribe(event => {
-                    if (event instanceof NavigationEnd) {
-                        this.sendActivity();
-                    }
-                });
-                this.alreadyConnectedOnce = true;
+        this.stompClient.connect(
+            headers,
+            () => {
+                this.connectedPromise('success');
+                this.connectedPromise = null;
+                this.sendActivity();
+                if (!this.alreadyConnectedOnce) {
+                    this.subscription = this.router.events.subscribe(event => {
+                        if (event instanceof NavigationEnd) {
+                            this.sendActivity();
+                        }
+                    });
+                    this.alreadyConnectedOnce = true;
+                }
             }
-        });
+        );
     }
 
     disconnect() {

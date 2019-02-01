@@ -1,12 +1,14 @@
 package de.otto.teamdojo.security;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import de.otto.teamdojo.domain.PersistentToken;
 import de.otto.teamdojo.repository.PersistentTokenRepository;
 import de.otto.teamdojo.repository.UserRepository;
 import de.otto.teamdojo.service.util.RandomUtil;
+
+
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.security.PersistentTokenCache;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -23,10 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -66,34 +65,33 @@ public class PersistentTokenRememberMeServices extends
 
     private static final int TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * TOKEN_VALIDITY_DAYS;
 
-    private static final int UPGRADED_TOKEN_VALIDITY_SECONDS = 5;
+    private static final long UPGRADED_TOKEN_VALIDITY_MILLIS = 5000l;
 
-    private Cache<String, UpgradedRememberMeToken> upgradedTokenCache = CacheBuilder.newBuilder()
-        .expireAfterWrite(UPGRADED_TOKEN_VALIDITY_SECONDS, TimeUnit.SECONDS)
-        .build();
+    private final PersistentTokenCache<UpgradedRememberMeToken> upgradedTokenCache;
 
     private final PersistentTokenRepository persistentTokenRepository;
 
     private final UserRepository userRepository;
 
     public PersistentTokenRememberMeServices(JHipsterProperties jHipsterProperties,
-                                             org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
-                                             PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
+            org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
+            PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
 
         super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         this.persistentTokenRepository = persistentTokenRepository;
         this.userRepository = userRepository;
+        upgradedTokenCache = new PersistentTokenCache<>(UPGRADED_TOKEN_VALIDITY_MILLIS);
     }
 
     @Override
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
-                                                 HttpServletResponse response) {
+        HttpServletResponse response) {
 
         synchronized (this) { // prevent 2 authentication requests from the same user in parallel
             String login = null;
-            UpgradedRememberMeToken upgradedToken = upgradedTokenCache.getIfPresent(cookieTokens[0]);
+            UpgradedRememberMeToken upgradedToken = upgradedTokenCache.get(cookieTokens[0]);
             if (upgradedToken != null) {
-                login = upgradedToken.getUserLoginIfValidAndRecentUpgrade(cookieTokens);
+                login = upgradedToken.getUserLoginIfValid(cookieTokens);
                 log.debug("Detected previously upgraded login token for user '{}'", login);
             }
 
@@ -158,7 +156,7 @@ public class PersistentTokenRememberMeServices extends
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
                 PersistentToken token = getPersistentToken(cookieTokens);
-                persistentTokenRepository.delete(token);
+                persistentTokenRepository.deleteById(token.getSeries());
             } catch (InvalidCookieException ice) {
                 log.info("Invalid cookie, no persistent token could be deleted", ice);
             } catch (RememberMeAuthenticationException rmae) {
@@ -188,13 +186,12 @@ public class PersistentTokenRememberMeServices extends
         log.info("presentedToken={} / tokenValue={}", presentedToken, token.getTokenValue());
         if (!presentedToken.equals(token.getTokenValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
-            persistentTokenRepository.delete(token);
+            persistentTokenRepository.deleteById(token.getSeries());
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
                 "cookie theft attack.");
         }
-
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
-            persistentTokenRepository.delete(token);
+            persistentTokenRepository.deleteById(token.getSeries());
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }
         return token;
@@ -210,22 +207,18 @@ public class PersistentTokenRememberMeServices extends
 
         private static final long serialVersionUID = 1L;
 
-        private String[] upgradedToken;
+        private final String[] upgradedToken;
 
-        private Date upgradeTime;
-
-        private String userLogin;
+        private final String userLogin;
 
         UpgradedRememberMeToken(String[] upgradedToken, String userLogin) {
             this.upgradedToken = upgradedToken;
             this.userLogin = userLogin;
-            this.upgradeTime = new Date();
         }
 
-        String getUserLoginIfValidAndRecentUpgrade(String[] currentToken) {
+        String getUserLoginIfValid(String[] currentToken) {
             if (currentToken[0].equals(this.upgradedToken[0]) &&
-                currentToken[1].equals(this.upgradedToken[1]) &&
-                (upgradeTime.getTime() + UPGRADED_TOKEN_VALIDITY_SECONDS * 1000) > new Date().getTime()) {
+                    currentToken[1].equals(this.upgradedToken[1])) {
                 return this.userLogin;
             }
             return null;

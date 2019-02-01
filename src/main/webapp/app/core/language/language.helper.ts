@@ -6,17 +6,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { LANGUAGES } from 'app/core/language/language.constants';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class JhiLanguageHelper {
     renderer: Renderer2 = null;
     private _language: BehaviorSubject<string>;
 
     constructor(
         private translateService: TranslateService,
-        // tslint:disable-next-line: no-unused-variable
-        private rootRenderer: RendererFactory2,
         private titleService: Title,
-        private router: Router
+        private router: Router,
+        rootRenderer: RendererFactory2
     ) {
         this._language = new BehaviorSubject<string>(this.translateService.currentLang);
         this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);

@@ -74,7 +74,7 @@ public class ReportResource {
     public ResponseEntity<ReportDTO> updateReport(@Valid @RequestBody ReportDTO reportDTO) throws URISyntaxException {
         log.debug("REST request to update Report : {}", reportDTO);
         if (reportDTO.getId() == null) {
-            return createReport(reportDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ReportDTO result = reportService.save(reportDTO);
         return ResponseEntity.ok()
@@ -94,6 +94,19 @@ public class ReportResource {
         log.debug("REST request to get Reports by criteria: {}", criteria);
         List<ReportDTO> entityList = reportQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /reports/count : count all the reports.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/reports/count")
+    @Timed
+    public ResponseEntity<Long> countReports(ReportCriteria criteria) {
+        log.debug("REST request to count Reports by criteria: {}", criteria);
+        return ResponseEntity.ok().body(reportQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -13,6 +13,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TeamsEditComponent } from 'app/teams/teams-edit.component';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
+import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-teams-status',
@@ -42,7 +43,7 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
         this.team.skills = this.teamSkills;
         this.organizationService
             .query()
-            .take(1)
+            .pipe(take(1))
             .subscribe(res => {
                 this.levelUpScore = res && res.body[0] ? res.body[0].levelUpScore : 0;
             });

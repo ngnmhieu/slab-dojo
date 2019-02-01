@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IReport } from 'app/shared/model/report.model';
@@ -10,11 +10,11 @@ import { IReport } from 'app/shared/model/report.model';
 export class ReportDetailComponent implements OnInit {
     report: IReport;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ report }) => {
-            this.report = report.body ? report.body : report;
+        this.activatedRoute.data.subscribe(({ report }) => {
+            this.report = report;
         });
     }
 

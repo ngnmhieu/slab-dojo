@@ -79,7 +79,7 @@ public class CommentResource {
     public ResponseEntity<CommentDTO> updateComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to update Comment : {}", commentDTO);
         if (commentDTO.getId() == null) {
-            return createComment(commentDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CommentDTO result = commentService.save(commentDTO);
         return ResponseEntity.ok()
@@ -101,6 +101,19 @@ public class CommentResource {
         Page<CommentDTO> page = commentQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/comments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+    * GET  /comments/count : count all the comments.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/comments/count")
+    @Timed
+    public ResponseEntity<Long> countComments(CommentCriteria criteria) {
+        log.debug("REST request to count Comments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(commentQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -1,4 +1,4 @@
-import { ILevelSkill } from './level-skill.model';
+import { ILevelSkill } from 'app/shared/model//level-skill.model';
 
 export interface ILevel {
     id?: number;

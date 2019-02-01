@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    DimensionService,
     DimensionComponent,
     DimensionDetailComponent,
     DimensionUpdateComponent,
     DimensionDeletePopupComponent,
     DimensionDeleteDialogComponent,
     dimensionRoute,
-    dimensionPopupRoute,
-    DimensionResolve
+    dimensionPopupRoute
 } from './';
 
 const ENTITY_STATES = [...dimensionRoute, ...dimensionPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...dimensionRoute, ...dimensionPopupRoute];
         DimensionDeletePopupComponent
     ],
     entryComponents: [DimensionComponent, DimensionUpdateComponent, DimensionDeleteDialogComponent, DimensionDeletePopupComponent],
-    providers: [DimensionService, DimensionResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoDimensionModule {}

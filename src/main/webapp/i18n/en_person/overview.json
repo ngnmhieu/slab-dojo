@@ -21,8 +21,8 @@
             "skills": {
                 "title": "Skills"
             },
-            "navigation" : {
-                "text" : "Person overview"
+            "navigation": {
+                "text": "Person overview"
             },
             "total-score": {
                 "title": "Total"

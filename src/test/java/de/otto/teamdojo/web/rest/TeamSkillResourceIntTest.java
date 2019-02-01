@@ -16,7 +16,6 @@ import de.otto.teamdojo.service.TeamSkillQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,12 +26,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,11 +70,8 @@ public class TeamSkillResourceIntTest {
     @Autowired
     private TeamSkillRepository teamSkillRepository;
 
-
-
     @Autowired
     private TeamSkillMapper teamSkillMapper;
-    
 
     @Autowired
     private TeamSkillService teamSkillService;
@@ -94,6 +91,9 @@ public class TeamSkillResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restTeamSkillMockMvc;
 
     private TeamSkill teamSkill;
@@ -106,7 +106,8 @@ public class TeamSkillResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -223,7 +224,6 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS.toString())));
     }
     
-
     @Test
     @Transactional
     public void getTeamSkill() throws Exception {
@@ -555,6 +555,12 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())))
             .andExpect(jsonPath("$.[*].vote").value(hasItem(DEFAULT_VOTE)))
             .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS.toString())));
+
+        // Check, that the count call also returns 1
+        restTeamSkillMockMvc.perform(get("/api/team-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -566,6 +572,12 @@ public class TeamSkillResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTeamSkillMockMvc.perform(get("/api/team-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -623,15 +635,15 @@ public class TeamSkillResourceIntTest {
         // Create the TeamSkill
         TeamSkillDTO teamSkillDTO = teamSkillMapper.toDto(teamSkill);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTeamSkillMockMvc.perform(put("/api/team-skills")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(teamSkillDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the TeamSkill in the database
         List<TeamSkill> teamSkillList = teamSkillRepository.findAll();
-        assertThat(teamSkillList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(teamSkillList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

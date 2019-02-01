@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { TeamdojoTestModule } from '../../../test.module';
@@ -15,17 +15,14 @@ describe('Component Tests', () => {
         let mockEventManager: any;
         let mockActiveModal: any;
 
-        beforeEach(
-            async(() => {
-                TestBed.configureTestingModule({
-                    imports: [TeamdojoTestModule],
-                    declarations: [UserMgmtDeleteDialogComponent],
-                    providers: [UserService]
-                })
-                    .overrideTemplate(UserMgmtDeleteDialogComponent, '')
-                    .compileComponents();
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                imports: [TeamdojoTestModule],
+                declarations: [UserMgmtDeleteDialogComponent]
             })
-        );
+                .overrideTemplate(UserMgmtDeleteDialogComponent, '')
+                .compileComponents();
+        }));
 
         beforeEach(() => {
             fixture = TestBed.createComponent(UserMgmtDeleteDialogComponent);
@@ -36,25 +33,22 @@ describe('Component Tests', () => {
         });
 
         describe('confirmDelete', () => {
-            it(
-                'Should call delete service on confirmDelete',
-                inject(
-                    [],
-                    fakeAsync(() => {
-                        // GIVEN
-                        spyOn(service, 'delete').and.returnValue(Observable.of({}));
+            it('Should call delete service on confirmDelete', inject(
+                [],
+                fakeAsync(() => {
+                    // GIVEN
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
-                        // WHEN
-                        comp.confirmDelete('user');
-                        tick();
+                    // WHEN
+                    comp.confirmDelete('user');
+                    tick();
 
-                        // THEN
-                        expect(service.delete).toHaveBeenCalledWith('user');
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
-                    })
-                )
-            );
+                    // THEN
+                    expect(service.delete).toHaveBeenCalledWith('user');
+                    expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
+                    expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
+                })
+            ));
         });
     });
 });

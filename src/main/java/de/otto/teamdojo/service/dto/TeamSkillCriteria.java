@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import io.github.jhipster.service.filter.InstantFilter;
-
-
-
 
 /**
  * Criteria class for the TeamSkill entity. This class is used in TeamSkillResource to
@@ -23,8 +20,8 @@ import io.github.jhipster.service.filter.InstantFilter;
  * fix type specific filters.
  */
 public class TeamSkillCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -43,9 +40,6 @@ public class TeamSkillCriteria implements Serializable {
     private LongFilter skillId;
 
     private LongFilter teamId;
-
-    public TeamSkillCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -117,6 +111,43 @@ public class TeamSkillCriteria implements Serializable {
 
     public void setTeamId(LongFilter teamId) {
         this.teamId = teamId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final TeamSkillCriteria that = (TeamSkillCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(completedAt, that.completedAt) &&
+            Objects.equals(verifiedAt, that.verifiedAt) &&
+            Objects.equals(irrelevant, that.irrelevant) &&
+            Objects.equals(note, that.note) &&
+            Objects.equals(vote, that.vote) &&
+            Objects.equals(voters, that.voters) &&
+            Objects.equals(skillId, that.skillId) &&
+            Objects.equals(teamId, that.teamId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        completedAt,
+        verifiedAt,
+        irrelevant,
+        note,
+        vote,
+        voters,
+        skillId,
+        teamId
+        );
     }
 
     @Override

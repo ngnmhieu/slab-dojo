@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ILevel } from 'app/shared/model/level.model';
@@ -10,11 +10,11 @@ import { ILevel } from 'app/shared/model/level.model';
 export class LevelDetailComponent implements OnInit {
     level: ILevel;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ level }) => {
-            this.level = level.body ? level.body : level;
+        this.activatedRoute.data.subscribe(({ level }) => {
+            this.level = level;
         });
     }
 

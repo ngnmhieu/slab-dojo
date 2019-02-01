@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IActivity } from 'app/shared/model/activity.model';
@@ -10,11 +10,11 @@ import { IActivity } from 'app/shared/model/activity.model';
 export class ActivityDetailComponent implements OnInit {
     activity: IActivity;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ activity }) => {
-            this.activity = activity.body ? activity.body : activity;
+        this.activatedRoute.data.subscribe(({ activity }) => {
+            this.activity = activity;
         });
     }
 

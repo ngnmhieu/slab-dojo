@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import io.github.jhipster.service.filter.InstantFilter;
-
-
-
 
 /**
  * Criteria class for the Training entity. This class is used in TrainingResource to
@@ -23,8 +20,8 @@ import io.github.jhipster.service.filter.InstantFilter;
  * fix type specific filters.
  */
 public class TrainingCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -41,9 +38,6 @@ public class TrainingCriteria implements Serializable {
     private BooleanFilter isOfficial;
 
     private LongFilter skillId;
-
-    public TrainingCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -109,6 +103,41 @@ public class TrainingCriteria implements Serializable {
         this.skillId = skillId;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final TrainingCriteria that = (TrainingCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(contactPerson, that.contactPerson) &&
+            Objects.equals(link, that.link) &&
+            Objects.equals(validUntil, that.validUntil) &&
+            Objects.equals(isOfficial, that.isOfficial) &&
+            Objects.equals(skillId, that.skillId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        title,
+        description,
+        contactPerson,
+        link,
+        validUntil,
+        isOfficial,
+        skillId
+        );
+    }
+
     @Override
     public String toString() {
         return "TrainingCriteria{" +
@@ -117,7 +146,7 @@ public class TrainingCriteria implements Serializable {
                 (description != null ? "description=" + description + ", " : "") +
                 (contactPerson != null ? "contactPerson=" + contactPerson + ", " : "") +
                 (link != null ? "link=" + link + ", " : "") +
-            (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
+                (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
                 (isOfficial != null ? "isOfficial=" + isOfficial + ", " : "") +
                 (skillId != null ? "skillId=" + skillId + ", " : "") +
             "}";

@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    ImageService,
     ImageComponent,
     ImageDetailComponent,
     ImageUpdateComponent,
     ImageDeletePopupComponent,
     ImageDeleteDialogComponent,
     imageRoute,
-    imagePopupRoute,
-    ImageResolve
+    imagePopupRoute
 } from './';
 
 const ENTITY_STATES = [...imageRoute, ...imagePopupRoute];
@@ -20,7 +18,6 @@ const ENTITY_STATES = [...imageRoute, ...imagePopupRoute];
     imports: [TeamdojoSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [ImageComponent, ImageDetailComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
     entryComponents: [ImageComponent, ImageUpdateComponent, ImageDeleteDialogComponent, ImageDeletePopupComponent],
-    providers: [ImageService, ImageResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoImageModule {}

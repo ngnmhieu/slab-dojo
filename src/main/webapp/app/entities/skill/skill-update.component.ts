@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
 import { ISkill } from 'app/shared/model/skill.model';
@@ -14,22 +14,22 @@ import { TrainingService } from 'app/entities/training';
     templateUrl: './skill-update.component.html'
 })
 export class SkillUpdateComponent implements OnInit {
-    private _skill: ISkill;
+    skill: ISkill;
     isSaving: boolean;
 
     trainings: ITraining[];
 
     constructor(
         private jhiAlertService: JhiAlertService,
-        private skillService: SkillService,
+        protected skillService: SkillService,
         private trainingService: TrainingService,
-        private route: ActivatedRoute
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ skill }) => {
-            this.skill = skill.body ? skill.body : skill;
+        this.activatedRoute.data.subscribe(({ skill }) => {
+            this.skill = skill;
         });
         this.trainingService.query().subscribe(
             (res: HttpResponse<ITraining[]>) => {
@@ -52,16 +52,16 @@ export class SkillUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ISkill>>) {
-        result.subscribe((res: HttpResponse<ISkill>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ISkill>>) {
+        result.subscribe((res: HttpResponse<ISkill>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ISkill) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
@@ -82,12 +82,5 @@ export class SkillUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-    get skill() {
-        return this._skill;
-    }
-
-    set skill(skill: ISkill) {
-        this._skill = skill;
     }
 }

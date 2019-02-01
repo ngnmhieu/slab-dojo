@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ISkill } from 'app/shared/model/skill.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { SkillService } from './skill.service';
@@ -29,11 +29,11 @@ export class SkillComponent implements OnInit, OnDestroy {
     private filters: FilterQuery[] = [];
 
     constructor(
-        private skillService: SkillService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
-        private principal: Principal
+        protected skillService: SkillService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected parseLinks: JhiParseLinks,
+        protected accountService: AccountService
     ) {
         this.skills = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -80,7 +80,7 @@ export class SkillComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then(account => {
+        this.accountService.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInSkills();
@@ -106,7 +106,7 @@ export class SkillComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateSkills(data: ISkill[], headers: HttpHeaders) {
+    protected paginateSkills(data: ISkill[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {

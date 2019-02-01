@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    ActivityService,
     ActivityComponent,
     ActivityDetailComponent,
     ActivityUpdateComponent,
     ActivityDeletePopupComponent,
     ActivityDeleteDialogComponent,
     activityRoute,
-    activityPopupRoute,
-    ActivityResolve
+    activityPopupRoute
 } from './';
 
 const ENTITY_STATES = [...activityRoute, ...activityPopupRoute];
@@ -26,7 +24,6 @@ const ENTITY_STATES = [...activityRoute, ...activityPopupRoute];
         ActivityDeletePopupComponent
     ],
     entryComponents: [ActivityComponent, ActivityUpdateComponent, ActivityDeleteDialogComponent, ActivityDeletePopupComponent],
-    providers: [ActivityService, ActivityResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoActivityModule {}

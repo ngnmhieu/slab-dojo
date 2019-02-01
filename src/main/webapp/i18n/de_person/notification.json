@@ -1,8 +1,7 @@
 {
     "teamdojoApp": {
         "notification": {
-            "header": {
-            },
+            "header": {},
             "body": {
                 "text": {
                     "badgeCreated": "Neuer Badge {{ badgeName }} ist verfügbar",

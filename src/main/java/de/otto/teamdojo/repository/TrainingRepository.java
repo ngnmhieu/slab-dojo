@@ -1,16 +1,17 @@
 package de.otto.teamdojo.repository;
 
 import de.otto.teamdojo.domain.Training;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Spring Data JPA repository for the Training entity.
+ * Spring Data  repository for the Training entity.
  */
 @SuppressWarnings("unused")
 @Repository

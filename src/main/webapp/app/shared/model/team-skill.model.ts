@@ -28,6 +28,6 @@ export class TeamSkill implements ITeamSkill {
         public teamName?: string,
         public teamId?: number
     ) {
-        this.irrelevant = false;
+        this.irrelevant = this.irrelevant || false;
     }
 }

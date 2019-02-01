@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ISkill } from './skill.model';
+import { ISkill } from 'app/shared/model//skill.model';
 
 export interface ITraining {
     id?: number;
@@ -23,6 +23,6 @@ export class Training implements ITraining {
         public isOfficial?: boolean,
         public skills?: ISkill[]
     ) {
-        this.isOfficial = false;
+        this.isOfficial = this.isOfficial || false;
     }
 }

@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "team" : {
+        "team": {
             "home": {
                 "title": "Persons",
                 "createLabel": "Create a new Person",
