@@ -36,7 +36,7 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
 
     private static final List<String> ALL_FILTER = Lists.newArrayList("COMPLETE", "INCOMPLETE");
 
-    private static final int REQUIRED_VOTES_FOR_TEAM_MODE = 0;
+    private static final int REQUIRED_VOTES_FOR_TEAM_MODE = Integer.MIN_VALUE;
     private static final int REQUIRED_VOTES_FOR_PERSON_MODE = 5;
 
     private final SkillRepository skillRepository;
