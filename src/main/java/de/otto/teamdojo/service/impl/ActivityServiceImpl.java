@@ -6,6 +6,7 @@ import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.domain.Team;
 import de.otto.teamdojo.domain.enumeration.ActivityType;
+import de.otto.teamdojo.domain.enumeration.UserMode;
 import de.otto.teamdojo.repository.ActivityRepository;
 import de.otto.teamdojo.repository.BadgeRepository;
 import de.otto.teamdojo.repository.SkillRepository;
@@ -122,7 +123,14 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setCreatedAt(Instant.now());
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
-        informMattermost(team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt! <" + properties.getFrontend() + "team-skill/" + teamSkill.getId() + "/vote|Traust du das " + team.getName() + " zu?>", Optional.empty());
+
+        String message = team.getName() + " hat den Skill \"" + skill.getTitle() + " erlernt!";
+
+        if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)) {
+            message += " <" + properties.getFrontend() + "team-skill/" + teamSkill.getId() + "/vote|Traust du das " + team.getName() + " zu?>";
+        }
+
+        informMattermost(message, Optional.empty());
         return save(activityDTO);
     }
 
@@ -131,7 +139,9 @@ public class ActivityServiceImpl implements ActivityService {
         Team team = teamRepository.getOne(teamSkill.getTeamId());
         Skill skill = skillRepository.getOne(teamSkill.getSkillId());
 
-        informMattermost("Dir wird der Skill \"" + skill.getTitle() + "\" vorgeschlagen! <" + properties.getFrontend() + "teams/" + team.getShortName() + "/skills/" + skill.getId() + "|Skill jetzt zuweisen?>", Optional.of("@" + team.getShortName()));
+        informMattermost("Dir wird der Skill \"" + skill.getTitle() + "\" vorgeschlagen! <"
+            + properties.getFrontend() + "teams/" + team.getShortName() + "/skills/" + skill.getId()
+            + "|Skill jetzt zuweisen?>", Optional.of("@" + team.getShortName()));
     }
 
     /**
