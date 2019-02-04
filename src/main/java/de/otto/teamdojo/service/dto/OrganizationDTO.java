@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,6 +14,7 @@ public class OrganizationDTO implements Serializable {
     private String name;
 
     private Integer levelUpScore;
+
 
     public Long getId() {
         return id;

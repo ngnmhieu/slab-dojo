@@ -8,14 +8,14 @@
     -->
     <changeSet id="20190122103430-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="trainings_id"
+        <addForeignKeyConstraint baseColumnNames="training_id"
                                  baseTableName="training_skill"
-                                 constraintName="fk_training_skill_trainings_id"
+                                 constraintName="fk_training_skill_training_id"
                                  referencedColumnNames="id"
                                  referencedTableName="training"/>
-        <addForeignKeyConstraint baseColumnNames="skills_id"
+        <addForeignKeyConstraint baseColumnNames="skill_id"
                                  baseTableName="training_skill"
-                                 constraintName="fk_training_skill_skills_id"
+                                 constraintName="fk_training_skill_skill_id"
                                  referencedColumnNames="id"
                                  referencedTableName="skill"/>
         

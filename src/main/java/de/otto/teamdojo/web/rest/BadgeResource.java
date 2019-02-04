@@ -1,7 +1,5 @@
 package de.otto.teamdojo.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.BadgeQueryService;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.service.BadgeSkillService;
 import de.otto.teamdojo.service.dto.BadgeCriteria;
@@ -10,8 +8,8 @@ import de.otto.teamdojo.service.dto.BadgeSkillDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
 import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.BadgeQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,8 +57,7 @@ public class BadgeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/badges")
-    @Timed
-    public ResponseEntity<BadgeDTO> createBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException, JSONException {
+    public ResponseEntity<BadgeDTO> createBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException {
         log.debug("REST request to save Badge : {}", badgeDTO);
         if (badgeDTO.getId() != null) {
             throw new BadRequestAlertException("A new badge cannot already have an ID", ENTITY_NAME, "idexists");
@@ -80,8 +78,7 @@ public class BadgeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/badges")
-    @Timed
-    public ResponseEntity<BadgeDTO> updateBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException, JSONException {
+    public ResponseEntity<BadgeDTO> updateBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException {
         log.debug("REST request to update Badge : {}", badgeDTO);
         if (badgeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -100,7 +97,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK) and the list of badges in body
      */
     @GetMapping("/badges")
-    @Timed
     public ResponseEntity<List<BadgeDTO>> getAllBadges(BadgeCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Badges by criteria: {}", criteria);
 
@@ -119,7 +115,6 @@ public class BadgeResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/badges/count")
-    @Timed
     public ResponseEntity<Long> countBadges(BadgeCriteria criteria) {
         log.debug("REST request to count Badges by criteria: {}", criteria);
         return ResponseEntity.ok().body(badgeQueryService.countByCriteria(criteria));
@@ -155,7 +150,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK) and with body the badgeDTO, or with status 404 (Not Found)
      */
     @GetMapping("/badges/{id}")
-    @Timed
     public ResponseEntity<BadgeDTO> getBadge(@PathVariable Long id) {
         log.debug("REST request to get Badge : {}", id);
         Optional<BadgeDTO> badgeDTO = badgeService.findOne(id);
@@ -169,7 +163,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/badges/{id}")
-    @Timed
     public ResponseEntity<Void> deleteBadge(@PathVariable Long id) {
         log.debug("REST request to delete Badge : {}", id);
         badgeService.delete(id);

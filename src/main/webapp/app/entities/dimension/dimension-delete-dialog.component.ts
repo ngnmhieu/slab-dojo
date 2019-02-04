@@ -51,11 +51,11 @@ export class DimensionDeletePopupComponent implements OnInit, OnDestroy {
                 this.ngbModalRef.componentInstance.dimension = dimension;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/dimension', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/dimension', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

@@ -16,7 +16,7 @@ import { ILevelSkill } from 'app/shared/model/level-skill.model';
 export class LevelSkillResolve implements Resolve<ILevelSkill> {
     constructor(private service: LevelSkillService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<LevelSkill> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ILevelSkill> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class LevelSkillResolve implements Resolve<ILevelSkill> {
 
 export const levelSkillRoute: Routes = [
     {
-        path: 'level-skill',
+        path: '',
         component: LevelSkillComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const levelSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level-skill/:id/view',
+        path: ':id/view',
         component: LevelSkillDetailComponent,
         resolve: {
             levelSkill: LevelSkillResolve
@@ -51,7 +51,7 @@ export const levelSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level-skill/new',
+        path: 'new',
         component: LevelSkillUpdateComponent,
         resolve: {
             levelSkill: LevelSkillResolve
@@ -63,7 +63,7 @@ export const levelSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level-skill/:id/edit',
+        path: ':id/edit',
         component: LevelSkillUpdateComponent,
         resolve: {
             levelSkill: LevelSkillResolve
@@ -78,7 +78,7 @@ export const levelSkillRoute: Routes = [
 
 export const levelSkillPopupRoute: Routes = [
     {
-        path: 'level-skill/:id/delete',
+        path: ':id/delete',
         component: LevelSkillDeletePopupComponent,
         resolve: {
             levelSkill: LevelSkillResolve

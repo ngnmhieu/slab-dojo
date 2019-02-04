@@ -83,7 +83,6 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Comment : {}", id);
-        commentRepository.deleteById(id);
+        log.debug("Request to delete Comment : {}", id);        commentRepository.deleteById(id);
     }
 }

@@ -309,7 +309,7 @@ public class LevelSkillResourceIntTest {
 
         int databaseSizeBeforeDelete = levelSkillRepository.findAll().size();
 
-        // Get the levelSkill
+        // Delete the levelSkill
         restLevelSkillMockMvc.perform(delete("/api/level-skills/{id}", levelSkill.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

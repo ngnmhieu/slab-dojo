@@ -16,7 +16,7 @@ import { IOrganization } from 'app/shared/model/organization.model';
 export class OrganizationResolve implements Resolve<IOrganization> {
     constructor(private service: OrganizationService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Organization> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IOrganization> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class OrganizationResolve implements Resolve<IOrganization> {
 
 export const organizationRoute: Routes = [
     {
-        path: 'organization',
+        path: '',
         component: OrganizationComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/:id/view',
+        path: ':id/view',
         component: OrganizationDetailComponent,
         resolve: {
             organization: OrganizationResolve
@@ -51,7 +51,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/new',
+        path: 'new',
         component: OrganizationUpdateComponent,
         resolve: {
             organization: OrganizationResolve
@@ -63,7 +63,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/:id/edit',
+        path: ':id/edit',
         component: OrganizationUpdateComponent,
         resolve: {
             organization: OrganizationResolve
@@ -78,7 +78,7 @@ export const organizationRoute: Routes = [
 
 export const organizationPopupRoute: Routes = [
     {
-        path: 'organization/:id/delete',
+        path: ':id/delete',
         component: OrganizationDeletePopupComponent,
         resolve: {
             organization: OrganizationResolve

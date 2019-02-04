@@ -16,7 +16,7 @@ import { IReport } from 'app/shared/model/report.model';
 export class ReportResolve implements Resolve<IReport> {
     constructor(private service: ReportService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Report> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IReport> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class ReportResolve implements Resolve<IReport> {
 
 export const reportRoute: Routes = [
     {
-        path: 'report',
+        path: '',
         component: ReportComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const reportRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'report/:id/view',
+        path: ':id/view',
         component: ReportDetailComponent,
         resolve: {
             report: ReportResolve
@@ -51,7 +51,7 @@ export const reportRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'report/new',
+        path: 'new',
         component: ReportUpdateComponent,
         resolve: {
             report: ReportResolve
@@ -63,7 +63,7 @@ export const reportRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'report/:id/edit',
+        path: ':id/edit',
         component: ReportUpdateComponent,
         resolve: {
             report: ReportResolve
@@ -78,7 +78,7 @@ export const reportRoute: Routes = [
 
 export const reportPopupRoute: Routes = [
     {
-        path: 'report/:id/delete',
+        path: ':id/delete',
         component: ReportDeletePopupComponent,
         resolve: {
             report: ReportResolve

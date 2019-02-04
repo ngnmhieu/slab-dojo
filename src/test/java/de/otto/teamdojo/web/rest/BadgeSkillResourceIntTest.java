@@ -311,7 +311,7 @@ public class BadgeSkillResourceIntTest {
 
         int databaseSizeBeforeDelete = badgeSkillRepository.findAll().size();
 
-        // Get the badgeSkill
+        // Delete the badgeSkill
         restBadgeSkillMockMvc.perform(delete("/api/badge-skills/{id}", badgeSkill.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

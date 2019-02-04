@@ -17,22 +17,13 @@ import { TeamdojoAppRoutingModule } from './app-routing.module';
 import { TeamdojoHomeModule } from './home/home.module';
 import { TeamdojoAccountModule } from './account/account.module';
 import { TeamdojoEntityModule } from './entities/entity.module';
+import * as moment from 'moment';
 import { OverviewModule } from 'app/overview';
 import { TeamsModule } from './teams/teams.module';
 import { FeedbackModule } from './feedback/feedback.module';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
-import {
-    ActiveMenuDirective,
-    ErrorComponent,
-    FooterComponent,
-    JhiMainComponent,
-    NavbarComponent,
-    PageRibbonComponent,
-    ProfileService
-} from './layouts';
-import * as moment from 'moment';
+import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent, NavbarComponent, PageRibbonComponent } from './layouts';
 
 @NgModule({
     imports: [
@@ -54,13 +45,12 @@ import * as moment from 'moment';
         TeamdojoAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
         TeamdojoEntityModule,
+        TeamdojoAppRoutingModule,
         TeamsModule,
         FeedbackModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [
-        ProfileService,
-        PaginationConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,

@@ -16,7 +16,7 @@ import { IDimension } from 'app/shared/model/dimension.model';
 export class DimensionResolve implements Resolve<IDimension> {
     constructor(private service: DimensionService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Dimension> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IDimension> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class DimensionResolve implements Resolve<IDimension> {
 
 export const dimensionRoute: Routes = [
     {
-        path: 'dimension',
+        path: '',
         component: DimensionComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const dimensionRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'dimension/:id/view',
+        path: ':id/view',
         component: DimensionDetailComponent,
         resolve: {
             dimension: DimensionResolve
@@ -51,7 +51,7 @@ export const dimensionRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'dimension/new',
+        path: 'new',
         component: DimensionUpdateComponent,
         resolve: {
             dimension: DimensionResolve
@@ -63,7 +63,7 @@ export const dimensionRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'dimension/:id/edit',
+        path: ':id/edit',
         component: DimensionUpdateComponent,
         resolve: {
             dimension: DimensionResolve
@@ -78,7 +78,7 @@ export const dimensionRoute: Routes = [
 
 export const dimensionPopupRoute: Routes = [
     {
-        path: 'dimension/:id/delete',
+        path: ':id/delete',
         component: DimensionDeletePopupComponent,
         resolve: {
             dimension: DimensionResolve

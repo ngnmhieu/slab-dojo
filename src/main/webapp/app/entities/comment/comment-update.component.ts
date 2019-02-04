@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { IComment } from 'app/shared/model/comment.model';
 import { CommentService } from './comment.service';
 import { ITeam } from 'app/shared/model/team.model';
@@ -40,18 +40,20 @@ export class CommentUpdateComponent implements OnInit {
             this.comment = comment;
             this.creationDate = this.comment.creationDate != null ? this.comment.creationDate.format(DATE_TIME_FORMAT) : null;
         });
-        this.teamService.query().subscribe(
-            (res: HttpResponse<ITeam[]>) => {
-                this.teams = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.skillService.query().subscribe(
-            (res: HttpResponse<ISkill[]>) => {
-                this.skills = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.teamService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITeam[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITeam[]>) => response.body)
+            )
+            .subscribe((res: ITeam[]) => (this.teams = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.skillService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ISkill[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ISkill[]>) => response.body)
+            )
+            .subscribe((res: ISkill[]) => (this.skills = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {

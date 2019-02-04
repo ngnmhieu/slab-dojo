@@ -1,15 +1,13 @@
 # TeamDojo
 
-This application was generated using JHipster 5.0.0-beta.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0](https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0).
+This application was generated using JHipster 5.8.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.8.1](https://www.jhipster.tech/documentation-archive/v5.8.1).
 
 ## Development
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
-1. [Node.js][]: We use Node to run a development web server and build the project.
-   Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-2. [npm][]: We use NPM to manage Node dependencies.
-   Depending on your system, you can install NPM either from source or as a pre-packaged bundle.
+1.  [Node.js][]: We use Node to run a development web server and build the project.
+    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
@@ -26,26 +24,11 @@ auto-refreshes when files change on your hard drive.
     ./gradlew
     npm start
 
-[npm][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies
-by specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to
-manage dependencies. Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
+Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
 
 The `npm run` command will list all of the scripts available to run for this project.
-
-### Code Formatting
-
-Install the IntelliJ IDE EditorConfig Plugin and enable EditorConfig support
-
-**Java**
-Format your Java code by using the IntelliJ IDE Default Code Style and organize imports before committing.
-
-**Type Script**
-Run prettier before committing (`npm run prettier:format` or `npm prettier --write **/*.ts`)
-Install IntelliJ IDE Prettier Plugin and use the action `Reformat with Prettier` to format the code
-
-**Line Separators**
-Configure your IDE to use Unix LF (\n) line separators
-IntelliJ IDE: Line separator (for new files)
 
 ### Service workers
 
@@ -56,40 +39,39 @@ Service workers are commented by default, to enable them please uncomment the fo
 ```html
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(function() {
+        navigator.serviceWorker.register('./service-worker.js').then(function() {
             console.log('Service Worker Registered');
         });
     }
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generates the `sw.js`
+Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run the following command:
+For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    npm add --exact leaflet
+    npm install --save --save-exact leaflet
 
-To benefit from TypeScript type definitions from [DefinitelyTyped][] in development, you would run the following command:
+To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    npm add --dev --exact @types/leaflet
+    npm install --save-dev --save-exact @types/leaflet
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] can pick them up:
-
-Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts):
+Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
+Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
 
 ```
 import 'leaflet/dist/leaflet.js';
 ```
 
-Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css):
+Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css) file:
 
 ```
 @import '~leaflet/dist/leaflet.css';
 ```
 
-Note: there are still a few other things remaining to do for Leaflet that we won't detail here.
+Note: there are still few other things remaining to do for Leaflet that we won't detail here.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
@@ -101,37 +83,33 @@ For example, the following command:
 
     ng generate component my-component
 
-will generate changes in these files:
+will generate few files:
 
     create src/main/webapp/app/my-component/my-component.component.html
     create src/main/webapp/app/my-component/my-component.component.ts
     update src/main/webapp/app/app.module.ts
 
-### Doing API-First development using swagger-codegen
+### Doing API-First development using openapi-generator
 
-[Swagger-Codegen]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml`
-definition file by running:
+[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
 
 ```bash
-./gradlew swagger
+./gradlew openApiGenerate
 ```
 
-Then implement the generated interfaces with `@RestController` classes.
+Then implements the generated delegate classes with `@Service` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the
-swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will
-then be located at [http://localhost:7742](http://localhost:7742).
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
 Refer to [Doing API-First development][] for more details.
 
 ## Building for production
 
-To optimize the TeamDojo application for production, run:
+To optimize the teamdojo application for production, run:
 
     ./gradlew -Pprod clean bootWar
 
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references
-these new files.
+This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
 
     java -jar build/libs/*.war
@@ -148,17 +126,31 @@ To launch your application's tests, run:
 
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/)
-and can be run with:
+Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
 
     npm test
 
 For more information, refer to the [Running tests page][].
 
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Then, run a Sonar analysis:
+
+```
+./gradlew -Pprod clean test sonarqube
+```
+
+For more information, refer to the [Code quality page][].
+
 ## Using Docker to simplify development (optional)
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configurations are
-available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
 For example, to start a postgresql database in a docker container, run:
 
@@ -177,15 +169,11 @@ Then run:
 
     docker-compose -f src/main/docker/app.yml up -d
 
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the
-docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configuration files for one
-or several JHipster applications.
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate
-configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][]
-page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 ## Working with Liquibase
 
@@ -223,22 +211,22 @@ These files have to kept in sync. The following script can help with that.
     command for example: $./i18n.sh ~/projects/slab-dojo en en_person
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 5.0.0-beta.0 archive]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/running-tests/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/setting-up-ci/
+[jhipster 5.8.1 archive]: https://www.jhipster.tech/documentation-archive/v5.8.1
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v5.8.1/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v5.8.1/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v5.8.1/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v5.8.1/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v5.8.1/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v5.8.1/setting-up-ci/
 [node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
 [webpack]: https://webpack.github.io/
 [angular cli]: https://cli.angular.io/
 [browsersync]: http://www.browsersync.io/
-[karma]: http://karma-runner.github.io/
+[jest]: https://facebook.github.io/jest/
 [jasmine]: http://jasmine.github.io/2.0/introduction.html
 [protractor]: https://angular.github.io/protractor/
 [leaflet]: http://leafletjs.com/
 [definitelytyped]: http://definitelytyped.org/
-[swagger-codegen]: https://github.com/swagger-api/swagger-codegen
+[openapi-generator]: https://openapi-generator.tech
 [swagger-editor]: http://editor.swagger.io
-[doing api-first development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/doing-api-first-development/
+[doing api-first development]: https://www.jhipster.tech/documentation-archive/v5.8.1/doing-api-first-development/

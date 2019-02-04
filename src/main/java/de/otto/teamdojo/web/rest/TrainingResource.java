@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.TrainingService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -53,7 +51,6 @@ public class TrainingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/trainings")
-    @Timed
     public ResponseEntity<TrainingDTO> createTraining(@Valid @RequestBody TrainingDTO trainingDTO) throws URISyntaxException {
         log.debug("REST request to save Training : {}", trainingDTO);
         if (trainingDTO.getId() != null) {
@@ -75,7 +72,6 @@ public class TrainingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/trainings")
-    @Timed
     public ResponseEntity<TrainingDTO> updateTraining(@Valid @RequestBody TrainingDTO trainingDTO) throws URISyntaxException {
         log.debug("REST request to update Training : {}", trainingDTO);
         if (trainingDTO.getId() == null) {
@@ -95,7 +91,6 @@ public class TrainingResource {
      * @return the ResponseEntity with status 200 (OK) and the list of trainings in body
      */
     @GetMapping("/trainings")
-    @Timed
     public ResponseEntity<List<TrainingDTO>> getAllTrainings(TrainingCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Trainings by criteria: {}", criteria);
         Page<TrainingDTO> page = trainingQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +105,6 @@ public class TrainingResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/trainings/count")
-    @Timed
     public ResponseEntity<Long> countTrainings(TrainingCriteria criteria) {
         log.debug("REST request to count Trainings by criteria: {}", criteria);
         return ResponseEntity.ok().body(trainingQueryService.countByCriteria(criteria));
@@ -123,7 +117,6 @@ public class TrainingResource {
      * @return the ResponseEntity with status 200 (OK) and with body the trainingDTO, or with status 404 (Not Found)
      */
     @GetMapping("/trainings/{id}")
-    @Timed
     public ResponseEntity<TrainingDTO> getTraining(@PathVariable Long id) {
         log.debug("REST request to get Training : {}", id);
         Optional<TrainingDTO> trainingDTO = trainingService.findOne(id);
@@ -137,7 +130,6 @@ public class TrainingResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/trainings/{id}")
-    @Timed
     public ResponseEntity<Void> deleteTraining(@PathVariable Long id) {
         log.debug("REST request to delete Training : {}", id);
         trainingService.delete(id);

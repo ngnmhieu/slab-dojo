@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ITeam } from 'app/shared/model/team.model';
 import { TeamService } from './team.service';
 import { IDimension } from 'app/shared/model/dimension.model';
@@ -36,18 +36,20 @@ export class TeamUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ team }) => {
             this.team = team;
         });
-        this.dimensionService.query().subscribe(
-            (res: HttpResponse<IDimension[]>) => {
-                this.dimensions = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.imageService.query().subscribe(
-            (res: HttpResponse<IImage[]>) => {
-                this.images = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.dimensionService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IDimension[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IDimension[]>) => response.body)
+            )
+            .subscribe((res: IDimension[]) => (this.dimensions = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.imageService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IImage[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IImage[]>) => response.body)
+            )
+            .subscribe((res: IImage[]) => (this.images = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {

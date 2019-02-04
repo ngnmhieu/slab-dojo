@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { IDimension } from 'app/shared/model/dimension.model';
 import { DimensionService } from './dimension.service';
 import { ITeam } from 'app/shared/model/team.model';
@@ -36,18 +36,20 @@ export class DimensionUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ dimension }) => {
             this.dimension = dimension;
         });
-        this.teamService.query().subscribe(
-            (res: HttpResponse<ITeam[]>) => {
-                this.teams = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.badgeService.query().subscribe(
-            (res: HttpResponse<IBadge[]>) => {
-                this.badges = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.teamService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITeam[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITeam[]>) => response.body)
+            )
+            .subscribe((res: ITeam[]) => (this.teams = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.badgeService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IBadge[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IBadge[]>) => response.body)
+            )
+            .subscribe((res: IBadge[]) => (this.badges = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
