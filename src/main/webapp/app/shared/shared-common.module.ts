@@ -10,6 +10,7 @@ import { SkillFilterPipe } from 'app/shared/pipe/skill-filter.pipe';
 import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
+import { DojoTranslateDirective } from 'app/shared/language/dojoTranslate.directive';
 
 @NgModule({
     imports: [TeamdojoSharedLibsModule],
@@ -19,6 +20,7 @@ import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selectio
         JhiAlertErrorComponent,
         SkillFilterPipe,
         SkillSortPipe,
+        DojoTranslateDirective,
         ImageUrlPipe,
         TruncateStringPipe,
         AchievementItemComponent,
@@ -33,6 +35,7 @@ import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selectio
         JhiAlertComponent,
         JhiAlertErrorComponent,
         SkillFilterPipe,
+        DojoTranslateDirective,
         SkillSortPipe,
         ImageUrlPipe,
         TruncateStringPipe,
