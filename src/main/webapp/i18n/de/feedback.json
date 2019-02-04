@@ -12,5 +12,19 @@
                 "submit": "Senden"
             }
         }
+    },
+    "persondojoApp": {
+        "feedback": {
+            "home": {
+                "title": "Feedback",
+                "createLabel": "Feedback geben"
+            },
+            "title": "Titel",
+            "description": "Beschreibung",
+            "type": "Typ",
+            "action": {
+                "submit": "Senden"
+            }
+        }
     }
 }

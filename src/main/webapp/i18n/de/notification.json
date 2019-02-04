@@ -9,5 +9,16 @@
                 }
             }
         }
+    },
+    "persondojoApp": {
+        "notification": {
+            "header": {},
+            "body": {
+                "text": {
+                    "badgeCreated": "Neuer Badge {{ badgeName }} ist verfügbar",
+                    "skillCompleted": "Skill {{ skillTitle }} wurde erlernt"
+                }
+            }
+        }
     }
 }
