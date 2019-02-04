@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IActivity } from 'app/shared/model/activity.model';
@@ -21,7 +22,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
     links: any;
     page: any;
     predicate: any;
-    queryCount: any;
     reverse: any;
     totalItems: number;
 

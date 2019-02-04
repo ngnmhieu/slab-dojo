@@ -62,8 +62,8 @@ public class TrainingResourceIntTest {
     private static final String DEFAULT_CONTACT_PERSON = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT_PERSON = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LINK = "v.W.mvR";
-    private static final String UPDATED_LINK = "tw.hv.C-;";
+    private static final String DEFAULT_LINK = "..0j";
+    private static final String UPDATED_LINK = "https://Zv.spI";
 
     private static final Instant DEFAULT_VALID_UNTIL = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_VALID_UNTIL = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -555,10 +555,10 @@ public class TrainingResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(training.getId().intValue())))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())))
-            .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK.toString())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON)))
+            .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK)))
             .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())))
             .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())));
 
@@ -660,7 +660,7 @@ public class TrainingResourceIntTest {
 
         int databaseSizeBeforeDelete = trainingRepository.findAll().size();
 
-        // Get the training
+        // Delete the training
         restTrainingMockMvc.perform(delete("/api/trainings/{id}", training.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

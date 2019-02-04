@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ISkill } from 'app/shared/model/skill.model';
 import { SkillService } from './skill.service';
 import { ITraining } from 'app/shared/model/training.model';
@@ -31,12 +31,13 @@ export class SkillUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ skill }) => {
             this.skill = skill;
         });
-        this.trainingService.query().subscribe(
-            (res: HttpResponse<ITraining[]>) => {
-                this.trainings = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.trainingService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITraining[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITraining[]>) => response.body)
+            )
+            .subscribe((res: ITraining[]) => (this.trainings = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {

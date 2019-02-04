@@ -1,7 +1,7 @@
-import { ITeamSkill } from 'app/shared/model//team-skill.model';
-import { IBadgeSkill } from 'app/shared/model//badge-skill.model';
-import { ILevelSkill } from 'app/shared/model//level-skill.model';
-import { ITraining } from 'app/shared/model//training.model';
+import { ITeamSkill } from 'app/shared/model/team-skill.model';
+import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
+import { ILevelSkill } from 'app/shared/model/level-skill.model';
+import { ITraining } from 'app/shared/model/training.model';
 
 export interface ISkill {
     id?: number;

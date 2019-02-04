@@ -42,7 +42,6 @@ public class LevelSkillServiceImpl implements LevelSkillService {
     @Override
     public LevelSkillDTO save(LevelSkillDTO levelSkillDTO) {
         log.debug("Request to save LevelSkill : {}", levelSkillDTO);
-
         LevelSkill levelSkill = levelSkillMapper.toEntity(levelSkillDTO);
         levelSkill = levelSkillRepository.save(levelSkill);
         return levelSkillMapper.toDto(levelSkill);
@@ -84,7 +83,6 @@ public class LevelSkillServiceImpl implements LevelSkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete LevelSkill : {}", id);
-        levelSkillRepository.deleteById(id);
+        log.debug("Request to delete LevelSkill : {}", id);        levelSkillRepository.deleteById(id);
     }
 }

@@ -346,8 +346,8 @@ public class DimensionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(dimension.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restDimensionMockMvc.perform(get("/api/dimensions/count?sort=id,desc&" + filter))
@@ -439,7 +439,7 @@ public class DimensionResourceIntTest {
 
         int databaseSizeBeforeDelete = dimensionRepository.findAll().size();
 
-        // Get the dimension
+        // Delete the dimension
         restDimensionMockMvc.perform(delete("/api/dimensions/{id}", dimension.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

@@ -47,11 +47,11 @@ export class CommentDeletePopupComponent implements OnInit, OnDestroy {
                 this.ngbModalRef.componentInstance.comment = comment;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/comment', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/comment', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

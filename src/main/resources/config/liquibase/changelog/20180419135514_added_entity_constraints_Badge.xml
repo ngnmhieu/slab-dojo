@@ -8,9 +8,9 @@
     -->
     <changeSet id="20180419135514-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="badges_id"
+        <addForeignKeyConstraint baseColumnNames="badge_id"
                                  baseTableName="badge_dimensions"
-                                 constraintName="fk_badge_dimensions_badges_id"
+                                 constraintName="fk_badge_dimensions_badge_id"
                                  referencedColumnNames="id"
                                  referencedTableName="badge"/>
         <addForeignKeyConstraint baseColumnNames="dimensions_id"

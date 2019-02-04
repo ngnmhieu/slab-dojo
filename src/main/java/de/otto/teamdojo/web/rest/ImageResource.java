@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.ImageService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -53,7 +51,6 @@ public class ImageResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/images")
-    @Timed
     public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
         log.debug("REST request to save Image : {}", imageDTO);
         if (imageDTO.getId() != null) {
@@ -75,7 +72,6 @@ public class ImageResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/images")
-    @Timed
     public ResponseEntity<ImageDTO> updateImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
         log.debug("REST request to update Image : {}", imageDTO);
         if (imageDTO.getId() == null) {
@@ -95,7 +91,6 @@ public class ImageResource {
      * @return the ResponseEntity with status 200 (OK) and the list of images in body
      */
     @GetMapping("/images")
-    @Timed
     public ResponseEntity<List<ImageDTO>> getAllImages(ImageCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Images by criteria: {}", criteria);
         Page<ImageDTO> page = imageQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +105,6 @@ public class ImageResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/images/count")
-    @Timed
     public ResponseEntity<Long> countImages(ImageCriteria criteria) {
         log.debug("REST request to count Images by criteria: {}", criteria);
         return ResponseEntity.ok().body(imageQueryService.countByCriteria(criteria));
@@ -123,7 +117,6 @@ public class ImageResource {
      * @return the ResponseEntity with status 200 (OK) and with body the imageDTO, or with status 404 (Not Found)
      */
     @GetMapping("/images/{id}")
-    @Timed
     public ResponseEntity<ImageDTO> getImage(@PathVariable Long id) {
         log.debug("REST request to get Image : {}", id);
         Optional<ImageDTO> imageDTO = imageService.findOne(id);
@@ -137,7 +130,6 @@ public class ImageResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/images/{id}")
-    @Timed
     public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
         log.debug("REST request to delete Image : {}", id);
         imageService.delete(id);

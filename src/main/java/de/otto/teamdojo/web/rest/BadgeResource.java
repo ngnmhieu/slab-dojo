@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -53,7 +51,6 @@ public class BadgeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/badges")
-    @Timed
     public ResponseEntity<BadgeDTO> createBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException {
         log.debug("REST request to save Badge : {}", badgeDTO);
         if (badgeDTO.getId() != null) {
@@ -75,7 +72,6 @@ public class BadgeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/badges")
-    @Timed
     public ResponseEntity<BadgeDTO> updateBadge(@Valid @RequestBody BadgeDTO badgeDTO) throws URISyntaxException {
         log.debug("REST request to update Badge : {}", badgeDTO);
         if (badgeDTO.getId() == null) {
@@ -95,7 +91,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK) and the list of badges in body
      */
     @GetMapping("/badges")
-    @Timed
     public ResponseEntity<List<BadgeDTO>> getAllBadges(BadgeCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Badges by criteria: {}", criteria);
         Page<BadgeDTO> page = badgeQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +105,6 @@ public class BadgeResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/badges/count")
-    @Timed
     public ResponseEntity<Long> countBadges(BadgeCriteria criteria) {
         log.debug("REST request to count Badges by criteria: {}", criteria);
         return ResponseEntity.ok().body(badgeQueryService.countByCriteria(criteria));
@@ -123,7 +117,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK) and with body the badgeDTO, or with status 404 (Not Found)
      */
     @GetMapping("/badges/{id}")
-    @Timed
     public ResponseEntity<BadgeDTO> getBadge(@PathVariable Long id) {
         log.debug("REST request to get Badge : {}", id);
         Optional<BadgeDTO> badgeDTO = badgeService.findOne(id);
@@ -137,7 +130,6 @@ public class BadgeResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/badges/{id}")
-    @Timed
     public ResponseEntity<Void> deleteBadge(@PathVariable Long id) {
         log.debug("REST request to delete Badge : {}", id);
         badgeService.delete(id);

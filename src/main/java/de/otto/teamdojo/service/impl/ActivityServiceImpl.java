@@ -42,7 +42,6 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ActivityDTO save(ActivityDTO activityDTO) {
         log.debug("Request to save Activity : {}", activityDTO);
-
         Activity activity = activityMapper.toEntity(activityDTO);
         activity = activityRepository.save(activity);
         return activityMapper.toDto(activity);
@@ -84,7 +83,6 @@ public class ActivityServiceImpl implements ActivityService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Activity : {}", id);
-        activityRepository.deleteById(id);
+        log.debug("Request to delete Activity : {}", id);        activityRepository.deleteById(id);
     }
 }

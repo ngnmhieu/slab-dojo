@@ -16,7 +16,7 @@ import { ITraining } from 'app/shared/model/training.model';
 export class TrainingResolve implements Resolve<ITraining> {
     constructor(private service: TrainingService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Training> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ITraining> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class TrainingResolve implements Resolve<ITraining> {
 
 export const trainingRoute: Routes = [
     {
-        path: 'training',
+        path: '',
         component: TrainingComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const trainingRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'training/:id/view',
+        path: ':id/view',
         component: TrainingDetailComponent,
         resolve: {
             training: TrainingResolve
@@ -51,7 +51,7 @@ export const trainingRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'training/new',
+        path: 'new',
         component: TrainingUpdateComponent,
         resolve: {
             training: TrainingResolve
@@ -63,7 +63,7 @@ export const trainingRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'training/:id/edit',
+        path: ':id/edit',
         component: TrainingUpdateComponent,
         resolve: {
             training: TrainingResolve
@@ -78,7 +78,7 @@ export const trainingRoute: Routes = [
 
 export const trainingPopupRoute: Routes = [
     {
-        path: 'training/:id/delete',
+        path: ':id/delete',
         component: TrainingDeletePopupComponent,
         resolve: {
             training: TrainingResolve

@@ -24,7 +24,7 @@
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 4096 }">
+                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4096 }">
                         This field cannot be longer than 4096 characters.
                         </small>
                     </div>
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="teamdojoApp.report.creationDate" for="field_creationDate">Creation Date</label>
                     <div class="d-flex">
-                        <input id="field_creationDate" type="datetime-local" class="form-control" name="creationDate" [(ngModel)]="creationDate"
+                        <input id="field_creationDate" type="datetime-local" class="form-control" name="creationDate" [(ngModel)]="creationDate" placeholder="YYYY-MM-DD HH:mm"
                         required/>
                     </div>
                     <div [hidden]="!(editForm.controls.creationDate?.dirty && editForm.controls.creationDate?.invalid)">

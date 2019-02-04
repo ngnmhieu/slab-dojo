@@ -355,7 +355,7 @@ public class ActivityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(activity.getId().intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())))
+            .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())));
 
         // Check, that the count call also returns 1
@@ -450,7 +450,7 @@ public class ActivityResourceIntTest {
 
         int databaseSizeBeforeDelete = activityRepository.findAll().size();
 
-        // Get the activity
+        // Delete the activity
         restActivityMockMvc.perform(delete("/api/activities/{id}", activity.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

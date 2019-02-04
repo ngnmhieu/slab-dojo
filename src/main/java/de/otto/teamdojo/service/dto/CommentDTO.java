@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -17,6 +16,7 @@ public class CommentDTO implements Serializable {
 
     @NotNull
     private Instant creationDate;
+
 
     private Long teamId;
 

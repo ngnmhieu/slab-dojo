@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -20,6 +19,7 @@ public class ActivityDTO implements Serializable {
 
     @NotNull
     private Instant createdAt;
+
 
     public Long getId() {
         return id;

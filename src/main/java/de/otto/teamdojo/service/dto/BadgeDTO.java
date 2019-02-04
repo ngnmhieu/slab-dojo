@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -36,6 +35,7 @@ public class BadgeDTO implements Serializable {
 
     @Min(value = 0)
     private Integer completionBonus;
+
 
     private Set<DimensionDTO> dimensions = new HashSet<>();
 

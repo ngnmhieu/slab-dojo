@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,6 +16,7 @@ public class DimensionDTO implements Serializable {
 
     @Size(max = 255)
     private String description;
+
 
     public Long getId() {
         return id;

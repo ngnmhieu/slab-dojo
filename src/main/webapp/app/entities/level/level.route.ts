@@ -16,7 +16,7 @@ import { ILevel } from 'app/shared/model/level.model';
 export class LevelResolve implements Resolve<ILevel> {
     constructor(private service: LevelService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Level> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ILevel> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class LevelResolve implements Resolve<ILevel> {
 
 export const levelRoute: Routes = [
     {
-        path: 'level',
+        path: '',
         component: LevelComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/:id/view',
+        path: ':id/view',
         component: LevelDetailComponent,
         resolve: {
             level: LevelResolve
@@ -51,7 +51,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/new',
+        path: 'new',
         component: LevelUpdateComponent,
         resolve: {
             level: LevelResolve
@@ -63,7 +63,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/:id/edit',
+        path: ':id/edit',
         component: LevelUpdateComponent,
         resolve: {
             level: LevelResolve
@@ -78,7 +78,7 @@ export const levelRoute: Routes = [
 
 export const levelPopupRoute: Routes = [
     {
-        path: 'level/:id/delete',
+        path: ':id/delete',
         component: LevelDeletePopupComponent,
         resolve: {
             level: LevelResolve

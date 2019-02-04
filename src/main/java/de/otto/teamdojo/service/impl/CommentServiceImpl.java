@@ -42,7 +42,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
-
         Comment comment = commentMapper.toEntity(commentDTO);
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);
@@ -84,7 +83,6 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Comment : {}", id);
-        commentRepository.deleteById(id);
+        log.debug("Request to delete Comment : {}", id);        commentRepository.deleteById(id);
     }
 }

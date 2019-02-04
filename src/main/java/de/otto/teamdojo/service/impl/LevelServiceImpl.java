@@ -42,7 +42,6 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public LevelDTO save(LevelDTO levelDTO) {
         log.debug("Request to save Level : {}", levelDTO);
-
         Level level = levelMapper.toEntity(levelDTO);
         level = levelRepository.save(level);
         return levelMapper.toDto(level);
@@ -84,7 +83,6 @@ public class LevelServiceImpl implements LevelService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Level : {}", id);
-        levelRepository.deleteById(id);
+        log.debug("Request to delete Level : {}", id);        levelRepository.deleteById(id);
     }
 }

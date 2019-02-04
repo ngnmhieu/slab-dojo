@@ -42,7 +42,6 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageDTO save(ImageDTO imageDTO) {
         log.debug("Request to save Image : {}", imageDTO);
-
         Image image = imageMapper.toEntity(imageDTO);
         image = imageRepository.save(image);
         return imageMapper.toDto(image);
@@ -84,7 +83,6 @@ public class ImageServiceImpl implements ImageService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Image : {}", id);
-        imageRepository.deleteById(id);
+        log.debug("Request to delete Image : {}", id);        imageRepository.deleteById(id);
     }
 }

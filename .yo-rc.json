@@ -4,7 +4,7 @@
       "packageName": "de.otto.teamdojo",
       "nativeLanguage": "en"
     },
-    "jhipsterVersion": "5.7.2",
+    "jhipsterVersion": "5.8.1",
     "applicationType": "monolith",
     "baseName": "teamdojo",
     "packageName": "de.otto.teamdojo",
@@ -35,6 +35,8 @@
       "en",
       "de"
     ],
-    "reactive": false
+    "reactive": false,
+    "entitySuffix": "",
+    "dtoSuffix": "DTO"
   }
 }

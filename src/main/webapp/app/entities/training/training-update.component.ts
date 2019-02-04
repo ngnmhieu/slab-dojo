@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ITraining } from 'app/shared/model/training.model';
 import { TrainingService } from './training.service';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -35,12 +35,13 @@ export class TrainingUpdateComponent implements OnInit {
             this.training = training;
             this.validUntil = this.training.validUntil != null ? this.training.validUntil.format(DATE_TIME_FORMAT) : null;
         });
-        this.skillService.query().subscribe(
-            (res: HttpResponse<ISkill[]>) => {
-                this.skills = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.skillService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ISkill[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ISkill[]>) => response.body)
+            )
+            .subscribe((res: ISkill[]) => (this.skills = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {

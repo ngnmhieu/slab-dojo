@@ -16,7 +16,7 @@ import { ITeamSkill } from 'app/shared/model/team-skill.model';
 export class TeamSkillResolve implements Resolve<ITeamSkill> {
     constructor(private service: TeamSkillService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TeamSkill> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ITeamSkill> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class TeamSkillResolve implements Resolve<ITeamSkill> {
 
 export const teamSkillRoute: Routes = [
     {
-        path: 'team-skill',
+        path: '',
         component: TeamSkillComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const teamSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team-skill/:id/view',
+        path: ':id/view',
         component: TeamSkillDetailComponent,
         resolve: {
             teamSkill: TeamSkillResolve
@@ -51,7 +51,7 @@ export const teamSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team-skill/new',
+        path: 'new',
         component: TeamSkillUpdateComponent,
         resolve: {
             teamSkill: TeamSkillResolve
@@ -63,7 +63,7 @@ export const teamSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team-skill/:id/edit',
+        path: ':id/edit',
         component: TeamSkillUpdateComponent,
         resolve: {
             teamSkill: TeamSkillResolve
@@ -78,7 +78,7 @@ export const teamSkillRoute: Routes = [
 
 export const teamSkillPopupRoute: Routes = [
     {
-        path: 'team-skill/:id/delete',
+        path: ':id/delete',
         component: TeamSkillDeletePopupComponent,
         resolve: {
             teamSkill: TeamSkillResolve

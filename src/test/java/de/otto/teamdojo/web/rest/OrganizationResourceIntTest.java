@@ -261,7 +261,7 @@ public class OrganizationResourceIntTest {
 
         int databaseSizeBeforeDelete = organizationRepository.findAll().size();
 
-        // Get the organization
+        // Delete the organization
         restOrganizationMockMvc.perform(delete("/api/organizations/{id}", organization.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

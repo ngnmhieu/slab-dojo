@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,6 +9,7 @@ import java.util.Objects;
 public class LevelSkillDTO implements Serializable {
 
     private Long id;
+
 
     private Long skillId;
 

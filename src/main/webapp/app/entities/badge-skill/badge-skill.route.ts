@@ -16,7 +16,7 @@ import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
 export class BadgeSkillResolve implements Resolve<IBadgeSkill> {
     constructor(private service: BadgeSkillService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<BadgeSkill> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IBadgeSkill> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class BadgeSkillResolve implements Resolve<IBadgeSkill> {
 
 export const badgeSkillRoute: Routes = [
     {
-        path: 'badge-skill',
+        path: '',
         component: BadgeSkillComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const badgeSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge-skill/:id/view',
+        path: ':id/view',
         component: BadgeSkillDetailComponent,
         resolve: {
             badgeSkill: BadgeSkillResolve
@@ -51,7 +51,7 @@ export const badgeSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge-skill/new',
+        path: 'new',
         component: BadgeSkillUpdateComponent,
         resolve: {
             badgeSkill: BadgeSkillResolve
@@ -63,7 +63,7 @@ export const badgeSkillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge-skill/:id/edit',
+        path: ':id/edit',
         component: BadgeSkillUpdateComponent,
         resolve: {
             badgeSkill: BadgeSkillResolve
@@ -78,7 +78,7 @@ export const badgeSkillRoute: Routes = [
 
 export const badgeSkillPopupRoute: Routes = [
     {
-        path: 'badge-skill/:id/delete',
+        path: ':id/delete',
         component: BadgeSkillDeletePopupComponent,
         resolve: {
             badgeSkill: BadgeSkillResolve

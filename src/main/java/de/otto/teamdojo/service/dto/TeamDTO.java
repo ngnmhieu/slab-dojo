@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -25,6 +24,7 @@ public class TeamDTO implements Serializable {
     private String slogan;
 
     private String contactPerson;
+
 
     private Set<DimensionDTO> participations = new HashSet<>();
 
