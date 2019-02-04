@@ -40,10 +40,8 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
 
     private getTranslation() {
         let translationKey = this.dojoTranslate;
-        console.log(translationKey);
 
         if (this.organizationService.getCurrent().userMode == UserMode.PERSON) {
-            console.log('PERSON mode');
             translationKey = translationKey.replace('teamdojoApp', 'persondojoApp');
         }
 
