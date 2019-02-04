@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'app/core';
+import { SessionStorageService } from 'ngx-webstorage';
+
+import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 import { TeamsSelectionComponent } from 'app/shared/teams-selection/teams-selection.component';
@@ -13,6 +15,10 @@ import { IDimension } from 'app/shared/model/dimension.model';
 import { ISkill } from 'app/shared/model/skill.model';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { IBreadcrumb } from 'app/shared/model/breadcrumb.model';
+import { OrganizationService } from 'app/entities/organization';
+import { IOrganization, Organization } from 'app/shared/model/organization.model';
+import { filter, map } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'jhi-navbar',
@@ -39,14 +45,16 @@ export class NavbarComponent implements OnInit {
         private loginService: LoginService,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper,
-        private principal: Principal,
+        private sessionStorage: SessionStorageService,
+        private accountService: AccountService,
         private loginModalService: LoginModalService,
         private teamsSelectionService: TeamsSelectionService,
         private profileService: ProfileService,
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,
-        private breadcrumbService: BreadcrumbService
+        private breadcrumbService: BreadcrumbService,
+        private organizationService: OrganizationService
     ) {
         this.isNavbarCollapsed = true;
     }
@@ -64,8 +72,17 @@ export class NavbarComponent implements OnInit {
         this.profileService.getProfileInfo().then(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
-            this.organizationName = profileInfo.organization.name;
         });
+
+        this.organizationService
+            .findCurrent()
+            .pipe(
+                filter((response: HttpResponse<Organization>) => response.ok),
+                map((organization: HttpResponse<Organization>) => organization.body)
+            )
+            .subscribe((current: IOrganization) => {
+                this.organizationName = current.name;
+            });
         this.teamsSelectionService.query().subscribe();
     }
 
@@ -80,6 +97,7 @@ export class NavbarComponent implements OnInit {
     }
 
     changeLanguage(languageKey: string) {
+        this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
 
@@ -88,7 +106,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -106,7 +124,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 
     selectTeam(): NgbModalRef {

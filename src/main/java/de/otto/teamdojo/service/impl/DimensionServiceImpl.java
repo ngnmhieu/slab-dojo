@@ -42,6 +42,7 @@ public class DimensionServiceImpl implements DimensionService {
     @Override
     public DimensionDTO save(DimensionDTO dimensionDTO) {
         log.debug("Request to save Dimension : {}", dimensionDTO);
+
         Dimension dimension = dimensionMapper.toEntity(dimensionDTO);
         dimension = dimensionRepository.save(dimension);
         return dimensionMapper.toDto(dimension);

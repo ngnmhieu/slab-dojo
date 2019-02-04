@@ -1,8 +1,8 @@
 package de.otto.teamdojo.repository;
 
 import de.otto.teamdojo.domain.Comment;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 /**
  * Spring Data JPA repository for the Comment entity.

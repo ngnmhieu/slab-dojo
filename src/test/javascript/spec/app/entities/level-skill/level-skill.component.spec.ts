@@ -1,6 +1,6 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { TeamdojoTestModule } from '../../../test.module';
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [LevelSkillComponent],
-                providers: [LevelSkillService]
+                providers: []
             })
                 .overrideTemplate(LevelSkillComponent, '')
                 .compileComponents();
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
             spyOn(service, 'query').and.returnValue(
-                Observable.of(
+                of(
                     new HttpResponse({
                         body: [new LevelSkill(123)],
                         headers

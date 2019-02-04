@@ -7,9 +7,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
@@ -32,7 +32,7 @@ public class PersistentToken implements Serializable {
     @NotNull
     @Column(name = "token_value", nullable = false)
     private String tokenValue;
-
+    
     @Column(name = "token_date")
     private LocalDate tokenDate;
 
@@ -43,7 +43,6 @@ public class PersistentToken implements Serializable {
 
     @Column(name = "user_agent")
     private String userAgent;
-
 
     @JsonIgnore
     @ManyToOne

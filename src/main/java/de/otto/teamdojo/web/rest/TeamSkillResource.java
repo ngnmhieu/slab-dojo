@@ -79,7 +79,7 @@ public class TeamSkillResource {
     public ResponseEntity<TeamSkillDTO> updateTeamSkill(@Valid @RequestBody TeamSkillDTO teamSkillDTO) throws URISyntaxException {
         log.debug("REST request to update TeamSkill : {}", teamSkillDTO);
         if (teamSkillDTO.getId() == null) {
-            return createTeamSkill(teamSkillDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         TeamSkillDTO result = teamSkillService.save(teamSkillDTO);
         return ResponseEntity.ok()
@@ -100,7 +100,20 @@ public class TeamSkillResource {
         log.debug("REST request to get TeamSkills by criteria: {}", criteria);
         Page<TeamSkillDTO> page = teamSkillQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-skills");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /team-skills/count : count all the teamSkills.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/team-skills/count")
+    @Timed
+    public ResponseEntity<Long> countTeamSkills(TeamSkillCriteria criteria) {
+        log.debug("REST request to count TeamSkills by criteria: {}", criteria);
+        return ResponseEntity.ok().body(teamSkillQueryService.countByCriteria(criteria));
     }
 
     /**

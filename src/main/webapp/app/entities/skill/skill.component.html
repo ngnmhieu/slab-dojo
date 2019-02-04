@@ -2,7 +2,7 @@
     <h2 id="page-heading">
         <span jhiTranslate="teamdojoApp.skill.home.title">Skills</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-skill" [routerLink]="['/skill/new']">
-            <span class="fa fa-plus"></span>
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="teamdojoApp.skill.home.createLabel">
             Create new Skill
             </span>
@@ -27,7 +27,7 @@
             <th></th>
             </tr>
 
-            <tr jhi-table-filter [fields]="[
+            <tr jhi-table-filter entityName="Skill" [fields]="[
                 {name: 'id', filter: true, operator: 'equals'},
                 {name: 'title', filter: true},
                 {name: 'description', filter: true},
@@ -58,13 +58,13 @@
                         <button type="submit"
                                 [routerLink]="['/skill', skill.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/skill', skill.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -72,7 +72,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

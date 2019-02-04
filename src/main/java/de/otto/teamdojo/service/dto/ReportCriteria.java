@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import de.otto.teamdojo.domain.enumeration.ReportType;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
@@ -9,11 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import io.github.jhipster.service.filter.InstantFilter;
-
-
-
 
 /**
  * Criteria class for the Report entity. This class is used in ReportResource to
@@ -32,7 +29,6 @@ public class ReportCriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     private LongFilter id;
 
     private StringFilter title;
@@ -42,9 +38,6 @@ public class ReportCriteria implements Serializable {
     private ReportTypeFilter type;
 
     private InstantFilter creationDate;
-
-    public ReportCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -84,6 +77,35 @@ public class ReportCriteria implements Serializable {
 
     public void setCreationDate(InstantFilter creationDate) {
         this.creationDate = creationDate;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ReportCriteria that = (ReportCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(type, that.type) &&
+            Objects.equals(creationDate, that.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        title,
+        description,
+        type,
+        creationDate
+        );
     }
 
     @Override

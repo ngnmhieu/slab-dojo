@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    TeamSkillService,
     TeamSkillComponent,
     TeamSkillDetailComponent,
     TeamSkillVoteComponent,
@@ -11,8 +10,7 @@ import {
     TeamSkillDeletePopupComponent,
     TeamSkillDeleteDialogComponent,
     teamSkillRoute,
-    teamSkillPopupRoute,
-    TeamSkillResolve
+    teamSkillPopupRoute
 } from './';
 
 const ENTITY_STATES = [...teamSkillRoute, ...teamSkillPopupRoute];
@@ -34,7 +32,6 @@ const ENTITY_STATES = [...teamSkillRoute, ...teamSkillPopupRoute];
         TeamSkillDeleteDialogComponent,
         TeamSkillDeletePopupComponent
     ],
-    providers: [TeamSkillService, TeamSkillResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoTeamSkillModule {}

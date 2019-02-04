@@ -24,7 +24,7 @@ export class AchievementItemComponent {
     }
 
     get progressWidth() {
-        return this.progress * (100 - this.irrelevancePercentage) / 100.0;
+        return (this.progress * (100 - this.irrelevancePercentage)) / 100.0;
     }
 
     get itemStatusCssClass() {

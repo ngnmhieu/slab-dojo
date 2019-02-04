@@ -22,4 +22,10 @@ import { TableFilterComponent } from 'app/shared/table-filter/table-filter.compo
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class TeamdojoSharedModule {}
+export class TeamdojoSharedModule {
+    static forRoot() {
+        return {
+            ngModule: TeamdojoSharedModule
+        };
+    }
+}

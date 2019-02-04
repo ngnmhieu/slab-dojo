@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "team" : {
+        "team": {
             "home": {
                 "title": "Personen",
                 "createLabel": "Person erstellen",
@@ -23,8 +22,8 @@
             "participations": "Participations",
             "skills": "Skills",
             "image": "Image",
-            "navigation" : {
-                "text" : "Person Wohnzimmer"
+            "navigation": {
+                "text": "Person Wohnzimmer"
             }
         }
     }

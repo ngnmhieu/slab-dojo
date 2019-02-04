@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Image } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 import { ImageComponent } from './image.component';
 import { ImageDetailComponent } from './image-detail.component';
 import { ImageUpdateComponent } from './image-update.component';
 import { ImageDeletePopupComponent } from './image-delete-dialog.component';
+import { IImage } from 'app/shared/model/image.model';
 
-@Injectable()
-export class ImageResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class ImageResolve implements Resolve<IImage> {
     constructor(private service: ImageService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Image> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Image>) => response.ok),
+                map((image: HttpResponse<Image>) => image.body)
+            );
         }
-        return new Image();
+        return of(new Image());
     }
 }
 

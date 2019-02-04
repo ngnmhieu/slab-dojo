@@ -12,6 +12,9 @@ import de.otto.teamdojo.service.dto.BadgeDTO;
 import de.otto.teamdojo.service.impl.BadgeServiceImpl;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.dto.BadgeCriteria;
+import de.otto.teamdojo.service.BadgeQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +32,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,6 +127,9 @@ public class BadgeResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restBadgeMockMvc;
 
     private Badge badge;
@@ -148,7 +158,8 @@ public class BadgeResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -170,7 +181,9 @@ public class BadgeResourceIntTest {
     }
 
     @Before
-    public void initTest() { badge = createEntity(em); }
+    public void initTest() {
+        badge = createEntity(em);
+    }
 
     @Test
     @Transactional
@@ -294,6 +307,7 @@ public class BadgeResourceIntTest {
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllBadgesWithEagerRelationshipsIsEnabled() throws Exception {
         BadgeResource badgeResource = new BadgeResource(badgeServiceMock, badgeQueryService, badgeSkillService);
         when(badgeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -310,6 +324,7 @@ public class BadgeResourceIntTest {
         verify(badgeServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllBadgesWithEagerRelationshipsIsNotEnabled() throws Exception {
         BadgeResource badgeResource = new BadgeResource(badgeServiceMock, badgeQueryService, badgeSkillService);
         when(badgeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -758,6 +773,12 @@ public class BadgeResourceIntTest {
             .andExpect(jsonPath("$.[*].requiredScore").value(hasItem(DEFAULT_REQUIRED_SCORE.doubleValue())))
             .andExpect(jsonPath("$.[*].instantMultiplier").value(hasItem(DEFAULT_INSTANT_MULTIPLIER.doubleValue())))
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
+
+        // Check, that the count call also returns 1
+        restBadgeMockMvc.perform(get("/api/badges/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -769,6 +790,12 @@ public class BadgeResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restBadgeMockMvc.perform(get("/api/badges/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -828,15 +855,15 @@ public class BadgeResourceIntTest {
         // Create the Badge
         BadgeDTO badgeDTO = badgeMapper.toDto(badge);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBadgeMockMvc.perform(put("/api/badges")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(badgeDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Badge in the database
         List<Badge> badgeList = badgeRepository.findAll();
-        assertThat(badgeList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(badgeList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

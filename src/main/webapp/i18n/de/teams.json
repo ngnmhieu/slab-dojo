@@ -13,6 +13,12 @@
                 "title": "Kompetenzen",
                 "notAchieved": "Noch nicht erreicht",
                 "achievedOn": "Erreicht am",
+                "votes": "Votes",
+                "score": {
+                    "title": "Score: {{ score }}",
+                    "save": "OK",
+                    "cancel": "Abbrechen"
+                },
                 "search": {
                     "placeholder": "Suche",
                     "filter": {
@@ -39,7 +45,7 @@
                     "implementation": "Implementation",
                     "validation": "Validation",
                     "achievedBy": "Erfüllt von",
-                    "achievedByNone" : "Dieser Skill wurde noch von keinem Team erfüllt!",
+                    "achievedByNone": "Dieser Skill wurde noch von keinem Team erfüllt!",
                     "neededFor": "Benötigt für",
                     "trainings": "Hilfreiche Weiterbildungsangebote",
                     "noTrainings": "Keine hilfreichen Weiterbildungsangebote verfügbar",

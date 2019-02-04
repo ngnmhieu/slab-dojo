@@ -16,7 +16,7 @@
                           [(ngModel)]="newComment.text" required [disabled]="!selectedTeam"></textarea>
                 <button type="submit" class="btn btn-secondary send-btn ml-1"
                         [disabled]="!selectedTeam || commentForm.form.invalid">
-                    <i class="fa fa-paper-plane"></i>
+                    <fa-icon icon="paper-plane"></fa-icon>
                 </button>
             </form>
         </div>

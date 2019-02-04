@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ISkill } from 'app/shared/model/skill.model';
@@ -10,11 +10,11 @@ import { ISkill } from 'app/shared/model/skill.model';
 export class SkillDetailComponent implements OnInit {
     skill: ISkill;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ skill }) => {
-            this.skill = skill.body ? skill.body : skill;
+        this.activatedRoute.data.subscribe(({ skill }) => {
+            this.skill = skill;
         });
     }
 

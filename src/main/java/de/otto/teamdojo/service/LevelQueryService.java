@@ -2,6 +2,8 @@ package de.otto.teamdojo.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import de.otto.teamdojo.domain.Level;
 import de.otto.teamdojo.domain.*; // for static metamodels
 import de.otto.teamdojo.repository.LevelRepository;
 import de.otto.teamdojo.service.dto.LevelCriteria;
-
 import de.otto.teamdojo.service.dto.LevelDTO;
 import de.otto.teamdojo.service.mapper.LevelMapper;
 
@@ -68,6 +69,18 @@ public class LevelQueryService extends QueryService<Level> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(LevelCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<Level> specification = createSpecification(criteria);
+        return levelRepository.count(specification);
+    }
+
+    /**
      * Function to convert LevelCriteria to a {@link Specification}
      */
     private Specification<Level> createSpecification(LevelCriteria criteria) {
@@ -92,19 +105,22 @@ public class LevelQueryService extends QueryService<Level> {
                 specification = specification.and(buildRangeSpecification(criteria.getCompletionBonus(), Level_.completionBonus));
             }
             if (criteria.getDimensionId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getDimensionId(), Level_.dimension, Dimension_.id));
+                specification = specification.and(buildSpecification(criteria.getDimensionId(),
+                    root -> root.join(Level_.dimension, JoinType.LEFT).get(Dimension_.id)));
             }
             if (criteria.getDependsOnId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getDependsOnId(), Level_.dependsOn, Level_.id));
+                specification = specification.and(buildSpecification(criteria.getDependsOnId(),
+                    root -> root.join(Level_.dependsOn, JoinType.LEFT).get(Level_.id)));
             }
             if (criteria.getSkillsId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getSkillsId(), Level_.skills, LevelSkill_.id));
+                specification = specification.and(buildSpecification(criteria.getSkillsId(),
+                    root -> root.join(Level_.skills, JoinType.LEFT).get(LevelSkill_.id)));
             }
             if (criteria.getImageId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getImageId(), Level_.image, Image_.id));
+                specification = specification.and(buildSpecification(criteria.getImageId(),
+                    root -> root.join(Level_.image, JoinType.LEFT).get(Image_.id)));
             }
         }
         return specification;
     }
-
 }

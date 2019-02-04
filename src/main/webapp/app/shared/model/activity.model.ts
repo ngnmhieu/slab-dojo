@@ -1,8 +1,8 @@
 import { Moment } from 'moment';
 
 export const enum ActivityType {
-    'SKILL_COMPLETED',
-    'BADGE_CREATED'
+    SKILL_COMPLETED = 'SKILL_COMPLETED',
+    BADGE_CREATED = 'BADGE_CREATED'
 }
 
 export interface IActivity {

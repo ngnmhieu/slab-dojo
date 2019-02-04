@@ -3,15 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { TeamdojoSharedModule } from 'app/shared';
 import {
-    OrganizationService,
     OrganizationComponent,
     OrganizationDetailComponent,
     OrganizationUpdateComponent,
     OrganizationDeletePopupComponent,
     OrganizationDeleteDialogComponent,
     organizationRoute,
-    organizationPopupRoute,
-    OrganizationResolve
+    organizationPopupRoute
 } from './';
 
 const ENTITY_STATES = [...organizationRoute, ...organizationPopupRoute];
@@ -31,7 +29,6 @@ const ENTITY_STATES = [...organizationRoute, ...organizationPopupRoute];
         OrganizationDeleteDialogComponent,
         OrganizationDeletePopupComponent
     ],
-    providers: [OrganizationService, OrganizationResolve],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoOrganizationModule {}

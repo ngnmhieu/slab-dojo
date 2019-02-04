@@ -12,8 +12,12 @@ import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { DimensionService } from 'app/entities/dimension';
 import { Progress } from 'app/shared/achievement/model/progress.model';
 import 'simplebar';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { SkillSortPipe } from 'app/shared/pipe/skill-sort.pipe';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-overview-skills',
@@ -38,12 +42,14 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
     search$: Subject<string>;
     search: string;
     orderBy = 'title';
+    hasAuthority = false;
 
     constructor(
         private jhiAlertService: JhiAlertService,
         private route: ActivatedRoute,
         private breadcrumbService: BreadcrumbService,
-        private dimensionService: DimensionService
+        private dimensionService: DimensionService,
+        private accountService: AccountService
     ) {}
 
     ngOnInit() {
@@ -58,12 +64,12 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
                 this.activeLevel = null;
                 this.activeBadge = null;
                 if (params.get('level')) {
-                    this.activeLevel = (this.levels || []).find((level: ILevel) => level.id === Number.parseInt(params.get('level')));
+                    this.activeLevel = (this.levels || []).find((level: ILevel) => level.id === Number.parseInt(params.get('level'), 10));
                     this.activeSkills = this.activeLevel ? this.sortActiveSkills(this.findSkills(this.activeLevel.skills)) : [];
                     this.itemSkills = this.activeLevel.skills || [];
                     this.updateBreadcrumb();
                 } else if (params.get('badge')) {
-                    this.activeBadge = (this.badges || []).find((badge: IBadge) => badge.id === Number.parseInt(params.get('badge')));
+                    this.activeBadge = (this.badges || []).find((badge: IBadge) => badge.id === Number.parseInt(params.get('badge'), 10));
                     this.activeSkills = this.activeBadge ? this.sortActiveSkills(this.findSkills(this.activeBadge.skills)) : [];
                     this.itemSkills = this.activeBadge.skills || [];
                     this.updateBreadcrumb();
@@ -81,12 +87,17 @@ export class OverviewSkillsComponent implements OnInit, OnChanges {
         this.search = '';
         this.search$ = new Subject<string>();
         this.search$
-            .debounceTime(400)
-            .distinctUntilChanged()
+            .pipe(
+                debounceTime(400),
+                distinctUntilChanged()
+            )
             .subscribe(value => {
                 this.search = value;
                 return value;
             });
+        this.accountService.identity().then(identity => {
+            this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+        });
     }
 
     loadAll() {

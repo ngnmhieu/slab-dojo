@@ -1,11 +1,12 @@
 package de.otto.teamdojo.repository;
 
 import de.otto.teamdojo.domain.TeamSkill;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+
 
 /**
- * Spring Data JPA repository for the TeamSkill entity.
+ * Spring Data  repository for the TeamSkill entity.
  */
 @SuppressWarnings("unused")
 @Repository

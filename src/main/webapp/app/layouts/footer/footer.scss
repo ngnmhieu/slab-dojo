@@ -1,6 +1,7 @@
-@import "../../../content/scss/colors";
+@import '../../../content/scss/colors';
 
-.app-version, .feedback a {
+.app-version,
+.feedback a {
     font-size: 10px;
     color: $dojo-text-primary;
 }
