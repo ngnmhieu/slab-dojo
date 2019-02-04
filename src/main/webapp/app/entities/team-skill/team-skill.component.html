@@ -1,0 +1,76 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="teamdojoApp.teamSkill.home.title">Team Skills</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-team-skill" [routerLink]="['/team-skill/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="teamdojoApp.teamSkill.home.createLabel">
+            Create new Team Skill
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="teamSkills">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="completedAt"><span jhiTranslate="teamdojoApp.teamSkill.completedAt">Completed At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="verifiedAt"><span jhiTranslate="teamdojoApp.teamSkill.verifiedAt">Verified At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="irrelevant"><span jhiTranslate="teamdojoApp.teamSkill.irrelevant">Irrelevant</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="note"><span jhiTranslate="teamdojoApp.teamSkill.note">Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="vote"><span jhiTranslate="teamdojoApp.teamSkill.vote">Vote</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="voters"><span jhiTranslate="teamdojoApp.teamSkill.voters">Voters</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="skillTitle"><span jhiTranslate="teamdojoApp.teamSkill.skill">Skill</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="teamName"><span jhiTranslate="teamdojoApp.teamSkill.team">Team</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let teamSkill of teamSkills ;trackBy: trackId">
+                <td><a [routerLink]="['/team-skill', teamSkill.id, 'view' ]">{{teamSkill.id}}</a></td>
+                <td>{{teamSkill.completedAt | date:'medium'}}</td>
+                <td>{{teamSkill.verifiedAt | date:'medium'}}</td>
+                <td>{{teamSkill.irrelevant}}</td>
+                <td>{{teamSkill.note}}</td>
+                <td>{{teamSkill.vote}}</td>
+                <td>{{teamSkill.voters}}</td>
+                <td>
+                    <div *ngIf="teamSkill.skillId">
+                        <a [routerLink]="['../skill', teamSkill.skillId , 'view' ]" >{{teamSkill.skillTitle}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="teamSkill.teamId">
+                        <a [routerLink]="['../team', teamSkill.teamId , 'view' ]" >{{teamSkill.teamName}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/team-skill', teamSkill.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/team-skill', teamSkill.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'team-skill/'+ teamSkill.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

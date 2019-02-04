@@ -1,0 +1,59 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "skill",
+            "otherEntityName": "skill",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "title"
+        },
+        {
+            "relationshipName": "team",
+            "otherEntityName": "team",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "completedAt",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "verifiedAt",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "irrelevant",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "note",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "vote",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "voters",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180419092355",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "team_skill",
+    "jpaMetamodelFiltering": true,
+    "pagination": "infinite-scroll"
+}
