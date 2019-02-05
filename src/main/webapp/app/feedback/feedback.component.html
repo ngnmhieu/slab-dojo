@@ -19,7 +19,8 @@
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                               [hidden]="!feedbackForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 4096 }">
+                               [hidden]="!feedbackForm.controls.description?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 4096 }">
                         This field cannot be longer than 4096 characters.
                         </small>
                     </div>

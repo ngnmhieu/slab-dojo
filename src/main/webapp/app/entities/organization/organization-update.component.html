@@ -51,12 +51,13 @@
                         [hidden]="!(editForm.controls.mattermostUrl?.dirty && editForm.controls.mattermostUrl?.invalid)">
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.mattermostUrl?.errors?.maxlength"
-                               jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 255 }">
                             This field cannot be longer than 255 characters.
                         </small>
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.mattermostUrl?.errors?.pattern"
-                               jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Mattermost Url' }">
+                               jhiTranslate="entity.validation.pattern"
+                               [translateValues]="{ pattern: 'Mattermost Url' }">
                             This field should follow pattern for "Mattermost Url".
                         </small>
                     </div>

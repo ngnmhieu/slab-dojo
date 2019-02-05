@@ -24,12 +24,12 @@
                             </small>
                             <small class="form-text text-danger"
                                    [hidden]="!editForm.controls.name?.errors?.minlength"
-                                   dojoTranslate="entity.validation.minlength" translateValues="{ min: 2 }">
+                                   dojoTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
                                 This field is required to be at least 2 characters.
                             </small>
                             <small class="form-text text-danger"
                                    [hidden]="!editForm.controls.name?.errors?.maxlength"
-                                   dojoTranslate="entity.validation.maxlength" translateValues="{ max: 50 }">
+                                   dojoTranslate="entity.validation.maxlength" [translateValues]="{ max: 50 }">
                                 This field cannot be longer than 50 characters.
                             </small>
                         </div>
@@ -47,18 +47,18 @@
                             </small>
                             <small class="form-text text-danger"
                                    [hidden]="!editForm.controls.shortName?.errors?.minlength"
-                                   dojoTranslate="entity.validation.minlength" translateValues="{ min: 2 }">
+                                   dojoTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
                                 This field is required to be at least 2 characters.
                             </small>
                             <small class="form-text text-danger"
                                    [hidden]="!editForm.controls.shortName?.errors?.maxlength"
-                                   dojoTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                                   dojoTranslate="entity.validation.maxlength" [translateValues]="{ max: 20 }">
                                 This field cannot be longer than 20 characters.
                             </small>
                             <small class="form-text text-danger"
                                    [hidden]="!editForm.controls.shortName?.errors?.pattern"
                                    dojoTranslate="entity.validation.pattern"
-                                   translateValues="{ pattern: 'Short Name' }">
+                                   [translateValues]="{ pattern: 'Short Name' }">
                                 This field should follow pattern for "Short Name".
                             </small>
                         </div>

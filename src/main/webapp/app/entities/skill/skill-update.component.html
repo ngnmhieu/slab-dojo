@@ -19,11 +19,13 @@
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 5 }">
+                               [hidden]="!editForm.controls.title?.errors?.minlength"
+                               jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 5 }">
                         This field is required to be at least 5 characters.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 80 }">
+                               [hidden]="!editForm.controls.title?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
                         This field cannot be longer than 80 characters.
                         </small>
                     </div>
@@ -34,7 +36,8 @@
                               [(ngModel)]="skill.description" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.description?.dirty && editForm.controls.description?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 2048 }">
+                               [hidden]="!editForm.controls.description?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
@@ -45,7 +48,8 @@
                               [(ngModel)]="skill.implementation" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.implementation?.dirty && editForm.controls.implementation?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.implementation?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 2048 }">
+                               [hidden]="!editForm.controls.implementation?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
@@ -56,7 +60,8 @@
                               [(ngModel)]="skill.validation" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.validation?.dirty && editForm.controls.validation?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.validation?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 2048 }">
+                               [hidden]="!editForm.controls.validation?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
@@ -68,12 +73,14 @@
                         [placeholder]="'teamdojoApp.skill.expiryPeriodPlaceholder' | translate"/>
                     <div [hidden]="!(editForm.controls.expiryPeriod?.dirty && editForm.controls.expiryPeriod?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Expiry Period' }">
+                               [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern"
+                               jhiTranslate="entity.validation.pattern"
+                               [translateValues]="{ pattern: 'Expiry Period' }">
                             This field should follow pattern for "Expiry Period".
                         </small>
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.expectedPattern"
-                               translateValues="{ regex: '/^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/' }">
+                               [translateValues]="{ regex: '/^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/' }">
                             The expected pattern is /^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/.
                         </small>
                     </div>
@@ -93,7 +100,8 @@
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.score?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: 0 }">
+                               [hidden]="!editForm.controls.score?.errors?.min" jhiTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
@@ -108,11 +116,13 @@
                         [(ngModel)]="skill.rateScore" min="0" jhiMin="0" max="5" jhiMax="5"/>
                     <div [hidden]="!(editForm.controls.rateScore?.dirty && editForm.controls.rateScore?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateScore?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: 0 }">
+                               [hidden]="!editForm.controls.rateScore?.errors?.min" jhiTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateScore?.errors?.max" jhiTranslate="entity.validation.max" translateValues="{ max: 5 }">
+                               [hidden]="!editForm.controls.rateScore?.errors?.max" jhiTranslate="entity.validation.max"
+                               [translateValues]="{ max: 5 }">
                             This field cannot be more than 5.
                         </small>
                         <small class="form-text text-danger"
@@ -127,7 +137,8 @@
                         [(ngModel)]="skill.rateCount" min="0" jhiMin="0"/>
                     <div [hidden]="!(editForm.controls.rateCount?.dirty && editForm.controls.rateCount?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateCount?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: 0 }">
+                               [hidden]="!editForm.controls.rateCount?.errors?.min" jhiTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"

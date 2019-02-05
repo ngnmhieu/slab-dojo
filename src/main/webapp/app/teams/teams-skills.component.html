@@ -106,7 +106,7 @@
                              class="skill-action-bar d-flex flex-wrap justify-content-between">
                             <p class="skill-action-bar-item">
                                 <small dojoTranslate="teamdojoApp.teams.skills.action.vote"
-                                       translateValues="{team: '{{team.name}}'}"></small>
+                                       [translateValues]="{team: team.name }"></small>
                             </p>
                             <p><a (click)="downVote(skill)">
                                 <fa-icon icon="angle-down"></fa-icon>
@@ -121,7 +121,7 @@
                             <p class="skill-action-bar-item">
                                 <a (click)="suggest(skill)">
                                     <small dojoTranslate="teamdojoApp.teams.skills.action.suggest"
-                                           translateValues="{team: '{{team.name}}'}"></small>
+                                           [translateValues]="{team: team.name }"></small>
                                 </a>
                             </p>
                         </div>
