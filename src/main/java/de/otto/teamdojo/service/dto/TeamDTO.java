@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * A DTO for the Team entity.
@@ -111,6 +112,10 @@ public class TeamDTO implements Serializable {
 
     public Long getDaysUntilExpiration() {
         return this.validUntil != null ? Instant.now().until(this.validUntil, DAYS) : Long.MAX_VALUE;
+    }
+
+    public Boolean getExpired() {
+        return this.validUntil != null ? Instant.now().until(this.validUntil, SECONDS) < 0 : false;
     }
 
     @Override
