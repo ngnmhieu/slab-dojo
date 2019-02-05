@@ -1,7 +1,7 @@
 <ng-template #popoverContent>
     <div class="d-flex flex-column align-items-center">
         <div>{{item.name}}</div>
-        <div *ngIf="item.instantMultiplier && !active">
+        <div *ngIf="item.instantMultiplier >= 0 && !active">
             {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
         </div>
         <small *ngIf="hasStatus">( {{progress | number: '1.0-2' }}% )</small>
@@ -12,7 +12,7 @@
      [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
 
     <div class="badge-content">
-        <span *ngIf="item.instantMultiplier && active" class="badge badge-pill multiplier-badge">
+        <span *ngIf="item.instantMultiplier >= 0 && active" class="badge badge-pill multiplier-badge">
             {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
         </span>
     </div>
