@@ -28,5 +28,35 @@
                 "title": "Total"
             }
         }
+    },
+    "persondojoApp": {
+        "overview": {
+            "teams": {
+                "title": "Persons"
+            },
+            "achievements": {
+                "title": "Achievements",
+                "generalBadges": {
+                    "title": "General Badges"
+                },
+                "dimensions": {
+                    "badges": {
+                        "title": "Badges"
+                    },
+                    "levels": {
+                        "title": "Levels"
+                    }
+                }
+            },
+            "skills": {
+                "title": "Skills"
+            },
+            "navigation": {
+                "text": "Person overview"
+            },
+            "total-score": {
+                "title": "Total"
+            }
+        }
     }
 }
