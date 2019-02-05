@@ -73,7 +73,7 @@
                         </small>
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.expectedPattern"
-                               translateValues="{ regex: '/^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/' }">
+                               [translateValues]="{ regex: '/^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/' }">
                             The expected pattern is /^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/.
                         </small>
                     </div>
