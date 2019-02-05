@@ -39,7 +39,7 @@ export class TeamUpdateComponent implements OnInit {
 
     set team(team: ITeam) {
         this._team = team;
-        this.validUntil = team.validUntil !== null ? moment(team.validUntil).format(DATE_FORMAT) : null;
+        this.validUntil = team.validUntil !== null ? moment(team.validUntil).format(DATE_TIME_FORMAT) : null;
     }
 
     ngOnInit() {

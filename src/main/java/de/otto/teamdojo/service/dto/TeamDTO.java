@@ -110,7 +110,13 @@ public class TeamDTO implements Serializable {
     }
 
     public Long getDaysUntilExpiration() {
-        return this.validUntil != null ? DAYS.between(Instant.now(), this.validUntil) : Long.MAX_VALUE;
+        if (this.validUntil != null) {
+            Instant expirationDate = this.validUntil.plus(1, DAYS);
+            return DAYS.between(Instant.now(), expirationDate) + 1;
+        }
+
+        // never expires
+        return Long.MAX_VALUE;
     }
 
     @Override
