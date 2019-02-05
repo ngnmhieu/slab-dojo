@@ -29,7 +29,6 @@ import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent,
     imports: [
         StarRatingModule.forRoot(),
         BrowserModule,
-        TeamdojoAppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
@@ -41,13 +40,13 @@ import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent,
         TeamdojoSharedModule.forRoot(),
         TeamdojoCoreModule,
         OverviewModule,
+        TeamsModule,
+        FeedbackModule,
         TeamdojoHomeModule,
         TeamdojoAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
         TeamdojoEntityModule,
-        TeamdojoAppRoutingModule,
-        TeamsModule,
-        FeedbackModule
+        TeamdojoAppRoutingModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [
