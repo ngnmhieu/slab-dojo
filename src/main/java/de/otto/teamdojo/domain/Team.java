@@ -49,7 +49,7 @@ public class Team implements Serializable {
     @Column(name = "valid_until")
     private Instant validUntil;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "team_participations",
                joinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"),
