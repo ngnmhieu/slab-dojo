@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="sberlin" id="1549372938956-1">
+        <renameColumn tableName="badge_dimensions" oldColumnName="badges_id" newColumnName="badge_id"/>
+        <renameColumn tableName="team_participations" oldColumnName="teams_id" newColumnName="team_id"/>
+        <renameColumn tableName="training_skill" oldColumnName="skills_id" newColumnName="skill_id"/>
+        <renameColumn tableName="training_skill" oldColumnName="trainings_id" newColumnName="training_id"/>
+        <addForeignKeyConstraint baseColumnNames="team_id"
+                                 baseTableName="team_participations"
+                                 constraintName="fk_team_participations_team_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="team"/>
+        <addForeignKeyConstraint baseColumnNames="badge_id"
+                                 baseTableName="badge_dimensions"
+                                 constraintName="fk_badge_dimensions_badge_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="badge"/>
+        <addForeignKeyConstraint baseColumnNames="training_id"
+                                 baseTableName="training_skill"
+                                 constraintName="fk_training_skill_training_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="training"/>
+        <addForeignKeyConstraint baseColumnNames="skill_id"
+                                 baseTableName="training_skill"
+                                 constraintName="fk_training_skill_skill_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="skill"/>
+        <dropForeignKeyConstraint baseTableName="team_participations" constraintName="fk_team_participations_teams_id"/>
+        <dropForeignKeyConstraint baseTableName="badge_dimensions" constraintName="fk_badge_dimensions_badges_id"/>
+        <dropForeignKeyConstraint baseTableName="training_skill" constraintName="fk_training_skill_trainings_id"/>
+        <dropForeignKeyConstraint baseTableName="training_skill" constraintName="fk_training_skill_skills_id"/>
+    </changeSet>
+</databaseChangeLog>
