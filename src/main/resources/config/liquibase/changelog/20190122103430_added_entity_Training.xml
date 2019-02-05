@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    
+
     <property name="now" value="current_timestamp" dbms="postgresql"/>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
@@ -48,18 +48,18 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="training" columnName="valid_until" columnDataType="datetime"/>
-        
+
         <createTable tableName="training_skill">
-            <column name="skill_id" type="bigint">
+            <column name="skills_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="training_id" type="bigint">
+            <column name="trainings_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="training_id, skill_id" tableName="training_skill"/>
-        
+        <addPrimaryKey columnNames="trainings_id, skills_id" tableName="training_skill"/>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

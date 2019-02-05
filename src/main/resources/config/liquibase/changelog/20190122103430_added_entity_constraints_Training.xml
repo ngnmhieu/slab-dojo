@@ -7,17 +7,17 @@
         Added the constraints for entity Training.
     -->
     <changeSet id="20190122103430-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="training_id"
+
+        <addForeignKeyConstraint baseColumnNames="trainings_id"
                                  baseTableName="training_skill"
-                                 constraintName="fk_training_skill_training_id"
+                                 constraintName="fk_training_skill_trainings_id"
                                  referencedColumnNames="id"
                                  referencedTableName="training"/>
-        <addForeignKeyConstraint baseColumnNames="skill_id"
+        <addForeignKeyConstraint baseColumnNames="skills_id"
                                  baseTableName="training_skill"
-                                 constraintName="fk_training_skill_skill_id"
+                                 constraintName="fk_training_skill_skills_id"
                                  referencedColumnNames="id"
                                  referencedTableName="skill"/>
-        
+
     </changeSet>
 </databaseChangeLog>

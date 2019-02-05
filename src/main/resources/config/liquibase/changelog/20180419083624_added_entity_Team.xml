@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    
+
     <property name="now" value="current_timestamp" dbms="postgresql"/>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
@@ -43,18 +43,18 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
         <createTable tableName="team_participations">
             <column name="participations_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="team_id" type="bigint">
+            <column name="teams_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="team_id, participations_id" tableName="team_participations"/>
-        
+        <addPrimaryKey columnNames="teams_id, participations_id" tableName="team_participations"/>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

@@ -7,7 +7,7 @@
         Added the constraints for entity Training.
     -->
     <changeSet id="20190122103014-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="trainings_id"
                                  baseTableName="training_skill"
                                  constraintName="fk_training_skill_trainings_id"
@@ -18,6 +18,6 @@
                                  constraintName="fk_training_skill_skills_id"
                                  referencedColumnNames="id"
                                  referencedTableName="skill"/>
-        
+
     </changeSet>
 </databaseChangeLog>
