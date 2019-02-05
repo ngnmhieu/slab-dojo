@@ -106,7 +106,7 @@
                         <div *ngIf="isVoteAble(skill)"
                              class="skill-action-bar d-flex flex-wrap justify-content-between">
                             <p class="skill-action-bar-item">
-                                <small jhiTranslate="teamdojoApp.teams.skills.action.vote" translateValues="{team: '{{team.name}}'}"></small>
+                                <small jhiTranslate="teamdojoApp.teams.skills.action.vote" [translateValues]="{team: team.name}"></small>
                             </p>
                             <p><a (click)="downVote(skill)">
                                 <fa-icon icon="angle-down"></fa-icon>
@@ -119,7 +119,7 @@
                         <div *ngIf="isSuggestAble(skill)"
                              class="skill-action-bar d-flex flex-wrap justify-content-between">
                             <p class="skill-action-bar-item">
-                                <a (click)="suggest(skill)"><small jhiTranslate="teamdojoApp.teams.skills.action.suggest" translateValues="{team: '{{team.name}}'}"></small></a>
+                                <a (click)="suggest(skill)"><small jhiTranslate="teamdojoApp.teams.skills.action.suggest" [translateValues]="{team: team.name}"></small></a>
                             </p>
                         </div>
                     </div>

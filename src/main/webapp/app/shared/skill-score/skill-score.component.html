@@ -5,7 +5,7 @@
     {{skill.score}}
 </span>
 <ng-template #scorePopoverTpl>
-    <small *ngIf="!isEditingScore()" jhiTranslate="teamdojoApp.teams.skills.score.title" translateValues="{score: '{{skill.score}}'}">
+    <small *ngIf="!isEditingScore()" jhiTranslate="teamdojoApp.teams.skills.score.title" [translateValues]="{score: skill.score}">
         Score: {{skill.score}}
     </small>
     <form *ngIf="isEditingScore()" name="scoreEditing" (ngSubmit)="updateScore(scorePopover)"
