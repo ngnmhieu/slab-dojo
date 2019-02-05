@@ -24,6 +24,7 @@
             "irrelevant": "Irrelevant",
             "note": "Note",
             "vote": "Vote",
+            "voters": "Voters",
             "skill": "Skill",
             "team": "Team"
         }
@@ -53,6 +54,7 @@
             "irrelevant": "Irrelevant",
             "note": "Note",
             "vote": "Vote",
+            "voters": "Voters",
             "skill": "Skill",
             "team": "Team"
         }
