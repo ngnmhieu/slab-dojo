@@ -108,7 +108,7 @@ export class OverviewTeamsComponent implements OnInit {
     }
 
     expirationDaysVisible(team: ITeam): boolean {
-        return team.daysUntilExpiration > 0 && team.daysUntilExpiration < 31;
+        return !team.expired && team.daysUntilExpiration < 31;
     }
 
     private isRelevant(team: ITeam): boolean {

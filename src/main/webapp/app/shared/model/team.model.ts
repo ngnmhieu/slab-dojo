@@ -14,6 +14,7 @@ export interface ITeam {
     imageName?: string;
     imageId?: number;
     daysUntilExpiration?: number;
+    expired: boolean;
 }
 
 export class Team implements ITeam {
@@ -30,4 +31,8 @@ export class Team implements ITeam {
         public imageId?: number,
         public daysUntilExpiration?: number
     ) {}
+
+    get expired(): boolean {
+        return this.daysUntilExpiration < 0;
+    }
 }

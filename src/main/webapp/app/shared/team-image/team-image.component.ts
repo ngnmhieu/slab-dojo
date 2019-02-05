@@ -16,8 +16,4 @@ export class TeamImageComponent {
     @Input() hasOverlay = false;
     @Input() showExpiredLabel = true;
     constructor() {}
-
-    isExpired(team: ITeam): boolean {
-        return team.daysUntilExpiration < 1;
-    }
 }
