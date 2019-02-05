@@ -124,7 +124,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDTO.setData(data.toString());
         log.debug("Request to create activity for SKILL_COMPLETED {}", activityDTO);
 
-        String message = team.getName() + " hat den Skill \"" + skill.getTitle() + " erlernt!";
+        String message = team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt!";
 
         if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)) {
             message += " <" + properties.getFrontend() + "team-skill/" + teamSkill.getId() + "/vote|Traust du das " + team.getName() + " zu?>";
