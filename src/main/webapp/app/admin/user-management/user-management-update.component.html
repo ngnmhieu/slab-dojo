@@ -7,7 +7,7 @@
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group" [hidden]="!user.id">
-                    <label jhiTranslate="global.field.id">ID</label>
+                    <label jhiTranslate="teamdojoApp.global.field.id">ID</label>
                     <input type="text" class="form-control" name="id"
                         [(ngModel)]="user.id" readonly>
                 </div>
@@ -85,7 +85,8 @@
                         </small>
 
                         <small class="form-text text-danger"
-                        *ngIf="emailInput.errors.email" jhiTranslate="global.messages.validate.email.invalid">
+                               *ngIf="emailInput.errors.email"
+                               jhiTranslate="teamdojoApp.global.messages.validate.email.invalid">
                             Your email is invalid.
                         </small>
                     </div>

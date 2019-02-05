@@ -14,7 +14,8 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="id"><span jhiTranslate="teamdojoApp.global.field.id">ID</span> <span
+                    class="fa fa-sort"></span></th>
             <th jhiSortBy="completedAt"><span jhiTranslate="teamdojoApp.teamSkill.completedAt">Completed At</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="verifiedAt"><span jhiTranslate="teamdojoApp.teamSkill.verifiedAt">Verified At</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="irrelevant"><span jhiTranslate="teamdojoApp.teamSkill.irrelevant">Irrelevant</span> <span class="fa fa-sort"></span></th>
