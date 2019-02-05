@@ -44,7 +44,6 @@ public class TeamQueryService extends QueryService<Team> {
 
     /**
      * Return a {@link List} of {@link TeamDTO} which matches the criteria from the database
-     *
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -57,7 +56,6 @@ public class TeamQueryService extends QueryService<Team> {
 
     /**
      * Return a {@link Page} of {@link TeamDTO} which matches the criteria from the database
-     *
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
@@ -102,6 +100,9 @@ public class TeamQueryService extends QueryService<Team> {
             }
             if (criteria.getContactPerson() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getContactPerson(), Team_.contactPerson));
+            }
+            if (criteria.getValidUntil() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getValidUntil(), Team_.validUntil));
             }
             if (criteria.getParticipationsId() != null) {
                 specification = specification.and(buildSpecification(criteria.getParticipationsId(),
