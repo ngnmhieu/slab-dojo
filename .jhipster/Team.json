@@ -57,6 +57,10 @@
         {
             "fieldName": "contactPerson",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "validUntil",
+            "fieldType": "Instant"
         }
     ],
     "changelogDate": "20180419083624",

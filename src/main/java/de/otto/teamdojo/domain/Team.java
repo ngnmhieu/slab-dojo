@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -45,6 +46,9 @@ public class Team implements Serializable {
 
     @Column(name = "contact_person")
     private String contactPerson;
+
+    @Column(name = "valid_until")
+    private Instant validUntil;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -119,6 +123,19 @@ public class Team implements Serializable {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public Instant getValidUntil() {
+        return validUntil;
+    }
+
+    public void setValidUntil(Instant validUntil) {
+        this.validUntil = validUntil;
+    }
+
+    public Team validUntil(Instant validUntil) {
+        this.validUntil = validUntil;
+        return this;
     }
 
     public Set<Dimension> getParticipations() {
@@ -213,6 +230,7 @@ public class Team implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", slogan='" + getSlogan() + "'" +
             ", contactPerson='" + getContactPerson() + "'" +
+            ", validUntil='" + getValidUntil() + "'" +
             "}";
     }
 }

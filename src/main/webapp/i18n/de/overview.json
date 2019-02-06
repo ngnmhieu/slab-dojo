@@ -2,7 +2,9 @@
     "teamdojoApp": {
         "overview": {
             "teams": {
-                "title": "Teams"
+                "title": "Teams",
+                "preExpiresIn": "läuft in",
+                "postExpiresIn": "Tagen ab"
             },
             "achievements": {
                 "title": "Errungenschaften",

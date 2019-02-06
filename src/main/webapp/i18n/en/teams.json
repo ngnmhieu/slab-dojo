@@ -67,7 +67,8 @@
                     "name": "Name",
                     "shortName": "Short Name",
                     "slogan": "Slogan"
-                }
+                },
+                "expired": "expired"
             },
             "achievements": {
                 "title": "Achievements",

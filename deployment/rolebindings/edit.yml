@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: RoleBinding
+metadata:
+  name: bamboo:deployers
+roleRef:
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: bamboodeployer
+  namespace: slabdojo
+userNames:
+- system:serviceaccount:slabdojo:bamboodeployer
