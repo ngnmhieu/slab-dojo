@@ -7,10 +7,10 @@
         Added the constraints for entity Team.
     -->
     <changeSet id="20180419083624-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="team_id"
+
+        <addForeignKeyConstraint baseColumnNames="teams_id"
                                  baseTableName="team_participations"
-                                 constraintName="fk_team_participations_team_id"
+                                 constraintName="fk_team_participations_teams_id"
                                  referencedColumnNames="id"
                                  referencedTableName="team"/>
         <addForeignKeyConstraint baseColumnNames="participations_id"
@@ -18,7 +18,6 @@
                                  constraintName="fk_team_participations_participations_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dimension"/>
-        
         <addForeignKeyConstraint baseColumnNames="image_id"
                                  baseTableName="team"
                                  constraintName="fk_team_image_id"

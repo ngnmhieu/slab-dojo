@@ -59,10 +59,6 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'training',
                 loadChildren: './training/training.module#TeamdojoTrainingModule'
-            },
-            {
-                path: 'team',
-                loadChildren: './team/team.module#TeamdojoTeamModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])
