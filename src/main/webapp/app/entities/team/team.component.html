@@ -14,14 +14,13 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="name"><span jhiTranslate="teamdojoApp.team.name">Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="shortName"><span jhiTranslate="teamdojoApp.team.shortName">Short Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="slogan"><span jhiTranslate="teamdojoApp.team.slogan">Slogan</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="contactPerson"><span jhiTranslate="teamdojoApp.team.contactPerson">Contact Person</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="validUntil"><span jhiTranslate="teamdojoApp.team.validUntil">Valid Until</span> <span
-                    class="fa fa-sort"></span></th>
-            <th jhiSortBy="imageName"><span jhiTranslate="teamdojoApp.team.image">Image</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span jhiTranslate="teamdojoApp.team.name">Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="shortName"><span jhiTranslate="teamdojoApp.team.shortName">Short Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="slogan"><span jhiTranslate="teamdojoApp.team.slogan">Slogan</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="contactPerson"><span jhiTranslate="teamdojoApp.team.contactPerson">Contact Person</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="validUntil"><span jhiTranslate="teamdojoApp.team.validUntil">Valid Until</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="imageName"><span jhiTranslate="teamdojoApp.team.image">Image</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>

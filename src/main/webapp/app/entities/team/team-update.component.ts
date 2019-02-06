@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
-import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { ITeam } from 'app/shared/model/team.model';
 import { TeamService } from './team.service';
@@ -18,11 +18,12 @@ import { ImageService } from 'app/entities/image';
     templateUrl: './team-update.component.html'
 })
 export class TeamUpdateComponent implements OnInit {
-    _team: ITeam;
+    team: ITeam;
     isSaving: boolean;
-    dimensions: IDimension[];
-    images: IImage[];
 
+    dimensions: IDimension[];
+
+    images: IImage[];
     validUntil: string;
 
     constructor(
@@ -33,19 +34,11 @@ export class TeamUpdateComponent implements OnInit {
         protected activatedRoute: ActivatedRoute
     ) {}
 
-    get team() {
-        return this._team;
-    }
-
-    set team(team: ITeam) {
-        this._team = team;
-        this.validUntil = team.validUntil !== null ? moment(team.validUntil).format(DATE_TIME_FORMAT) : null;
-    }
-
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ team }) => {
             this.team = team;
+            this.validUntil = this.team.validUntil != null ? this.team.validUntil.format(DATE_TIME_FORMAT) : null;
         });
         this.dimensionService
             .query()

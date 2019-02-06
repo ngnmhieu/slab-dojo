@@ -13,8 +13,6 @@ export interface ITeam {
     skills?: ITeamSkill[];
     imageName?: string;
     imageId?: number;
-    daysUntilExpiration?: number;
-    expired?: boolean;
 }
 
 export class Team implements ITeam {
@@ -28,8 +26,6 @@ export class Team implements ITeam {
         public participations?: IDimension[],
         public skills?: ITeamSkill[],
         public imageName?: string,
-        public imageId?: number,
-        public expired?: boolean,
-        public daysUntilExpiration?: number
+        public imageId?: number
     ) {}
 }

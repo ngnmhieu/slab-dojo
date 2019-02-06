@@ -50,7 +50,7 @@ public class Team implements Serializable {
     @Column(name = "valid_until")
     private Instant validUntil;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "team_participations",
                joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
@@ -129,13 +129,13 @@ public class Team implements Serializable {
         return validUntil;
     }
 
-    public void setValidUntil(Instant validUntil) {
-        this.validUntil = validUntil;
-    }
-
     public Team validUntil(Instant validUntil) {
         this.validUntil = validUntil;
         return this;
+    }
+
+    public void setValidUntil(Instant validUntil) {
+        this.validUntil = validUntil;
     }
 
     public Set<Dimension> getParticipations() {

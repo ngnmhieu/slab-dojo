@@ -2,16 +2,14 @@ package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import io.github.jhipster.service.filter.InstantFilter;
-
-
-
 
 /**
  * Criteria class for the Team entity. This class is used in TeamResource to
@@ -22,6 +20,7 @@ import io.github.jhipster.service.filter.InstantFilter;
  * fix type specific filters.
  */
 public class TeamCriteria implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -130,9 +129,9 @@ public class TeamCriteria implements Serializable {
             Objects.equals(shortName, that.shortName) &&
             Objects.equals(slogan, that.slogan) &&
             Objects.equals(contactPerson, that.contactPerson) &&
+            Objects.equals(validUntil, that.validUntil) &&
             Objects.equals(participationsId, that.participationsId) &&
             Objects.equals(skillsId, that.skillsId) &&
-            Objects.equals(validUntil, that.validUntil) &&
             Objects.equals(imageId, that.imageId);
     }
 
@@ -144,6 +143,7 @@ public class TeamCriteria implements Serializable {
         shortName,
         slogan,
         contactPerson,
+        validUntil,
         participationsId,
         skillsId,
         imageId
@@ -158,7 +158,7 @@ public class TeamCriteria implements Serializable {
                 (shortName != null ? "shortName=" + shortName + ", " : "") +
                 (slogan != null ? "slogan=" + slogan + ", " : "") +
                 (contactPerson != null ? "contactPerson=" + contactPerson + ", " : "") +
-            (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
+                (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
                 (participationsId != null ? "participationsId=" + participationsId + ", " : "") +
                 (skillsId != null ? "skillsId=" + skillsId + ", " : "") +
                 (imageId != null ? "imageId=" + imageId + ", " : "") +

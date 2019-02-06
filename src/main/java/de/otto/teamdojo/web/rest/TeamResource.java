@@ -95,7 +95,7 @@ public class TeamResource {
         log.debug("REST request to get Teams by criteria: {}", criteria);
         Page<TeamDTO> page = teamQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
