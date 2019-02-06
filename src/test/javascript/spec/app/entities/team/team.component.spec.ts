@@ -27,7 +27,7 @@ describe('Component Tests', () => {
                                 subscribe: (fn: (value: Data) => void) =>
                                     fn({
                                         pagingParams: {
-                                            predicate: 'id',
+                                            predicate: 'name',
                                             reverse: false,
                                             page: 0
                                         }
@@ -107,6 +107,9 @@ describe('Component Tests', () => {
             expect(comp.teams[0]).toEqual(jasmine.objectContaining({ id: 123 }));
         });
         it('should calculate the sort attribute for an id', () => {
+            // GIVEN
+            comp.predicate = 'id';
+
             // WHEN
             const result = comp.sort();
 
@@ -115,9 +118,6 @@ describe('Component Tests', () => {
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
-            // GIVEN
-            comp.predicate = 'name';
-
             // WHEN
             const result = comp.sort();
 
