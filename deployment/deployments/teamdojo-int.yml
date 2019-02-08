@@ -30,7 +30,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: slabdojo-db
-                key: user
+                key: username
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
               secretKeyRef:

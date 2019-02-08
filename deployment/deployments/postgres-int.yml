@@ -31,7 +31,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: slabdojo-db
-              key: user
+              key: username
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
