@@ -5,11 +5,12 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IOrganization, Organization, UserMode } from 'app/shared/model/organization.model';
-import { TeamSkillService } from 'app/entities/team-skill';
 import { LocalStorageService } from 'ngx-webstorage';
 
 type EntityResponseType = HttpResponse<IOrganization>;
 type EntityArrayResponseType = HttpResponse<IOrganization[]>;
+
+const USER_MODE_STORAGE_KEY = 'userMode';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {
@@ -17,7 +18,7 @@ export class OrganizationService {
 
     private currentOrganization: IOrganization;
 
-    constructor(protected http: HttpClient) {}
+    constructor(protected http: HttpClient, private storage: LocalStorageService) {}
 
     create(organization: IOrganization): Observable<EntityResponseType> {
         return this.http.post<IOrganization>(this.resourceUrl, organization, { observe: 'response' });
@@ -42,12 +43,20 @@ export class OrganizationService {
 
     findCurrent(): Observable<EntityResponseType> {
         const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
-        result.subscribe(res => (this.currentOrganization = res.body));
+        result.subscribe(res => {
+            this.currentOrganization = res.body;
+            this.storage.store(USER_MODE_STORAGE_KEY, this.currentOrganization.userMode);
+        });
         return result;
     }
 
     getCurrent(): IOrganization {
         const defaultOrganization = new Organization(null, 'Organization', 1, UserMode.TEAM, '');
         return this.currentOrganization ? this.currentOrganization : defaultOrganization;
+    }
+
+    getCurrentUserMode(): UserMode {
+        const userMode = this.storage.retrieve(USER_MODE_STORAGE_KEY);
+        return userMode ? userMode : this.getCurrent().userMode;
     }
 }
