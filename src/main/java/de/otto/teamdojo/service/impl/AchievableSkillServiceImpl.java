@@ -109,13 +109,14 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
         }
         teamSkill = teamSkillService.save(teamSkill);
 
-        if ((originSkill == null && teamSkill.getCompletedAt() != null) || (originSkill != null && originSkill.getAchievedAt() == null && teamSkill.getCompletedAt() != null)) {
+        if ((originSkill == null && teamSkill.getCompletedAt() != null) || (originSkill != null
+            && originSkill.getAchievedAt() == null && teamSkill.getCompletedAt() != null)) {
             activityService.createForCompletedSkill(teamSkill);
         }
 
         if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)
-            && teamSkill.getCompletedAt() == null && teamSkill.getVote() == 1 && (originSkill == null
-            || (originSkill != null && originSkill.getVote() != teamSkill.getVote()))) {
+            && teamSkill.getCompletedAt() == null && teamSkill.getVote() == 1
+            && (originSkill == null || !originSkill.getVote().equals(teamSkill.getVote()))) {
             activityService.createForSuggestedSkill(teamSkill);
         }
 
