@@ -7,14 +7,5 @@
             "REVIEW": "Review",
             "COMPLIMENT": "Compliment"
         }
-    },
-    "persondojoApp": {
-        "ReportType": {
-            "null": "",
-            "BUG": "Bug",
-            "WISH": "Wish",
-            "REVIEW": "Review",
-            "COMPLIMENT": "Compliment"
-        }
     }
 }

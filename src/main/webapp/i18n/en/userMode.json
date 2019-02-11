@@ -5,12 +5,5 @@
             "PERSON": "PERSON",
             "TEAM": "TEAM"
         }
-    },
-    "persondojoApp": {
-        "UserMode": {
-            "null": "",
-            "PERSON": "PERSON",
-            "TEAM": "TEAM"
-        }
     }
 }
