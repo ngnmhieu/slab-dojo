@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IOrganization, Organization, UserMode } from 'app/shared/model/organization.model';
+import { TeamSkillService } from 'app/entities/team-skill';
+import { LocalStorageService } from 'ngx-webstorage';
 
 type EntityResponseType = HttpResponse<IOrganization>;
 type EntityArrayResponseType = HttpResponse<IOrganization[]>;
@@ -39,13 +41,13 @@ export class OrganizationService {
     }
 
     findCurrent(): Observable<EntityResponseType> {
-        let result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
+        const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
         result.subscribe(res => (this.currentOrganization = res.body));
         return result;
     }
 
     getCurrent(): IOrganization {
-        let defaultOrganization = new Organization(null, 'Organization', 1, UserMode.TEAM, '');
+        const defaultOrganization = new Organization(null, 'Organization', 1, UserMode.TEAM, '');
         return this.currentOrganization ? this.currentOrganization : defaultOrganization;
     }
 }
