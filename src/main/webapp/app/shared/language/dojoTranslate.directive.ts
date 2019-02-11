@@ -4,9 +4,6 @@ import { JhiConfigService } from 'ng-jhipster';
 import { OrganizationService } from 'app/entities/organization';
 import { UserMode } from 'app/shared/model/organization.model';
 
-/**
- * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
- */
 @Directive({
     selector: '[dojoTranslate]'
 })
@@ -39,19 +36,34 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
     }
 
     private getTranslation() {
-        let translationKey = this.dojoTranslate;
+        const translationKey = this.dojoTranslate;
 
+        // if person mode: if translation key for person mode exists: use it. else: fallback to team translation.
         if (this.organizationService.getCurrentUserMode() === UserMode.PERSON) {
-            translationKey = translationKey.replace('teamdojoApp', 'persondojoApp');
+            this.translateService.get(translationKey.replace('teamdojoApp', 'persondojoApp'), this.translateValues).subscribe(
+                value => {
+                    this.el.nativeElement.innerHTML = value;
+                },
+                () => {
+                    this.translateService.get(translationKey, this.translateValues).subscribe(
+                        value => {
+                            this.el.nativeElement.innerHTML = value;
+                        },
+                        () => {
+                            return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
+                        }
+                    );
+                }
+            );
+        } else {
+            this.translateService.get(translationKey, this.translateValues).subscribe(
+                value => {
+                    this.el.nativeElement.innerHTML = value;
+                },
+                () => {
+                    return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
+                }
+            );
         }
-
-        this.translateService.get(translationKey, this.translateValues).subscribe(
-            value => {
-                this.el.nativeElement.innerHTML = value;
-            },
-            () => {
-                return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
-            }
-        );
     }
 }

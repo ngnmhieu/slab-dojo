@@ -50,13 +50,19 @@ export class OrganizationService {
         return result;
     }
 
-    getCurrent(): IOrganization {
-        const defaultOrganization = new Organization(null, 'Organization', 1, UserMode.TEAM, '');
-        return this.currentOrganization ? this.currentOrganization : defaultOrganization;
-    }
-
     getCurrentUserMode(): UserMode {
         const userMode = this.storage.retrieve(USER_MODE_STORAGE_KEY);
-        return userMode ? userMode : this.getCurrent().userMode;
+        if (userMode) {
+            return userMode;
+        }
+        // if user mode didn't exist in storage, fetch it from backend. fallback to team mode on error.
+        this.findCurrent().subscribe(
+            res => {
+                return res.body.userMode;
+            },
+            () => {
+                return UserMode.TEAM;
+            }
+        );
     }
 }
