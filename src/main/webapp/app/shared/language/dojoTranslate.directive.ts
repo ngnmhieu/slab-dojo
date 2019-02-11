@@ -50,7 +50,7 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
                 this.el.nativeElement.innerHTML = value;
             },
             () => {
-                return `${this.configService.getConfig().noi18nMessage}[${this.dojoTranslate}]`;
+                return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
             }
         );
     }
