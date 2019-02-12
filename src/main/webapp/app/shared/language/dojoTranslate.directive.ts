@@ -42,7 +42,6 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
             const personTranslateKey = this.dojoTranslate.replace('teamdojoApp', 'persondojoApp');
 
             this.translateService.get(personTranslateKey, this.translateValues).subscribe(personValue => {
-                console.log(personValue);
                 // valid translation exists if the response does not contain the key
                 if (!personValue.includes(personTranslateKey)) {
                     this.el.nativeElement.innerHTML = personValue;
