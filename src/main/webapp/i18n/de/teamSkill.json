@@ -24,9 +24,27 @@
             "irrelevant": "Irrelevant",
             "note": "Note",
             "vote": "Vote",
-            "voters": "Voters",
             "skill": "Skill",
             "team": "Team"
+        }
+    },
+    "persondojoApp": {
+        "teamSkill": {
+            "home": {
+                "title": "Personen Skills",
+                "createLabel": "Personen Skill erstellen",
+                "createOrEditLabel": "Personen Skill erstellen oder bearbeiten"
+            },
+            "created": "Personen Skill erstellt mit ID {{ param }}",
+            "updated": "Personen Skill aktualisiert mit ID {{ param }}",
+            "deleted": "Personen Skill gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll Personen Skill {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Personen Skill"
+            },
+            "team": "Person"
         }
     }
 }

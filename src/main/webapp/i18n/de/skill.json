@@ -38,5 +38,10 @@
             "validation": "validation",
             "implementation": "implementation"
         }
+    },
+    "persondojoApp": {
+        "skill": {
+            "teams": "Personen"
+        }
     }
 }

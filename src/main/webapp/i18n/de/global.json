@@ -113,5 +113,19 @@
             },
             "item-count": "Ergebnis {{first}} - {{second}} von {{total}} Elemente."
         }
+    },
+    "persondojoApp": {
+        "global": {
+            "menu": {
+                "entities": {
+                    "team": "Person",
+                    "teamSkill": "Person Skill"
+                },
+                "teams": {
+                    "select": "Meine Person auswählen",
+                    "change": "Person wechseln"
+                }
+            }
+        }
     }
 }
