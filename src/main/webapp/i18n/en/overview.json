@@ -28,5 +28,15 @@
                 "title": "Total"
             }
         }
+    },
+    "persondojoApp": {
+        "overview": {
+            "teams": {
+                "title": "Persons"
+            },
+            "navigation": {
+                "text": "Person overview"
+            }
+        }
     }
 }
