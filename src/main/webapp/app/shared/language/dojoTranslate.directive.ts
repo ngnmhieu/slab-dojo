@@ -36,34 +36,27 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
     }
 
     private getTranslation() {
-        const translationKey = this.dojoTranslate;
-
         // if person mode: if translation key for person mode exists: use it. else: fallback to team translation.
         if (this.organizationService.getCurrentUserMode() === UserMode.PERSON) {
-            this.translateService.get(translationKey.replace('teamdojoApp', 'persondojoApp'), this.translateValues).subscribe(
-                value => {
-                    this.el.nativeElement.innerHTML = value;
-                },
-                () => {
-                    this.translateService.get(translationKey, this.translateValues).subscribe(
-                        value => {
-                            this.el.nativeElement.innerHTML = value;
-                        },
-                        () => {
-                            return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
-                        }
-                    );
+            // replace key and check if there is a valid translation for this new key
+            const personTranslateKey = this.dojoTranslate.replace('teamdojoApp', 'persondojoApp');
+
+            this.translateService.get(personTranslateKey, this.translateValues).subscribe(personValue => {
+                console.log(personValue);
+                // valid translation exists if the response does not contain the key
+                if (!personValue.includes(personTranslateKey)) {
+                    this.el.nativeElement.innerHTML = personValue;
+                } else {
+                    // there was no valid translation so we have to fall back to team translation
+                    this.translateService.get(this.dojoTranslate, this.translateValues).subscribe(teamValue => {
+                        this.el.nativeElement.innerHTML = teamValue;
+                    });
                 }
-            );
+            });
         } else {
-            this.translateService.get(translationKey, this.translateValues).subscribe(
-                value => {
-                    this.el.nativeElement.innerHTML = value;
-                },
-                () => {
-                    return `${this.configService.getConfig().noi18nMessage}[${translationKey}]`;
-                }
-            );
+            this.translateService.get(this.dojoTranslate, this.translateValues).subscribe(teamValue => {
+                this.el.nativeElement.innerHTML = teamValue;
+            });
         }
     }
 }
