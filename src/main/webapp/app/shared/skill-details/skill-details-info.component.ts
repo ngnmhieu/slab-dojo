@@ -16,7 +16,8 @@ import { ILevelSkill } from 'app/shared/model/level-skill.model';
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from 'app/entities/team-skill';
 import { ITraining } from 'app/shared/model/training.model';
-import { TrainingService } from 'app/entities/training';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TrainingsAddComponent } from 'app/shared/trainings/trainings-add.component';
 
 @Component({
     selector: 'jhi-skill-details-info',
@@ -46,17 +47,21 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
 
     trainings: ITraining[] = [];
 
+    isTrainingPopupOpen = false;
+
     private _levels: ILevel[] = [];
     private _badges: IBadge[] = [];
     private _teams: ITeam[] = [];
     private _levelSkills: ILevelSkill[] = [];
     private _badgeSkills: IBadgeSkill[] = [];
     private _teamSkills: ITeamSkill[] = [];
+    private _allTrainings: ITraining[] = [];
 
     constructor(
         private route: ActivatedRoute,
         private teamSkillsService: TeamSkillService,
-        private teamsSelectionService: TeamsSelectionService
+        private teamsSelectionService: TeamsSelectionService,
+        private modalService: NgbModal
     ) {}
 
     ngOnInit(): void {
@@ -67,7 +72,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
             this._levelSkills = (levelSkills && levelSkills.body ? levelSkills.body : levelSkills) || [];
             this._badgeSkills = (badgeSkills && badgeSkills.body ? badgeSkills.body : badgeSkills) || [];
             this._teamSkills = (teamSkills && teamSkills.body ? teamSkills.body : teamSkills) || [];
-            this.trainings = (trainings && trainings.body ? trainings.body : trainings) || [];
+            this._allTrainings = (trainings && trainings.body ? trainings.body : trainings) || [];
             this.loadData();
         });
     }
@@ -88,6 +93,7 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
         this.neededForBadges = this._badges.filter((badge: IBadge) =>
             this._badgeSkills.some((badgeSkill: IBadgeSkill) => badge.id === badgeSkill.badgeId && badgeSkill.skillId === this.skill.id)
         );
+        this.trainings = (this._allTrainings || []).filter(training => (training.skills || []).find(skill => skill.id === this.skill.id));
     }
 
     onVoteSubmittedFromChild(vote: ISkillRate) {
@@ -140,5 +146,25 @@ export class SkillDetailsInfoComponent implements OnInit, OnChanges {
     isSameTeamSelected() {
         const selectedTeam = this.teamsSelectionService.selectedTeam;
         return selectedTeam && this.team && selectedTeam.id === this.team.id;
+    }
+
+    addTraining(): NgbModalRef {
+        if (this.isTrainingPopupOpen) {
+            return;
+        }
+        this.isTrainingPopupOpen = true;
+        const modalRef = this.modalService.open(TrainingsAddComponent, { size: 'lg' });
+        modalRef.componentInstance.skills = [this.skill];
+        modalRef.result.then(
+            training => {
+                this.isTrainingPopupOpen = false;
+                this._allTrainings = (this._allTrainings || []).concat(training);
+                this.trainings = (this.trainings || []).concat(training);
+            },
+            reason => {
+                this.isTrainingPopupOpen = false;
+            }
+        );
+        return modalRef;
     }
 }

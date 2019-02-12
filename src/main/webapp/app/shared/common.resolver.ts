@@ -193,10 +193,6 @@ export class AllTrainingsResolve implements Resolve<any> {
     constructor(private trainingService: TrainingService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const skillId = route.params['skillId'] ? route.params['skillId'] : null;
-        if (skillId) {
-            return this.trainingService.query({ 'skillId.equals': skillId }).pipe(map(res => res.body));
-        }
         return this.trainingService.query();
     }
 }
