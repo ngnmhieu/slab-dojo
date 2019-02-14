@@ -1,8 +1,8 @@
 <div>
     <h2>
-        <span id="user-management-page-heading" jhiTranslate="userManagement.home.title">Users</span>
+        <span dojoTranslate="userManagement.home.title" id="user-management-page-heading">Users</span>
         <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['./new']">
-            <fa-icon [icon]="'plus'"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+            <fa-icon [icon]="'plus'"></fa-icon> <span dojoTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
@@ -10,16 +10,16 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="id"><span jhiTranslate="teamdojoApp.global.field.id">ID</span> <span
+                <th jhiSortBy="id"><span dojoTranslate="teamdojoApp.global.field.id">ID</span> <span
                     class="fa fa-sort"></span></th>
-                <th jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="login"><span dojoTranslate="userManagement.login">Login</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="email"><span dojoTranslate="userManagement.email">Email</span> <span class="fa fa-sort"></span></th>
                 <th></th>
-                <th jhiSortBy="langKey"> <span jhiTranslate="userManagement.langKey">Lang Key</span> <span class="fa fa-sort"></span></th>
-                <th><span jhiTranslate="userManagement.profiles">Profiles</span></th>
-                <th jhiSortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="langKey"> <span dojoTranslate="userManagement.langKey">Lang Key</span> <span class="fa fa-sort"></span></th>
+                <th><span dojoTranslate="userManagement.profiles">Profiles</span></th>
+                <th jhiSortBy="createdDate"><span dojoTranslate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="lastModifiedBy"><span dojoTranslate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="lastModifiedDate"><span dojoTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
                 <th></th>
             </tr>
             </thead>
@@ -30,9 +30,9 @@
                 <td>{{user.email}}</td>
                 <td>
                     <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
-                            jhiTranslate="userManagement.deactivated">Deactivated</button>
+                            dojoTranslate="userManagement.deactivated">Deactivated</button>
                     <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
-                            [disabled]="currentAccount.login === user.login" jhiTranslate="userManagement.activated">Activated</button>
+                            [disabled]="currentAccount.login === user.login" dojoTranslate="userManagement.activated">Activated</button>
                 </td>
                 <td>{{user.langKey}}</td>
                 <td>
@@ -49,19 +49,19 @@
                                 [routerLink]="['./', user.login, 'view']"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['./', user.login, 'edit']"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="button" (click)="deleteUser(user)"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">
                             <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>
                 </td>
