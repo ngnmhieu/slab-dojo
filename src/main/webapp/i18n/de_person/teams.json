@@ -2,12 +2,12 @@
     "teamdojoApp": {
         "teams": {
             "home": {
-                "title": "Team"
+                "title": "Person"
             },
             "selection": {
-                "title": "Team Auswahl",
-                "deselect": "Kein Team",
-                "select": "Team auswählen"
+                "title": "Person Auswahl",
+                "deselect": "Kein Person",
+                "select": "Person auswählen"
             },
             "skills": {
                 "title": "Kompetenzen",
@@ -45,7 +45,7 @@
                     "implementation": "Implementation",
                     "validation": "Validation",
                     "achievedBy": "Erfüllt von",
-                    "achievedByNone": "Dieser Skill wurde noch von keinem Team erfüllt!",
+                    "achievedByNone": "Dieser Skill wurde noch von keiner Person erfüllt!",
                     "neededFor": "Benötigt für",
                     "3of5": "3 von 5 Sternen",
                     "contact": "Ansprechpartner",
@@ -76,7 +76,7 @@
                     "received": "erhalten"
                 },
                 "edit": {
-                    "label": "Team bearbeiten",
+                    "label": "Person bearbeiten",
                     "name": "Name",
                     "shortName": "Kurzname",
                     "slogan": "Slogan"
@@ -93,23 +93,6 @@
                 }
             },
             "dateFormat": "dd.MM.yyyy"
-        }
-    },
-    "persondojoApp": {
-        "teams": {
-            "home": {
-                "title": "Person"
-            },
-            "selection": {
-                "title": "Person Auswahl",
-                "deselect": "Keine Person",
-                "select": "Person auswählen"
-            }
-        },
-        "skills": {
-            "details": {
-                "achievedByNone": "Dieser Skill wurde noch von keiner Person erfüllt!"
-            }
         }
     }
 }

@@ -23,7 +23,7 @@
             <th></th>
             </tr>
 
-            <tr jhi-table-filter [fields]="[
+            <tr jhi-table-filter entityName="LevelSkill" [fields]="[
                 {name: 'id', filter: true, operator: 'equals'},
                 {name: 'skillTitle', filter: true, operator: 'contains'},
                 {name: 'levelName', filter: true, operator: 'contains'}

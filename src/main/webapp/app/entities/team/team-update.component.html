@@ -72,6 +72,13 @@
                     <input type="text" class="form-control" name="contactPerson" id="field_contactPerson"
                         [(ngModel)]="team.contactPerson" />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="teamdojoApp.team.validUntil" for="field_validUntil">Valid
+                        Until</label>
+                    <div class="d-flex">
+                        <input id="field_validUntil" type="datetime-local" class="form-control" name="validUntil" [(ngModel)]="validUntil"/>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label dojoTranslate="teamdojoApp.team.participations"

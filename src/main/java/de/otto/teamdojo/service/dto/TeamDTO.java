@@ -1,10 +1,14 @@
 package de.otto.teamdojo.service.dto;
 
+import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * A DTO for the Team entity.
@@ -25,6 +29,8 @@ public class TeamDTO implements Serializable {
     private String slogan;
 
     private String contactPerson;
+
+    private Instant validUntil;
 
     private Set<DimensionDTO> participations = new HashSet<>();
 
@@ -72,6 +78,14 @@ public class TeamDTO implements Serializable {
         this.contactPerson = contactPerson;
     }
 
+    public Instant getValidUntil() {
+        return validUntil;
+    }
+
+    public void setValidUntil(Instant validUntil) {
+        this.validUntil = validUntil;
+    }
+
     public Set<DimensionDTO> getParticipations() {
         return participations;
     }
@@ -94,6 +108,14 @@ public class TeamDTO implements Serializable {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Long getDaysUntilExpiration() {
+        return this.validUntil != null ? Instant.now().until(this.validUntil, DAYS) : Long.MAX_VALUE;
+    }
+
+    public Boolean getExpired() {
+        return this.validUntil != null ? Instant.now().until(this.validUntil, SECONDS) < 0 : false;
     }
 
     @Override
@@ -125,6 +147,7 @@ public class TeamDTO implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", slogan='" + getSlogan() + "'" +
             ", contactPerson='" + getContactPerson() + "'" +
+            ", validUntil='" + getValidUntil() + "'" +
             ", image=" + getImageId() +
             ", image='" + getImageName() + "'" +
             "}";

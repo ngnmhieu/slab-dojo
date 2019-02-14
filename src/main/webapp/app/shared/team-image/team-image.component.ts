@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ITeam } from 'app/shared/model/team.model';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-team-image',
@@ -13,5 +14,6 @@ export class TeamImageComponent {
     @Input() hasPlaceholder = true;
     @Input() hasBorder = true;
     @Input() hasOverlay = false;
+    @Input() showExpiredLabel = true;
     constructor() {}
 }

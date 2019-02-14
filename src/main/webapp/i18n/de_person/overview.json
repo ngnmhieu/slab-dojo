@@ -2,7 +2,7 @@
     "teamdojoApp": {
         "overview": {
             "teams": {
-                "title": "Teams",
+                "title": "Personen",
                 "preExpiresIn": "läuft in",
                 "postExpiresIn": "Tagen ab"
             },
@@ -24,20 +24,10 @@
                 "title": "Kompetenzen"
             },
             "navigation": {
-                "text": "Teamübersicht"
+                "text": "Personenübersicht"
             },
             "total-score": {
                 "title": "Insgesamt"
-            }
-        }
-    },
-    "persondojoApp": {
-        "overview": {
-            "teams": {
-                "title": "Personen"
-            },
-            "navigation": {
-                "text": "Personenbersicht"
             }
         }
     }

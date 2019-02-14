@@ -34,6 +34,9 @@
     <include file="config/liquibase/changelog/20181130093500_extend_team_shortname_length.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181130125000_added_column_voters.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181220135000_extend_skill_columns_length.xml" relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20190122155221_add_valid_until_column_to_team.xml"
+             relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190124121700_jhipster_update.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190131112230_extend_organization_userMode.xml"
              relativeToChangelogFile="false"/>
