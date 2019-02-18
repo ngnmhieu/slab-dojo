@@ -97,7 +97,9 @@
                         <span [ngClass]="{'fa-star-o': training.isOfficial, 'fa-circle-thin': !training.isOfficial, 'fa training-is-official': true}"></span>
                         <a *ngIf="training.link" [href]="training.link" target="_blank">{{training.title}}</a>
                         <span *ngIf="!training.link">{{training.title}}</span>
-                        <small>{{training.contactPerson}}</small>
+                        <small>({{training.contactPerson}})</small>
+                        <small jhiTranslate="teamdojoApp.teams.skills.details.trainings.add.suggestedBy">Suggested by</small>
+                        <small>{{training.suggestedBy}}</small>
                     </h6>
                     <p>{{training.description}}</p>
                 </div>
