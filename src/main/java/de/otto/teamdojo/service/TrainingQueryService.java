@@ -107,6 +107,9 @@ public class TrainingQueryService extends QueryService<Training> {
             if (criteria.getIsOfficial() != null) {
                 specification = specification.and(buildSpecification(criteria.getIsOfficial(), Training_.isOfficial));
             }
+            if (criteria.getSuggestedBy() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getSuggestedBy(), Training_.suggestedBy));
+            }
             if (criteria.getSkillId() != null) {
                 specification = specification.and(buildSpecification(criteria.getSkillId(),
                     root -> root.join(Training_.skills, JoinType.LEFT).get(Skill_.id)));

@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "team" : {
+        "team": {
             "home": {
                 "title": "Teams",
                 "createLabel": "Team erstellen",
@@ -20,6 +19,7 @@
             "shortName": "Short Name",
             "slogan": "Slogan",
             "contactPerson": "Contact Person",
+            "suggestedBy": "Vorgeschlagen von",
             "validUntil": "Valid Until",
             "participations": "Participations",
             "skills": "Skills",

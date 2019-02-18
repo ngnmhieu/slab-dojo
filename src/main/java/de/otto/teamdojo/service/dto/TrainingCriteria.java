@@ -37,6 +37,8 @@ public class TrainingCriteria implements Serializable {
 
     private BooleanFilter isOfficial;
 
+    private StringFilter suggestedBy;
+
     private LongFilter skillId;
 
     public LongFilter getId() {
@@ -95,6 +97,14 @@ public class TrainingCriteria implements Serializable {
         this.isOfficial = isOfficial;
     }
 
+    public StringFilter getSuggestedBy() {
+        return suggestedBy;
+    }
+
+    public void setSuggestedBy(StringFilter suggestedBy) {
+        this.suggestedBy = suggestedBy;
+    }
+
     public LongFilter getSkillId() {
         return skillId;
     }
@@ -121,6 +131,7 @@ public class TrainingCriteria implements Serializable {
             Objects.equals(link, that.link) &&
             Objects.equals(validUntil, that.validUntil) &&
             Objects.equals(isOfficial, that.isOfficial) &&
+            Objects.equals(suggestedBy, that.suggestedBy) &&
             Objects.equals(skillId, that.skillId);
     }
 
@@ -134,6 +145,7 @@ public class TrainingCriteria implements Serializable {
         link,
         validUntil,
         isOfficial,
+        suggestedBy,
         skillId
         );
     }
@@ -148,6 +160,7 @@ public class TrainingCriteria implements Serializable {
                 (link != null ? "link=" + link + ", " : "") +
                 (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
                 (isOfficial != null ? "isOfficial=" + isOfficial + ", " : "") +
+                (suggestedBy != null ? "suggestedBy=" + suggestedBy + ", " : "") +
                 (skillId != null ? "skillId=" + skillId + ", " : "") +
             "}";
     }
