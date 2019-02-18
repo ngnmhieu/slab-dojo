@@ -52,6 +52,9 @@ public class Training implements Serializable {
     @Column(name = "is_official", nullable = false)
     private Boolean isOfficial;
 
+    @Column(name = "suggested_by")
+    private String suggestedBy;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "training_skill",
@@ -146,6 +149,19 @@ public class Training implements Serializable {
         this.isOfficial = isOfficial;
     }
 
+    public String getSuggestedBy() {
+        return suggestedBy;
+    }
+
+    public Training suggestedBy(String suggestedBy) {
+        this.suggestedBy = suggestedBy;
+        return this;
+    }
+
+    public void setSuggestedBy(String suggestedBy) {
+        this.suggestedBy = suggestedBy;
+    }
+
     public Set<Skill> getSkills() {
         return skills;
     }
@@ -202,6 +218,7 @@ public class Training implements Serializable {
             ", link='" + getLink() + "'" +
             ", validUntil='" + getValidUntil() + "'" +
             ", isOfficial='" + isIsOfficial() + "'" +
+            ", suggestedBy='" + getSuggestedBy() + "'" +
             "}";
     }
 }
