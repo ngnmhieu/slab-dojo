@@ -47,10 +47,23 @@
                     "achievedBy": "Achieved by",
                     "achievedByNone": "No Persons have achieved this skill yet!",
                     "neededFor": "Needed for",
-                    "trainings": "Helpful trainings",
-                    "noTrainings": "No helpful trainings available",
                     "3of5": "3 out of 5 stars",
-                    "contact": "Contact"
+                    "contact": "Contact",
+                    "trainings": {
+                        "label": "Helpful trainings",
+                        "absent": "No helpful trainings available",
+                        "add": {
+                            "label": "Add a Training",
+                            "action": "Add",
+                            "title": "Title",
+                            "description": "Description",
+                            "contactPerson": "Contact Person",
+                            "link": "Link",
+                            "validUntil": "Valid Until",
+                            "validUntilPlaceholder": "e.g. 2029-01-01T00:00:00+01:00",
+                            "skill": "Skill"
+                        }
+                    }
                 },
                 "comments": {
                     "title": "Comments",

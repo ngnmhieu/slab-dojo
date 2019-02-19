@@ -3,14 +3,14 @@ package de.otto.teamdojo.web.rest;
 import de.otto.teamdojo.TeamdojoApp;
 import de.otto.teamdojo.domain.*;
 import de.otto.teamdojo.repository.BadgeRepository;
+import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.BadgeQueryService;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.service.BadgeSkillService;
 import de.otto.teamdojo.service.dto.BadgeDTO;
+import de.otto.teamdojo.service.impl.BadgeServiceImpl;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
-import de.otto.teamdojo.service.dto.BadgeCriteria;
-import de.otto.teamdojo.service.BadgeQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,21 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
-import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.alwaysUpToDate;
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.awsReady;
@@ -94,16 +89,13 @@ public class BadgeResourceIntTest {
     private BadgeRepository badgeRepository;
 
     @Mock
-    private BadgeRepository badgeRepositoryMock;
+    private ActivityService activityServiceMock;
 
     @Autowired
     private BadgeMapper badgeMapper;
 
     @Mock
     private BadgeService badgeServiceMock;
-
-    @Autowired
-    private BadgeService badgeService;
 
     @Autowired
     private BadgeQueryService badgeQueryService;
@@ -148,6 +140,7 @@ public class BadgeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        BadgeService badgeService = new BadgeServiceImpl(badgeRepository, badgeMapper, activityServiceMock);
         final BadgeResource badgeResource = new BadgeResource(badgeService, badgeQueryService, badgeSkillService);
         this.restBadgeMockMvc = MockMvcBuilders.standaloneSetup(badgeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -942,6 +935,7 @@ public class BadgeResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -949,6 +943,7 @@ public class BadgeResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -961,6 +956,7 @@ public class BadgeResourceIntTest {
         teamSkill.setTeam(team2);
         teamSkill.setSkill(softwareUpdates);
         teamSkill.setCompletedAt(new Date().toInstant());
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team2.addSkills(teamSkill);
         em.persist(team2);
