@@ -357,7 +357,7 @@ public class CommentResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())))
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT)))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
 
         // Check, that the count call also returns 1
@@ -450,7 +450,7 @@ public class CommentResourceIntTest {
 
         int databaseSizeBeforeDelete = commentRepository.findAll().size();
 
-        // Get the comment
+        // Delete the comment
         restCommentMockMvc.perform(delete("/api/comments/{id}", comment.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

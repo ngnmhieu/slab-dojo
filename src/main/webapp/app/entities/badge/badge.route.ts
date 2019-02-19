@@ -16,7 +16,7 @@ import { IBadge } from 'app/shared/model/badge.model';
 export class BadgeResolve implements Resolve<IBadge> {
     constructor(private service: BadgeService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Badge> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IBadge> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class BadgeResolve implements Resolve<IBadge> {
 
 export const badgeRoute: Routes = [
     {
-        path: 'badge',
+        path: '',
         component: BadgeComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const badgeRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge/:id/view',
+        path: ':id/view',
         component: BadgeDetailComponent,
         resolve: {
             badge: BadgeResolve
@@ -51,7 +51,7 @@ export const badgeRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge/new',
+        path: 'new',
         component: BadgeUpdateComponent,
         resolve: {
             badge: BadgeResolve
@@ -63,7 +63,7 @@ export const badgeRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'badge/:id/edit',
+        path: ':id/edit',
         component: BadgeUpdateComponent,
         resolve: {
             badge: BadgeResolve
@@ -78,7 +78,7 @@ export const badgeRoute: Routes = [
 
 export const badgePopupRoute: Routes = [
     {
-        path: 'badge/:id/delete',
+        path: ':id/delete',
         component: BadgeDeletePopupComponent,
         resolve: {
             badge: BadgeResolve

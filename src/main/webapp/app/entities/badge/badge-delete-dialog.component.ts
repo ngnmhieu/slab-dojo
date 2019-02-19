@@ -47,11 +47,11 @@ export class BadgeDeletePopupComponent implements OnInit, OnDestroy {
                 this.ngbModalRef.componentInstance.badge = badge;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

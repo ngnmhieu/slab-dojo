@@ -7,7 +7,7 @@
         Added the constraints for entity BadgeSkill.
     -->
     <changeSet id="20180419141143-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="badge_id"
                                  baseTableName="badge_skill"
                                  constraintName="fk_badge_skill_badge_id"

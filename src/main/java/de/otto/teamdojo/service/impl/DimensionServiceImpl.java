@@ -42,7 +42,6 @@ public class DimensionServiceImpl implements DimensionService {
     @Override
     public DimensionDTO save(DimensionDTO dimensionDTO) {
         log.debug("Request to save Dimension : {}", dimensionDTO);
-
         Dimension dimension = dimensionMapper.toEntity(dimensionDTO);
         dimension = dimensionRepository.save(dimension);
         return dimensionMapper.toDto(dimension);
@@ -84,7 +83,6 @@ public class DimensionServiceImpl implements DimensionService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Dimension : {}", id);
-        dimensionRepository.deleteById(id);
+        log.debug("Request to delete Dimension : {}", id);        dimensionRepository.deleteById(id);
     }
 }

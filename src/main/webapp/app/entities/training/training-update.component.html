@@ -19,7 +19,7 @@
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 80 }">
+                        [hidden]="!editForm.controls.title?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
                         This field cannot be longer than 80 characters.
                         </small>
                     </div>
@@ -30,7 +30,7 @@
                         [(ngModel)]="training.description" maxlength="100"/>
                     <div [hidden]="!(editForm.controls.description?.dirty && editForm.controls.description?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 100 }">
+                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }">
                         This field cannot be longer than 100 characters.
                         </small>
                     </div>
@@ -41,7 +41,7 @@
                         [(ngModel)]="training.contactPerson" maxlength="255"/>
                     <div [hidden]="!(editForm.controls.contactPerson?.dirty && editForm.controls.contactPerson?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.contactPerson?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
+                        [hidden]="!editForm.controls.contactPerson?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 255 }">
                         This field cannot be longer than 255 characters.
                         </small>
                     </div>
@@ -52,11 +52,11 @@
                         [(ngModel)]="training.link" maxlength="255" pattern="^(?:http(s)?://)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#\[\]@!\$&'\(\)\*\+,;=.]+$"/>
                     <div [hidden]="!(editForm.controls.link?.dirty && editForm.controls.link?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.link?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 255 }">
+                        [hidden]="!editForm.controls.link?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 255 }">
                         This field cannot be longer than 255 characters.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.link?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: 'Link' }">
+                            [hidden]="!editForm.controls.link?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Link' }">
                             This field should follow pattern for "Link".
                         </small>
                         <small class="form-text text-danger"

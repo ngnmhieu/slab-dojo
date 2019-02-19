@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { IReport } from 'app/shared/model/report.model';
@@ -24,12 +25,18 @@ export class ReportComponent implements OnInit, OnDestroy {
     ) {}
 
     loadAll() {
-        this.reportService.query().subscribe(
-            (res: HttpResponse<IReport[]>) => {
-                this.reports = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.reportService
+            .query()
+            .pipe(
+                filter((res: HttpResponse<IReport[]>) => res.ok),
+                map((res: HttpResponse<IReport[]>) => res.body)
+            )
+            .subscribe(
+                (res: IReport[]) => {
+                    this.reports = res;
+                },
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     ngOnInit() {

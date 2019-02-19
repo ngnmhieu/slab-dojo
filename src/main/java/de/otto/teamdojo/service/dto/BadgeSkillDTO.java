@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.io.Serializable;
 import java.util.Objects;
 

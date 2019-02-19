@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "team" : {
+        "team": {
             "home": {
                 "title": "Teams",
                 "createLabel": "Team erstellen",
@@ -23,10 +22,7 @@
             "validUntil": "Valid Until",
             "participations": "Participations",
             "skills": "Skills",
-            "image": "Image",
-            "navigation": {
-                "text": "Team Wohnzimmer"
-            }
+            "image": "Image"
         }
     }
 }

@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -32,6 +31,7 @@ public class TrainingDTO implements Serializable {
 
     @NotNull
     private Boolean isOfficial;
+
 
     private Set<SkillDTO> skills = new HashSet<>();
 

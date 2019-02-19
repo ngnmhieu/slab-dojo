@@ -4,8 +4,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 
+import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
-import { ProfileService } from '../profiles/profile.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 import { TeamsSelectionComponent } from 'app/shared/teams-selection/teams-selection.component';
 import { ITeam, Team } from 'app/shared/model/team.model';
@@ -32,6 +33,7 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     organizationName: string;
     modalRef: NgbModalRef;
+    version: string;
     isTeamSelectionOpen = false;
 
     activeLevel: ILevel;
@@ -56,6 +58,7 @@ export class NavbarComponent implements OnInit {
         private breadcrumbService: BreadcrumbService,
         private organizationService: OrganizationService
     ) {
+        this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
     }
 

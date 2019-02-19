@@ -38,4 +38,5 @@
     <include file="config/liquibase/changelog/20190122155221_add_valid_until_column_to_team.xml"
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190124121700_jhipster_update.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190205142213_jhipster_update.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

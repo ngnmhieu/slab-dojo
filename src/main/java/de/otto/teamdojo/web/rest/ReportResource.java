@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.ReportService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -48,7 +46,6 @@ public class ReportResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/reports")
-    @Timed
     public ResponseEntity<ReportDTO> createReport(@Valid @RequestBody ReportDTO reportDTO) throws URISyntaxException {
         log.debug("REST request to save Report : {}", reportDTO);
         if (reportDTO.getId() != null) {
@@ -70,7 +67,6 @@ public class ReportResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/reports")
-    @Timed
     public ResponseEntity<ReportDTO> updateReport(@Valid @RequestBody ReportDTO reportDTO) throws URISyntaxException {
         log.debug("REST request to update Report : {}", reportDTO);
         if (reportDTO.getId() == null) {
@@ -89,7 +85,6 @@ public class ReportResource {
      * @return the ResponseEntity with status 200 (OK) and the list of reports in body
      */
     @GetMapping("/reports")
-    @Timed
     public ResponseEntity<List<ReportDTO>> getAllReports(ReportCriteria criteria) {
         log.debug("REST request to get Reports by criteria: {}", criteria);
         List<ReportDTO> entityList = reportQueryService.findByCriteria(criteria);
@@ -103,7 +98,6 @@ public class ReportResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/reports/count")
-    @Timed
     public ResponseEntity<Long> countReports(ReportCriteria criteria) {
         log.debug("REST request to count Reports by criteria: {}", criteria);
         return ResponseEntity.ok().body(reportQueryService.countByCriteria(criteria));
@@ -116,7 +110,6 @@ public class ReportResource {
      * @return the ResponseEntity with status 200 (OK) and with body the reportDTO, or with status 404 (Not Found)
      */
     @GetMapping("/reports/{id}")
-    @Timed
     public ResponseEntity<ReportDTO> getReport(@PathVariable Long id) {
         log.debug("REST request to get Report : {}", id);
         Optional<ReportDTO> reportDTO = reportService.findOne(id);
@@ -130,7 +123,6 @@ public class ReportResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/reports/{id}")
-    @Timed
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
         log.debug("REST request to delete Report : {}", id);
         reportService.delete(id);

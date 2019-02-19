@@ -1,39 +1,67 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-import { TeamdojoDimensionModule } from './dimension/dimension.module';
-import { TeamdojoSkillModule } from './skill/skill.module';
-import { TeamdojoTeamModule } from './team/team.module';
-import { TeamdojoTeamSkillModule } from './team-skill/team-skill.module';
-import { TeamdojoLevelModule } from './level/level.module';
-import { TeamdojoBadgeModule } from './badge/badge.module';
-import { TeamdojoBadgeSkillModule } from './badge-skill/badge-skill.module';
-import { TeamdojoLevelSkillModule } from './level-skill/level-skill.module';
-import { TeamdojoOrganizationModule } from './organization/organization.module';
-import { TeamdojoReportModule } from './report/report.module';
-import { TeamdojoCommentModule } from './comment/comment.module';
-import { TeamdojoActivityModule } from './activity/activity.module';
-import { TeamdojoImageModule } from './image/image.module';
-import { TeamdojoTrainingModule } from './training/training.module';
-/* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-    // prettier-ignore
     imports: [
-        TeamdojoDimensionModule,
-        TeamdojoSkillModule,
-        TeamdojoTeamModule,
-        TeamdojoTeamSkillModule,
-        TeamdojoLevelModule,
-        TeamdojoBadgeModule,
-        TeamdojoBadgeSkillModule,
-        TeamdojoLevelSkillModule,
-        TeamdojoOrganizationModule,
-        TeamdojoReportModule,
-        TeamdojoCommentModule,
-        TeamdojoActivityModule,
-        TeamdojoImageModule,
-        TeamdojoTrainingModule,
-        /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
+        RouterModule.forChild([
+            {
+                path: 'dimension',
+                loadChildren: './dimension/dimension.module#TeamdojoDimensionModule'
+            },
+            {
+                path: 'skill',
+                loadChildren: './skill/skill.module#TeamdojoSkillModule'
+            },
+            {
+                path: 'team',
+                loadChildren: './team/team.module#TeamdojoTeamModule'
+            },
+            {
+                path: 'team-skill',
+                loadChildren: './team-skill/team-skill.module#TeamdojoTeamSkillModule'
+            },
+            {
+                path: 'level',
+                loadChildren: './level/level.module#TeamdojoLevelModule'
+            },
+            {
+                path: 'badge',
+                loadChildren: './badge/badge.module#TeamdojoBadgeModule'
+            },
+            {
+                path: 'badge-skill',
+                loadChildren: './badge-skill/badge-skill.module#TeamdojoBadgeSkillModule'
+            },
+            {
+                path: 'level-skill',
+                loadChildren: './level-skill/level-skill.module#TeamdojoLevelSkillModule'
+            },
+            {
+                path: 'organization',
+                loadChildren: './organization/organization.module#TeamdojoOrganizationModule'
+            },
+            {
+                path: 'report',
+                loadChildren: './report/report.module#TeamdojoReportModule'
+            },
+            {
+                path: 'comment',
+                loadChildren: './comment/comment.module#TeamdojoCommentModule'
+            },
+            {
+                path: 'activity',
+                loadChildren: './activity/activity.module#TeamdojoActivityModule'
+            },
+            {
+                path: 'image',
+                loadChildren: './image/image.module#TeamdojoImageModule'
+            },
+            {
+                path: 'training',
+                loadChildren: './training/training.module#TeamdojoTrainingModule'
+            }
+            /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
+        ])
     ],
     declarations: [],
     entryComponents: [],
