@@ -7,7 +7,7 @@
         Added the constraints for entity Level.
     -->
     <changeSet id="20180419133250-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="dimension_id"
                                  baseTableName="level"
                                  constraintName="fk_level_dimension_id"

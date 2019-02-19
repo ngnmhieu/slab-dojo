@@ -49,7 +49,7 @@
                             <span class="d-none d-md-inline" dojoTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'badge-skill/'+ badgeSkill.id + '/delete'} }]"
+                                [routerLink]="['/', 'badge-skill', { outlets: { popup: badgeSkill.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

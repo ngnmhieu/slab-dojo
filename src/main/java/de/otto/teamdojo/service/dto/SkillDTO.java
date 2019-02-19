@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -39,6 +38,7 @@ public class SkillDTO implements Serializable {
 
     @Min(value = 0)
     private Integer rateCount;
+
 
     public Long getId() {
         return id;

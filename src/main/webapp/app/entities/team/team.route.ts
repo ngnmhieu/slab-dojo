@@ -16,7 +16,7 @@ import { ITeam } from 'app/shared/model/team.model';
 export class TeamResolve implements Resolve<ITeam> {
     constructor(private service: TeamService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Team> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ITeam> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class TeamResolve implements Resolve<ITeam> {
 
 export const teamRoute: Routes = [
     {
-        path: 'team',
+        path: '',
         component: TeamComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const teamRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/:id/view',
+        path: ':id/view',
         component: TeamDetailComponent,
         resolve: {
             team: TeamResolve
@@ -51,18 +51,19 @@ export const teamRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/new',
+        path: 'new',
         component: TeamUpdateComponent,
         resolve: {
             team: TeamResolve
         },
         data: {
-            authorities: [],
+            authorities: ['ROLE_USER'],
             pageTitle: 'teamdojoApp.team.home.title'
-        }
+        },
+        canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/:id/edit',
+        path: ':id/edit',
         component: TeamUpdateComponent,
         resolve: {
             team: TeamResolve
@@ -77,7 +78,7 @@ export const teamRoute: Routes = [
 
 export const teamPopupRoute: Routes = [
     {
-        path: 'team/:id/delete',
+        path: ':id/delete',
         component: TeamDeletePopupComponent,
         resolve: {
             team: TeamResolve

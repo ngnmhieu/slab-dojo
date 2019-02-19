@@ -552,9 +552,9 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].completedAt").value(hasItem(DEFAULT_COMPLETED_AT.toString())))
             .andExpect(jsonPath("$.[*].verifiedAt").value(hasItem(DEFAULT_VERIFIED_AT.toString())))
             .andExpect(jsonPath("$.[*].irrelevant").value(hasItem(DEFAULT_IRRELEVANT.booleanValue())))
-            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())))
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)))
             .andExpect(jsonPath("$.[*].vote").value(hasItem(DEFAULT_VOTE)))
-            .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS.toString())));
+            .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS)));
 
         // Check, that the count call also returns 1
         restTeamSkillMockMvc.perform(get("/api/team-skills/count?sort=id,desc&" + filter))
@@ -654,7 +654,7 @@ public class TeamSkillResourceIntTest {
 
         int databaseSizeBeforeDelete = teamSkillRepository.findAll().size();
 
-        // Get the teamSkill
+        // Delete the teamSkill
         restTeamSkillMockMvc.perform(delete("/api/team-skills/{id}", teamSkill.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

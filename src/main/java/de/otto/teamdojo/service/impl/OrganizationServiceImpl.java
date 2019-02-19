@@ -46,7 +46,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
         log.debug("Request to save Organization : {}", organizationDTO);
-
         Organization organization = organizationMapper.toEntity(organizationDTO);
         organization = organizationRepository.save(organization);
         return organizationMapper.toDto(organization);
@@ -88,8 +87,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Organization : {}", id);
-        organizationRepository.deleteById(id);
+        log.debug("Request to delete Organization : {}", id);        organizationRepository.deleteById(id);
     }
 
     @Override

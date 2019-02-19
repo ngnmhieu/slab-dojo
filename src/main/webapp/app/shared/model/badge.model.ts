@@ -1,6 +1,6 @@
 import { Moment } from 'moment';
-import { IBadgeSkill } from 'app/shared/model//badge-skill.model';
-import { IDimension } from 'app/shared/model//dimension.model';
+import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
+import { IDimension } from 'app/shared/model/dimension.model';
 
 export interface IBadge {
     id?: number;

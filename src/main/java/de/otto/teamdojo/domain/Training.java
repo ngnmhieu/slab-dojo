@@ -1,5 +1,6 @@
 package de.otto.teamdojo.domain;
 
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -21,7 +22,7 @@ import java.util.Objects;
 public class Training implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -55,8 +56,8 @@ public class Training implements Serializable {
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "training_skill",
-               joinColumns = @JoinColumn(name = "trainings_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "skills_id", referencedColumnName = "id"))
+               joinColumns = @JoinColumn(name = "training_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "id"))
     private Set<Skill> skills = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

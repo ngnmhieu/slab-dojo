@@ -44,7 +44,6 @@ public class BadgeSkillServiceImpl implements BadgeSkillService {
     @Override
     public BadgeSkillDTO save(BadgeSkillDTO badgeSkillDTO) {
         log.debug("Request to save BadgeSkill : {}", badgeSkillDTO);
-
         BadgeSkill badgeSkill = badgeSkillMapper.toEntity(badgeSkillDTO);
         badgeSkill = badgeSkillRepository.save(badgeSkill);
         return badgeSkillMapper.toDto(badgeSkill);
@@ -103,7 +102,6 @@ public class BadgeSkillServiceImpl implements BadgeSkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete BadgeSkill : {}", id);
-        badgeSkillRepository.deleteById(id);
+        log.debug("Request to delete BadgeSkill : {}", id);        badgeSkillRepository.deleteById(id);
     }
 }

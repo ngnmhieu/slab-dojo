@@ -16,7 +16,7 @@ import { IActivity } from 'app/shared/model/activity.model';
 export class ActivityResolve implements Resolve<IActivity> {
     constructor(private service: ActivityService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Activity> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IActivity> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class ActivityResolve implements Resolve<IActivity> {
 
 export const activityRoute: Routes = [
     {
-        path: 'activity',
+        path: '',
         component: ActivityComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const activityRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'activity/:id/view',
+        path: ':id/view',
         component: ActivityDetailComponent,
         resolve: {
             activity: ActivityResolve
@@ -51,7 +51,7 @@ export const activityRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'activity/new',
+        path: 'new',
         component: ActivityUpdateComponent,
         resolve: {
             activity: ActivityResolve
@@ -63,7 +63,7 @@ export const activityRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'activity/:id/edit',
+        path: ':id/edit',
         component: ActivityUpdateComponent,
         resolve: {
             activity: ActivityResolve
@@ -78,7 +78,7 @@ export const activityRoute: Routes = [
 
 export const activityPopupRoute: Routes = [
     {
-        path: 'activity/:id/delete',
+        path: ':id/delete',
         component: ActivityDeletePopupComponent,
         resolve: {
             activity: ActivityResolve

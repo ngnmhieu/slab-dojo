@@ -51,11 +51,11 @@ export class TeamSkillDeletePopupComponent implements OnInit, OnDestroy {
                 this.ngbModalRef.componentInstance.teamSkill = teamSkill;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

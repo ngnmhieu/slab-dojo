@@ -16,7 +16,7 @@ import { IComment } from 'app/shared/model/comment.model';
 export class CommentResolve implements Resolve<IComment> {
     constructor(private service: CommentService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Comment> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IComment> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class CommentResolve implements Resolve<IComment> {
 
 export const commentRoute: Routes = [
     {
-        path: 'comment',
+        path: '',
         component: CommentComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const commentRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'comment/:id/view',
+        path: ':id/view',
         component: CommentDetailComponent,
         resolve: {
             comment: CommentResolve
@@ -51,7 +51,7 @@ export const commentRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'comment/new',
+        path: 'new',
         component: CommentUpdateComponent,
         resolve: {
             comment: CommentResolve
@@ -63,7 +63,7 @@ export const commentRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'comment/:id/edit',
+        path: ':id/edit',
         component: CommentUpdateComponent,
         resolve: {
             comment: CommentResolve
@@ -78,7 +78,7 @@ export const commentRoute: Routes = [
 
 export const commentPopupRoute: Routes = [
     {
-        path: 'comment/:id/delete',
+        path: ':id/delete',
         component: CommentDeletePopupComponent,
         resolve: {
             comment: CommentResolve

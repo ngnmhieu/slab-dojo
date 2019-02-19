@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,6 +27,7 @@ public class LevelDTO implements Serializable {
 
     @Min(value = 0)
     private Integer completionBonus;
+
 
     private Long dimensionId;
 

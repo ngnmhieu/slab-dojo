@@ -16,7 +16,7 @@ import { ISkill } from 'app/shared/model/skill.model';
 export class SkillResolve implements Resolve<ISkill> {
     constructor(private service: SkillService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Skill> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISkill> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class SkillResolve implements Resolve<ISkill> {
 
 export const skillRoute: Routes = [
     {
-        path: 'skill',
+        path: '',
         component: SkillComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/:id/view',
+        path: ':id/view',
         component: SkillDetailComponent,
         resolve: {
             skill: SkillResolve
@@ -51,7 +51,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/new',
+        path: 'new',
         component: SkillUpdateComponent,
         resolve: {
             skill: SkillResolve
@@ -63,7 +63,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/:id/edit',
+        path: ':id/edit',
         component: SkillUpdateComponent,
         resolve: {
             skill: SkillResolve
@@ -78,7 +78,7 @@ export const skillRoute: Routes = [
 
 export const skillPopupRoute: Routes = [
     {
-        path: 'skill/:id/delete',
+        path: ':id/delete',
         component: SkillDeletePopupComponent,
         resolve: {
             skill: SkillResolve

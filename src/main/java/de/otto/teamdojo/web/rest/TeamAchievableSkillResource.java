@@ -1,6 +1,5 @@
 package de.otto.teamdojo.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.AchievableSkillService;
 import de.otto.teamdojo.service.dto.AchievableSkillDTO;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -31,7 +30,6 @@ public class TeamAchievableSkillResource {
     }
 
     @GetMapping("/teams/{id}/achievable-skills")
-    @Timed
     public ResponseEntity<List<AchievableSkillDTO>> getAchievableSkills(
         @PathVariable Long id,
         @RequestParam(name = "levelId", required = false, defaultValue = "") List<Long> levelIds,
@@ -45,7 +43,6 @@ public class TeamAchievableSkillResource {
     }
 
     @GetMapping("/teams/{teamId}/achievable-skills/{skillId}")
-    @Timed
     public ResponseEntity<AchievableSkillDTO> getAchievableSkills(
         @PathVariable Long teamId,
         @PathVariable Long skillId) {
@@ -59,7 +56,6 @@ public class TeamAchievableSkillResource {
     }
 
     @PutMapping("/teams/{id}/achievable-skills")
-    @Timed
     public ResponseEntity<AchievableSkillDTO> updateAchievableSkill(@PathVariable Long id, @RequestBody AchievableSkillDTO achievableSkill) throws JSONException {
         log.debug("REST request to put vote {}", achievableSkill.getVote());
         AchievableSkillDTO result = achievableSkillService.updateAchievableSkill(id, achievableSkill);

@@ -42,4 +42,5 @@
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190131154030_extend_organization_mattermostUrl.xml"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190205142213_jhipster_update.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

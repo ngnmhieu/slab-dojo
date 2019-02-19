@@ -60,6 +60,7 @@
         }
 
     ],
+    "changelogDate": "20190122103430",
     "dto": "mapstruct",
     "service": "serviceImpl",
     "entityTableName": "training",

@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label class="form-control-label" dojoTranslate="teamdojoApp.activity.createdAt" for="field_createdAt">Created At</label>
                     <div class="d-flex">
-                        <input id="field_createdAt" type="datetime-local" class="form-control" name="createdAt" [(ngModel)]="createdAt"
+                        <input id="field_createdAt" type="datetime-local" class="form-control" name="createdAt" [(ngModel)]="createdAt" placeholder="YYYY-MM-DD HH:mm"
                         required/>
                     </div>
                     <div [hidden]="!(editForm.controls.createdAt?.dirty && editForm.controls.createdAt?.invalid)">
