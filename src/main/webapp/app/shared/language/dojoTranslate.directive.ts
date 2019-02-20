@@ -4,6 +4,7 @@ import { JhiConfigService } from 'ng-jhipster';
 import { OrganizationService } from 'app/entities/organization';
 import { UserMode } from 'app/shared/model/organization.model';
 
+/* tslint:disable directive-selector */
 @Directive({
     selector: '[dojoTranslate]'
 })
