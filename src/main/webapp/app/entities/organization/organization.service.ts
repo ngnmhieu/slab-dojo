@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IOrganization, Organization, UserMode } from 'app/shared/model/organization.model';
+import { IOrganization, UserMode } from 'app/shared/model/organization.model';
 import { LocalStorageService } from 'ngx-webstorage';
 
 type EntityResponseType = HttpResponse<IOrganization>;
@@ -15,8 +15,6 @@ const USER_MODE_STORAGE_KEY = 'userMode';
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {
     public resourceUrl = SERVER_API_URL + 'api/organizations';
-
-    private currentOrganization: IOrganization;
 
     constructor(protected http: HttpClient, private storage: LocalStorageService) {}
 
@@ -44,25 +42,12 @@ export class OrganizationService {
     findCurrent(): Observable<EntityResponseType> {
         const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
         result.subscribe(res => {
-            this.currentOrganization = res.body;
-            this.storage.store(USER_MODE_STORAGE_KEY, this.currentOrganization.userMode);
+            this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode);
         });
         return result;
     }
 
     getCurrentUserMode(): UserMode {
-        const userMode = this.storage.retrieve(USER_MODE_STORAGE_KEY);
-        if (userMode) {
-            return userMode;
-        }
-        // if user mode didn't exist in storage, fetch it from backend. fallback to team mode on error.
-        this.findCurrent().subscribe(
-            res => {
-                return res.body.userMode;
-            },
-            () => {
-                return UserMode.TEAM;
-            }
-        );
+        return this.storage.retrieve(USER_MODE_STORAGE_KEY) || UserMode.TEAM;
     }
 }
