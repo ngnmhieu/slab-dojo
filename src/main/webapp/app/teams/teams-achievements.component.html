@@ -7,7 +7,7 @@
                     <div class="achievement-list-header d-flex align-items-center">
                         <div class="achievement-list-header-left">
                                 <span class="achievement-list-header-left-image">
-                                    <jhi-achievement-item type="item-badge" size="4vh" [item]="{'name': 'recent'}">
+                                    <jhi-achievement-item type="item-badge" size="4vh" [item]="{'name': 'recent'}" [hasAuthority]="hasAuthority">
                                     </jhi-achievement-item>
                                 </span>
                         </div>
@@ -26,7 +26,8 @@
                                                       [irrelevancePercentage]="getAchievementIrrelevancy(badge)"
                                                       [active]="activeItemIds.badge === badge.id"
                                                       [completable]="true"
-                                                      (onItemSelected)="selectItem('badge', badge.id)">
+                                                      (onItemSelected)="selectItem('badge', badge.id)"
+                                                      [hasAuthority]="hasAuthority">
                                 </jhi-achievement-item>
                             </div>
                         </div>
@@ -42,12 +43,12 @@
                         <div class="achievement-list-header d-flex align-items-center">
                             <div class="achievement-list-header-left">
                                 <div *ngIf="getHighestAchievedLevel(dimension) as highestLevel; else noLevelAchieved">
-                                    <jhi-achievement-item type="item-level" size="4vh" [item]="highestLevel">
+                                    <jhi-achievement-item type="item-level" size="4vh" [item]="highestLevel" [hasAuthority]="hasAuthority">
                                     </jhi-achievement-item>
                                 </div>
                                 <ng-template #noLevelAchieved>
                                     <span class="achievement-list-header-left-image">
-                                        <jhi-achievement-item type="item-level" size="4vh" [item]="{'name': 'none'}">
+                                        <jhi-achievement-item type="item-level" size="4vh" [item]="{'name': 'none'}" [hasAuthority]="hasAuthority">
                                         </jhi-achievement-item>
                                     </span>
                                 </ng-template>
@@ -69,7 +70,8 @@
                                                           [irrelevancePercentage]="getAchievementIrrelevancy(level)"
                                                           [active]="activeItemIds.level === level.id"
                                                           [completable]="isCompletable(level, dimension)"
-                                                          (onItemSelected)="selectItem('level', level.id)">
+                                                          (onItemSelected)="selectItem('level', level.id)"
+                                                          [hasAuthority]="hasAuthority">
                                     </jhi-achievement-item>
                                 </div>
                             </div>
@@ -82,7 +84,8 @@
                                                           [irrelevancePercentage]="getAchievementIrrelevancy(badge)"
                                                           [active]="activeItemIds.badge === badge.id"
                                                           [completable]="true"
-                                                          (onItemSelected)="selectItem('badge', badge.id)">
+                                                          (onItemSelected)="selectItem('badge', badge.id)"
+                                                          [hasAuthority]="hasAuthority">
                                     </jhi-achievement-item>
                                 </div>
                             </div>

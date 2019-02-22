@@ -1,24 +1,26 @@
 <ng-template #popoverContent>
     <div class="d-flex flex-column align-items-center">
         <div>{{item.name}}</div>
-        <div *ngIf="item.instantMultiplier >= 0 && !active">
+        <jhi-number-input *ngIf="inEditMode && _active" [value]="item.instantMultiplier" (valueComitted)='saveInstantMultiplier($event)'></jhi-number-input>
+        <div *ngIf="item.instantMultiplier >= 0 && !_active">
             {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
         </div>
         <small *ngIf="hasStatus">( {{progress | number: '1.0-2' }}% )</small>
     </div>
 </ng-template>
 <div class="d-flex flex-column achievement-item" (click)="selectItem($event)"
-     [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
-     [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
+     popoverClass="score-popover"
+     [ngClass]="[_active ? 'active' : '', type, itemStatusCssClass]"
+     [ngbPopover]="popoverContent" #popover="ngbPopover" triggers="manual"
+     (mouseenter)="onPopupEnter()" (mouseleave)="onPopupLeave()" placement="top" container="body">
 
     <div class="badge-content">
-        <span *ngIf="item.instantMultiplier >= 0 && active" class="badge badge-pill multiplier-badge">
+        <span *ngIf="item.instantMultiplier >= 0 && _active" class="badge badge-pill multiplier-badge">
             {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
         </span>
     </div>
 
     <div class="item-content d-flex justify-content-center" [ngStyle]="{'width': size, 'height': size}">
-
         <span class="item-image">
             <img *ngIf="item.imageId ; else picturePlaceholder" [title]="item.name"
                  [src]="item.imageId | imageUrl: 'medium'" class="mx-auto"/>

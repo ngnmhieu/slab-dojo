@@ -21,7 +21,8 @@
                         <div class="" *ngFor="let badge of generalBadges">
                             <jhi-achievement-item type="item-badge" [item]="badge" [progress]="getAchievementProgress(badge)"
                                                   [active]="activeItemIds.badge === badge.id"
-                                                  (onItemSelected)="selectItem('badge', badge.id)">
+                                                  (onItemSelected)="selectItem('badge', badge.id)"
+                                                  [hasAuthority]="hasAuthority">
                             </jhi-achievement-item>
                         </div>
                     </div>
@@ -47,7 +48,8 @@
                         <div *ngFor="let badge of dimension.badges">
                             <jhi-achievement-item type="item-badge" [item]="badge" [progress]="getAchievementProgress(badge)"
                                                   [active]="activeItemIds.badge === badge.id"
-                                                  (onItemSelected)="selectItem('badge', badge.id)">
+                                                  (onItemSelected)="selectItem('badge', badge.id)"
+                                                  [hasAuthority]="hasAuthority">
                             </jhi-achievement-item>
                         </div>
                     </div>
@@ -58,7 +60,8 @@
                             <div *ngFor="let level of dimension.levels">
                                 <jhi-achievement-item type="item-level" [item]="level" [progress]="getAchievementProgress(level)"
                                                       [active]="activeItemIds.level === level.id"
-                                                      (onItemSelected)="selectItem('level', level.id)">
+                                                      (onItemSelected)="selectItem('level', level.id)"
+                                                      [hasAuthority]="hasAuthority">
                                 </jhi-achievement-item>
                             </div>
                         </div>

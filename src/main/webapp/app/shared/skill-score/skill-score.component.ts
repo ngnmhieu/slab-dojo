@@ -24,7 +24,6 @@ export class SkillScoreComponent {
 
         skillPromise.subscribe(
             skill => {
-                console.dir(2, skill);
                 skill.score = this.skill.score;
                 this.skillService.update(skill).subscribe((res: HttpResponse<ISkill>) => {
                     this.onSkillChanged.emit({

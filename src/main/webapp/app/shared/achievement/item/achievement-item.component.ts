@@ -1,6 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IBadge } from 'app/shared/model/badge.model';
 import { ILevel } from 'app/shared/model/level.model';
+import { HttpResponse } from '@angular/common/http';
+import { ISkill } from 'app/shared/model/skill.model';
+import { BadgeService } from 'app/entities/badge';
+import { LevelService } from 'app/entities/level';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-achievement-item',
@@ -11,16 +16,77 @@ export class AchievementItemComponent {
     @Input() item: any;
     @Input() irrelevancePercentage: number;
     @Input() progress: number;
-    @Input() active: boolean;
     @Input() type = '';
     @Input() hasStatus = false;
     @Input() size = '10vh';
     @Input() completable = false;
     @Output() onItemSelected = new EventEmitter<ILevel | IBadge>();
+    @ViewChild('popover') popover: NgbPopover;
+    @Input() hasAuthority: boolean;
+
+    get active(): boolean {
+        return this._active;
+    }
+
+    @Input()
+    set active(active: boolean) {
+        this._active = active;
+        if (!active) {
+            this.inEditMode = false;
+            this.popover.close();
+        }
+    }
+
+    private inEditMode: boolean;
+    private _active: boolean;
+
+    constructor(private badgeService: BadgeService, private levelService: LevelService) {}
+
+    saveInstantMultiplier(newInstantMultiplier) {
+        if (newInstantMultiplier || newInstantMultiplier === 0) {
+            this.item.instantMultiplier = newInstantMultiplier;
+            switch (this.type) {
+                case 'item-badge':
+                    this.badgeService.update(this.item).subscribe((res: HttpResponse<ISkill>) => {
+                        this.inEditMode = false;
+                    });
+                    break;
+                case 'item-level':
+                    this.levelService.update(this.item).subscribe((res: HttpResponse<ISkill>) => {
+                        this.inEditMode = false;
+                    });
+                    break;
+            }
+        }
+    }
 
     selectItem(event) {
         event.preventDefault();
-        this.onItemSelected.emit(this.item);
+        event.stopPropagation();
+        if (!this._active) {
+            this.onItemSelected.emit(this.item);
+            this.inEditMode = false;
+        } else {
+            if (this.hasAuthority) {
+                this.inEditMode = true;
+            }
+        }
+        if (!this.popover.isOpen()) {
+            this.popover.open();
+        }
+    }
+
+    onPopupEnter() {
+        if (this.inEditMode) {
+            this.popover.close();
+        }
+        this.popover.open();
+    }
+
+    onPopupLeave() {
+        if (!this.inEditMode) {
+            this.popover.close();
+        }
     }
 
     get progressWidth() {
