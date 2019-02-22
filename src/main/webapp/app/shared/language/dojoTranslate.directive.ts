@@ -37,17 +37,13 @@ export class DojoTranslateDirective implements OnChanges, OnInit {
     }
 
     private getTranslation() {
-        // if person mode: if translation key for person mode exists: use it. else: fallback to team translation.
         if (this.organizationService.getCurrentUserMode() === UserMode.PERSON) {
-            // replace key and check if there is a valid translation for this new key
             const personTranslateKey = this.dojoTranslate.replace('teamdojoApp', 'persondojoApp');
 
             this.translateService.get(personTranslateKey, this.translateValues).subscribe(personValue => {
-                // valid translation exists if the response does not contain the key
                 if (!personValue.includes(personTranslateKey)) {
                     this.el.nativeElement.innerHTML = personValue;
                 } else {
-                    // there was no valid translation so we have to fall back to team translation
                     this.translateService.get(this.dojoTranslate, this.translateValues).subscribe(teamValue => {
                         this.el.nativeElement.innerHTML = teamValue;
                     });
