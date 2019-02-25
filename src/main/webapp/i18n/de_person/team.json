@@ -10,7 +10,7 @@
             "updated": "Person aktualisiert mit ID {{ param }}",
             "deleted": "Person gelöscht mit ID {{ param }}",
             "delete": {
-                "question": "Soll Person {{ id }} wirklich dauerhaft gelöscht werden?"
+                "question": "Soll Person \"{{ name }}\" wirklich dauerhaft gelöscht werden?"
             },
             "detail": {
                 "title": "Person"

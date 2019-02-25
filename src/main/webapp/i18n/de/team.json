@@ -10,7 +10,7 @@
             "updated": "Team aktualisiert mit ID {{ param }}",
             "deleted": "Team gelöscht mit ID {{ param }}",
             "delete": {
-                "question": "Soll Team {{ id }} wirklich dauerhaft gelöscht werden?"
+                "question": "Soll Team \"{{ name }}\" wirklich dauerhaft gelöscht werden?"
             },
             "detail": {
                 "title": "Team"
