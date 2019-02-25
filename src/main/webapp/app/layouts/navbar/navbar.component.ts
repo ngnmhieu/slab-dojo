@@ -77,7 +77,6 @@ export class NavbarComponent implements OnInit {
 
         this.route.data.subscribe(({ organization }) => {
             this.organizationName = organization.name;
-            console.log('got org');
         });
         this.teamsSelectionService.query().subscribe();
     }
