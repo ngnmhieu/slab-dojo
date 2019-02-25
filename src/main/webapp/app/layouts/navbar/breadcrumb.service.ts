@@ -55,7 +55,7 @@ export class BreadcrumbService {
 
         if (this.team !== null && typeof this.team !== 'undefined') {
             path.push('teams', this.team.shortName);
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path).toString();
             breadcrumbs.push(new Breadcrumb(this.team.shortName, url, false));
         } else {
             path.push('');
@@ -65,11 +65,11 @@ export class BreadcrumbService {
             breadcrumbs.push(new Breadcrumb(this.dimension.name, url, false));
         }
         if (this.level !== null && typeof this.level !== 'undefined') {
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path, { queryParams: { level: this.level.id } }).toString();
             breadcrumbs.push(new Breadcrumb(this.level.name, url, false));
         }
         if (this.badge !== null && typeof this.badge !== 'undefined') {
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path, { queryParams: { badge: this.badge.id } }).toString();
             breadcrumbs.push(new Breadcrumb(this.badge.name, url, false));
         }
         if (this.skill !== null && typeof this.skill !== 'undefined') {
