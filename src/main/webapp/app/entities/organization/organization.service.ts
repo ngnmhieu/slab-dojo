@@ -42,7 +42,7 @@ export class OrganizationService {
     findCurrent(): Observable<EntityResponseType> {
         const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
         result.subscribe(res => {
-            this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode);
+            this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode || UserMode.TEAM);
         });
         return result;
     }
