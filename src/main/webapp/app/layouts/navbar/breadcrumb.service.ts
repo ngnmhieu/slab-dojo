@@ -27,10 +27,24 @@ export class BreadcrumbService {
 
     setBreadcrumb(team: ITeam = null, dimension: IDimension = null, level: ILevel = null, badge: IBadge = null, skill: ISkill = null) {
         this.team = team || this.team;
-        this.dimension = dimension || this.dimension;
-        this.level = level || this.level;
-        this.badge = badge || this.badge;
-        this.skill = skill || this.skill;
+
+        if (badge) {
+            this.badge = badge;
+            this.dimension = null;
+            this.level = null;
+        } else if (this.badge) {
+            this.badge = null;
+        }
+        if (level || dimension) {
+            this.dimension = dimension;
+            this.level = level;
+            this.badge = null;
+        } else if (this.level || this.dimension) {
+            this.dimension = null;
+            this.level = null;
+        }
+
+        this.skill = skill;
         this.breadcrumbChanged.emit('Breadcrumb changed');
     }
 
