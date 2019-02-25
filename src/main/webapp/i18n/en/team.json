@@ -10,7 +10,7 @@
             "updated": "A Team is updated with identifier {{ param }}",
             "deleted": "A Team is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Team {{ id }}?"
+                "question": "Are you sure you want to delete Team \"{{ name }}\"?"
             },
             "detail": {
                 "title": "Team"
