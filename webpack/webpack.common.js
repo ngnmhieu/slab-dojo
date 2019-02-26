@@ -56,7 +56,7 @@ module.exports = (options) => ({
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
-                BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
+                BUILD_TIMESTAMP: `'${new Date().toISOString()}'`,
                 VERSION: process.env["VERSION"] || "_DEV",
                 DEBUG_INFO_ENABLED: options.env === 'development',
                 // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
