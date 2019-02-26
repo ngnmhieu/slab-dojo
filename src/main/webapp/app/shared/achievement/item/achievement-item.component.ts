@@ -62,16 +62,23 @@ export class AchievementItemComponent {
     selectItem(event) {
         event.preventDefault();
         event.stopPropagation();
+        this.inEditMode = false;
         if (!this._active) {
             this.onItemSelected.emit(this.item);
             this.inEditMode = false;
         } else {
-            if (this.hasAuthority) {
-                this.inEditMode = true;
-            }
+            this.onItemSelected.emit(null);
         }
         if (!this.popover.isOpen()) {
             this.popover.open();
+        }
+    }
+
+    toggleEditMode() {
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.hasAuthority) {
+            this.inEditMode = !this.inEditMode;
         }
     }
 
