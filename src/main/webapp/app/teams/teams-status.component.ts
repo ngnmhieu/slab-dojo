@@ -53,7 +53,6 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.team.skills = this.teamSkills;
         this.calculateStatus();
-        this.breadcrumbService.setBreadcrumb(this.team);
     }
 
     editTeam(): NgbModalRef {

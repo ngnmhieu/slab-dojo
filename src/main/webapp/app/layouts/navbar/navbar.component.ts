@@ -87,7 +87,6 @@ export class NavbarComponent implements OnInit {
         this.activeDimension = null;
         this.activeTeam = null;
         this.activeSkill = null;
-        this.breadcrumbs = null;
         this.breadcrumbs = this.breadcrumbService.getCurrentBreadcrumb();
     }
 
