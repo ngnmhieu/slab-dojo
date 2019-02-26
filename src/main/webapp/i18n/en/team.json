@@ -10,7 +10,7 @@
             "updated": "A Team is updated with identifier {{ param }}",
             "deleted": "A Team is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Team {{ id }}?"
+                "question": "Are you sure you want to delete Team \"{{ name }}\"?"
             },
             "detail": {
                 "title": "Team"
@@ -23,6 +23,24 @@
             "participations": "Participations",
             "skills": "Skills",
             "image": "Image"
+        }
+    },
+    "persondojoApp": {
+        "team": {
+            "home": {
+                "title": "Persons",
+                "createLabel": "Create a new Person",
+                "createOrEditLabel": "Create or edit a Person"
+            },
+            "created": "A new Person is created with identifier {{ param }}",
+            "updated": "A Person is updated with identifier {{ param }}",
+            "deleted": "A Person is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Person {{ id }}?"
+            },
+            "detail": {
+                "title": "Person"
+            }
         }
     }
 }

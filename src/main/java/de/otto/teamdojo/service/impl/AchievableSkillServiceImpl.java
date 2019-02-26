@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.Level;
 import de.otto.teamdojo.domain.Team;
+import de.otto.teamdojo.domain.enumeration.UserMode;
 import de.otto.teamdojo.repository.BadgeRepository;
 import de.otto.teamdojo.repository.SkillRepository;
 import de.otto.teamdojo.repository.TeamRepository;
 import de.otto.teamdojo.service.AchievableSkillService;
 import de.otto.teamdojo.service.ActivityService;
+import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.service.dto.AchievableSkillDTO;
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
@@ -24,7 +26,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,9 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
     private final Logger log = LoggerFactory.getLogger(AchievableSkillServiceImpl.class);
 
     private static final List<String> ALL_FILTER = Lists.newArrayList("COMPLETE", "INCOMPLETE");
+
+    private static final int REQUIRED_VOTES_FOR_TEAM_MODE = Integer.MIN_VALUE;
+    private static final int REQUIRED_VOTES_FOR_PERSON_MODE = 5;
 
     private final SkillRepository skillRepository;
 
@@ -45,16 +49,21 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
 
     private final ActivityService activityService;
 
+    private final OrganizationService organizationService;
+
+
     public AchievableSkillServiceImpl(SkillRepository skillRepository,
                                       TeamRepository teamRepository,
                                       BadgeRepository badgeRepository,
                                       TeamSkillService teamSkillService,
-                                      ActivityService activityService) {
+                                      ActivityService activityService,
+                                      OrganizationService organizationService) {
         this.skillRepository = skillRepository;
         this.teamRepository = teamRepository;
         this.badgeRepository = badgeRepository;
         this.teamSkillService = teamSkillService;
         this.activityService = activityService;
+        this.organizationService = organizationService;
     }
 
     @Override
@@ -88,17 +97,27 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
         teamSkill.setVote((achievableSkill.getVote() != null) ? achievableSkill.getVote() : 0);
         teamSkill.setVoters(achievableSkill.getVoters());
         teamSkill.setIrrelevant(achievableSkill.isIrrelevant());
-        if(teamSkill.getVote() >= 5 && teamSkill.getVerifiedAt() == null){
+
+        int requiredVotes = REQUIRED_VOTES_FOR_TEAM_MODE;
+
+        if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)) {
+            requiredVotes = REQUIRED_VOTES_FOR_PERSON_MODE;
+        }
+
+        if (teamSkill.getVote() >= requiredVotes && teamSkill.getVerifiedAt() == null) {
             teamSkill.setVerifiedAt(Instant.now());
         }
         teamSkill = teamSkillService.save(teamSkill);
 
-        if ((originSkill == null && teamSkill.getCompletedAt() != null) || (originSkill != null && originSkill.getAchievedAt() == null && teamSkill.getCompletedAt() != null)) {
+        if ((originSkill == null && teamSkill.getCompletedAt() != null) || (originSkill != null
+            && originSkill.getAchievedAt() == null && teamSkill.getCompletedAt() != null)) {
             activityService.createForCompletedSkill(teamSkill);
         }
 
-        if (teamSkill.getCompletedAt() == null && teamSkill.getVote() == 1 && (originSkill == null || (originSkill != null && originSkill.getVote() != teamSkill.getVote()))) {
-                activityService.createForSuggestedSkill(teamSkill);
+        if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)
+            && teamSkill.getCompletedAt() == null && teamSkill.getVote() == 1
+            && (originSkill == null || !originSkill.getVote().equals(teamSkill.getVote()))) {
+            activityService.createForSuggestedSkill(teamSkill);
         }
 
         return skillRepository.findAchievableSkill(teamId, achievableSkill.getSkillId());

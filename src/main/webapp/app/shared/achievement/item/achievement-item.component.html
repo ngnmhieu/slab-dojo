@@ -13,7 +13,6 @@
      [ngClass]="[_active ? 'active' : '', type, itemStatusCssClass]"
      [ngbPopover]="popoverContent" #popover="ngbPopover" triggers="manual"
      (mouseenter)="onPopupEnter()" (mouseleave)="onPopupLeave()" placement="top" container="body">
-
     <div class="badge-content">
         <span *ngIf="item.instantMultiplier >= 0 && _active" class="badge badge-pill multiplier-badge">
             {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}

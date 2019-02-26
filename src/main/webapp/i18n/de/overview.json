@@ -30,5 +30,15 @@
                 "title": "Insgesamt"
             }
         }
+    },
+    "persondojoApp": {
+        "overview": {
+            "teams": {
+                "title": "Personen"
+            },
+            "navigation": {
+                "text": "Personenbersicht"
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@
             "updated": "Team aktualisiert mit ID {{ param }}",
             "deleted": "Team gelöscht mit ID {{ param }}",
             "delete": {
-                "question": "Soll Team {{ id }} wirklich dauerhaft gelöscht werden?"
+                "question": "Soll Team \"{{ name }}\" wirklich dauerhaft gelöscht werden?"
             },
             "detail": {
                 "title": "Team"
@@ -23,6 +23,27 @@
             "participations": "Participations",
             "skills": "Skills",
             "image": "Image"
+        }
+    },
+    "persondojoApp": {
+        "team": {
+            "home": {
+                "title": "Personen",
+                "createLabel": "Person erstellen",
+                "createOrEditLabel": "Person erstellen oder bearbeiten"
+            },
+            "created": "Person erstellt mit ID {{ param }}",
+            "updated": "Person aktualisiert mit ID {{ param }}",
+            "deleted": "Person gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll Person {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Person"
+            },
+            "navigation": {
+                "text": "Person Wohnzimmer"
+            }
         }
     }
 }

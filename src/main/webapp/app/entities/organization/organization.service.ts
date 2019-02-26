@@ -4,16 +4,19 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IOrganization } from 'app/shared/model/organization.model';
+import { IOrganization, UserMode } from 'app/shared/model/organization.model';
+import { LocalStorageService } from 'ngx-webstorage';
 
 type EntityResponseType = HttpResponse<IOrganization>;
 type EntityArrayResponseType = HttpResponse<IOrganization[]>;
+
+const USER_MODE_STORAGE_KEY = 'userMode';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {
     public resourceUrl = SERVER_API_URL + 'api/organizations';
 
-    constructor(protected http: HttpClient) {}
+    constructor(protected http: HttpClient, private storage: LocalStorageService) {}
 
     create(organization: IOrganization): Observable<EntityResponseType> {
         return this.http.post<IOrganization>(this.resourceUrl, organization, { observe: 'response' });
@@ -37,6 +40,14 @@ export class OrganizationService {
     }
 
     findCurrent(): Observable<EntityResponseType> {
-        return this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
+        const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
+        result.subscribe(res => {
+            this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode || UserMode.TEAM);
+        });
+        return result;
+    }
+
+    getCurrentUserMode(): UserMode {
+        return this.storage.retrieve(USER_MODE_STORAGE_KEY) || UserMode.TEAM;
     }
 }

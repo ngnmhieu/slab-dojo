@@ -11,7 +11,7 @@ export const adminState: Routes = [
         path: '',
         data: {
             authorities: ['ROLE_ADMIN'],
-            pageTitle: 'global.menu.admin.main'
+            pageTitle: 'teamdojoApp.global.menu.admin.main'
         },
         canActivate: [UserRouteAccessService],
         children: ADMIN_ROUTES

@@ -44,7 +44,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
                         }
                     });
                     if (errorHeader) {
-                        const entityName = translateService.instant('global.menu.entities.' + entityKey);
+                        const entityName = translateService.instant('teamdojoApp.global.menu.entities.' + entityKey);
                         this.addErrorAlert(errorHeader, errorHeader, { entityName });
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
                         const fieldErrors = httpErrorResponse.error.fieldErrors;
