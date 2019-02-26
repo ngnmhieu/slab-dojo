@@ -131,4 +131,12 @@
     &:hover {
         cursor: pointer;
     }
+
+    .skill-score {
+        height: 1.3rem;
+        width: 2.8rem;
+        line-height: 1rem;
+        color: $dojo-text-inverse-primary;
+        background-color: $dojo-text-primary;
+    }
 }
