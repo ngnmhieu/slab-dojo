@@ -32,6 +32,7 @@ public class TrainingDTO implements Serializable {
     @NotNull
     private Boolean isOfficial;
 
+    private String suggestedBy;
 
     private Set<SkillDTO> skills = new HashSet<>();
 
@@ -91,6 +92,14 @@ public class TrainingDTO implements Serializable {
         this.isOfficial = isOfficial;
     }
 
+    public String getSuggestedBy() {
+        return suggestedBy;
+    }
+
+    public void setSuggestedBy(String suggestedBy) {
+        this.suggestedBy = suggestedBy;
+    }
+
     public Set<SkillDTO> getSkills() {
         return skills;
     }
@@ -130,6 +139,7 @@ public class TrainingDTO implements Serializable {
             ", link='" + getLink() + "'" +
             ", validUntil='" + getValidUntil() + "'" +
             ", isOfficial='" + isIsOfficial() + "'" +
+            ", suggestedBy='" + getSuggestedBy() + "'" +
             "}";
     }
 }

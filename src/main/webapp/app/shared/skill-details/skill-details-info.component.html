@@ -94,16 +94,22 @@
             <div class="available-trainings">
                 <div *ngFor="let training of trainings">
                     <h6>
-                        <span [ngClass]="{'fa-star-o': training.isOfficial, 'fa-circle-thin': !training.isOfficial, 'fa training-is-official': true}"></span>
-                        <a *ngIf="training.link" [href]="training.link" target="_blank">{{training.title}}</a>
-                        <span *ngIf="!training.link">{{training.title}}</span>
-                        <small>{{training.contactPerson}}</small>
+                        <span
+                            [ngClass]="{
+                                'fa-star-o': training.isOfficial,
+                                'fa-circle-thin': !training.isOfficial,
+                                'fa training-is-official': true
+                            }"
+                        ></span>
+                        <a *ngIf="training.link" [href]="training.link" target="_blank">{{ training.title }}</a>
+                        <span *ngIf="!training.link">{{ training.title }}</span> <small>({{ training.contactPerson }})</small>
+                        <div *ngIf="training.suggestedBy">
+                            <small jhiTranslate="teamdojoApp.teams.skills.details.trainings.add.suggestedBy"></small><small>: {{ training.suggestedBy }}</small>
+                        </div>
                     </h6>
-                    <p>{{training.description}}</p>
+                    <p>{{ training.description }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-

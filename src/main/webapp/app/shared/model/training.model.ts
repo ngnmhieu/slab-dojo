@@ -9,6 +9,7 @@ export interface ITraining {
     link?: string;
     validUntil?: Moment;
     isOfficial?: boolean;
+    suggestedBy?: string;
     skills?: ISkill[];
 }
 
@@ -21,6 +22,7 @@ export class Training implements ITraining {
         public link?: string,
         public validUntil?: Moment,
         public isOfficial?: boolean,
+        public suggestedBy?: string,
         public skills?: ISkill[]
     ) {
         this.isOfficial = this.isOfficial || false;

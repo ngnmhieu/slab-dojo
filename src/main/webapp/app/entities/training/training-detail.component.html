@@ -29,6 +29,10 @@
                 <dd>
                     <span>{{training.isOfficial}}</span>
                 </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.suggestedBy">Suggested By</span></dt>
+                <dd>
+                    <span>{{training.suggestedBy}}</span>
+                </dd>
                 <dt><span dojoTranslate="teamdojoApp.training.skill">Skill</span></dt>
                 <dd>
                     <span *ngFor="let skill of training.skills; let last = last">

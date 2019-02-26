@@ -71,6 +71,9 @@ public class TrainingResourceIntTest {
     private static final Boolean DEFAULT_IS_OFFICIAL = false;
     private static final Boolean UPDATED_IS_OFFICIAL = true;
 
+    private static final String DEFAULT_SUGGESTED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_SUGGESTED_BY = "BBBBBBBBBB";
+
     @Autowired
     private TrainingRepository trainingRepository;
 
@@ -133,7 +136,8 @@ public class TrainingResourceIntTest {
             .contactPerson(DEFAULT_CONTACT_PERSON)
             .link(DEFAULT_LINK)
             .validUntil(DEFAULT_VALID_UNTIL)
-            .isOfficial(DEFAULT_IS_OFFICIAL);
+            .isOfficial(DEFAULT_IS_OFFICIAL)
+            .suggestedBy(DEFAULT_SUGGESTED_BY);
         return training;
     }
 
@@ -164,6 +168,7 @@ public class TrainingResourceIntTest {
         assertThat(testTraining.getLink()).isEqualTo(DEFAULT_LINK);
         assertThat(testTraining.getValidUntil()).isEqualTo(DEFAULT_VALID_UNTIL);
         assertThat(testTraining.isIsOfficial()).isEqualTo(DEFAULT_IS_OFFICIAL);
+        assertThat(testTraining.getSuggestedBy()).isEqualTo(DEFAULT_SUGGESTED_BY);
     }
 
     @Test
@@ -240,7 +245,8 @@ public class TrainingResourceIntTest {
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())))
             .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK.toString())))
             .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())))
-            .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())));
+            .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].suggestedBy").value(hasItem(DEFAULT_SUGGESTED_BY.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -292,7 +298,8 @@ public class TrainingResourceIntTest {
             .andExpect(jsonPath("$.contactPerson").value(DEFAULT_CONTACT_PERSON.toString()))
             .andExpect(jsonPath("$.link").value(DEFAULT_LINK.toString()))
             .andExpect(jsonPath("$.validUntil").value(DEFAULT_VALID_UNTIL.toString()))
-            .andExpect(jsonPath("$.isOfficial").value(DEFAULT_IS_OFFICIAL.booleanValue()));
+            .andExpect(jsonPath("$.isOfficial").value(DEFAULT_IS_OFFICIAL.booleanValue()))
+            .andExpect(jsonPath("$.suggestedBy").value(DEFAULT_SUGGESTED_BY.toString()));
     }
 
     @Test
@@ -531,6 +538,45 @@ public class TrainingResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTrainingsBySuggestedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        trainingRepository.saveAndFlush(training);
+
+        // Get all the trainingList where suggestedBy equals to DEFAULT_SUGGESTED_BY
+        defaultTrainingShouldBeFound("suggestedBy.equals=" + DEFAULT_SUGGESTED_BY);
+
+        // Get all the trainingList where suggestedBy equals to UPDATED_SUGGESTED_BY
+        defaultTrainingShouldNotBeFound("suggestedBy.equals=" + UPDATED_SUGGESTED_BY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrainingsBySuggestedByIsInShouldWork() throws Exception {
+        // Initialize the database
+        trainingRepository.saveAndFlush(training);
+
+        // Get all the trainingList where suggestedBy in DEFAULT_SUGGESTED_BY or UPDATED_SUGGESTED_BY
+        defaultTrainingShouldBeFound("suggestedBy.in=" + DEFAULT_SUGGESTED_BY + "," + UPDATED_SUGGESTED_BY);
+
+        // Get all the trainingList where suggestedBy equals to UPDATED_SUGGESTED_BY
+        defaultTrainingShouldNotBeFound("suggestedBy.in=" + UPDATED_SUGGESTED_BY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrainingsBySuggestedByIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        trainingRepository.saveAndFlush(training);
+
+        // Get all the trainingList where suggestedBy is not null
+        defaultTrainingShouldBeFound("suggestedBy.specified=true");
+
+        // Get all the trainingList where suggestedBy is null
+        defaultTrainingShouldNotBeFound("suggestedBy.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllTrainingsBySkillIsEqualToSomething() throws Exception {
         // Initialize the database
         Skill skill = SkillResourceIntTest.createEntity(em);
@@ -560,7 +606,8 @@ public class TrainingResourceIntTest {
             .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())))
             .andExpect(jsonPath("$.[*].link").value(hasItem(DEFAULT_LINK.toString())))
             .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())))
-            .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())));
+            .andExpect(jsonPath("$.[*].isOfficial").value(hasItem(DEFAULT_IS_OFFICIAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].suggestedBy").value(hasItem(DEFAULT_SUGGESTED_BY.toString())));
 
         // Check, that the count call also returns 1
         restTrainingMockMvc.perform(get("/api/trainings/count?sort=id,desc&" + filter))
@@ -613,7 +660,8 @@ public class TrainingResourceIntTest {
             .contactPerson(UPDATED_CONTACT_PERSON)
             .link(UPDATED_LINK)
             .validUntil(UPDATED_VALID_UNTIL)
-            .isOfficial(UPDATED_IS_OFFICIAL);
+            .isOfficial(UPDATED_IS_OFFICIAL)
+            .suggestedBy(UPDATED_SUGGESTED_BY);
         TrainingDTO trainingDTO = trainingMapper.toDto(updatedTraining);
 
         restTrainingMockMvc.perform(put("/api/trainings")
@@ -631,6 +679,7 @@ public class TrainingResourceIntTest {
         assertThat(testTraining.getLink()).isEqualTo(UPDATED_LINK);
         assertThat(testTraining.getValidUntil()).isEqualTo(UPDATED_VALID_UNTIL);
         assertThat(testTraining.isIsOfficial()).isEqualTo(UPDATED_IS_OFFICIAL);
+        assertThat(testTraining.getSuggestedBy()).isEqualTo(UPDATED_SUGGESTED_BY);
     }
 
     @Test
