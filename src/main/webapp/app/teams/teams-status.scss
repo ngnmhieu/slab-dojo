@@ -77,20 +77,6 @@
 
     .teams-status-achievements-container {
         height: 29vh;
-        .teams-status-achievements {
-            .teams-status-achievements-levels {
-                h5 {
-                    margin-bottom: 0;
-                }
-
-                /deep/ .achievement-item {
-                    padding-top: 0;
-                }
-            }
-
-            .teams-status-achievements-badges {
-            }
-        }
     }
 
     .team-edit-btn {
