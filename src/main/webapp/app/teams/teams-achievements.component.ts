@@ -11,6 +11,9 @@ import { IProgress, Progress } from 'app/shared/achievement/model/progress.model
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-teams-achievements',
@@ -25,8 +28,14 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
     generalBadges: IBadge[];
     activeItemIds: { badge: number; level: number; dimension: number };
     expandedDimensions: string[];
+    hasAuthority = false;
 
-    constructor(private route: ActivatedRoute, private jhiAlertService: JhiAlertService, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private jhiAlertService: JhiAlertService,
+        private router: Router,
+        private accountService: AccountService
+    ) {}
 
     ngOnInit() {
         this.generalBadges = this.badges.filter((badge: IBadge) => !badge.dimensions || !badge.dimensions.length);
@@ -77,6 +86,10 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
                     this.setExpandedDimensionId(this.team.participations[0].id);
                 }
             }
+        });
+
+        this.accountService.identity().then(identity => {
+            this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
         });
     }
 

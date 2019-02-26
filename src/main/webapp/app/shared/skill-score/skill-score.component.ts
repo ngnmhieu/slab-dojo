@@ -1,10 +1,11 @@
 import { AchievableSkill, IAchievableSkill } from 'app/shared/model/achievable-skill.model';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ISkill } from 'app/shared/model/skill.model';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { SkillService } from 'app/entities/skill';
 import { empty, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-skill-score',
@@ -16,28 +17,34 @@ export class SkillScoreComponent {
     @Input() hasAuthority: false;
     @Output() onSkillChanged = new EventEmitter<{ iSkill: ISkill; aSkill: IAchievableSkill }>();
     private _isEditingScore = {};
+    @ViewChild('scorePopover') popover: NgbPopover;
 
     constructor(private skillService: SkillService) {}
 
-    updateScore(popover) {
-        const skillPromise = this.skill.skillId ? this.skillService.find(this.skill.skillId).pipe(map(res => res.body)) : of(this.skill);
+    updateScore(newScore) {
+        if (newScore) {
+            const skillPromise = this.skill.skillId
+                ? this.skillService.find(this.skill.skillId).pipe(map(res => res.body))
+                : of(this.skill);
 
-        skillPromise.subscribe(
-            skill => {
-                console.dir(2, skill);
-                skill.score = this.skill.score;
-                this.skillService.update(skill).subscribe((res: HttpResponse<ISkill>) => {
-                    this.onSkillChanged.emit({
-                        iSkill: res.body,
-                        aSkill: null
+            skillPromise.subscribe(
+                skill => {
+                    skill.score = newScore;
+                    this.skillService.update(skill).subscribe((res: HttpResponse<ISkill>) => {
+                        this.onSkillChanged.emit({
+                            iSkill: res.body,
+                            aSkill: null
+                        });
+                        this.popover.close();
                     });
-                    popover.close();
-                });
-            },
-            (res: HttpErrorResponse) => {
-                console.log(res);
-            }
-        );
+                },
+                (res: HttpErrorResponse) => {
+                    console.log(res);
+                }
+            );
+        } else {
+            this.popover.close();
+        }
     }
 
     onPopupEnter(popover, isEditing) {
