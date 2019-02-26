@@ -29,6 +29,7 @@ task webpack_test(type: NpmTask, dependsOn: 'npm_install') {
 
 task webpack(type: NpmTask, dependsOn: 'npm_install') {
     args = ["run", "webpack:prod"]
+    environment = [ "VERSION": project.version ]
 }
 
 task copyIntoStatic (type: Copy) {
