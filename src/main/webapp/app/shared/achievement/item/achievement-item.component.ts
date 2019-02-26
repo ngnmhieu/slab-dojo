@@ -23,6 +23,8 @@ export class AchievementItemComponent {
     @Output() onItemSelected = new EventEmitter<ILevel | IBadge>();
     @ViewChild('popover') popover: NgbPopover;
     @Input() hasAuthority: boolean;
+    inEditMode: boolean;
+    private _active: boolean;
 
     get active(): boolean {
         return this._active;
@@ -36,9 +38,6 @@ export class AchievementItemComponent {
             this.popover.close();
         }
     }
-
-    private inEditMode: boolean;
-    private _active: boolean;
 
     constructor(private badgeService: BadgeService, private levelService: LevelService) {}
 
