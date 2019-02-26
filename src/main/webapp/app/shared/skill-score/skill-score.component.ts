@@ -22,7 +22,7 @@ export class SkillScoreComponent {
     constructor(private skillService: SkillService) {}
 
     updateScore(newScore) {
-        if (newScore) {
+        if (newScore || newScore === 0) {
             const skillPromise = this.skill.skillId
                 ? this.skillService.find(this.skill.skillId).pipe(map(res => res.body))
                 : of(this.skill);
