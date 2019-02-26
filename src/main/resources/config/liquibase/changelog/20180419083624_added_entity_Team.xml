@@ -25,7 +25,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="short_name" type="varchar(6)">
+            <column name="short_name" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
 

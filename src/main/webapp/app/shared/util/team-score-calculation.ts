@@ -10,7 +10,6 @@ export class TeamScoreCalculation {
         let score = this._calcSkillScore(team, skills);
         score += this._calcLevelBonus(team, skills);
         score += this._calcBadgeBonus(team, badges, skills);
-        score = Math.ceil(score);
         return score;
     }
 

@@ -10,6 +10,8 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+import de.otto.teamdojo.domain.enumeration.UserMode;
+
 /**
  * A Organization.
  */
@@ -31,6 +33,16 @@ public class Organization implements Serializable {
 
     @Column(name = "level_up_score")
     private Integer levelUpScore;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_mode", nullable = false)
+    private UserMode userMode;
+
+    @Size(max = 255)
+    @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
+    @Column(name = "mattermost_url", length = 255)
+    private String mattermostUrl;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -66,6 +78,32 @@ public class Organization implements Serializable {
     public void setLevelUpScore(Integer levelUpScore) {
         this.levelUpScore = levelUpScore;
     }
+
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public Organization userMode(UserMode userMode) {
+        this.userMode = userMode;
+        return this;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    public String getMattermostUrl() {
+        return mattermostUrl;
+    }
+
+    public void setMattermostUrl(String mattermostUrl) {
+        this.mattermostUrl = mattermostUrl;
+    }
+
+    public Organization mattermostUrl(String mattermostUrl) {
+        this.mattermostUrl = mattermostUrl;
+        return this;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -94,6 +132,8 @@ public class Organization implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", levelUpScore=" + getLevelUpScore() +
+            ", userMode='" + getUserMode() + "'" +
+            ", mattermostUrl='" + getMattermostUrl() + "'" +
             "}";
     }
 }

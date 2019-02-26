@@ -40,4 +40,7 @@ public interface OrganizationService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    // get the only organization - assuming, there is only one.
+    OrganizationDTO getCurrentOrganization();
 }

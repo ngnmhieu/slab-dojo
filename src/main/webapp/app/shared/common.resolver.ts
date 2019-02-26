@@ -12,7 +12,10 @@ import { CommentService } from 'app/entities/comment';
 import { TeamService } from 'app/entities/team';
 import { Injectable } from '@angular/core';
 import { TrainingService } from 'app/entities/training';
-import { map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
+import { IOrganization } from 'app/shared/model/organization.model';
+import { HttpResponse } from '@angular/common/http';
+import { OrganizationService } from 'app/entities/organization';
 
 @Injectable()
 export class AllTeamsResolve implements Resolve<any> {
@@ -194,5 +197,18 @@ export class AllTrainingsResolve implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.trainingService.query();
+    }
+}
+
+@Injectable()
+export class OrganizationResolve implements Resolve<any> {
+    constructor(private organizationService: OrganizationService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.organizationService.findCurrent().pipe(
+            filter((response: HttpResponse<IOrganization>) => response.ok),
+            take(1),
+            map((organization: HttpResponse<IOrganization>) => organization.body)
+        );
     }
 }

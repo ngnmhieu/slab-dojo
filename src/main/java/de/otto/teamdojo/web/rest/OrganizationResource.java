@@ -27,8 +27,6 @@ public class OrganizationResource {
 
     private static final String ENTITY_NAME = "organization";
 
-    static final String DEFAULT_ORGANIZATION_NAME = "Organization";
-
     private final OrganizationService organizationService;
 
     public OrganizationResource(OrganizationService organizationService) {
@@ -120,20 +118,8 @@ public class OrganizationResource {
     @GetMapping("/organizations/current")
     public OrganizationDTO getCurrentOrganization() {
         log.debug("REST request to get current Organizations");
-        List<OrganizationDTO> organizations = organizationService.findAll();
-        if (organizations.isEmpty()) {
-            return getDefaultOrganization();
-        } else {
-            if (organizations.size() > 1) {
-                log.warn("There exists more than one organization");
-            }
-            return organizations.get(0);
-        }
+        return organizationService.getCurrentOrganization();
     }
 
-    private OrganizationDTO getDefaultOrganization() {
-        OrganizationDTO organization = new OrganizationDTO();
-        organization.setName(DEFAULT_ORGANIZATION_NAME);
-        return organization;
-    }
+
 }

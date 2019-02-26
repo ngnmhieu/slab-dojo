@@ -20,5 +20,10 @@
             "team": "Team",
             "skill": "Skill"
         }
+    },
+    "personojoApp": {
+        "comment": {
+            "team": "Person"
+        }
     }
 }

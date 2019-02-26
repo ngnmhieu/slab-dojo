@@ -18,7 +18,6 @@ import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { IBreadcrumb } from 'app/shared/model/breadcrumb.model';
 import { OrganizationService } from 'app/entities/organization';
 import { IOrganization, Organization } from 'app/shared/model/organization.model';
-import { filter, map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -55,8 +54,7 @@ export class NavbarComponent implements OnInit {
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,
-        private breadcrumbService: BreadcrumbService,
-        private organizationService: OrganizationService
+        private breadcrumbService: BreadcrumbService
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
@@ -77,15 +75,9 @@ export class NavbarComponent implements OnInit {
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
 
-        this.organizationService
-            .findCurrent()
-            .pipe(
-                filter((response: HttpResponse<Organization>) => response.ok),
-                map((organization: HttpResponse<Organization>) => organization.body)
-            )
-            .subscribe((current: IOrganization) => {
-                this.organizationName = current.name;
-            });
+        this.route.data.subscribe(({ organization }) => {
+            this.organizationName = organization.name;
+        });
         this.teamsSelectionService.query().subscribe();
     }
 

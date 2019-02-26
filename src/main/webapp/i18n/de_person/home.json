@@ -1,9 +1,0 @@
-{
-    "home": {
-        "title": "Willkommen beim Team Dojo",
-        "subtitle": "Dies ist die Hauptseite",
-        "logged": {
-            "message": "Du bist als Benutzer \"{{username}}\" angemeldet."
-        }
-    }
-}

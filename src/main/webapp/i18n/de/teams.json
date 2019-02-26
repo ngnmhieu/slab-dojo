@@ -76,7 +76,7 @@
                     "received": "erhalten"
                 },
                 "edit": {
-                    "label": "Person bearbeiten",
+                    "label": "Team bearbeiten",
                     "name": "Name",
                     "shortName": "Kurzname",
                     "slogan": "Slogan"
@@ -93,6 +93,23 @@
                 }
             },
             "dateFormat": "dd.MM.yyyy"
+        }
+    },
+    "persondojoApp": {
+        "teams": {
+            "home": {
+                "title": "Person"
+            },
+            "selection": {
+                "title": "Person Auswahl",
+                "deselect": "Keine Person",
+                "select": "Person auswählen"
+            }
+        },
+        "skills": {
+            "details": {
+                "achievedByNone": "Dieser Skill wurde noch von keiner Person erfüllt!"
+            }
         }
     }
 }

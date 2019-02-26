@@ -1,137 +1,148 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-skill-heading" jhiTranslate="teamdojoApp.skill.home.createOrEditLabel">Create or edit a Skill</h2>
+            <h2 dojoTranslate="teamdojoApp.skill.home.createOrEditLabel" id="jhi-skill-heading">Create or edit a Skill</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group" [hidden]="!skill.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <label dojoTranslate="teamdojoApp.global.field.id" for="id">ID</label>
                     <input type="text" class="form-control" id="id" name="id"
                         [(ngModel)]="skill.id" readonly />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.title" for="field_title">Title</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.title" for="field_title">Title</label>
                     <input type="text" class="form-control" name="title" id="field_title"
                         [(ngModel)]="skill.title" required minlength="5" maxlength="80"/>
                     <div [hidden]="!(editForm.controls.title?.dirty && editForm.controls.title?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.required" jhiTranslate="entity.validation.required">
+                        [hidden]="!editForm.controls.title?.errors?.required" dojoTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 5 }">
+                               [hidden]="!editForm.controls.title?.errors?.minlength"
+                               [translateValues]="{ min: 5 }" dojoTranslate="entity.validation.minlength">
                         This field is required to be at least 5 characters.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.title?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
+                               [hidden]="!editForm.controls.title?.errors?.maxlength"
+                               [translateValues]="{ max: 80 }" dojoTranslate="entity.validation.maxlength">
                         This field cannot be longer than 80 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.description" for="field_description">Description</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.description" for="field_description">Description</label>
                     <textarea class="form-control" name="description" id="field_description"
                               [(ngModel)]="skill.description" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.description?.dirty && editForm.controls.description?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.description?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
+                               [hidden]="!editForm.controls.description?.errors?.maxlength"
+                               [translateValues]="{ max: 2048 }" dojoTranslate="entity.validation.maxlength">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.implementation" for="field_implementation">Implementation</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.implementation" for="field_implementation">Implementation</label>
                     <textarea class="form-control" name="implementation" id="field_implementation"
                               [(ngModel)]="skill.implementation" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.implementation?.dirty && editForm.controls.implementation?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.implementation?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
+                               [hidden]="!editForm.controls.implementation?.errors?.maxlength"
+                               [translateValues]="{ max: 2048 }" dojoTranslate="entity.validation.maxlength">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.validation" for="field_validation">Validation</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.validation" for="field_validation">Validation</label>
                     <textarea class="form-control" name="validation" id="field_validation"
                               [(ngModel)]="skill.validation" rows="3" maxlength="2048"></textarea>
                     <div [hidden]="!(editForm.controls.validation?.dirty && editForm.controls.validation?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.validation?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 2048 }">
+                               [hidden]="!editForm.controls.validation?.errors?.maxlength"
+                               [translateValues]="{ max: 2048 }" dojoTranslate="entity.validation.maxlength">
                         This field cannot be longer than 2048 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.expiryPeriod" for="field_expiryPeriod">Expiry Period</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.expiryPeriod" for="field_expiryPeriod">Expiry Period</label>
                     <input type="text" class="form-control" name="expiryPeriod" id="field_expiryPeriod"
                         [(ngModel)]="skill.expiryPeriod" pattern="^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$"
                         [placeholder]="'teamdojoApp.skill.expiryPeriodPlaceholder' | translate"/>
                     <div [hidden]="!(editForm.controls.expiryPeriod?.dirty && editForm.controls.expiryPeriod?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Expiry Period' }">
+                               [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern"
+                               dojoTranslate="entity.validation.pattern"
+                               [translateValues]="{ pattern: 'Expiry Period' }">
                             This field should follow pattern for "Expiry Period".
                         </small>
                         <small class="form-text text-danger"
-                               [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" jhiTranslate="entity.validation.expectedPattern"
+                               [hidden]="!editForm.controls.expiryPeriod?.errors?.pattern" dojoTranslate="entity.validation.expectedPattern"
                                [translateValues]="{ regex: '/^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/' }">
                             The expected pattern is /^P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?$/.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.contact" for="field_contact">Contact</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.contact" for="field_contact">Contact</label>
                     <input type="text" class="form-control" name="contact" id="field_contact"
                         [(ngModel)]="skill.contact" />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.score" for="field_score">Score</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.score" for="field_score">Score</label>
                     <input type="number" class="form-control" name="score" id="field_score"
                         [(ngModel)]="skill.score" required min="0" jhiMin="0"/>
                     <div [hidden]="!(editForm.controls.score?.dirty && editForm.controls.score?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.score?.errors?.required" jhiTranslate="entity.validation.required">
+                        [hidden]="!editForm.controls.score?.errors?.required" dojoTranslate="entity.validation.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.score?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                               [hidden]="!editForm.controls.score?.errors?.min" dojoTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.score?.errors?.number" jhiTranslate="entity.validation.number">
+                            [hidden]="!editForm.controls.score?.errors?.number" dojoTranslate="entity.validation.number">
                             This field should be a number.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.rateScore" for="field_rateScore">Rate Score</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.rateScore" for="field_rateScore">Rate Score</label>
                     <input type="number" class="form-control" name="rateScore" id="field_rateScore"
                         [(ngModel)]="skill.rateScore" min="0" jhiMin="0" max="5" jhiMax="5"/>
                     <div [hidden]="!(editForm.controls.rateScore?.dirty && editForm.controls.rateScore?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateScore?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                               [hidden]="!editForm.controls.rateScore?.errors?.min" dojoTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateScore?.errors?.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }">
+                               [hidden]="!editForm.controls.rateScore?.errors?.max" dojoTranslate="entity.validation.max"
+                               [translateValues]="{ max: 5 }">
                             This field cannot be more than 5.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateScore?.errors?.number" jhiTranslate="entity.validation.number">
+                            [hidden]="!editForm.controls.rateScore?.errors?.number" dojoTranslate="entity.validation.number">
                             This field should be a number.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="teamdojoApp.skill.rateCount" for="field_rateCount">Rate Count</label>
+                    <label class="form-control-label" dojoTranslate="teamdojoApp.skill.rateCount" for="field_rateCount">Rate Count</label>
                     <input type="number" class="form-control" name="rateCount" id="field_rateCount"
                         [(ngModel)]="skill.rateCount" min="0" jhiMin="0"/>
                     <div [hidden]="!(editForm.controls.rateCount?.dirty && editForm.controls.rateCount?.invalid)">
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateCount?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                               [hidden]="!editForm.controls.rateCount?.errors?.min" dojoTranslate="entity.validation.min"
+                               [translateValues]="{ min: 0 }">
                             This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.rateCount?.errors?.number" jhiTranslate="entity.validation.number">
+                            [hidden]="!editForm.controls.rateCount?.errors?.number" dojoTranslate="entity.validation.number">
                             This field should be a number.
                         </small>
                     </div>
@@ -140,10 +151,10 @@
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.cancel">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.save">Save</span>
                 </button>
             </div>
         </form>
