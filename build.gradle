@@ -78,7 +78,7 @@ springBoot {
 
 reckon {
     scopeFromProp()
-    snapshotFromProp()
+    stageFromProp('rc')
 }
 
 if (OperatingSystem.current().isWindows()) {
