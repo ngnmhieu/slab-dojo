@@ -9,7 +9,7 @@
 </ng-template>
 <div class="d-flex flex-column achievement-item" (click)="selectItem($event)"
      [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
-     [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
+     [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top" container="body">
 
     <div class="badge-content">
         <span *ngIf="item.instantMultiplier >= 0 && active" class="badge badge-pill multiplier-badge">
