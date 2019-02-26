@@ -5,7 +5,7 @@
     {{skill.score}}
 </span>
 <ng-template #scorePopoverTpl>
-    <small *ngIf="!isEditingScore()" dojoTranslate="teamdojoApp.teams.skills.score.title" translateValues="{score: '{{skill.score}}'}">
+    <small *ngIf="!isEditingScore()" dojoTranslate="teamdojoApp.teams.skills.score.title"  [translateValues]="{'score': skill.score }">
         Score: {{skill.score}}
     </small>
     <jhi-number-input *ngIf="isEditingScore()" [value]="skill.score" (valueComitted)='updateScore($event)'></jhi-number-input>
