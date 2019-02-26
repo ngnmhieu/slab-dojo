@@ -17,28 +17,18 @@ import { TeamdojoAppRoutingModule } from './app-routing.module';
 import { TeamdojoHomeModule } from './home/home.module';
 import { TeamdojoAccountModule } from './account/account.module';
 import { TeamdojoEntityModule } from './entities/entity.module';
+import * as moment from 'moment';
 import { OverviewModule } from 'app/overview';
 import { TeamsModule } from './teams/teams.module';
 import { FeedbackModule } from './feedback/feedback.module';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
-import {
-    ActiveMenuDirective,
-    ErrorComponent,
-    FooterComponent,
-    JhiMainComponent,
-    NavbarComponent,
-    PageRibbonComponent,
-    ProfileService
-} from './layouts';
-import * as moment from 'moment';
+import { ActiveMenuDirective, ErrorComponent, FooterComponent, JhiMainComponent, NavbarComponent, PageRibbonComponent } from './layouts';
 
 @NgModule({
     imports: [
         StarRatingModule.forRoot(),
         BrowserModule,
-        TeamdojoAppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
@@ -50,17 +40,16 @@ import * as moment from 'moment';
         TeamdojoSharedModule.forRoot(),
         TeamdojoCoreModule,
         OverviewModule,
+        TeamsModule,
+        FeedbackModule,
         TeamdojoHomeModule,
         TeamdojoAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
         TeamdojoEntityModule,
-        TeamsModule,
-        FeedbackModule
+        TeamdojoAppRoutingModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [
-        ProfileService,
-        PaginationConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,

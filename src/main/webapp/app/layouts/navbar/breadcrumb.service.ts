@@ -27,10 +27,24 @@ export class BreadcrumbService {
 
     setBreadcrumb(team: ITeam = null, dimension: IDimension = null, level: ILevel = null, badge: IBadge = null, skill: ISkill = null) {
         this.team = team || this.team;
-        this.dimension = dimension || this.dimension;
-        this.level = level || this.level;
-        this.badge = badge || this.badge;
-        this.skill = skill || this.skill;
+
+        if (badge) {
+            this.badge = badge;
+            this.dimension = null;
+            this.level = null;
+        } else if (this.badge) {
+            this.badge = null;
+        }
+        if (level || dimension) {
+            this.dimension = dimension;
+            this.level = level;
+            this.badge = null;
+        } else if (this.level || this.dimension) {
+            this.dimension = null;
+            this.level = null;
+        }
+
+        this.skill = skill;
         this.breadcrumbChanged.emit('Breadcrumb changed');
     }
 
@@ -41,7 +55,7 @@ export class BreadcrumbService {
 
         if (this.team !== null && typeof this.team !== 'undefined') {
             path.push('teams', this.team.shortName);
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path).toString();
             breadcrumbs.push(new Breadcrumb(this.team.shortName, url, false));
         } else {
             path.push('');
@@ -51,11 +65,11 @@ export class BreadcrumbService {
             breadcrumbs.push(new Breadcrumb(this.dimension.name, url, false));
         }
         if (this.level !== null && typeof this.level !== 'undefined') {
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path, { queryParams: { level: this.level.id } }).toString();
             breadcrumbs.push(new Breadcrumb(this.level.name, url, false));
         }
         if (this.badge !== null && typeof this.badge !== 'undefined') {
-            const url = this.router.createUrlTree(path, { queryParams: this.params }).toString();
+            const url = this.router.createUrlTree(path, { queryParams: { badge: this.badge.id } }).toString();
             breadcrumbs.push(new Breadcrumb(this.badge.name, url, false));
         }
         if (this.skill !== null && typeof this.skill !== 'undefined') {

@@ -7,7 +7,7 @@
         Added the constraints for entity TeamSkill.
     -->
     <changeSet id="20180419092355-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="skill_id"
                                  baseTableName="team_skill"
                                  constraintName="fk_team_skill_skill_id"

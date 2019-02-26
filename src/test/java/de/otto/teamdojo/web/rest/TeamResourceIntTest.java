@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,9 @@ public class TeamResourceIntTest {
 
     private static final String DEFAULT_CONTACT_PERSON = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT_PERSON = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_VALID_UNTIL = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_VALID_UNTIL = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private TeamRepository teamRepository;
@@ -125,7 +130,8 @@ public class TeamResourceIntTest {
             .name(DEFAULT_NAME)
             .shortName(DEFAULT_SHORT_NAME)
             .slogan(DEFAULT_SLOGAN)
-            .contactPerson(DEFAULT_CONTACT_PERSON);
+            .contactPerson(DEFAULT_CONTACT_PERSON)
+            .validUntil(DEFAULT_VALID_UNTIL);
         return team;
     }
 
@@ -154,6 +160,7 @@ public class TeamResourceIntTest {
         assertThat(testTeam.getShortName()).isEqualTo(DEFAULT_SHORT_NAME);
         assertThat(testTeam.getSlogan()).isEqualTo(DEFAULT_SLOGAN);
         assertThat(testTeam.getContactPerson()).isEqualTo(DEFAULT_CONTACT_PERSON);
+        assertThat(testTeam.getValidUntil()).isEqualTo(DEFAULT_VALID_UNTIL);
     }
 
     @Test
@@ -228,7 +235,8 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME.toString())))
             .andExpect(jsonPath("$.[*].slogan").value(hasItem(DEFAULT_SLOGAN.toString())))
-            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())));
+            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())))
+            .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -278,7 +286,8 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.shortName").value(DEFAULT_SHORT_NAME.toString()))
             .andExpect(jsonPath("$.slogan").value(DEFAULT_SLOGAN.toString()))
-            .andExpect(jsonPath("$.contactPerson").value(DEFAULT_CONTACT_PERSON.toString()));
+            .andExpect(jsonPath("$.contactPerson").value(DEFAULT_CONTACT_PERSON.toString()))
+            .andExpect(jsonPath("$.validUntil").value(DEFAULT_VALID_UNTIL.toString()));
     }
 
     @Test
@@ -439,6 +448,45 @@ public class TeamResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTeamsByValidUntilIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamRepository.saveAndFlush(team);
+
+        // Get all the teamList where validUntil equals to DEFAULT_VALID_UNTIL
+        defaultTeamShouldBeFound("validUntil.equals=" + DEFAULT_VALID_UNTIL);
+
+        // Get all the teamList where validUntil equals to UPDATED_VALID_UNTIL
+        defaultTeamShouldNotBeFound("validUntil.equals=" + UPDATED_VALID_UNTIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamsByValidUntilIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamRepository.saveAndFlush(team);
+
+        // Get all the teamList where validUntil in DEFAULT_VALID_UNTIL or UPDATED_VALID_UNTIL
+        defaultTeamShouldBeFound("validUntil.in=" + DEFAULT_VALID_UNTIL + "," + UPDATED_VALID_UNTIL);
+
+        // Get all the teamList where validUntil equals to UPDATED_VALID_UNTIL
+        defaultTeamShouldNotBeFound("validUntil.in=" + UPDATED_VALID_UNTIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamsByValidUntilIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamRepository.saveAndFlush(team);
+
+        // Get all the teamList where validUntil is not null
+        defaultTeamShouldBeFound("validUntil.specified=true");
+
+        // Get all the teamList where validUntil is null
+        defaultTeamShouldNotBeFound("validUntil.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllTeamsByParticipationsIsEqualToSomething() throws Exception {
         // Initialize the database
         Dimension participations = DimensionResourceIntTest.createEntity(em);
@@ -501,10 +549,11 @@ public class TeamResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(team.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].slogan").value(hasItem(DEFAULT_SLOGAN.toString())))
-            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
+            .andExpect(jsonPath("$.[*].slogan").value(hasItem(DEFAULT_SLOGAN)))
+            .andExpect(jsonPath("$.[*].contactPerson").value(hasItem(DEFAULT_CONTACT_PERSON)))
+            .andExpect(jsonPath("$.[*].validUntil").value(hasItem(DEFAULT_VALID_UNTIL.toString())));
 
         // Check, that the count call also returns 1
         restTeamMockMvc.perform(get("/api/teams/count?sort=id,desc&" + filter))
@@ -555,7 +604,8 @@ public class TeamResourceIntTest {
             .name(UPDATED_NAME)
             .shortName(UPDATED_SHORT_NAME)
             .slogan(UPDATED_SLOGAN)
-            .contactPerson(UPDATED_CONTACT_PERSON);
+            .contactPerson(UPDATED_CONTACT_PERSON)
+            .validUntil(UPDATED_VALID_UNTIL);
         TeamDTO teamDTO = teamMapper.toDto(updatedTeam);
 
         restTeamMockMvc.perform(put("/api/teams")
@@ -571,6 +621,7 @@ public class TeamResourceIntTest {
         assertThat(testTeam.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testTeam.getSlogan()).isEqualTo(UPDATED_SLOGAN);
         assertThat(testTeam.getContactPerson()).isEqualTo(UPDATED_CONTACT_PERSON);
+        assertThat(testTeam.getValidUntil()).isEqualTo(UPDATED_VALID_UNTIL);
     }
 
     @Test
@@ -600,7 +651,7 @@ public class TeamResourceIntTest {
 
         int databaseSizeBeforeDelete = teamRepository.findAll().size();
 
-        // Get the team
+        // Delete the team
         restTeamMockMvc.perform(delete("/api/teams/{id}", team.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

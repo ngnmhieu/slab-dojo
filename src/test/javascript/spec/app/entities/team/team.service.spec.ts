@@ -4,6 +4,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { TeamService } from 'app/entities/team/team.service';
 import { ITeam, Team } from 'app/shared/model/team.model';
 
@@ -13,6 +15,7 @@ describe('Service Tests', () => {
         let service: TeamService;
         let httpMock: HttpTestingController;
         let elemDefault: ITeam;
+        let currentDate: moment.Moment;
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
@@ -20,13 +23,19 @@ describe('Service Tests', () => {
             injector = getTestBed();
             service = injector.get(TeamService);
             httpMock = injector.get(HttpTestingController);
+            currentDate = moment();
 
-            elemDefault = new Team(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+            elemDefault = new Team(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate);
         });
 
         describe('Service methods', async () => {
             it('should find an element', async () => {
-                const returnedFromService = Object.assign({}, elemDefault);
+                const returnedFromService = Object.assign(
+                    {
+                        validUntil: currentDate.format(DATE_TIME_FORMAT)
+                    },
+                    elemDefault
+                );
                 service
                     .find(123)
                     .pipe(take(1))
@@ -39,11 +48,17 @@ describe('Service Tests', () => {
             it('should create a Team', async () => {
                 const returnedFromService = Object.assign(
                     {
-                        id: 0
+                        id: 0,
+                        validUntil: currentDate.format(DATE_TIME_FORMAT)
                     },
                     elemDefault
                 );
-                const expected = Object.assign({}, returnedFromService);
+                const expected = Object.assign(
+                    {
+                        validUntil: currentDate
+                    },
+                    returnedFromService
+                );
                 service
                     .create(new Team(null))
                     .pipe(take(1))
@@ -58,12 +73,18 @@ describe('Service Tests', () => {
                         name: 'BBBBBB',
                         shortName: 'BBBBBB',
                         slogan: 'BBBBBB',
-                        contactPerson: 'BBBBBB'
+                        contactPerson: 'BBBBBB',
+                        validUntil: currentDate.format(DATE_TIME_FORMAT)
                     },
                     elemDefault
                 );
 
-                const expected = Object.assign({}, returnedFromService);
+                const expected = Object.assign(
+                    {
+                        validUntil: currentDate
+                    },
+                    returnedFromService
+                );
                 service
                     .update(expected)
                     .pipe(take(1))
@@ -78,11 +99,17 @@ describe('Service Tests', () => {
                         name: 'BBBBBB',
                         shortName: 'BBBBBB',
                         slogan: 'BBBBBB',
-                        contactPerson: 'BBBBBB'
+                        contactPerson: 'BBBBBB',
+                        validUntil: currentDate.format(DATE_TIME_FORMAT)
                     },
                     elemDefault
                 );
-                const expected = Object.assign({}, returnedFromService);
+                const expected = Object.assign(
+                    {
+                        validUntil: currentDate
+                    },
+                    returnedFromService
+                );
                 service
                     .query(expected)
                     .pipe(

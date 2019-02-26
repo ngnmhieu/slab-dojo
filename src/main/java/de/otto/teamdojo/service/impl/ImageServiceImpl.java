@@ -1,12 +1,13 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.service.ImageService;
 import de.otto.teamdojo.domain.Image;
 import de.otto.teamdojo.repository.ImageRepository;
-import de.otto.teamdojo.service.ImageService;
 import de.otto.teamdojo.service.dto.ImageDTO;
 import de.otto.teamdojo.service.mapper.ImageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -29,8 +27,6 @@ public class OrganizationResource {
 
     private static final String ENTITY_NAME = "organization";
 
-    static final String DEFAULT_ORGANIZATION_NAME = "Organization";
-
     private final OrganizationService organizationService;
 
     public OrganizationResource(OrganizationService organizationService) {
@@ -45,7 +41,6 @@ public class OrganizationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/organizations")
-    @Timed
     public ResponseEntity<OrganizationDTO> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to save Organization : {}", organizationDTO);
         if (organizationDTO.getId() != null) {
@@ -67,7 +62,6 @@ public class OrganizationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/organizations")
-    @Timed
     public ResponseEntity<OrganizationDTO> updateOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to update Organization : {}", organizationDTO);
         if (organizationDTO.getId() == null) {
@@ -85,7 +79,6 @@ public class OrganizationResource {
      * @return the ResponseEntity with status 200 (OK) and the list of organizations in body
      */
     @GetMapping("/organizations")
-    @Timed
     public List<OrganizationDTO> getAllOrganizations() {
         log.debug("REST request to get all Organizations");
         return organizationService.findAll();
@@ -98,7 +91,6 @@ public class OrganizationResource {
      * @return the ResponseEntity with status 200 (OK) and with body the organizationDTO, or with status 404 (Not Found)
      */
     @GetMapping("/organizations/{id}")
-    @Timed
     public ResponseEntity<OrganizationDTO> getOrganization(@PathVariable Long id) {
         log.debug("REST request to get Organization : {}", id);
         Optional<OrganizationDTO> organizationDTO = organizationService.findOne(id);
@@ -112,7 +104,6 @@ public class OrganizationResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/organizations/{id}")
-    @Timed
     public ResponseEntity<Void> deleteOrganization(@PathVariable Long id) {
         log.debug("REST request to delete Organization : {}", id);
         organizationService.delete(id);
@@ -125,23 +116,10 @@ public class OrganizationResource {
      * @return the ResponseEntity with status 200 (OK) and the organization in body
      */
     @GetMapping("/organizations/current")
-    @Timed
     public OrganizationDTO getCurrentOrganization() {
         log.debug("REST request to get current Organizations");
-        List<OrganizationDTO> organizations = organizationService.findAll();
-        if (organizations.isEmpty()) {
-            return getDefaultOrganization();
-        } else {
-            if (organizations.size() > 1) {
-                log.warn("There exists more than one organization");
-            }
-            return organizations.get(0);
-        }
+        return organizationService.getCurrentOrganization();
     }
 
-    private OrganizationDTO getDefaultOrganization() {
-        OrganizationDTO organization = new OrganizationDTO();
-        organization.setName(DEFAULT_ORGANIZATION_NAME);
-        return organization;
-    }
+
 }

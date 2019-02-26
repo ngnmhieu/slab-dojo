@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ITeam } from 'app/shared/model/team.model';
@@ -21,7 +22,6 @@ export class TeamComponent implements OnInit, OnDestroy {
     links: any;
     page: any;
     predicate: any;
-    queryCount: any;
     reverse: any;
     totalItems: number;
 
@@ -94,7 +94,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateTeams(data: ITeam[], headers: HttpHeaders) {
+    protected paginateTeams(data: ITeam[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {

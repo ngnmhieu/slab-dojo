@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { OrganizationService } from 'app/entities/organization/organization.service';
-import { IOrganization, Organization } from 'app/shared/model/organization.model';
+import { IOrganization, Organization, UserMode } from 'app/shared/model/organization.model';
 
 describe('Service Tests', () => {
     describe('Organization Service', () => {
@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(OrganizationService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Organization(0, 'AAAAAAA', 0);
+            elemDefault = new Organization(0, 'AAAAAAA', 0, UserMode.PERSON, 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -56,7 +56,9 @@ describe('Service Tests', () => {
                 const returnedFromService = Object.assign(
                     {
                         name: 'BBBBBB',
-                        levelUpScore: 1
+                        levelUpScore: 1,
+                        userMode: 'BBBBBB',
+                        mattermostUrl: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -74,7 +76,9 @@ describe('Service Tests', () => {
                 const returnedFromService = Object.assign(
                     {
                         name: 'BBBBBB',
-                        levelUpScore: 1
+                        levelUpScore: 1,
+                        userMode: 'BBBBBB',
+                        mattermostUrl: 'BBBBBB'
                     },
                     elemDefault
                 );

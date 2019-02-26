@@ -48,7 +48,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="training" columnName="valid_until" columnDataType="datetime"/>
-        
+
         <createTable tableName="training_skill">
             <column name="skills_id" type="bigint">
                 <constraints nullable="false"/>
@@ -59,7 +59,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="trainings_id, skills_id" tableName="training_skill"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

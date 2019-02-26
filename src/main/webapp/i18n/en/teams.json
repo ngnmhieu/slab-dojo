@@ -77,7 +77,7 @@
                     "received": "received"
                 },
                 "edit": {
-                    "label": "Edit Person",
+                    "label": "Edit Team",
                     "name": "Name",
                     "shortName": "Short Name",
                     "slogan": "Slogan"
@@ -94,6 +94,28 @@
                 }
             },
             "dateFormat": "yyyy-MM-dd"
+        }
+    },
+    "persondojoApp": {
+        "teams": {
+            "home": {
+                "title": "Person"
+            },
+            "selection": {
+                "title": "Person Selection",
+                "deselect": "No Person",
+                "select": "Select Person"
+            },
+            "skills": {
+                "details": {
+                    "achievedByNone": "No Persons have achieved this skill yet!"
+                }
+            },
+            "status": {
+                "edit": {
+                    "label": "Edit Person"
+                }
+            }
         }
     }
 }

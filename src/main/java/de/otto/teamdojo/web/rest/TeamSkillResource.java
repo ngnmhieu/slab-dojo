@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -53,7 +51,6 @@ public class TeamSkillResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/team-skills")
-    @Timed
     public ResponseEntity<TeamSkillDTO> createTeamSkill(@Valid @RequestBody TeamSkillDTO teamSkillDTO) throws URISyntaxException {
         log.debug("REST request to save TeamSkill : {}", teamSkillDTO);
         if (teamSkillDTO.getId() != null) {
@@ -75,7 +72,6 @@ public class TeamSkillResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/team-skills")
-    @Timed
     public ResponseEntity<TeamSkillDTO> updateTeamSkill(@Valid @RequestBody TeamSkillDTO teamSkillDTO) throws URISyntaxException {
         log.debug("REST request to update TeamSkill : {}", teamSkillDTO);
         if (teamSkillDTO.getId() == null) {
@@ -95,7 +91,6 @@ public class TeamSkillResource {
      * @return the ResponseEntity with status 200 (OK) and the list of teamSkills in body
      */
     @GetMapping("/team-skills")
-    @Timed
     public ResponseEntity<List<TeamSkillDTO>> getAllTeamSkills(TeamSkillCriteria criteria, Pageable pageable) {
         log.debug("REST request to get TeamSkills by criteria: {}", criteria);
         Page<TeamSkillDTO> page = teamSkillQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +105,6 @@ public class TeamSkillResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/team-skills/count")
-    @Timed
     public ResponseEntity<Long> countTeamSkills(TeamSkillCriteria criteria) {
         log.debug("REST request to count TeamSkills by criteria: {}", criteria);
         return ResponseEntity.ok().body(teamSkillQueryService.countByCriteria(criteria));
@@ -123,7 +117,6 @@ public class TeamSkillResource {
      * @return the ResponseEntity with status 200 (OK) and with body the teamSkillDTO, or with status 404 (Not Found)
      */
     @GetMapping("/team-skills/{id}")
-    @Timed
     public ResponseEntity<TeamSkillDTO> getTeamSkill(@PathVariable Long id) {
         log.debug("REST request to get TeamSkill : {}", id);
         Optional<TeamSkillDTO> teamSkillDTO = teamSkillService.findOne(id);
@@ -137,7 +130,6 @@ public class TeamSkillResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/team-skills/{id}")
-    @Timed
     public ResponseEntity<Void> deleteTeamSkill(@PathVariable Long id) {
         log.debug("REST request to delete TeamSkill : {}", id);
         teamSkillService.delete(id);

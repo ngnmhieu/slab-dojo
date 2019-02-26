@@ -87,9 +87,12 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
                 this.search = value;
                 return value;
             });
-        this.accountService.identity().then(identity => {
-            this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
-        });
+
+        setTimeout(() => {
+            this.accountService.identity().then(identity => {
+                this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+            });
+        }, 0);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -293,6 +296,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         console.log(s);
         this.updateSkill(s);
     }
+
     downVote(s: IAchievableSkill) {
         console.log('downvote TeamSkill');
         s.vote = s.vote - 1;

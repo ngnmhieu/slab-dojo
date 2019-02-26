@@ -62,10 +62,10 @@
             "fieldName": "suggestedBy",
             "fieldType": "String"
         }
+
     ],
-    "changelogDate": "20190218105248",
+    "changelogDate": "20190122103430",
     "dto": "mapstruct",
-    "searchEngine": false,
     "service": "serviceImpl",
     "entityTableName": "training",
     "jpaMetamodelFiltering": true,

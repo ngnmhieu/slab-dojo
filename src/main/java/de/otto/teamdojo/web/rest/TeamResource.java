@@ -1,6 +1,4 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
 import de.otto.teamdojo.service.TeamService;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
@@ -53,7 +51,6 @@ public class TeamResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/teams")
-    @Timed
     public ResponseEntity<TeamDTO> createTeam(@Valid @RequestBody TeamDTO teamDTO) throws URISyntaxException {
         log.debug("REST request to save Team : {}", teamDTO);
         if (teamDTO.getId() != null) {
@@ -75,7 +72,6 @@ public class TeamResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/teams")
-    @Timed
     public ResponseEntity<TeamDTO> updateTeam(@Valid @RequestBody TeamDTO teamDTO) throws URISyntaxException {
         log.debug("REST request to update Team : {}", teamDTO);
         if (teamDTO.getId() == null) {
@@ -95,12 +91,11 @@ public class TeamResource {
      * @return the ResponseEntity with status 200 (OK) and the list of teams in body
      */
     @GetMapping("/teams")
-    @Timed
     public ResponseEntity<List<TeamDTO>> getAllTeams(TeamCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Teams by criteria: {}", criteria);
         Page<TeamDTO> page = teamQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -110,7 +105,6 @@ public class TeamResource {
     * @return the ResponseEntity with status 200 (OK) and the count in body
     */
     @GetMapping("/teams/count")
-    @Timed
     public ResponseEntity<Long> countTeams(TeamCriteria criteria) {
         log.debug("REST request to count Teams by criteria: {}", criteria);
         return ResponseEntity.ok().body(teamQueryService.countByCriteria(criteria));
@@ -123,7 +117,6 @@ public class TeamResource {
      * @return the ResponseEntity with status 200 (OK) and with body the teamDTO, or with status 404 (Not Found)
      */
     @GetMapping("/teams/{id}")
-    @Timed
     public ResponseEntity<TeamDTO> getTeam(@PathVariable Long id) {
         log.debug("REST request to get Team : {}", id);
         Optional<TeamDTO> teamDTO = teamService.findOne(id);
@@ -137,7 +130,6 @@ public class TeamResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/teams/{id}")
-    @Timed
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         log.debug("REST request to delete Team : {}", id);
         teamService.delete(id);

@@ -16,7 +16,9 @@
                 "title": "Organization"
             },
             "name": "Name",
-            "levelUpScore": "Level Up Score"
+            "levelUpScore": "Level Up Score",
+            "userMode": "User Mode",
+            "mattermostUrl": "Mattermost Url"
         }
     }
 }

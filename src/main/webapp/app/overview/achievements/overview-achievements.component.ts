@@ -12,6 +12,9 @@ import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
 import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-overview-achievements',
@@ -27,8 +30,14 @@ export class OverviewAchievementsComponent implements OnInit {
     generalBadges: IBadge[];
     activeItemIds: { [key: string]: number };
     expandedDimensions: string[];
+    hasAuthority = false;
 
-    constructor(private route: ActivatedRoute, private dimensionService: DimensionService, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private dimensionService: DimensionService,
+        private router: Router,
+        private accountService: AccountService
+    ) {}
 
     ngOnInit(): void {
         this.dimensions = [];
@@ -87,6 +96,12 @@ export class OverviewAchievementsComponent implements OnInit {
                 }
             }
         });
+
+        setTimeout(() => {
+            this.accountService.identity().then(identity => {
+                this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+            });
+        }, 0);
     }
 
     handleDimensionToggle(event: NgbPanelChangeEvent) {

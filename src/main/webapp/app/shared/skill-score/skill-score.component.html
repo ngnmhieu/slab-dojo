@@ -5,20 +5,8 @@
     {{skill.score}}
 </span>
 <ng-template #scorePopoverTpl>
-    <small *ngIf="!isEditingScore()" jhiTranslate="teamdojoApp.teams.skills.score.title" translateValues="{score: '{{skill.score}}'}">
+    <small *ngIf="!isEditingScore()" dojoTranslate="teamdojoApp.teams.skills.score.title" translateValues="{score: '{{skill.score}}'}">
         Score: {{skill.score}}
     </small>
-    <form *ngIf="isEditingScore()" name="scoreEditing" (ngSubmit)="updateScore(scorePopover)"
-          class="form-inline d-flex flex-nowrap score-editing">
-        <label class="sr-only" for="score-input">Score</label>
-        <input id="score-input" class="form-control score-input" type="number" name="score"
-               [(ngModel)]="skill.score" [ngModelOptions]="{ allowInvalid: false, updateOn: 'submit' }"
-               [min]="0" [required]="true">
-        <button class="btn ml-1" type="submit" jhiTranslate="teamdojoApp.teams.skills.score.save">
-            OK
-        </button>
-        <button class="btn ml-1" type="button" (click)="scorePopover.close()" jhiTranslate="teamdojoApp.teams.skills.score.cancel">
-            Cancel
-        </button>
-    </form>
+    <jhi-number-input *ngIf="isEditingScore()" [value]="skill.score" (valueComitted)='updateScore($event)'></jhi-number-input>
 </ng-template>

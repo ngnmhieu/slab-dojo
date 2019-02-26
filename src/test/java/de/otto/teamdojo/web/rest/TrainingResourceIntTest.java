@@ -62,8 +62,8 @@ public class TrainingResourceIntTest {
     private static final String DEFAULT_CONTACT_PERSON = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT_PERSON = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LINK = "https://9V.Nd.wHd";
-    private static final String UPDATED_LINK = "E.Mg.VDR";
+    private static final String DEFAULT_LINK = "https://v.W.mvR";
+    private static final String UPDATED_LINK = "tw.hv.C-;";
 
     private static final Instant DEFAULT_VALID_UNTIL = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_VALID_UNTIL = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -709,7 +709,7 @@ public class TrainingResourceIntTest {
 
         int databaseSizeBeforeDelete = trainingRepository.findAll().size();
 
-        // Get the training
+        // Delete the training
         restTrainingMockMvc.perform(delete("/api/trainings/{id}", training.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

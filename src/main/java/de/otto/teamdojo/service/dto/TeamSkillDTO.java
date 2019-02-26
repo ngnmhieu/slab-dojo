@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -24,6 +23,7 @@ public class TeamSkillDTO implements Serializable {
     private Integer vote;
 
     private String voters;
+
 
     private Long skillId;
 

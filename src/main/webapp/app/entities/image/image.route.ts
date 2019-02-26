@@ -16,7 +16,7 @@ import { IImage } from 'app/shared/model/image.model';
 export class ImageResolve implements Resolve<IImage> {
     constructor(private service: ImageService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Image> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IImage> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -30,7 +30,7 @@ export class ImageResolve implements Resolve<IImage> {
 
 export const imageRoute: Routes = [
     {
-        path: 'image',
+        path: '',
         component: ImageComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -39,7 +39,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/:id/view',
+        path: ':id/view',
         component: ImageDetailComponent,
         resolve: {
             image: ImageResolve
@@ -51,7 +51,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/new',
+        path: 'new',
         component: ImageUpdateComponent,
         resolve: {
             image: ImageResolve
@@ -63,7 +63,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/:id/edit',
+        path: ':id/edit',
         component: ImageUpdateComponent,
         resolve: {
             image: ImageResolve
@@ -78,7 +78,7 @@ export const imageRoute: Routes = [
 
 export const imagePopupRoute: Routes = [
     {
-        path: 'image/:id/delete',
+        path: ':id/delete',
         component: ImageDeletePopupComponent,
         resolve: {
             image: ImageResolve

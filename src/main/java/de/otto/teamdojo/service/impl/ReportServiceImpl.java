@@ -43,7 +43,6 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportDTO save(ReportDTO reportDTO) {
         log.debug("Request to save Report : {}", reportDTO);
-
         Report report = reportMapper.toEntity(reportDTO);
         report = reportRepository.save(report);
         return reportMapper.toDto(report);
@@ -85,7 +84,6 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Report : {}", id);
-        reportRepository.deleteById(id);
+        log.debug("Request to delete Report : {}", id);        reportRepository.deleteById(id);
     }
 }

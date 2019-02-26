@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { ISkill } from 'app/shared/model//skill.model';
+import { ISkill } from 'app/shared/model/skill.model';
 
 export interface ITraining {
     id?: number;

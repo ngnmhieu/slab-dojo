@@ -41,7 +41,6 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public SkillDTO save(SkillDTO skillDTO) {
         log.debug("Request to save Skill : {}", skillDTO);
-
         Skill skill = skillMapper.toEntity(skillDTO);
         skill = skillRepository.save(skill);
         return skillMapper.toDto(skill);
@@ -83,8 +82,7 @@ public class SkillServiceImpl implements SkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Skill : {}", id);
-        skillRepository.deleteById(id);
+        log.debug("Request to delete Skill : {}", id);        skillRepository.deleteById(id);
     }
 
     /**

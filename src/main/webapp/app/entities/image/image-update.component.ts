@@ -2,8 +2,8 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiDataUtils } from 'ng-jhipster';
-
 import { IImage } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 

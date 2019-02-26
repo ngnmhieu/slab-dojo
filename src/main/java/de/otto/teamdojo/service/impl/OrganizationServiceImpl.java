@@ -1,5 +1,6 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.domain.enumeration.UserMode;
 import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.domain.Organization;
 import de.otto.teamdojo.repository.OrganizationRepository;
@@ -29,6 +30,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationMapper organizationMapper;
 
+    static final String DEFAULT_ORGANIZATION_NAME = "Organization";
+
     public OrganizationServiceImpl(OrganizationRepository organizationRepository, OrganizationMapper organizationMapper) {
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
@@ -43,7 +46,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
         log.debug("Request to save Organization : {}", organizationDTO);
-
         Organization organization = organizationMapper.toEntity(organizationDTO);
         organization = organizationRepository.save(organization);
         return organizationMapper.toDto(organization);
@@ -85,7 +87,26 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Organization : {}", id);
-        organizationRepository.deleteById(id);
+        log.debug("Request to delete Organization : {}", id);        organizationRepository.deleteById(id);
+    }
+
+    @Override
+    public OrganizationDTO getCurrentOrganization() {
+        List<OrganizationDTO> organizations = findAll();
+        if (organizations.isEmpty()) {
+            return getDefaultOrganization();
+        } else {
+            if (organizations.size() > 1) {
+                log.warn("There exists more than one organization");
+            }
+            return organizations.get(0);
+        }
+    }
+
+    private OrganizationDTO getDefaultOrganization() {
+        OrganizationDTO organization = new OrganizationDTO();
+        organization.setName(DEFAULT_ORGANIZATION_NAME);
+        organization.setUserMode(UserMode.TEAM);
+        return organization;
     }
 }

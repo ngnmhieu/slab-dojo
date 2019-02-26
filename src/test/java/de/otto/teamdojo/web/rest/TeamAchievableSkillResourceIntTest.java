@@ -8,6 +8,7 @@ import de.otto.teamdojo.repository.TeamRepository;
 import de.otto.teamdojo.repository.TeamSkillRepository;
 import de.otto.teamdojo.service.AchievableSkillService;
 import de.otto.teamdojo.service.ActivityService;
+import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.service.dto.AchievableSkillDTO;
 import de.otto.teamdojo.service.impl.AchievableSkillServiceImpl;
@@ -79,6 +80,9 @@ public class TeamAchievableSkillResourceIntTest {
     @Autowired
     private TeamSkillService teamSkillService;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     @Mock
     private ActivityService activityServiceMock;
 
@@ -99,7 +103,7 @@ public class TeamAchievableSkillResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        achievableSkillService = new AchievableSkillServiceImpl(skillRepository, teamRepository, badgeRepository, teamSkillService, activityServiceMock);
+        achievableSkillService = new AchievableSkillServiceImpl(skillRepository, teamRepository, badgeRepository, teamSkillService, activityServiceMock, organizationService);
         final TeamAchievableSkillResource resource = new TeamAchievableSkillResource(achievableSkillService);
         this.restTeamMockMvc = MockMvcBuilders.standaloneSetup(resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

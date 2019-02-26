@@ -42,7 +42,6 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamDTO save(TeamDTO teamDTO) {
         log.debug("Request to save Team : {}", teamDTO);
-
         Team team = teamMapper.toEntity(teamDTO);
         team = teamRepository.save(team);
         return teamMapper.toDto(team);
@@ -93,7 +92,6 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Team : {}", id);
-        teamRepository.deleteById(id);
+        log.debug("Request to delete Team : {}", id);        teamRepository.deleteById(id);
     }
 }
