@@ -3,7 +3,7 @@
         "overview": {
             "teams": {
                 "title": "Teams",
-                "preExpiresIn": "läuft in",
+                "preExpiresIn": "Gültigkeit läuft in",
                 "postExpiresIn": "Tagen ab"
             },
             "achievements": {
