@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet author="mhi" id="20190226165530-1" context="demo">
         <insert tableName="image">
-            <column name="id" valueNumeric="8050"/>
+            <column name="id" valueNumeric="8001"/>
             <column name="name" value="Default_Badge"/>
 
             <column name="small" valueBlobFile="../initial-images/badge/Default_Badge.png"/>
@@ -18,7 +18,7 @@
         </insert>
 
         <insert tableName="image">
-            <column name="id" valueNumeric="8000"/>
+            <column name="id" valueNumeric="8002"/>
             <column name="name" value="Default_Level"/>
 
             <column name="small" valueBlobFile="../initial-images/level/Default_Level.png"/>
