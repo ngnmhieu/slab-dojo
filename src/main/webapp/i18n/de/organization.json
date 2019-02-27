@@ -18,7 +18,8 @@
             "name": "Name",
             "levelUpScore": "Level Up Score",
             "userMode": "User Mode",
-            "mattermostUrl": "Mattermost Url"
+            "mattermostUrl": "Mattermost Url",
+            "countOfConfirmations": "Count Of Confirmations"
         }
     }
 }

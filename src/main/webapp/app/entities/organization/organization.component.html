@@ -14,11 +14,12 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th><span dojoTranslate="teamdojoApp.global.field.id">ID</span></th>
+            <th><span dojoTranslate="teamdojoApp.global.field.id">ID</span></th>
             <th><span dojoTranslate="teamdojoApp.organization.name">Name</span></th>
             <th><span dojoTranslate="teamdojoApp.organization.levelUpScore">Level Up Score</span></th>
-                <th><span dojoTranslate="teamdojoApp.organization.userMode">User Mode</span></th>
-                <th><span dojoTranslate="teamdojoApp.organization.mattermostUrl">Mattermost Url</span></th>
+            <th><span dojoTranslate="teamdojoApp.organization.userMode">User Mode</span></th>
+            <th><span dojoTranslate="teamdojoApp.organization.mattermostUrl">Mattermost Url</span></th>
+            <th><span dojoTranslate="teamdojoApp.organization.countOfConfirmations">Count Of Confirmations</span></th>
             <th></th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
                 <td>{{organization.levelUpScore}}</td>
                 <td dojoTranslate="{{'teamdojoApp.UserMode.' + organization.userMode}}">{{organization.userMode}}</td>
                 <td>{{organization.mattermostUrl}}</td>
+                <td>{{organization.countOfConfirmations}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

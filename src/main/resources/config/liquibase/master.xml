@@ -45,4 +45,5 @@
     <include file="config/liquibase/changelog/20190205142213_jhipster_update.xml" relativeToChangelogFile="false"/>
 
     <include file="config/liquibase/changelog/20190218115900_add_suggested_by_column_to_training.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190227105900_add_count_of_confirmations_to_organization.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
