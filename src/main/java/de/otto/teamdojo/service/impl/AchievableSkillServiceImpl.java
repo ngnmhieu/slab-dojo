@@ -36,9 +36,6 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
 
     private static final List<String> ALL_FILTER = Lists.newArrayList("COMPLETE", "INCOMPLETE");
 
-    private static final int REQUIRED_VOTES_FOR_TEAM_MODE = Integer.MIN_VALUE;
-    private static final int REQUIRED_VOTES_FOR_PERSON_MODE = 5;
-
     private final SkillRepository skillRepository;
 
     private final TeamRepository teamRepository;
@@ -98,11 +95,7 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
         teamSkill.setVoters(achievableSkill.getVoters());
         teamSkill.setIrrelevant(achievableSkill.isIrrelevant());
 
-        int requiredVotes = REQUIRED_VOTES_FOR_TEAM_MODE;
-
-        if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)) {
-            requiredVotes = REQUIRED_VOTES_FOR_PERSON_MODE;
-        }
+        int requiredVotes = organizationService.getCurrentOrganization().getCountOfConfirmations();
 
         if (teamSkill.getVote() >= requiredVotes && teamSkill.getVerifiedAt() == null) {
             teamSkill.setVerifiedAt(Instant.now());
