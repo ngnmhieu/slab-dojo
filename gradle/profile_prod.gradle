@@ -29,7 +29,7 @@ task webpack_test(type: NpmTask, dependsOn: 'npm_install') {
 
 task webpack(type: NpmTask, dependsOn: 'npm_install') {
     args = ["run", "webpack:prod"]
-    environment = [ "VERSION": project.version ]
+    environment = [ "TEAMDOJO_BUILD_VERSION": project.version ]
 }
 
 task copyIntoStatic (type: Copy) {
