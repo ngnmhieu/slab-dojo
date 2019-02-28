@@ -11,6 +11,7 @@ import { OverviewSkillDetailsComponent } from 'app/overview/skills/skill-details
 import { TeamsModule } from 'app/teams';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { AllCommentsResolve, AllSkillsResolve, AllTrainingsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
+import { ServerInfoService } from 'app/server-info';
 
 @NgModule({
     imports: [TeamdojoSharedModule, RouterModule.forChild(OVERVIEW_ROUTE), NgbModule, TeamsModule],
@@ -22,7 +23,15 @@ import { AllCommentsResolve, AllSkillsResolve, AllTrainingsResolve, DojoModelRes
         OverviewSkillDetailsComponent
     ],
     entryComponents: [],
-    providers: [DojoModelResolve, SkillResolve, AllSkillsResolve, AllCommentsResolve, AllTrainingsResolve, BreadcrumbService],
+    providers: [
+        DojoModelResolve,
+        SkillResolve,
+        AllSkillsResolve,
+        AllCommentsResolve,
+        AllTrainingsResolve,
+        BreadcrumbService,
+        ServerInfoService
+    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OverviewModule {}
