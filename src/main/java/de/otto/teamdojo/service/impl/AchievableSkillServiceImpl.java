@@ -95,11 +95,6 @@ public class AchievableSkillServiceImpl implements AchievableSkillService {
         teamSkill.setVoters(achievableSkill.getVoters());
         teamSkill.setIrrelevant(achievableSkill.isIrrelevant());
 
-        int requiredVotes = organizationService.getCurrentOrganization().getCountOfConfirmations();
-
-        if (teamSkill.getVote() >= requiredVotes && teamSkill.getVerifiedAt() == null) {
-            teamSkill.setVerifiedAt(Instant.now());
-        }
         teamSkill = teamSkillService.save(teamSkill);
 
         if ((originSkill == null && teamSkill.getCompletedAt() != null) || (originSkill != null
