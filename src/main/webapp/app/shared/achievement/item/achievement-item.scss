@@ -28,6 +28,7 @@
                 justify-content: center;
                 width: inherit;
                 height: inherit;
+                position: relative;
                 &::after {
                     content: '';
                     position: absolute;
@@ -65,6 +66,7 @@
                 justify-content: center;
                 width: inherit;
                 height: inherit;
+                position: relative;
                 &::before {
                     content: '';
                     position: absolute;
