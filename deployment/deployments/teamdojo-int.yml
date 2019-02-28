@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
       - image: "docker.iteratec.io/teamdojo:develop"
+        imagePullPolicy: Always
         name: teamdojo-int
         ports:
         - containerPort: 8080
