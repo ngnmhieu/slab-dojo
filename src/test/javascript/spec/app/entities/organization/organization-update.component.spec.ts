@@ -2,6 +2,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { OrganizationUpdateComponent } from 'app/entities/organization/organization-update.component';
@@ -17,7 +18,8 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [OrganizationUpdateComponent]
+                declarations: [OrganizationUpdateComponent],
+                providers: [LocalStorageService]
             })
                 .overrideTemplate(OrganizationUpdateComponent, '')
                 .compileComponents();

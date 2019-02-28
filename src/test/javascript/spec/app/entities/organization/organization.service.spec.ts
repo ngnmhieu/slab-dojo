@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
+import { LocalStorageService } from 'ngx-webstorage';
 import { OrganizationService } from 'app/entities/organization/organization.service';
 import { IOrganization, Organization, UserMode } from 'app/shared/model/organization.model';
 
@@ -15,7 +16,8 @@ describe('Service Tests', () => {
         let elemDefault: IOrganization;
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [HttpClientTestingModule]
+                imports: [HttpClientTestingModule],
+                providers: [LocalStorageService]
             });
             injector = getTestBed();
             service = injector.get(OrganizationService);
