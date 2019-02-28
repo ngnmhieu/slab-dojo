@@ -6,14 +6,6 @@ const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
 const utils = require('./utils.js');
 
-const VERSION_ARG_NAME = "--version=";
-const getVersion = () => {
-    let version = process.argv.find((e) => {
-        return e.startsWith(VERSION_ARG_NAME);
-    });
-    return version ?  version.substring(VERSION_ARG_NAME.length) : "_DEV";
-};
-
 module.exports = (options) => ({
     resolve: {
         extensions: ['.ts', '.js'],
@@ -64,8 +56,8 @@ module.exports = (options) => ({
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
-                BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
-                VERSION: `'${getVersion()}'`,
+                BUILD_TIMESTAMP: `'${new Date().toISOString()}'`,
+                VERSION: `'${process.env['TEAMDOJO_BUILD_VERSION'] || '_DEV'}'`,
                 DEBUG_INFO_ENABLED: options.env === 'development',
                 // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
                 // If this URL is left empty (""), then it will be relative to the current context.
@@ -88,8 +80,8 @@ module.exports = (options) => ({
         new MergeJsonWebpackPlugin({
             output: {
                 groupBy: [
-                    { pattern: "./src/main/webapp/i18n/de/*.json", fileName: "./i18n/de.json" }, //for SLAB usage!!!
-                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" } //for SLAB usage!!!
+                    { pattern: "./src/main/webapp/i18n/de/*.json", fileName: "./i18n/de.json" },
+                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" }
                     // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
                 ]
             }
