@@ -18,11 +18,10 @@
            {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
         </span>
     </div>
-
     <div class="item-content d-flex justify-content-center" [ngStyle]="{'width': size, 'height': size}">
         <span class="item-image">
             <img *ngIf="item.imageId ; else picturePlaceholder" [title]="item.name"
-                 [src]="item.imageId | imageUrl: 'medium'" class="mx-auto"/>
+                 [src]="item.imageId | imageUrl: 'medium' : item.imageHash ? item.imageHash : item.imageId" class="mx-auto"/>
             <ng-template #picturePlaceholder>
                 <span class="img-placeholder">{{item.name | truncateString}}</span>
             </ng-template>

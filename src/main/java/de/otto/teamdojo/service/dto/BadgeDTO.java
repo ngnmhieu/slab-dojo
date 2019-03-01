@@ -41,6 +41,8 @@ public class BadgeDTO implements Serializable {
 
     private Long imageId;
 
+    private String imageHash;
+
     private String imageName;
 
     public Long getId() {
@@ -123,6 +125,14 @@ public class BadgeDTO implements Serializable {
         this.imageId = imageId;
     }
 
+    public String getImageHash() {
+        return imageHash;
+    }
+
+    public void setImageHash(String imageHash) {
+        this.imageHash = imageHash;
+    }
+
     public String getImageName() {
         return imageName;
     }
@@ -164,7 +174,8 @@ public class BadgeDTO implements Serializable {
             ", instantMultiplier=" + getInstantMultiplier() +
             ", completionBonus=" + getCompletionBonus() +
             ", image=" + getImageId() +
-            ", image='" + getImageName() + "'" +
+            ", imageName='" + getImageName() + "'" +
+            ", imageHash='" + getImageHash() + "'" +
             "}";
     }
 }

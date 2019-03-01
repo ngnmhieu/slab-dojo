@@ -50,6 +50,10 @@ public class Image implements Serializable {
     @Column(name = "large_content_type")
     private String largeContentType;
 
+    @Size(max = 32)
+    @Column(name = "hash", length = 32)
+    private String hash;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -149,6 +153,19 @@ public class Image implements Serializable {
     public void setLargeContentType(String largeContentType) {
         this.largeContentType = largeContentType;
     }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public Image hash(String hash) {
+        this.hash = hash;
+        return this;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -182,6 +199,7 @@ public class Image implements Serializable {
             ", mediumContentType='" + getMediumContentType() + "'" +
             ", large='" + getLarge() + "'" +
             ", largeContentType='" + getLargeContentType() + "'" +
+            ", hash='" + getHash() + "'" +
             "}";
     }
 }

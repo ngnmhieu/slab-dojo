@@ -26,6 +26,9 @@ public class ImageDTO implements Serializable {
     private byte[] large;
 
     private String largeContentType;
+    @Size(max = 32)
+    private String hash;
+
 
     public Long getId() {
         return id;
@@ -91,6 +94,14 @@ public class ImageDTO implements Serializable {
         this.largeContentType = largeContentType;
     }
 
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -120,6 +131,7 @@ public class ImageDTO implements Serializable {
             ", small='" + getSmall() + "'" +
             ", medium='" + getMedium() + "'" +
             ", large='" + getLarge() + "'" +
+            ", hash='" + getHash() + "'" +
             "}";
     }
 }

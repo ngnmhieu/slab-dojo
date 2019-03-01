@@ -92,6 +92,9 @@ public class ImageQueryService extends QueryService<Image> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Image_.name));
             }
+            if (criteria.getHash() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getHash(), Image_.hash));
+            }
         }
         return specification;
     }
