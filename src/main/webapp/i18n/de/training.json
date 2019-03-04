@@ -15,14 +15,14 @@
             "detail": {
                 "title": "Training"
             },
-            "title": "Title",
-            "description": "Description",
-            "contactPerson": "Contact Person",
+            "title": "Titel",
+            "description": "Beschreibung",
+            "contactPerson": "Kontaktperson",
             "link": "Link",
-            "validUntil": "Valid Until",
+            "validUntil": "Gültig bis",
             "validUntilPlaceholder": "z.B. 2029-01-01T00:00:00+01:00",
-            "isOfficial": "Is Official",
-            "suggestedBy": "Suggested By",
+            "isOfficial": "offiziell",
+            "suggestedBy": "Empfohlen von",
             "skill": "Skill"
         }
     }

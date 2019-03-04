@@ -77,7 +77,7 @@
             "evictions": "Anzahl entfernter Objekte"
         },
         "datasource": {
-            "usage": "Usage",
+            "usage": "Nutzung",
             "title": "Datenquelle (Zeit in Millisekunden)",
             "name": "Pool-Auslastung",
             "count": "Anzahl",

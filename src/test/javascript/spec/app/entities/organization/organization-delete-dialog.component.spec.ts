@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/cor
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { OrganizationDeleteDialogComponent } from 'app/entities/organization/organization-delete-dialog.component';
@@ -19,7 +20,8 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
-                declarations: [OrganizationDeleteDialogComponent]
+                declarations: [OrganizationDeleteDialogComponent],
+                providers: [LocalStorageService]
             })
                 .overrideTemplate(OrganizationDeleteDialogComponent, '')
                 .compileComponents();

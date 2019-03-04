@@ -2,6 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { OrganizationComponent } from 'app/entities/organization/organization.component';
@@ -18,7 +19,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [OrganizationComponent],
-                providers: []
+                providers: [LocalStorageService]
             })
                 .overrideTemplate(OrganizationComponent, '')
                 .compileComponents();

@@ -26,7 +26,7 @@ export class BreadcrumbService {
     }
 
     setBreadcrumb(team: ITeam = null, dimension: IDimension = null, level: ILevel = null, badge: IBadge = null, skill: ISkill = null) {
-        this.team = team || this.team;
+        this.team = team;
 
         if (badge) {
             this.badge = badge;

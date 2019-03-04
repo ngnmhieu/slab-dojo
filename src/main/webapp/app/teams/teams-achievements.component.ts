@@ -12,6 +12,7 @@ import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
 import { AccountService } from 'app/core';
+import { ILevelSkill } from 'app/shared/model/level-skill.model';
 
 const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
@@ -81,10 +82,23 @@ export class TeamsAchievementsComponent implements OnInit, OnChanges {
                 if (badge) {
                     this.activeItemIds.badge = badge.id;
                 }
-            } else {
-                if (this.team.participations && this.team.participations.length) {
-                    this.setExpandedDimensionId(this.team.participations[0].id);
-                }
+            } else if (this.team.participations && this.team.participations.length) {
+                const completedSkills: Array<ITeamSkill> = this.teamSkills.filter(teamSkill => teamSkill.completedAt);
+                const dimensions: Array<IDimension> = completedSkills
+                    .map(completedSkill => {
+                        return this.team.participations.find(
+                            (dimension: IDimension) =>
+                                dimension.levels &&
+                                dimension.levels.some(
+                                    (level: ILevel) =>
+                                        level.skills && level.skills.some((skill: ILevelSkill) => skill.skillId === completedSkill.skillId)
+                                )
+                        );
+                    })
+                    .filter(dimension => dimension !== undefined);
+                const dimensionIds: Array<number> = dimensions.map(dimension => dimension.id);
+                const uniqueDimensionIds = dimensionIds.filter((el, i, a) => i === a.indexOf(el)); // filter duplicates
+                uniqueDimensionIds.forEach(id => this.setExpandedDimensionId(id));
             }
         });
 
