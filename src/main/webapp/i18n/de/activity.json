@@ -15,9 +15,9 @@
             "detail": {
                 "title": "Activity"
             },
-            "type": "Type",
-            "data": "Data",
-            "createdAt": "Created At"
+            "type": "Typ",
+            "data": "Informationen",
+            "createdAt": "Erstellt am"
         }
     }
 }
