@@ -18,7 +18,8 @@
             "name": "Name",
             "levelUpScore": "Aufstiegspunktzahl",
             "userMode": "Nutzungsmodus",
-            "mattermostUrl": "Mattermost Url"
+            "mattermostUrl": "Mattermost Url",
+            "countOfConfirmations": "Anzahl Bestätigungen"
         }
     }
 }

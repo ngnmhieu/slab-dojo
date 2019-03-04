@@ -104,7 +104,7 @@
                         <a *ngIf="training.link" [href]="training.link" target="_blank">{{ training.title }}</a>
                         <span *ngIf="!training.link">{{ training.title }}</span> <small>({{ training.contactPerson }})</small>
                         <div *ngIf="training.suggestedBy">
-                            <small jhiTranslate="teamdojoApp.teams.skills.details.trainings.add.suggestedBy"></small><small>: {{ training.suggestedBy }}</small>
+                            <small dojoTranslate="teamdojoApp.teams.skills.details.trainings.add.suggestedBy"></small><small>: {{ training.suggestedBy }}</small>
                         </div>
                     </h6>
                     <p>{{ training.description }}</p>

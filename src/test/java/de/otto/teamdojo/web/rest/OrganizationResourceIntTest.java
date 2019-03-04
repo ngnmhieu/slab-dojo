@@ -56,6 +56,9 @@ public class OrganizationResourceIntTest {
     private static final String DEFAULT_MATTERMOST_URL = "-.u.CoT5";
     private static final String UPDATED_MATTERMOST_URL = "http://V.Zt.rPmr";
 
+    private static final Integer DEFAULT_COUNT_OF_CONFIRMATIONS = 0;
+    private static final Integer UPDATED_COUNT_OF_CONFIRMATIONS = 1;
+
     @Autowired
     private OrganizationRepository organizationRepository;
 
@@ -107,7 +110,8 @@ public class OrganizationResourceIntTest {
             .name(DEFAULT_NAME)
             .levelUpScore(DEFAULT_LEVEL_UP_SCORE)
             .userMode(DEFAULT_USER_MODE)
-            .mattermostUrl(DEFAULT_MATTERMOST_URL);
+            .mattermostUrl(DEFAULT_MATTERMOST_URL)
+            .countOfConfirmations(DEFAULT_COUNT_OF_CONFIRMATIONS);
         return organization;
     }
 
@@ -136,6 +140,7 @@ public class OrganizationResourceIntTest {
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(DEFAULT_LEVEL_UP_SCORE);
         assertThat(testOrganization.getUserMode()).isEqualTo(DEFAULT_USER_MODE);
         assertThat(testOrganization.getMattermostUrl()).isEqualTo(DEFAULT_MATTERMOST_URL);
+        assertThat(testOrganization.getCountOfConfirmations()).isEqualTo(DEFAULT_COUNT_OF_CONFIRMATIONS);
     }
 
     @Test
@@ -210,7 +215,8 @@ public class OrganizationResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].levelUpScore").value(hasItem(DEFAULT_LEVEL_UP_SCORE)))
             .andExpect(jsonPath("$.[*].userMode").value(hasItem(DEFAULT_USER_MODE.toString())))
-            .andExpect(jsonPath("$.[*].mattermostUrl").value(hasItem(DEFAULT_MATTERMOST_URL.toString())));
+            .andExpect(jsonPath("$.[*].mattermostUrl").value(hasItem(DEFAULT_MATTERMOST_URL.toString())))
+            .andExpect(jsonPath("$.[*].countOfConfirmations").value(hasItem(DEFAULT_COUNT_OF_CONFIRMATIONS)));
     }
     
     @Test
@@ -227,7 +233,8 @@ public class OrganizationResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.levelUpScore").value(DEFAULT_LEVEL_UP_SCORE))
             .andExpect(jsonPath("$.userMode").value(DEFAULT_USER_MODE.toString()))
-            .andExpect(jsonPath("$.mattermostUrl").value(DEFAULT_MATTERMOST_URL.toString()));
+            .andExpect(jsonPath("$.mattermostUrl").value(DEFAULT_MATTERMOST_URL.toString()))
+            .andExpect(jsonPath("$.countOfConfirmations").value(DEFAULT_COUNT_OF_CONFIRMATIONS));
     }
 
     @Test
@@ -254,7 +261,8 @@ public class OrganizationResourceIntTest {
             .name(UPDATED_NAME)
             .levelUpScore(UPDATED_LEVEL_UP_SCORE)
             .userMode(UPDATED_USER_MODE)
-            .mattermostUrl(UPDATED_MATTERMOST_URL);
+            .mattermostUrl(UPDATED_MATTERMOST_URL)
+            .countOfConfirmations(UPDATED_COUNT_OF_CONFIRMATIONS);
         OrganizationDTO organizationDTO = organizationMapper.toDto(updatedOrganization);
 
         restOrganizationMockMvc.perform(put("/api/organizations")
@@ -270,6 +278,7 @@ public class OrganizationResourceIntTest {
         assertThat(testOrganization.getLevelUpScore()).isEqualTo(UPDATED_LEVEL_UP_SCORE);
         assertThat(testOrganization.getUserMode()).isEqualTo(UPDATED_USER_MODE);
         assertThat(testOrganization.getMattermostUrl()).isEqualTo(UPDATED_MATTERMOST_URL);
+        assertThat(testOrganization.getCountOfConfirmations()).isEqualTo(UPDATED_COUNT_OF_CONFIRMATIONS);
     }
 
     @Test
