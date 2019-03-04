@@ -16,8 +16,8 @@
                 "title": "Organization"
             },
             "name": "Name",
-            "levelUpScore": "Level Up Score",
-            "userMode": "User Mode",
+            "levelUpScore": "Aufstiegspunktzahl",
+            "userMode": "Nutzungsmodus",
             "mattermostUrl": "Mattermost Url"
         }
     }

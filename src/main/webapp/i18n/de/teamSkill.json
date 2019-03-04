@@ -19,11 +19,12 @@
             "accept": "Traust du das {{ team }} zu?",
             "upvote": "Bestätigen",
             "downvote": "Ablehnen",
-            "completedAt": "Completed At",
-            "verifiedAt": "Verified At",
+            "completedAt": "Erreicht am",
+            "verifiedAt": "Bestätigt am",
             "irrelevant": "Irrelevant",
-            "note": "Note",
-            "vote": "Vote",
+            "note": "Notiz",
+            "vote": "Anzahl Bestätigungen",
+            "voters": "Bestätigende",
             "skill": "Skill",
             "team": "Team"
         }

@@ -19,24 +19,24 @@
                 "modalClose": "Abbrechen",
                 "modalSubmit": "Bewertung abschicken"
             },
-            "title": "Title",
-            "description": "Description",
+            "title": "Titel",
+            "description": "Beschreibung",
             "implementation": "Implementation",
-            "validation": "Validation",
-            "expiryPeriod": "Expiry Period",
+            "validation": "Validierung",
+            "expiryPeriod": "Gültigkeitszeitraum",
             "expiryPeriodPlaceholder": "z.B. P1Y6M1W2D oder P6M-1D",
-            "contact": "Contact",
-            "score": "Score",
-            "rateScore": "Rate Score",
-            "rateCount": "Rate Count",
+            "contact": "Kontakt",
+            "score": "Punktzahl",
+            "rateScore": "Punktzahl aus Bewertungen",
+            "rateCount": "Anzahl Bewertungen",
             "teams": "Teams",
             "badges": "Badges",
             "levels": "Levels"
         },
         "skillDTO": {
-            "description": "description",
-            "validation": "validation",
-            "implementation": "implementation"
+            "description": "Beschreibung",
+            "validation": "Validierung",
+            "implementation": "Implementation"
         }
     },
     "persondojoApp": {
