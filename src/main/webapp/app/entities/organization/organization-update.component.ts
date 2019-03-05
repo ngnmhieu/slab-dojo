@@ -33,6 +33,8 @@ export class OrganizationUpdateComponent implements OnInit {
         } else {
             this.subscribeToSaveResponse(this.organizationService.create(this.organization));
         }
+        // reload organization
+        this.organizationService.findCurrent();
     }
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrganization>>) {
