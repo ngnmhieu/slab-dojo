@@ -52,9 +52,6 @@ public class TeamSkillServiceImpl implements TeamSkillService {
         }
 
         Integer requiredVotes = organizationService.getCurrentOrganization().getCountOfConfirmations();
-        if (requiredVotes == null) {
-            requiredVotes = 0;
-        }
 
         if (teamSkillDTO.getVote() >= requiredVotes && teamSkillDTO.getVerifiedAt() == null) {
             teamSkillDTO.setVerifiedAt(Instant.now());
