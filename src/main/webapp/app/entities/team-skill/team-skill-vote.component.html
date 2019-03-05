@@ -23,7 +23,7 @@
                 </dd>
                 <dt><span dojoTranslate="teamdojoApp.teamSkill.completedAt">Completed At</span></dt>
                 <dd>
-                    <span>{{teamSkill.completedAt}}</span>
+                    <span>{{teamSkill.completedAt | date}}</span>
                 </dd>
                 <dt><span dojoTranslate="teamdojoApp.teamSkill.verifiedAt">Verified At</span></dt>
                 <dd>
@@ -38,7 +38,6 @@
             <button type="submit"
                     (click)="upVote()"
                     [routerLink]="['/']"
-                    [disabled]="upvoteDisabled"
                     class="btn btn-info">
                 <span class="fa fa-arrow-up"></span>&nbsp;<span dojoTranslate="teamdojoApp.teamSkill.upvote">Upvote</span>
             </button>
@@ -46,7 +45,6 @@
             <button type="button"
                     (click)="downVote()"
                     [routerLink]="['/']"
-                    [disabled]="downvoteDisabled"
                     class="btn btn-primary">
                 <span class="fa fa-arrow-down"></span>&nbsp;<span dojoTranslate="teamdojoApp.teamSkill.downvote">Downvote</span>
             </button>
