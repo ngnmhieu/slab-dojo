@@ -60,6 +60,10 @@ public class TeamSkillServiceImpl implements TeamSkillService {
             teamSkillDTO.setVerifiedAt(Instant.now());
         }
 
+        if (teamSkillDTO.getVote() < requiredVotes && teamSkillDTO.getVerifiedAt() != null) {
+            teamSkillDTO.setVerifiedAt(null);
+        }
+
         TeamSkill teamSkill = teamSkillMapper.toEntity(teamSkillDTO);
         teamSkill = teamSkillRepository.save(teamSkill);
         return teamSkillMapper.toDto(teamSkill);

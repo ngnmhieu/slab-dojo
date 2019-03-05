@@ -11,6 +11,7 @@ type EntityResponseType = HttpResponse<IOrganization>;
 type EntityArrayResponseType = HttpResponse<IOrganization[]>;
 
 const USER_MODE_STORAGE_KEY = 'userMode';
+const COUNT_OF_CONFIRMATIONS_STORAGE_KEY = 'countOfConfirmations';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {
@@ -43,11 +44,16 @@ export class OrganizationService {
         const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
         result.subscribe(res => {
             this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode || UserMode.TEAM);
+            this.storage.store(COUNT_OF_CONFIRMATIONS_STORAGE_KEY, res.body.countOfConfirmations || 0);
         });
         return result;
     }
 
     getCurrentUserMode(): UserMode {
         return this.storage.retrieve(USER_MODE_STORAGE_KEY) || UserMode.TEAM;
+    }
+
+    getCurrentCountOfConfirmations(): number {
+        return this.storage.retrieve(COUNT_OF_CONFIRMATIONS_STORAGE_KEY) || 0;
     }
 }
