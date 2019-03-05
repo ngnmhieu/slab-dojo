@@ -8,7 +8,7 @@
             "properties": "Properties",
             "name": "Name",
             "value": "Wert",
-            "error": "Error"
+            "error": "Fehler"
         },
         "indicator": {
             "diskSpace": "Festplattenspeicher",

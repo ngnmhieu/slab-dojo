@@ -16,15 +16,15 @@
                 "title": "Badge"
             },
             "name": "Name",
-            "description": "Description",
-            "availableUntil": "Available Until",
-            "availableAmount": "Available Amount",
-            "requiredScore": "Required Score",
-            "instantMultiplier": "Skill Score Multiplier",
-            "completionBonus": "Badge Completion Bonus",
-            "skills": "Skills",
-            "dimensions": "Dimensions",
-            "image": "Image"
+            "description": "Beschreibung",
+            "availableUntil": "Verfügbar bis",
+            "availableAmount": "Verfügbare Menge",
+            "requiredScore": "Benötigte Punktzahl",
+            "instantMultiplier": "Skill Score Multiplikator",
+            "completionBonus": "Badge Vollendungsbonus",
+            "skills": "Fähigkeiten",
+            "dimensions": "Themengebiete",
+            "image": "Bild"
         }
     }
 }

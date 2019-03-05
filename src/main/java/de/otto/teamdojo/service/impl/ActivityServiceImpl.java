@@ -125,7 +125,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         String message = team.getName() + " hat den Skill \"" + skill.getTitle() + "\" erlernt!";
 
-        if (organizationService.getCurrentOrganization().getUserMode().equals(UserMode.PERSON)) {
+        if (organizationService.getCurrentOrganization().getCountOfConfirmations() > 0) {
             message += " <" + properties.getFrontend() + "team-skill/" + teamSkill.getId() + "/vote|Traust du das " + team.getName() + " zu?>";
         }
 

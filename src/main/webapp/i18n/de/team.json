@@ -16,12 +16,12 @@
                 "title": "Team"
             },
             "name": "Name",
-            "shortName": "Short Name",
+            "shortName": "Kurzname",
             "slogan": "Slogan",
-            "contactPerson": "Contact Person",
+            "contactPerson": "Kontaktperson",
             "suggestedBy": "Vorgeschlagen von",
-            "validUntil": "Valid Until",
-            "participations": "Participations",
+            "validUntil": "Gültig bis",
+            "participations": "Teilnahmen",
             "skills": "Skills",
             "image": "Image"
         }

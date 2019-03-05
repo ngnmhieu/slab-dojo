@@ -9,6 +9,7 @@ export interface IOrganization {
     levelUpScore?: number;
     userMode?: UserMode;
     mattermostUrl?: string;
+    countOfConfirmations?: number;
 }
 
 export class Organization implements IOrganization {
@@ -17,6 +18,7 @@ export class Organization implements IOrganization {
         public name?: string,
         public levelUpScore?: number,
         public userMode?: UserMode,
-        public mattermostUrl?: string
+        public mattermostUrl?: string,
+        public countOfConfirmations?: number
     ) {}
 }

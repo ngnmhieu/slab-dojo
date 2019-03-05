@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +22,10 @@ public class OrganizationDTO implements Serializable {
     @Size(max = 255)
     @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
     private String mattermostUrl;
+
+    @Min(value = 0)
+    private Integer countOfConfirmations;
+
 
     public Long getId() {
         return id;
@@ -64,6 +67,14 @@ public class OrganizationDTO implements Serializable {
         this.mattermostUrl = mattermostUrl;
     }
 
+    public Integer getCountOfConfirmations() {
+        return countOfConfirmations;
+    }
+
+    public void setCountOfConfirmations(Integer countOfConfirmations) {
+        this.countOfConfirmations = countOfConfirmations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -93,6 +104,7 @@ public class OrganizationDTO implements Serializable {
             ", levelUpScore=" + getLevelUpScore() +
             ", userMode='" + getUserMode() + "'" +
             ", mattermostUrl='" + getMattermostUrl() + "'" +
+            ", countOfConfirmations=" + getCountOfConfirmations() +
             "}";
     }
 }

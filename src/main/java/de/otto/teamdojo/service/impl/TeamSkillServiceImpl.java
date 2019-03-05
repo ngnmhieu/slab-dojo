@@ -1,18 +1,19 @@
 package de.otto.teamdojo.service.impl;
 
-import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.domain.TeamSkill;
 import de.otto.teamdojo.repository.TeamSkillRepository;
+import de.otto.teamdojo.service.OrganizationService;
+import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
 import de.otto.teamdojo.service.mapper.TeamSkillMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -28,9 +29,13 @@ public class TeamSkillServiceImpl implements TeamSkillService {
 
     private final TeamSkillMapper teamSkillMapper;
 
-    public TeamSkillServiceImpl(TeamSkillRepository teamSkillRepository, TeamSkillMapper teamSkillMapper) {
+    private final OrganizationService organizationService;
+
+    public TeamSkillServiceImpl(TeamSkillRepository teamSkillRepository, TeamSkillMapper teamSkillMapper,
+                                OrganizationService organizationService) {
         this.teamSkillRepository = teamSkillRepository;
         this.teamSkillMapper = teamSkillMapper;
+        this.organizationService = organizationService;
     }
 
     /**
@@ -42,9 +47,19 @@ public class TeamSkillServiceImpl implements TeamSkillService {
     @Override
     public TeamSkillDTO save(TeamSkillDTO teamSkillDTO) {
         log.debug("Request to save TeamSkill : {}", teamSkillDTO);
-        if(teamSkillDTO.getVote()==null){
+        if (teamSkillDTO.getVote() == null) {
             teamSkillDTO.setVote(0);
         }
+
+        Integer requiredVotes = organizationService.getCurrentOrganization().getCountOfConfirmations();
+        if (requiredVotes == null) {
+            requiredVotes = 0;
+        }
+
+        if (teamSkillDTO.getVote() >= requiredVotes && teamSkillDTO.getVerifiedAt() == null) {
+            teamSkillDTO.setVerifiedAt(Instant.now());
+        }
+
         TeamSkill teamSkill = teamSkillMapper.toEntity(teamSkillDTO);
         teamSkill = teamSkillRepository.save(teamSkill);
         return teamSkillMapper.toDto(teamSkill);

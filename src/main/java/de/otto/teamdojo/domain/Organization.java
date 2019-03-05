@@ -44,6 +44,10 @@ public class Organization implements Serializable {
     @Column(name = "mattermost_url", length = 255)
     private String mattermostUrl;
 
+    @Min(value = 0)
+    @Column(name = "count_of_confirmations")
+    private Integer countOfConfirmations;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -96,13 +100,26 @@ public class Organization implements Serializable {
         return mattermostUrl;
     }
 
+    public Organization mattermostUrl(String mattermostUrl) {
+        this.mattermostUrl = mattermostUrl;
+        return this;
+    }
+
     public void setMattermostUrl(String mattermostUrl) {
         this.mattermostUrl = mattermostUrl;
     }
 
-    public Organization mattermostUrl(String mattermostUrl) {
-        this.mattermostUrl = mattermostUrl;
+    public Integer getCountOfConfirmations() {
+        return countOfConfirmations;
+    }
+
+    public Organization countOfConfirmations(Integer countOfConfirmations) {
+        this.countOfConfirmations = countOfConfirmations;
         return this;
+    }
+
+    public void setCountOfConfirmations(Integer countOfConfirmations) {
+        this.countOfConfirmations = countOfConfirmations;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -134,6 +151,7 @@ public class Organization implements Serializable {
             ", levelUpScore=" + getLevelUpScore() +
             ", userMode='" + getUserMode() + "'" +
             ", mattermostUrl='" + getMattermostUrl() + "'" +
+            ", countOfConfirmations=" + getCountOfConfirmations() +
             "}";
     }
 }

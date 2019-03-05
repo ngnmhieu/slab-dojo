@@ -31,12 +31,22 @@
             ],
             "fieldValidateRulesMaxlength": 255,
             "fieldValidateRulesPattern": "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+        },
+        {
+            "fieldName": "countOfConfirmations",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
         }
     ],
     "changelogDate": "20180517074753",
     "dto": "mapstruct",
+    "searchEngine": false,
     "service": "serviceImpl",
     "entityTableName": "organization",
+    "databaseType": "sql",
     "jpaMetamodelFiltering": false,
     "pagination": "no"
 }
