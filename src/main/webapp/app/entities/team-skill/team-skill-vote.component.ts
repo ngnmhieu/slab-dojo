@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from 'app/entities/team-skill/team-skill.service';
-import { OrganizationService } from 'app/entities/organization';
 
 @Component({
     selector: 'jhi-team-skill-vote',
