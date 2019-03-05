@@ -37,9 +37,9 @@ TeamDojo comes prefilled with some demo data.
 Log in with the default admin credentials: _admin/teamdojo_ at [http://localhost:8080/#/admin](http://localhost:8080/#/admin)
 and change your **organization** _Entities - Organization_. It will be your navigation root node.
 
-#### Dimension
+#### Topic
 
-Next you would like to create some **Dimensions** your teams want to achieve skills for: _Entities - Dimension_.
+Next you would like to create some **Topics** your teams want to achieve skills for: _Entities - Topic_.
 Examples could be _Quality Assurance_, _Security_, _Operations_, _Architecture_, ...
 
 #### Team
@@ -53,11 +53,11 @@ _Entities - Team_
 -   **Picture** - The Team's logo
 -   Team **Slogan**
 -   Team **Contact Person**
--   **Participations** - Every Team can participate on one or more Dimensions.
+-   **Participations** - Every Team can participate on one or more Topics.
 
 #### Level
 
-Now you can specify maturity or ability **Levels** for these Dimensions.
+Now you can specify maturity or ability **Levels** for these Topics.
 Each Level should contain _n_ Skills - see next step.
 
 A Level consists of the following settings:
@@ -74,7 +74,7 @@ _Entities - Level_
     skill of this level. Default can be 0.0. See [Scoring System](#scoring-system-and-balancing) for more details.
 -   [OPTIONAL] **Level Completion Bonus** - A numeric value. How much bonus points the team can achieve with the
     completion of this level. See [Scoring System](#scoring-system-and-balancing) for more details.
--   **Dimension** - Every Level must be assigned to one dimension.
+-   **Topic** - Every Level must be assigned to one topic.
 -   [OPTIONAL] A level can **depends on** a previous level. E.g.: To reach Level 2, all skills of Level 2 and Level 1 must
     be completed.
 
@@ -98,7 +98,7 @@ _Entities - Badges_
     every skill of this badge. Default can be 0.0. See [Scoring System](#scoring-system-and-balancing) for more details.
 -   [OPTIONAL] **Badge Completion Bonus** - A numeric value. How much bonus points the team can gain with the
     completion of this badge. See [Scoring System](#scoring-system-and-balancing) for more details.
--   **Dimensions** - Every Badge can be assigned to one ore more Dimensions.
+-   **Topics** - Every Badge can be assigned to one ore more topics.
 
 #### Skill
 
