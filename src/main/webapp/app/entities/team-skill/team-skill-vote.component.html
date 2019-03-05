@@ -38,7 +38,7 @@
             <button type="submit"
                     (click)="upVote()"
                     [routerLink]="['/']"
-                    [disabled]="disabled"
+                    [disabled]="upvoteDisabled"
                     class="btn btn-info">
                 <span class="fa fa-arrow-up"></span>&nbsp;<span dojoTranslate="teamdojoApp.teamSkill.upvote">Upvote</span>
             </button>
@@ -46,7 +46,7 @@
             <button type="button"
                     (click)="downVote()"
                     [routerLink]="['/']"
-                    [disabled]="disabled"
+                    [disabled]="downvoteDisabled"
                     class="btn btn-primary">
                 <span class="fa fa-arrow-down"></span>&nbsp;<span dojoTranslate="teamdojoApp.teamSkill.downvote">Downvote</span>
             </button>
