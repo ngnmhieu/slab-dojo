@@ -17,15 +17,13 @@ the amount of their achieved scores.
     git clone https://github.com/otto-de/TeamDojo.git
     cd TeamDojo/
 
-### Docker
+### Start the database
 
-First build a docker image by running:
+    docker-compose -f src/main/docker/postgresql.yml up
 
-    ./gradlew bootWar -Pprod jibDockerBuild
+### Start the server
 
-Then run:
-
-    docker-compose -f src/main/docker/app.yml up -d
+    ./gradlew
 
 The application will be available at [http://localhost:8080](http://localhost:8080)
 
