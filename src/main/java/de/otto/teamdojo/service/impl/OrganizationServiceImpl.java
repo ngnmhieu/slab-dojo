@@ -1,14 +1,13 @@
 package de.otto.teamdojo.service.impl;
 
-import de.otto.teamdojo.domain.enumeration.UserMode;
-import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.domain.Organization;
+import de.otto.teamdojo.domain.enumeration.UserMode;
 import de.otto.teamdojo.repository.OrganizationRepository;
+import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.service.dto.OrganizationDTO;
 import de.otto.teamdojo.service.mapper.OrganizationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +86,8 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Organization : {}", id);        organizationRepository.deleteById(id);
+        log.debug("Request to delete Organization : {}", id);
+        organizationRepository.deleteById(id);
     }
 
     @Override
@@ -99,7 +99,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             if (organizations.size() > 1) {
                 log.warn("There exists more than one organization");
             }
-            return organizations.get(0);
+
+            OrganizationDTO organizationDTO = organizations.get(0);
+            if (organizationDTO.getCountOfConfirmations() == null) {
+                organizationDTO.setCountOfConfirmations(0);
+            }
+
+            return organizationDTO;
         }
     }
 
@@ -107,6 +113,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         OrganizationDTO organization = new OrganizationDTO();
         organization.setName(DEFAULT_ORGANIZATION_NAME);
         organization.setUserMode(UserMode.TEAM);
+        organization.setCountOfConfirmations(0);
         return organization;
     }
 }
