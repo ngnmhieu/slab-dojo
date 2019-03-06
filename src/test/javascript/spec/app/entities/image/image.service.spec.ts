@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(ImageService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Image(0, 'AAAAAAA', 'image/png', 'AAAAAAA', 'image/png', 'AAAAAAA', 'image/png', 'AAAAAAA');
+            elemDefault = new Image(0, 'AAAAAAA', 'image/png', 'AAAAAAA', 'image/png', 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -58,7 +58,8 @@ describe('Service Tests', () => {
                         name: 'BBBBBB',
                         small: 'BBBBBB',
                         medium: 'BBBBBB',
-                        large: 'BBBBBB'
+                        large: 'BBBBBB',
+                        hash: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -78,7 +79,8 @@ describe('Service Tests', () => {
                         name: 'BBBBBB',
                         small: 'BBBBBB',
                         medium: 'BBBBBB',
-                        large: 'BBBBBB'
+                        large: 'BBBBBB',
+                        hash: 'BBBBBB'
                     },
                     elemDefault
                 );

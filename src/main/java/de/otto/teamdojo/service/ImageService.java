@@ -4,6 +4,7 @@ import de.otto.teamdojo.service.dto.ImageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 /**
@@ -17,7 +18,7 @@ public interface ImageService {
      * @param imageDTO the entity to save
      * @return the persisted entity
      */
-    ImageDTO save(ImageDTO imageDTO);
+    ImageDTO save(ImageDTO imageDTO) throws NoSuchAlgorithmException;
 
     /**
      * Get all the images.

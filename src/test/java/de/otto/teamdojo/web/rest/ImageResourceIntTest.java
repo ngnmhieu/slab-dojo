@@ -8,6 +8,7 @@ import de.otto.teamdojo.service.ImageService;
 import de.otto.teamdojo.service.dto.ImageDTO;
 import de.otto.teamdojo.service.mapper.ImageMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.dto.ImageCriteria;
 import de.otto.teamdojo.service.ImageQueryService;
 
 import org.junit.Before;
@@ -69,6 +70,9 @@ public class ImageResourceIntTest {
     private static final byte[] EXPECTED_IMAGE_WHITE = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0, -112, 119, 83, -34, 0, 0, 0, 12, 73, 68, 65, 84, 120, -38, 99, -8, -1, -1, 63, 0, 5, -2, 2, -2, 51, 18, -107, 20, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126 };
     private static final String EXPECTED_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_HASH = "AAAAAAAAAA";
+    private static final String UPDATED_HASH = "BBBBBBBBBB";
+
     @Autowired
     private ImageRepository imageRepository;
 
@@ -126,7 +130,8 @@ public class ImageResourceIntTest {
             .medium(DEFAULT_MEDIUM)
             .mediumContentType(DEFAULT_MEDIUM_CONTENT_TYPE)
             .large(DEFAULT_LARGE)
-            .largeContentType(DEFAULT_LARGE_CONTENT_TYPE);
+            .largeContentType(DEFAULT_LARGE_CONTENT_TYPE)
+            .hash(DEFAULT_HASH);
         return image;
     }
 
@@ -158,6 +163,7 @@ public class ImageResourceIntTest {
         assertThat(testImage.getMediumContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
         assertThat(testImage.getLarge()).containsExactly(EXPECTED_IMAGE_BLACK);
         assertThat(testImage.getLargeContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getHash()).isEqualTo(DEFAULT_HASH);
     }
 
     @Test
@@ -216,9 +222,10 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.[*].mediumContentType").value(hasItem(DEFAULT_MEDIUM_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].medium").value(hasItem(Base64Utils.encodeToString(DEFAULT_MEDIUM))))
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
+            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))))
+            .andExpect(jsonPath("$.[*].hash").value(hasItem(DEFAULT_HASH.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getImage() throws Exception {
@@ -236,7 +243,8 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.mediumContentType").value(DEFAULT_MEDIUM_CONTENT_TYPE))
             .andExpect(jsonPath("$.medium").value(Base64Utils.encodeToString(DEFAULT_MEDIUM)))
             .andExpect(jsonPath("$.largeContentType").value(DEFAULT_LARGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.large").value(Base64Utils.encodeToString(DEFAULT_LARGE)));
+            .andExpect(jsonPath("$.large").value(Base64Utils.encodeToString(DEFAULT_LARGE)))
+            .andExpect(jsonPath("$.hash").value(DEFAULT_HASH.toString()));
     }
 
     @Test
@@ -277,6 +285,45 @@ public class ImageResourceIntTest {
         // Get all the imageList where name is null
         defaultImageShouldNotBeFound("name.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsEqualToSomething() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash equals to DEFAULT_HASH
+        defaultImageShouldBeFound("hash.equals=" + DEFAULT_HASH);
+
+        // Get all the imageList where hash equals to UPDATED_HASH
+        defaultImageShouldNotBeFound("hash.equals=" + UPDATED_HASH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsInShouldWork() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash in DEFAULT_HASH or UPDATED_HASH
+        defaultImageShouldBeFound("hash.in=" + DEFAULT_HASH + "," + UPDATED_HASH);
+
+        // Get all the imageList where hash equals to UPDATED_HASH
+        defaultImageShouldNotBeFound("hash.in=" + UPDATED_HASH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash is not null
+        defaultImageShouldBeFound("hash.specified=true");
+
+        // Get all the imageList where hash is null
+        defaultImageShouldNotBeFound("hash.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -291,7 +338,8 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.[*].mediumContentType").value(hasItem(DEFAULT_MEDIUM_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].medium").value(hasItem(Base64Utils.encodeToString(DEFAULT_MEDIUM))))
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
+            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))))
+            .andExpect(jsonPath("$.[*].hash").value(hasItem(DEFAULT_HASH)));
 
         // Check, that the count call also returns 1
         restImageMockMvc.perform(get("/api/images/count?sort=id,desc&" + filter))
@@ -345,7 +393,8 @@ public class ImageResourceIntTest {
             .medium(UPDATED_MEDIUM)
             .mediumContentType(UPDATED_MEDIUM_CONTENT_TYPE)
             .large(UPDATED_LARGE)
-            .largeContentType(UPDATED_LARGE_CONTENT_TYPE);
+            .largeContentType(UPDATED_LARGE_CONTENT_TYPE)
+            .hash(UPDATED_HASH);
         ImageDTO imageDTO = imageMapper.toDto(updatedImage);
 
         restImageMockMvc.perform(put("/api/images")
@@ -364,6 +413,7 @@ public class ImageResourceIntTest {
         assertThat(testImage.getMediumContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
         assertThat(testImage.getLarge()).isEqualTo(EXPECTED_IMAGE_WHITE);
         assertThat(testImage.getLargeContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getHash()).isEqualTo(UPDATED_HASH);
     }
 
     @Test

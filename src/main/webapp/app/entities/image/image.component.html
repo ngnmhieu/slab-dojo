@@ -14,16 +14,12 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-                <th jhiSortBy="id"><span dojoTranslate="teamdojoApp.global.field.id">ID</span> <span
-                    class="fa fa-sort"></span></th>
-                <th jhiSortBy="name"><span dojoTranslate="teamdojoApp.image.name">Name</span> <span
-                    class="fa fa-sort"></span></th>
-                <th jhiSortBy="small"><span dojoTranslate="teamdojoApp.image.small">Small</span> <span
-                    class="fa fa-sort"></span></th>
-                <th jhiSortBy="medium"><span dojoTranslate="teamdojoApp.image.medium">Medium</span> <span
-                    class="fa fa-sort"></span></th>
-                <th jhiSortBy="large"><span dojoTranslate="teamdojoApp.image.large">Large</span> <span
-                    class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span dojoTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span dojoTranslate="teamdojoApp.image.name">Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="small"><span dojoTranslate="teamdojoApp.image.small">Small</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="medium"><span dojoTranslate="teamdojoApp.image.medium">Medium</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="large"><span dojoTranslate="teamdojoApp.image.large">Large</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="hash"><span dojoTranslate="teamdojoApp.image.hash">Hash</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>

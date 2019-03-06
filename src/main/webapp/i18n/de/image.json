@@ -18,7 +18,8 @@
             "name": "Name",
             "small": "Small",
             "medium": "Medium",
-            "large": "Large"
+            "large": "Large",
+            "hash": "Hash"
         }
     }
 }

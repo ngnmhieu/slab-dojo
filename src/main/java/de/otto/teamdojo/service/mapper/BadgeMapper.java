@@ -13,6 +13,7 @@ public interface BadgeMapper extends EntityMapper<BadgeDTO, Badge> {
 
     @Mapping(source = "image.id", target = "imageId")
     @Mapping(source = "image.name", target = "imageName")
+    @Mapping(source = "image.hash", target = "imageHash")
     BadgeDTO toDto(Badge badge);
 
     @Mapping(target = "skills", ignore = true)
