@@ -21,7 +21,7 @@
             },
             "title": "Title",
             "titleExplanationShort": "(What? (Short version <120 characters))",
-            "titleExplanation": "So kurz und eindeutig wie möglich, da diese in den Notifications, Mattermost-Posts und in den Übersichtslisten verwendet werden. Da es um das \"Tun\" geht, sollten Verben benutzt werden, um Mißverständnisse zu vermeiden.",
+            "titleExplanation": "As short and clear as possible, since these are used in the notifications, Mattermost posts and in the overview lists. Since this is about \"doing\", verbs should be used to avoid misunderstandings.",
             "description": "Description",
             "descriptionExplanationShort": "(Why?)",
             "descriptionExplanation": "Why is this skill relevant to the team/organization? Please describe the motivation and background of the skill!",
