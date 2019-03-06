@@ -18,9 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.bind.DatatypeConverter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +56,7 @@ public class ImageResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/images")
-    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
+    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException, NoSuchAlgorithmException {
         log.debug("REST request to save Image : {}", imageDTO);
         if (imageDTO.getId() != null) {
             throw new BadRequestAlertException("A new image cannot already have an ID", ENTITY_NAME, "idexists");
@@ -74,7 +77,7 @@ public class ImageResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/images")
-    public ResponseEntity<ImageDTO> updateImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
+    public ResponseEntity<ImageDTO> updateImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException, NoSuchAlgorithmException {
         log.debug("REST request to update Image : {}", imageDTO);
         if (imageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

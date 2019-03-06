@@ -7,6 +7,7 @@ export interface IImage {
     medium?: any;
     largeContentType?: string;
     large?: any;
+    hash?: string;
 }
 
 export class Image implements IImage {
@@ -18,6 +19,7 @@ export class Image implements IImage {
         public mediumContentType?: string,
         public medium?: any,
         public largeContentType?: string,
-        public large?: any
+        public large?: any,
+        public hash?: string
     ) {}
 }

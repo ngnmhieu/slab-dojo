@@ -26,6 +26,8 @@ public class ImageCriteria implements Serializable {
 
     private StringFilter name;
 
+    private StringFilter hash;
+
     public LongFilter getId() {
         return id;
     }
@@ -42,6 +44,14 @@ public class ImageCriteria implements Serializable {
         this.name = name;
     }
 
+    public StringFilter getHash() {
+        return hash;
+    }
+
+    public void setHash(StringFilter hash) {
+        this.hash = hash;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -54,14 +64,16 @@ public class ImageCriteria implements Serializable {
         final ImageCriteria that = (ImageCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name);
+            Objects.equals(name, that.name) &&
+            Objects.equals(hash, that.hash);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        name
+        name,
+        hash
         );
     }
 
@@ -70,6 +82,7 @@ public class ImageCriteria implements Serializable {
         return "ImageCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (hash != null ? "hash=" + hash + ", " : "") +
             "}";
     }
 
