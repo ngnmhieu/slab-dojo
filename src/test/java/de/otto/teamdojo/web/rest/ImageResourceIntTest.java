@@ -70,8 +70,8 @@ public class ImageResourceIntTest {
     private static final byte[] EXPECTED_IMAGE_WHITE = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0, -112, 119, 83, -34, 0, 0, 0, 12, 73, 68, 65, 84, 120, -38, 99, -8, -1, -1, 63, 0, 5, -2, 2, -2, 51, 18, -107, 20, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126 };
     private static final String EXPECTED_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_HASH = "AAAAAAAAAA";
-    private static final String UPDATED_HASH = "BBBBBBBBBB";
+    private static final String DEFAULT_HASH = "A2021C9ED42E09243D51F00D17862BE3";
+    private static final String UPDATED_HASH = "08332C69A77B3D73376DF2FC43D9B0C0";
 
     @Autowired
     private ImageRepository imageRepository;
