@@ -1,4 +1,7 @@
-<h4 class="skill-title">{{skill.title}}</h4>
+<span>
+    <span class="skill-title">{{ skill.title }}</span>
+    <span class="explanation">{{ 'teamdojoApp.skill.titleExplanationShort' | translate }}</span>
+</span>
 
 <div class="skill-actions" *ngIf="isSameTeamSelected()">
     <button class="irrelevant action-btn" *ngIf="achievableSkill.irrelevant; else skillNotIrrelevant"
@@ -32,24 +35,32 @@
 
     <div class="skill-contact" *ngIf="skill.contact">
         <span dojoTranslate="teamdojoApp.teams.skills.details.contact">Contact</span>:
-        <span>{{skill.contact}}</span>
+        <span>{{ skill.contact }}</span>
     </div>
     <div class="clearfix"></div>
 </div>
 
-
 <div class="dojo-card">
     <div class="skill-desc desc-block">
-        <h5 dojoTranslate="teamdojoApp.teams.skills.details.desc"></h5>
-        <p>{{skill.description}}</p>
+        <span>
+            <span class="headline"> {{ 'teamdojoApp.teams.skills.details.desc' | translate }}</span>
+            <span class="explanation"> {{ 'teamdojoApp.skill.descriptionExplanationShort' | translate }}</span>
+        </span>
+        <p>{{ skill.description }}</p>
     </div>
     <div class="skill-impl desc-block">
-        <h5 dojoTranslate="teamdojoApp.teams.skills.details.implementation"></h5>
-        <p>{{skill.implementation}}</p>
+        <span>
+            <span class="headline"> {{ 'teamdojoApp.teams.skills.details.implementation' | translate }}</span>
+            <span class="explanation"> {{ 'teamdojoApp.skill.implementationExplanationShort' | translate }}</span>
+        </span>
+        <p>{{ skill.implementation }}</p>
     </div>
     <div class="skill-validation desc-block">
-        <h5 dojoTranslate="teamdojoApp.teams.skills.details.validation"></h5>
-        <p>{{skill.validation}}</p>
+        <span>
+            <span class="headline"> {{ 'teamdojoApp.teams.skills.details.validation' | translate }}</span>
+            <span class="explanation"> {{ 'teamdojoApp.skill.validationExplanationShort' | translate }}</span>
+        </span>
+        <p>{{ skill.validation }}</p>
     </div>
 
     <div class="row skill-metadata">
