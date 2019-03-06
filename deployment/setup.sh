@@ -3,15 +3,12 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# hard-coded in templates and currently not subject to modification
-OC_NAMESPACE="slabdojo"
-
-# variables
 read_var() {
     test -z "${!1}" && read -p "${2}" ${3:+-s} "${1}" || true
     test -n "${3}" && echo || true
 }
 
+read_var OC_NAMESPACE "OpenShift namespace: "
 read_var OC_PROJECT_NAME "OpenShift project name: "
 read_var OC_PROJECT_DESC "OpenShift project description: "
 read_var DB_USER "Database user: "
@@ -40,11 +37,17 @@ create_instance() {
     create "routes/teamdojo${instancesuffix}.yml"
 }
 
-oc secrets new-dockercfg "${OC_NAMESPACE}-registry" --docker-server="${DOCKER_CFG_REGISTRY}" --docker-username="${DOCKER_CFG_USERNAME}" --docker-email="${DOCKER_CFG_EMAIL}" --docker-password="${DOCKER_CFG_TOKEN}"
-oc secrets new-basicauth "${OC_NAMESPACE}-db" --username="${DB_USER}" --password="${DB_PASSWORD}"
+oc secrets new-dockercfg "registry-dockercfg" --docker-server="${DOCKER_CFG_REGISTRY}" --docker-username="${DOCKER_CFG_USERNAME}" --docker-email="${DOCKER_CFG_EMAIL}" --docker-password="${DOCKER_CFG_TOKEN}"
+oc secrets new-basicauth "database-creds" --username="${DB_USER}" --password="${DB_PASSWORD}"
 create "serviceaccounts/bamboodeployer.yml"
 create "rolebindings/edit.yml"
 
 create_instance ""
 create_instance "-int"
+
+set +x
+OC_BAMBOO_TOKEN="$(oc get serviceaccounts/bamboodeployer --output jsonpath='{.secrets[0].name}')"
+echo
+echo "Use this as your deployer token in Bamboo: "
+oc describe "secret/${OC_BAMBOO_TOKEN}"
 
