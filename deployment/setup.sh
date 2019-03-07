@@ -47,10 +47,8 @@ create_instance ""
 create_instance "-int"
 
 set +x
-OC_BAMBOO_TOKEN="$(oc get serviceaccounts/bamboodeployer --output jsonpath='{.secrets[0].name}')"
-OC_BAMBOO_DOCKERCFG="$(oc get serviceaccounts/bamboodeployer --output jsonpath='{.secrets[1].name}')"
+OC_BAMBOO_TOKEN="$(oc get --output name secrets | grep --max-count=1 bamboodeployer-token)"
 echo
-echo "Use a deployer token in Bamboo: "
-oc describe "secret/${OC_BAMBOO_TOKEN}"
-oc describe "secret/${OC_BAMBOO_DOCKERCFG}"
+echo "Use this deployer token in Bamboo: "
+oc describe "${OC_BAMBOO_TOKEN}" | grep 'token:'
 
