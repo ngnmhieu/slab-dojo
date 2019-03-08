@@ -1,10 +1,10 @@
 package de.otto.teamdojo.service;
 
 import de.otto.teamdojo.service.dto.TeamDTO;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,9 +23,10 @@ public interface TeamService {
     /**
      * Get all the teams.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
-    List<TeamDTO> findAll();
+    Page<TeamDTO> findAll(Pageable pageable);
 
     /**
      * Get all the Team with eager load of many-to-many relationships.
@@ -33,7 +34,7 @@ public interface TeamService {
      * @return the list of entities
      */
     Page<TeamDTO> findAllWithEagerRelationships(Pageable pageable);
-
+    
     /**
      * Get the "id" team.
      *

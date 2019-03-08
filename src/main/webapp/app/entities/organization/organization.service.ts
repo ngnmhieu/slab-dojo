@@ -1,78 +1,59 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IOrganization } from 'app/shared/model/organization.model';
+import { IOrganization, UserMode } from 'app/shared/model/organization.model';
+import { LocalStorageService } from 'ngx-webstorage';
 
-export type EntityResponseType = HttpResponse<IOrganization>;
-export type EntityArrayResponseType = HttpResponse<IOrganization[]>;
+type EntityResponseType = HttpResponse<IOrganization>;
+type EntityArrayResponseType = HttpResponse<IOrganization[]>;
 
-@Injectable()
+const USER_MODE_STORAGE_KEY = 'userMode';
+const COUNT_OF_CONFIRMATIONS_STORAGE_KEY = 'countOfConfirmations';
+
+@Injectable({ providedIn: 'root' })
 export class OrganizationService {
-    private resourceUrl = SERVER_API_URL + 'api/organizations';
+    public resourceUrl = SERVER_API_URL + 'api/organizations';
 
-    constructor(private http: HttpClient) {}
+    constructor(protected http: HttpClient, private storage: LocalStorageService) {}
 
     create(organization: IOrganization): Observable<EntityResponseType> {
-        const copy = this.convert(organization);
-        return this.http
-            .post<IOrganization>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.post<IOrganization>(this.resourceUrl, organization, { observe: 'response' });
     }
 
     update(organization: IOrganization): Observable<EntityResponseType> {
-        const copy = this.convert(organization);
-        return this.http
-            .put<IOrganization>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.put<IOrganization>(this.resourceUrl, organization, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http
-            .get<IOrganization>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.get<IOrganization>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http
-            .get<IOrganization[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: EntityArrayResponseType) => this.convertArrayResponse(res));
+        return this.http.get<IOrganization[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: IOrganization = this.convertItemFromServer(res.body);
-        return res.clone({ body });
+    findCurrent(): Observable<EntityResponseType> {
+        const result = this.http.get<IOrganization>(`${this.resourceUrl}/current`, { observe: 'response' });
+        result.subscribe(res => {
+            this.storage.store(USER_MODE_STORAGE_KEY, res.body.userMode || UserMode.TEAM);
+            this.storage.store(COUNT_OF_CONFIRMATIONS_STORAGE_KEY, res.body.countOfConfirmations || 0);
+        });
+        return result;
     }
 
-    private convertArrayResponse(res: EntityArrayResponseType): EntityArrayResponseType {
-        const jsonResponse: IOrganization[] = res.body;
-        const body: IOrganization[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({ body });
+    getCurrentUserMode(): UserMode {
+        return this.storage.retrieve(USER_MODE_STORAGE_KEY) || UserMode.TEAM;
     }
 
-    /**
-     * Convert a returned JSON object to Organization.
-     */
-    private convertItemFromServer(organization: IOrganization): IOrganization {
-        const copy: IOrganization = Object.assign({}, organization, {});
-        return copy;
-    }
-
-    /**
-     * Convert a Organization to a JSON which can be sent to the server.
-     */
-    private convert(organization: IOrganization): IOrganization {
-        const copy: IOrganization = Object.assign({}, organization, {});
-        return copy;
+    getCurrentCountOfConfirmations(): number {
+        return this.storage.retrieve(COUNT_OF_CONFIRMATIONS_STORAGE_KEY) || 0;
     }
 }

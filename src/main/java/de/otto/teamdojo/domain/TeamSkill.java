@@ -1,11 +1,13 @@
 package de.otto.teamdojo.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import java.util.Objects;
 public class TeamSkill implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -36,6 +38,13 @@ public class TeamSkill implements Serializable {
 
     @Column(name = "note")
     private String note;
+
+    @NotNull
+    @Column(name = "vote", nullable = false)
+    private Integer vote;
+
+    @Column(name = "voters")
+    private String voters;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -108,6 +117,32 @@ public class TeamSkill implements Serializable {
         this.note = note;
     }
 
+    public Integer getVote() {
+        return vote;
+    }
+
+    public TeamSkill vote(Integer vote) {
+        this.vote = vote;
+        return this;
+    }
+
+    public void setVote(Integer vote) {
+        this.vote = vote;
+    }
+
+    public String getVoters() {
+        return voters;
+    }
+
+    public TeamSkill voters(String voters) {
+        this.voters = voters;
+        return this;
+    }
+
+    public void setVoters(String voters) {
+        this.voters = voters;
+    }
+
     public Skill getSkill() {
         return skill;
     }
@@ -163,6 +198,8 @@ public class TeamSkill implements Serializable {
             ", verifiedAt='" + getVerifiedAt() + "'" +
             ", irrelevant='" + isIrrelevant() + "'" +
             ", note='" + getNote() + "'" +
+            ", vote=" + getVote() +
+            ", voters='" + getVoters() + "'" +
             "}";
     }
 }

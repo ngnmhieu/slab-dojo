@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Team } from 'app/shared/model/team.model';
 import { TeamService } from './team.service';
 import { TeamComponent } from './team.component';
 import { TeamDetailComponent } from './team-detail.component';
 import { TeamUpdateComponent } from './team-update.component';
 import { TeamDeletePopupComponent } from './team-delete-dialog.component';
+import { ITeam } from 'app/shared/model/team.model';
 
-@Injectable()
-export class TeamResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class TeamResolve implements Resolve<ITeam> {
     constructor(private service: TeamService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ITeam> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Team>) => response.ok),
+                map((team: HttpResponse<Team>) => team.body)
+            );
         }
-        return new Team();
+        return of(new Team());
     }
 }
 
 export const teamRoute: Routes = [
     {
-        path: 'team',
+        path: '',
         component: TeamComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -33,7 +39,7 @@ export const teamRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/:id/view',
+        path: ':id/view',
         component: TeamDetailComponent,
         resolve: {
             team: TeamResolve
@@ -45,7 +51,7 @@ export const teamRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/new',
+        path: 'new',
         component: TeamUpdateComponent,
         resolve: {
             team: TeamResolve
@@ -57,7 +63,7 @@ export const teamRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'team/:id/edit',
+        path: ':id/edit',
         component: TeamUpdateComponent,
         resolve: {
             team: TeamResolve
@@ -72,7 +78,7 @@ export const teamRoute: Routes = [
 
 export const teamPopupRoute: Routes = [
     {
-        path: 'team/:id/delete',
+        path: ':id/delete',
         component: TeamDeletePopupComponent,
         resolve: {
             team: TeamResolve

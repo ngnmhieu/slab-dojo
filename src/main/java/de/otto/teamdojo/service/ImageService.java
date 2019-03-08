@@ -1,8 +1,10 @@
 package de.otto.teamdojo.service;
 
 import de.otto.teamdojo.service.dto.ImageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 /**
@@ -16,14 +18,15 @@ public interface ImageService {
      * @param imageDTO the entity to save
      * @return the persisted entity
      */
-    ImageDTO save(ImageDTO imageDTO);
+    ImageDTO save(ImageDTO imageDTO) throws NoSuchAlgorithmException;
 
     /**
      * Get all the images.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
-    List<ImageDTO> findAll();
+    Page<ImageDTO> findAll(Pageable pageable);
 
 
     /**
@@ -33,6 +36,14 @@ public interface ImageService {
      * @return the entity
      */
     Optional<ImageDTO> findOne(Long id);
+
+    /**
+     * Get the "name" image.
+     *
+     * @param name the name of the entity
+     * @return the entity
+     */
+    Optional<ImageDTO> findByName(String name);
 
     /**
      * Delete the "id" image.

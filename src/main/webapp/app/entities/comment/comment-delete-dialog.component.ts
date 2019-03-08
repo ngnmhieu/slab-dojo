@@ -14,7 +14,7 @@ import { CommentService } from './comment.service';
 export class CommentDeleteDialogComponent {
     comment: IComment;
 
-    constructor(private commentService: CommentService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(protected commentService: CommentService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +36,22 @@ export class CommentDeleteDialogComponent {
     template: ''
 })
 export class CommentDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ comment }) => {
+        this.activatedRoute.data.subscribe(({ comment }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(CommentDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.comment = comment.body;
+                this.ngbModalRef.componentInstance.comment = comment;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/comment', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/comment', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IAchievableSkill } from 'app/shared/model/achievable-skill.model';
 import * as moment from 'moment';
+import { map } from 'rxjs/operators';
 
 export type EntityArrayResponseType = HttpResponse<IAchievableSkill[]>;
 export type EntityResponseType = HttpResponse<IAchievableSkill>;
@@ -22,7 +23,7 @@ export class TeamsSkillsService {
                 params: options,
                 observe: 'response'
             })
-            .map(res => this.convertItemFromServer(res.body));
+            .pipe(map(res => this.convertItemFromServer(res.body)));
     }
 
     queryAchievableSkills(teamId: number, req?: any): Observable<EntityArrayResponseType> {
@@ -32,14 +33,14 @@ export class TeamsSkillsService {
                 params: options,
                 observe: 'response'
             })
-            .map((res: EntityArrayResponseType) => this.convertArrayResponse(res));
+            .pipe(map((res: EntityArrayResponseType) => this.convertArrayResponse(res)));
     }
 
     updateAchievableSkill(teamId: number, skill: IAchievableSkill): Observable<EntityResponseType> {
         const copy = this.convert(skill);
         return this.http
             .put<IAchievableSkill>(`${this.resourceUrl}/${teamId}/achievable-skills`, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+            .pipe(map((res: EntityResponseType) => this.convertResponse(res)));
     }
 
     private convertResponse(res: EntityResponseType): EntityResponseType {
@@ -61,7 +62,8 @@ export class TeamsSkillsService {
      */
     private convertItemFromServer(achievableSkill: IAchievableSkill): IAchievableSkill {
         const copy: IAchievableSkill = Object.assign({}, achievableSkill, {
-            achievedAt: achievableSkill.achievedAt != null ? moment(achievableSkill.achievedAt) : achievableSkill.achievedAt
+            achievedAt: achievableSkill.achievedAt != null ? moment(achievableSkill.achievedAt) : achievableSkill.achievedAt,
+            verifiedAt: achievableSkill.verifiedAt != null ? moment(achievableSkill.verifiedAt) : achievableSkill.verifiedAt
         });
         return copy;
     }
@@ -72,7 +74,9 @@ export class TeamsSkillsService {
     private convert(achievableSkill: IAchievableSkill): IAchievableSkill {
         const copy: IAchievableSkill = Object.assign({}, achievableSkill, {
             completedAt:
-                achievableSkill.achievedAt != null && achievableSkill.achievedAt.isValid() ? achievableSkill.achievedAt.toJSON() : null
+                achievableSkill.achievedAt != null && achievableSkill.achievedAt.isValid() ? achievableSkill.achievedAt.toJSON() : null,
+            verifiedAt:
+                achievableSkill.verifiedAt != null && achievableSkill.verifiedAt.isValid() ? achievableSkill.verifiedAt.toJSON() : null
         });
         return copy;
     }

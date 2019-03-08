@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Spring Data JPA repository for the Level entity.
+ * Spring Data  repository for the Level entity.
  */
 @SuppressWarnings("unused")
 @Repository

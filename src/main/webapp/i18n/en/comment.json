@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "comment" : {
+        "comment": {
             "home": {
                 "title": "Comments",
                 "createLabel": "Create a new Comment",
@@ -20,6 +19,11 @@
             "creationDate": "Creation Date",
             "team": "Team",
             "skill": "Skill"
+        }
+    },
+    "personojoApp": {
+        "comment": {
+            "team": "Person"
         }
     }
 }

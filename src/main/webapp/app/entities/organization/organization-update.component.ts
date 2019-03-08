@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { IOrganization } from 'app/shared/model/organization.model';
 import { OrganizationService } from './organization.service';
 
@@ -11,15 +10,15 @@ import { OrganizationService } from './organization.service';
     templateUrl: './organization-update.component.html'
 })
 export class OrganizationUpdateComponent implements OnInit {
-    private _organization: IOrganization;
+    organization: IOrganization;
     isSaving: boolean;
 
-    constructor(private organizationService: OrganizationService, private route: ActivatedRoute) {}
+    constructor(protected organizationService: OrganizationService, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ organization }) => {
-            this.organization = organization.body ? organization.body : organization;
+        this.activatedRoute.data.subscribe(({ organization }) => {
+            this.organization = organization;
         });
     }
 
@@ -34,28 +33,20 @@ export class OrganizationUpdateComponent implements OnInit {
         } else {
             this.subscribeToSaveResponse(this.organizationService.create(this.organization));
         }
+        // reload organization
+        this.organizationService.findCurrent();
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IOrganization>>) {
-        result.subscribe(
-            (res: HttpResponse<IOrganization>) => this.onSaveSuccess(res.body),
-            (res: HttpErrorResponse) => this.onSaveError()
-        );
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrganization>>) {
+        result.subscribe((res: HttpResponse<IOrganization>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: IOrganization) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
-    }
-    get organization() {
-        return this._organization;
-    }
-
-    set organization(organization: IOrganization) {
-        this._organization = organization;
     }
 }

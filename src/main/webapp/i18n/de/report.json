@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "report" : {
+        "report": {
             "home": {
                 "title": "Reports",
                 "createLabel": "Report erstellen",
@@ -16,10 +15,10 @@
             "detail": {
                 "title": "Report"
             },
-            "title": "Title",
-            "description": "Description",
-            "type": "Type",
-            "creationDate": "Creation Date"
+            "title": "Titel",
+            "description": "Beschreibung",
+            "type": "Typ",
+            "creationDate": "Erstellungsdatum"
         }
     }
 }

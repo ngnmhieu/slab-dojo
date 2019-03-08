@@ -1,14 +1,15 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.repository.BadgeRepository;
 import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.service.dto.BadgeDTO;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class BadgeServiceImpl implements BadgeService {
      * @return the persisted entity
      */
     @Override
-    public BadgeDTO save(BadgeDTO badgeDTO) throws JSONException {
+    public BadgeDTO save(BadgeDTO badgeDTO) {
         log.debug("Request to save Badge : {}", badgeDTO);
         boolean newBadge = badgeDTO.getId() == null;
         Badge badge = badgeMapper.toEntity(badgeDTO);
@@ -86,7 +87,6 @@ public class BadgeServiceImpl implements BadgeService {
     public Page<BadgeDTO> findAllWithEagerRelationships(Pageable pageable) {
         return badgeRepository.findAllWithEagerRelationships(pageable).map(badgeMapper::toDto);
     }
-
 
     /**
      * Get one badge by id.

@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "teamSkill" : {
+        "teamSkill": {
             "home": {
                 "title": "Team Skills",
                 "createLabel": "Team Skill erstellen",
@@ -16,12 +15,37 @@
             "detail": {
                 "title": "Team Skill"
             },
-            "completedAt": "Completed At",
-            "verifiedAt": "Verified At",
+            "completed": "{{ team }} hat den Skill {{ skill }} erlernt!",
+            "accept": "Traust du das {{ team }} zu?",
+            "upvote": "Bestätigen",
+            "downvote": "Ablehnen",
+            "completedAt": "Erreicht am",
+            "verifiedAt": "Bestätigt am",
             "irrelevant": "Irrelevant",
-            "note": "Note",
+            "note": "Notiz",
+            "vote": "Anzahl Bestätigungen",
+            "voters": "Bestätigende",
             "skill": "Skill",
             "team": "Team"
+        }
+    },
+    "persondojoApp": {
+        "teamSkill": {
+            "home": {
+                "title": "Personen Skills",
+                "createLabel": "Personen Skill erstellen",
+                "createOrEditLabel": "Personen Skill erstellen oder bearbeiten"
+            },
+            "created": "Personen Skill erstellt mit ID {{ param }}",
+            "updated": "Personen Skill aktualisiert mit ID {{ param }}",
+            "deleted": "Personen Skill gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll Personen Skill {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Personen Skill"
+            },
+            "team": "Person"
         }
     }
 }

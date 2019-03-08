@@ -169,6 +169,7 @@ public class SkillRepositoryIntTest {
         teamSkill.setTeam(team);
         teamSkill.setCompletedAt((Instant.now()));
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);

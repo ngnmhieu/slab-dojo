@@ -1,7 +1,7 @@
 package de.otto.teamdojo.service.dto;
-
-import java.io.Serializable;
 import java.time.Instant;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -18,6 +18,12 @@ public class TeamSkillDTO implements Serializable {
     private Boolean irrelevant;
 
     private String note;
+
+    @NotNull
+    private Integer vote;
+
+    private String voters;
+
 
     private Long skillId;
 
@@ -65,6 +71,22 @@ public class TeamSkillDTO implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Integer getVote() {
+        return vote;
+    }
+
+    public void setVote(Integer vote) {
+        this.vote = vote;
+    }
+
+    public String getVoters() {
+        return voters;
+    }
+
+    public void setVoters(String voters) {
+        this.voters = voters;
     }
 
     public Long getSkillId() {
@@ -128,6 +150,8 @@ public class TeamSkillDTO implements Serializable {
             ", verifiedAt='" + getVerifiedAt() + "'" +
             ", irrelevant='" + isIrrelevant() + "'" +
             ", note='" + getNote() + "'" +
+            ", vote=" + getVote() +
+            ", voters='" + getVoters() + "'" +
             ", skill=" + getSkillId() +
             ", skill='" + getSkillTitle() + "'" +
             ", team=" + getTeamId() +

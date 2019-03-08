@@ -14,7 +14,7 @@ import { TeamService } from './team.service';
 export class TeamDeleteDialogComponent {
     team: ITeam;
 
-    constructor(private teamService: TeamService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(protected teamService: TeamService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +36,22 @@ export class TeamDeleteDialogComponent {
     template: ''
 })
 export class TeamDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ team }) => {
+        this.activatedRoute.data.subscribe(({ team }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(TeamDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.team = team.body;
+                this.ngbModalRef.componentInstance.team = team;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

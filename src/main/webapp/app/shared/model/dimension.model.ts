@@ -1,6 +1,6 @@
-import { ITeam } from './team.model';
-import { ILevel } from './level.model';
-import { IBadge } from './badge.model';
+import { ITeam } from 'app/shared/model/team.model';
+import { ILevel } from 'app/shared/model/level.model';
+import { IBadge } from 'app/shared/model/badge.model';
 
 export interface IDimension {
     id?: number;

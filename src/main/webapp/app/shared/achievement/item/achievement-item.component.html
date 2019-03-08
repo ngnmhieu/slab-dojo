@@ -1,15 +1,27 @@
 <ng-template #popoverContent>
     <div class="d-flex flex-column align-items-center">
         <div>{{item.name}}</div>
+        <jhi-number-input *ngIf="inEditMode && active" [value]="item.instantMultiplier" (valueComitted)='saveInstantMultiplier($event)'></jhi-number-input>
+        <div *ngIf="item.instantMultiplier >= 0 && !active">
+            {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
+        </div>
         <small *ngIf="hasStatus">( {{progress | number: '1.0-2' }}% )</small>
     </div>
 </ng-template>
-<div class="achievement-item" (click)="selectItem($event)" [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
-     [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="top">
+<div class="d-flex flex-column achievement-item" (click)="selectItem($event)"
+     popoverClass="score-popover"
+     [ngClass]="[active ? 'active' : '', type, itemStatusCssClass]"
+     [ngbPopover]="popoverContent" #popover="ngbPopover" [autoClose]="false" triggers="manual"
+     (mouseenter)="onPopupEnter()" (mouseleave)="onPopupLeave()" placement="top" container="body">
+    <div class="badge-content">
+        <span *ngIf="item.instantMultiplier >= 0 && active" class="badge badge-pill multiplier-badge" (click)="toggleEditMode($event)">
+           {{('teamdojoApp.teams.achievements.item.multiplier' | translate) + ': ' + item.instantMultiplier}}
+        </span>
+    </div>
     <div class="item-content d-flex justify-content-center" [ngStyle]="{'width': size, 'height': size}">
         <span class="item-image">
             <img *ngIf="item.imageId ; else picturePlaceholder" [title]="item.name"
-                 [src]="item.imageId | imageUrl: 'medium'" class="mx-auto"/>
+                 [src]="item.imageId | imageUrl: 'medium' : item.imageHash ? item.imageHash : item.imageId" class="mx-auto"/>
             <ng-template #picturePlaceholder>
                 <span class="img-placeholder">{{item.name | truncateString}}</span>
             </ng-template>
@@ -22,4 +34,5 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <div *ngIf="item.completionBonus" class="completion-bonus">{{'+' + item.completionBonus}}</div>
 </div>

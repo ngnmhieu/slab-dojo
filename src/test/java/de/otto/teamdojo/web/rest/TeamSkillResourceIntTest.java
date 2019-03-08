@@ -1,15 +1,18 @@
 package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
+
+import de.otto.teamdojo.domain.TeamSkill;
 import de.otto.teamdojo.domain.Skill;
 import de.otto.teamdojo.domain.Team;
-import de.otto.teamdojo.domain.TeamSkill;
 import de.otto.teamdojo.repository.TeamSkillRepository;
-import de.otto.teamdojo.service.TeamSkillQueryService;
 import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.service.dto.TeamSkillDTO;
 import de.otto.teamdojo.service.mapper.TeamSkillMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.dto.TeamSkillCriteria;
+import de.otto.teamdojo.service.TeamSkillQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,11 +26,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,13 +61,17 @@ public class TeamSkillResourceIntTest {
     private static final String DEFAULT_NOTE = "AAAAAAAAAA";
     private static final String UPDATED_NOTE = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_VOTE = 1;
+    private static final Integer UPDATED_VOTE = 2;
+
+    private static final String DEFAULT_VOTERS = "AAAAAAAAAA";
+    private static final String UPDATED_VOTERS = "BBBBBBBBBB";
+
     @Autowired
     private TeamSkillRepository teamSkillRepository;
 
-
     @Autowired
     private TeamSkillMapper teamSkillMapper;
-
 
     @Autowired
     private TeamSkillService teamSkillService;
@@ -82,6 +91,9 @@ public class TeamSkillResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restTeamSkillMockMvc;
 
     private TeamSkill teamSkill;
@@ -94,12 +106,13 @@ public class TeamSkillResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
      * Create an entity for this test.
-     * <p>
+     *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -108,7 +121,9 @@ public class TeamSkillResourceIntTest {
             .completedAt(DEFAULT_COMPLETED_AT)
             .verifiedAt(DEFAULT_VERIFIED_AT)
             .irrelevant(DEFAULT_IRRELEVANT)
-            .note(DEFAULT_NOTE);
+            .note(DEFAULT_NOTE)
+            .vote(DEFAULT_VOTE)
+            .voters(DEFAULT_VOTERS);
         // Add required entity
         Skill skill = SkillResourceIntTest.createEntity(em);
         em.persist(skill);
@@ -147,6 +162,8 @@ public class TeamSkillResourceIntTest {
         assertThat(testTeamSkill.getVerifiedAt()).isEqualTo(DEFAULT_VERIFIED_AT);
         assertThat(testTeamSkill.isIrrelevant()).isEqualTo(DEFAULT_IRRELEVANT);
         assertThat(testTeamSkill.getNote()).isEqualTo(DEFAULT_NOTE);
+        assertThat(testTeamSkill.getVote()).isEqualTo(DEFAULT_VOTE);
+        assertThat(testTeamSkill.getVoters()).isEqualTo(DEFAULT_VOTERS);
     }
 
     @Test
@@ -171,6 +188,25 @@ public class TeamSkillResourceIntTest {
 
     @Test
     @Transactional
+    public void checkVoteIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamSkillRepository.findAll().size();
+        // set the field null
+        teamSkill.setVote(null);
+
+        // Create the TeamSkill, which fails.
+        TeamSkillDTO teamSkillDTO = teamSkillMapper.toDto(teamSkill);
+
+        restTeamSkillMockMvc.perform(post("/api/team-skills")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(teamSkillDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<TeamSkill> teamSkillList = teamSkillRepository.findAll();
+        assertThat(teamSkillList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTeamSkills() throws Exception {
         // Initialize the database
         teamSkillRepository.saveAndFlush(teamSkill);
@@ -183,10 +219,11 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].completedAt").value(hasItem(DEFAULT_COMPLETED_AT.toString())))
             .andExpect(jsonPath("$.[*].verifiedAt").value(hasItem(DEFAULT_VERIFIED_AT.toString())))
             .andExpect(jsonPath("$.[*].irrelevant").value(hasItem(DEFAULT_IRRELEVANT.booleanValue())))
-            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())));
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())))
+            .andExpect(jsonPath("$.[*].vote").value(hasItem(DEFAULT_VOTE)))
+            .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS.toString())));
     }
-
-
+    
     @Test
     @Transactional
     public void getTeamSkill() throws Exception {
@@ -201,7 +238,9 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.completedAt").value(DEFAULT_COMPLETED_AT.toString()))
             .andExpect(jsonPath("$.verifiedAt").value(DEFAULT_VERIFIED_AT.toString()))
             .andExpect(jsonPath("$.irrelevant").value(DEFAULT_IRRELEVANT.booleanValue()))
-            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE.toString()));
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE.toString()))
+            .andExpect(jsonPath("$.vote").value(DEFAULT_VOTE))
+            .andExpect(jsonPath("$.voters").value(DEFAULT_VOTERS.toString()));
     }
 
     @Test
@@ -362,6 +401,111 @@ public class TeamSkillResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTeamSkillsByVoteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where vote equals to DEFAULT_VOTE
+        defaultTeamSkillShouldBeFound("vote.equals=" + DEFAULT_VOTE);
+
+        // Get all the teamSkillList where vote equals to UPDATED_VOTE
+        defaultTeamSkillShouldNotBeFound("vote.equals=" + UPDATED_VOTE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVoteIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where vote in DEFAULT_VOTE or UPDATED_VOTE
+        defaultTeamSkillShouldBeFound("vote.in=" + DEFAULT_VOTE + "," + UPDATED_VOTE);
+
+        // Get all the teamSkillList where vote equals to UPDATED_VOTE
+        defaultTeamSkillShouldNotBeFound("vote.in=" + UPDATED_VOTE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVoteIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where vote is not null
+        defaultTeamSkillShouldBeFound("vote.specified=true");
+
+        // Get all the teamSkillList where vote is null
+        defaultTeamSkillShouldNotBeFound("vote.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVoteIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where vote greater than or equals to DEFAULT_VOTE
+        defaultTeamSkillShouldBeFound("vote.greaterOrEqualThan=" + DEFAULT_VOTE);
+
+        // Get all the teamSkillList where vote greater than or equals to UPDATED_VOTE
+        defaultTeamSkillShouldNotBeFound("vote.greaterOrEqualThan=" + UPDATED_VOTE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVoteIsLessThanSomething() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where vote less than or equals to DEFAULT_VOTE
+        defaultTeamSkillShouldNotBeFound("vote.lessThan=" + DEFAULT_VOTE);
+
+        // Get all the teamSkillList where vote less than or equals to UPDATED_VOTE
+        defaultTeamSkillShouldBeFound("vote.lessThan=" + UPDATED_VOTE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVotersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where voters equals to DEFAULT_VOTERS
+        defaultTeamSkillShouldBeFound("voters.equals=" + DEFAULT_VOTERS);
+
+        // Get all the teamSkillList where voters equals to UPDATED_VOTERS
+        defaultTeamSkillShouldNotBeFound("voters.equals=" + UPDATED_VOTERS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVotersIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where voters in DEFAULT_VOTERS or UPDATED_VOTERS
+        defaultTeamSkillShouldBeFound("voters.in=" + DEFAULT_VOTERS + "," + UPDATED_VOTERS);
+
+        // Get all the teamSkillList where voters equals to UPDATED_VOTERS
+        defaultTeamSkillShouldNotBeFound("voters.in=" + UPDATED_VOTERS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTeamSkillsByVotersIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamSkillRepository.saveAndFlush(teamSkill);
+
+        // Get all the teamSkillList where voters is not null
+        defaultTeamSkillShouldBeFound("voters.specified=true");
+
+        // Get all the teamSkillList where voters is null
+        defaultTeamSkillShouldNotBeFound("voters.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllTeamSkillsBySkillIsEqualToSomething() throws Exception {
         // Initialize the database
         Skill skill = SkillResourceIntTest.createEntity(em);
@@ -408,7 +552,15 @@ public class TeamSkillResourceIntTest {
             .andExpect(jsonPath("$.[*].completedAt").value(hasItem(DEFAULT_COMPLETED_AT.toString())))
             .andExpect(jsonPath("$.[*].verifiedAt").value(hasItem(DEFAULT_VERIFIED_AT.toString())))
             .andExpect(jsonPath("$.[*].irrelevant").value(hasItem(DEFAULT_IRRELEVANT.booleanValue())))
-            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())));
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)))
+            .andExpect(jsonPath("$.[*].vote").value(hasItem(DEFAULT_VOTE)))
+            .andExpect(jsonPath("$.[*].voters").value(hasItem(DEFAULT_VOTERS)));
+
+        // Check, that the count call also returns 1
+        restTeamSkillMockMvc.perform(get("/api/team-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -420,6 +572,12 @@ public class TeamSkillResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTeamSkillMockMvc.perform(get("/api/team-skills/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -447,7 +605,9 @@ public class TeamSkillResourceIntTest {
             .completedAt(UPDATED_COMPLETED_AT)
             .verifiedAt(UPDATED_VERIFIED_AT)
             .irrelevant(UPDATED_IRRELEVANT)
-            .note(UPDATED_NOTE);
+            .note(UPDATED_NOTE)
+            .vote(UPDATED_VOTE)
+            .voters(UPDATED_VOTERS);
         TeamSkillDTO teamSkillDTO = teamSkillMapper.toDto(updatedTeamSkill);
 
         restTeamSkillMockMvc.perform(put("/api/team-skills")
@@ -463,6 +623,8 @@ public class TeamSkillResourceIntTest {
         assertThat(testTeamSkill.getVerifiedAt()).isEqualTo(UPDATED_VERIFIED_AT);
         assertThat(testTeamSkill.isIrrelevant()).isEqualTo(UPDATED_IRRELEVANT);
         assertThat(testTeamSkill.getNote()).isEqualTo(UPDATED_NOTE);
+        assertThat(testTeamSkill.getVote()).isEqualTo(UPDATED_VOTE);
+        assertThat(testTeamSkill.getVoters()).isEqualTo(UPDATED_VOTERS);
     }
 
     @Test
@@ -473,15 +635,15 @@ public class TeamSkillResourceIntTest {
         // Create the TeamSkill
         TeamSkillDTO teamSkillDTO = teamSkillMapper.toDto(teamSkill);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTeamSkillMockMvc.perform(put("/api/team-skills")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(teamSkillDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the TeamSkill in the database
         List<TeamSkill> teamSkillList = teamSkillRepository.findAll();
-        assertThat(teamSkillList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(teamSkillList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -492,7 +654,7 @@ public class TeamSkillResourceIntTest {
 
         int databaseSizeBeforeDelete = teamSkillRepository.findAll().size();
 
-        // Get the teamSkill
+        // Delete the teamSkill
         restTeamSkillMockMvc.perform(delete("/api/team-skills/{id}", teamSkill.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

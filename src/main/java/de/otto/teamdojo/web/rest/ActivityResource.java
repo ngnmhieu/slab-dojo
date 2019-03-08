@@ -1,13 +1,11 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.ActivityQueryService;
 import de.otto.teamdojo.service.ActivityService;
-import de.otto.teamdojo.service.dto.ActivityCriteria;
-import de.otto.teamdojo.service.dto.ActivityDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
 import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.dto.ActivityDTO;
+import de.otto.teamdojo.service.dto.ActivityCriteria;
+import de.otto.teamdojo.service.ActivityQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +51,6 @@ public class ActivityResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/activities")
-    @Timed
     public ResponseEntity<ActivityDTO> createActivity(@Valid @RequestBody ActivityDTO activityDTO) throws URISyntaxException {
         log.debug("REST request to save Activity : {}", activityDTO);
         if (activityDTO.getId() != null) {
@@ -74,11 +72,10 @@ public class ActivityResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/activities")
-    @Timed
     public ResponseEntity<ActivityDTO> updateActivity(@Valid @RequestBody ActivityDTO activityDTO) throws URISyntaxException {
         log.debug("REST request to update Activity : {}", activityDTO);
         if (activityDTO.getId() == null) {
-            return createActivity(activityDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ActivityDTO result = activityService.save(activityDTO);
         return ResponseEntity.ok()
@@ -94,12 +91,23 @@ public class ActivityResource {
      * @return the ResponseEntity with status 200 (OK) and the list of activities in body
      */
     @GetMapping("/activities")
-    @Timed
     public ResponseEntity<List<ActivityDTO>> getAllActivities(ActivityCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Activities by criteria: {}", criteria);
         Page<ActivityDTO> page = activityQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/activities");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /activities/count : count all the activities.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/activities/count")
+    public ResponseEntity<Long> countActivities(ActivityCriteria criteria) {
+        log.debug("REST request to count Activities by criteria: {}", criteria);
+        return ResponseEntity.ok().body(activityQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -109,7 +117,6 @@ public class ActivityResource {
      * @return the ResponseEntity with status 200 (OK) and with body the activityDTO, or with status 404 (Not Found)
      */
     @GetMapping("/activities/{id}")
-    @Timed
     public ResponseEntity<ActivityDTO> getActivity(@PathVariable Long id) {
         log.debug("REST request to get Activity : {}", id);
         Optional<ActivityDTO> activityDTO = activityService.findOne(id);
@@ -123,7 +130,6 @@ public class ActivityResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/activities/{id}")
-    @Timed
     public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
         log.debug("REST request to delete Activity : {}", id);
         activityService.delete(id);

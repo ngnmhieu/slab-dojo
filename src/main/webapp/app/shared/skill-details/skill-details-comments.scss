@@ -59,12 +59,12 @@
                 border: 12px solid transparent;
                 border-bottom-color: #e9deb9;
             }
-            &~ .message {
+            & ~ .message {
                 margin-top: 0.5rem;
             }
         }
 
-        .message-received  {
+        .message-received {
             flex-direction: row;
 
             .speech-bubble {
@@ -78,7 +78,7 @@
             }
         }
 
-        .message-sent  {
+        .message-sent {
             flex-direction: row-reverse;
 
             .speech-bubble {

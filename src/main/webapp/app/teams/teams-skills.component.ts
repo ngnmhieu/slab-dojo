@@ -19,7 +19,11 @@ import { IBadge } from 'app/shared/model/badge.model';
 import { IDimension } from 'app/shared/model/dimension.model';
 import { DimensionService } from 'app/entities/dimension';
 import 'simplebar';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-teams-skills',
@@ -42,6 +46,8 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     activeSkill: ISkill;
     search$: Subject<string>;
     search: string;
+    orderBy = 'title';
+    hasAuthority = false;
 
     constructor(
         private teamsSkillsService: TeamsSkillsService,
@@ -56,7 +62,8 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         private breadcrumbService: BreadcrumbService,
         private levelService: LevelService,
         private badgeService: BadgeService,
-        private dimensionService: DimensionService
+        private dimensionService: DimensionService,
+        private accountService: AccountService
     ) {}
 
     ngOnInit() {
@@ -72,12 +79,20 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         this.search = '';
         this.search$ = new Subject<string>();
         this.search$
-            .debounceTime(400)
-            .distinctUntilChanged()
+            .pipe(
+                debounceTime(400),
+                distinctUntilChanged()
+            )
             .subscribe(value => {
                 this.search = value;
                 return value;
             });
+
+        setTimeout(() => {
+            this.accountService.identity().then(identity => {
+                this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+            });
+        }, 0);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -87,7 +102,7 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
     }
 
     private getParamAsNumber(name: string, params: ParamMap) {
-        return Number.parseInt(params.get(name));
+        return Number.parseInt(params.get(name), 10);
     }
 
     loadAll() {
@@ -210,6 +225,22 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
         return selectedTeam && selectedTeam.id === this.team.id;
     }
 
+    isTeamVoteAble(s: IAchievableSkill) {
+        const selectedTeam = this.teamsSelectionService.selectedTeam;
+        if (selectedTeam && (!s.voters || (s.voters && !s.voters.split('||').includes(selectedTeam.id.toString())))) {
+            return true;
+        }
+        return false;
+    }
+
+    isVoteAble(s: IAchievableSkill) {
+        return s.achievedAt && !s.verifiedAt && s.vote > -5 && this.isTeamVoteAble(s);
+    }
+
+    isSuggestAble(s: IAchievableSkill) {
+        return !s.achievedAt && !s.irrelevant && (!s.vote || (s.vote && s.vote !== 1)) && this.isTeamVoteAble(s);
+    }
+
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
@@ -254,5 +285,33 @@ export class TeamsSkillsComponent implements OnInit, OnChanges {
 
     private getFiltersFromStorage(): string[] {
         return this.storage.retrieve('filterKey') || [];
+    }
+
+    upVote(s: IAchievableSkill) {
+        console.log('Upvote TeamSkill');
+        s.vote = s.vote + 1;
+        const array = s.voters ? s.voters.split('||') : [];
+        array.push(this.teamsSelectionService.selectedTeam.id.toString());
+        s.voters = array.join('||');
+        console.log(s);
+        this.updateSkill(s);
+    }
+
+    downVote(s: IAchievableSkill) {
+        console.log('downvote TeamSkill');
+        s.vote = s.vote - 1;
+        const array = s.voters ? s.voters.split('||') : [];
+        array.push(this.teamsSelectionService.selectedTeam.id.toString());
+        s.voters = array.join('||');
+        this.updateSkill(s);
+    }
+
+    suggest(s: IAchievableSkill) {
+        console.log('suggest TeamSkill');
+        s.vote = 1;
+        const array = s.voters ? s.voters.split('||') : [];
+        array.push(this.teamsSelectionService.selectedTeam.id.toString());
+        s.voters = array.join('||');
+        this.updateSkill(s);
     }
 }

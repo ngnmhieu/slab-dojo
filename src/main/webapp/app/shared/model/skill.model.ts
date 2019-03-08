@@ -1,7 +1,8 @@
-import { ITeamSkill } from './team-skill.model';
-import { IBadgeSkill } from './badge-skill.model';
-import { ILevelSkill } from './level-skill.model';
+import { ITeamSkill } from 'app/shared/model/team-skill.model';
+import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
+import { ILevelSkill } from 'app/shared/model/level-skill.model';
 import { IComment } from 'app/shared/model/comment.model';
+import { ITraining } from 'app/shared/model/training.model';
 
 export interface ISkill {
     id?: number;
@@ -18,6 +19,7 @@ export interface ISkill {
     badges?: IBadgeSkill[];
     levels?: ILevelSkill[];
     comments?: IComment[];
+    trainings?: ITraining[];
 }
 
 export class Skill implements ISkill {
@@ -29,12 +31,13 @@ export class Skill implements ISkill {
         public validation?: string,
         public expiryPeriod?: string,
         public contact?: string,
+        public score?: number,
         public rateScore?: number,
         public rateCount?: number,
-        public score?: number,
         public teams?: ITeamSkill[],
         public badges?: IBadgeSkill[],
         public levels?: ILevelSkill[],
-        public comments?: IComment[]
+        public comments?: IComment[],
+        public trainings?: ITraining[]
     ) {}
 }

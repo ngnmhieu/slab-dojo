@@ -1,0 +1,73 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "skill",
+            "otherEntityName": "skill",
+            "relationshipType": "many-to-many",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "trainings",
+            "otherEntityField": "title"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 80
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "contactPerson",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 255
+        },
+        {
+            "fieldName": "link",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "pattern"
+            ],
+            "fieldValidateRulesMaxlength": 255,
+            "fieldValidateRulesPattern": "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+        },
+        {
+            "fieldName": "validUntil",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "isOfficial",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "suggestedBy",
+            "fieldType": "String"
+        }
+
+    ],
+    "changelogDate": "20190122103430",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "training",
+    "jpaMetamodelFiltering": true,
+    "pagination": "infinite-scroll"
+}

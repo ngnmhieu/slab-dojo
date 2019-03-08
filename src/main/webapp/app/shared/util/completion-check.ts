@@ -47,7 +47,7 @@ export class CompletionCheck {
                 totalScore += skill.score;
             }
         }
-        return totalScore !== 0 ? irrelevantScore / totalScore * 100.0 : 0;
+        return totalScore !== 0 ? (irrelevantScore / totalScore) * 100.0 : 0;
     }
 
     private isTeamSkillCompleted(teamSkill: ITeamSkill): boolean {

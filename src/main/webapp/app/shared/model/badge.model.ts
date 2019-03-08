@@ -1,6 +1,6 @@
 import { Moment } from 'moment';
-import { IBadgeSkill } from './badge-skill.model';
-import { IDimension } from './dimension.model';
+import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
+import { IDimension } from 'app/shared/model/dimension.model';
 
 export interface IBadge {
     id?: number;
@@ -15,6 +15,7 @@ export interface IBadge {
     dimensions?: IDimension[];
     imageName?: string;
     imageId?: number;
+    imageHash?: string;
 }
 
 export class Badge implements IBadge {
@@ -30,6 +31,7 @@ export class Badge implements IBadge {
         public skills?: IBadgeSkill[],
         public dimensions?: IDimension[],
         public imageName?: string,
-        public imageId?: number
+        public imageId?: number,
+        public imageHash?: string
     ) {}
 }

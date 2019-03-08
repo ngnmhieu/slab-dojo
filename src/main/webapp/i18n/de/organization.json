@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "organization" : {
+        "organization": {
             "home": {
                 "title": "Organizations",
                 "createLabel": "Organization erstellen",
@@ -17,7 +16,10 @@
                 "title": "Organization"
             },
             "name": "Name",
-            "levelUpScore": "Level Up Score"
+            "levelUpScore": "Aufstiegspunktzahl",
+            "userMode": "Nutzungsmodus",
+            "mattermostUrl": "Mattermost Url",
+            "countOfConfirmations": "Anzahl Bestätigungen"
         }
     }
 }

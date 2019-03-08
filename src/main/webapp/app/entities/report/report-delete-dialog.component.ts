@@ -14,7 +14,7 @@ import { ReportService } from './report.service';
 export class ReportDeleteDialogComponent {
     report: IReport;
 
-    constructor(private reportService: ReportService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(protected reportService: ReportService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +36,22 @@ export class ReportDeleteDialogComponent {
     template: ''
 })
 export class ReportDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ report }) => {
+        this.activatedRoute.data.subscribe(({ report }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(ReportDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.report = report.body;
+                this.ngbModalRef.componentInstance.report = report;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/report', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/report', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

@@ -1,5 +1,6 @@
 package de.otto.teamdojo.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -21,7 +22,7 @@ import java.util.Set;
 public class Dimension implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -37,17 +38,16 @@ public class Dimension implements Serializable {
     private String description;
 
     @ManyToMany(mappedBy = "participations")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
     private Set<Team> participants = new HashSet<>();
 
     @OneToMany(mappedBy = "dimension")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Level> levels = new HashSet<>();
-
     @ManyToMany(mappedBy = "dimensions")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
     private Set<Badge> badges = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

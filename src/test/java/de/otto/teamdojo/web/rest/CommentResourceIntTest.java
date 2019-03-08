@@ -16,7 +16,6 @@ import de.otto.teamdojo.service.CommentQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,12 +26,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.ArrayList;
+
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,11 +58,8 @@ public class CommentResourceIntTest {
     @Autowired
     private CommentRepository commentRepository;
 
-
-
     @Autowired
     private CommentMapper commentMapper;
-    
 
     @Autowired
     private CommentService commentService;
@@ -82,6 +79,9 @@ public class CommentResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restCommentMockMvc;
 
     private Comment comment;
@@ -94,7 +94,8 @@ public class CommentResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -218,7 +219,6 @@ public class CommentResourceIntTest {
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
     }
     
-
     @Test
     @Transactional
     public void getComment() throws Exception {
@@ -357,8 +357,14 @@ public class CommentResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())))
+            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT)))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
+
+        // Check, that the count call also returns 1
+        restCommentMockMvc.perform(get("/api/comments/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -370,6 +376,12 @@ public class CommentResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCommentMockMvc.perform(get("/api/comments/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -419,15 +431,15 @@ public class CommentResourceIntTest {
         // Create the Comment
         CommentDTO commentDTO = commentMapper.toDto(comment);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCommentMockMvc.perform(put("/api/comments")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Comment in the database
         List<Comment> commentList = commentRepository.findAll();
-        assertThat(commentList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(commentList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -438,7 +450,7 @@ public class CommentResourceIntTest {
 
         int databaseSizeBeforeDelete = commentRepository.findAll().size();
 
-        // Get the comment
+        // Delete the comment
         restCommentMockMvc.perform(delete("/api/comments/{id}", comment.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

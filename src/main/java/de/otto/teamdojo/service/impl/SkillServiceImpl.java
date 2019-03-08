@@ -82,8 +82,7 @@ public class SkillServiceImpl implements SkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Skill : {}", id);
-        skillRepository.deleteById(id);
+        log.debug("Request to delete Skill : {}", id);        skillRepository.deleteById(id);
     }
 
     /**

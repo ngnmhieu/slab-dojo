@@ -14,7 +14,11 @@ import { DimensionService } from './dimension.service';
 export class DimensionDeleteDialogComponent {
     dimension: IDimension;
 
-    constructor(private dimensionService: DimensionService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+        protected dimensionService: DimensionService,
+        public activeModal: NgbActiveModal,
+        protected eventManager: JhiEventManager
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +40,22 @@ export class DimensionDeleteDialogComponent {
     template: ''
 })
 export class DimensionDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ dimension }) => {
+        this.activatedRoute.data.subscribe(({ dimension }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(DimensionDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.dimension = dimension.body;
+                this.ngbModalRef.componentInstance.dimension = dimension;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/dimension', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/dimension', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

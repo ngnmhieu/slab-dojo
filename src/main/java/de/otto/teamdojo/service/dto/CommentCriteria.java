@@ -1,12 +1,11 @@
 package de.otto.teamdojo.service.dto;
 
+import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-import java.io.Serializable;
-
+import io.github.jhipster.service.filter.InstantFilter;
 
 /**
  * Criteria class for the Comment entity. This class is used in CommentResource to
@@ -17,8 +16,8 @@ import java.io.Serializable;
  * fix type specific filters.
  */
 public class CommentCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -29,9 +28,6 @@ public class CommentCriteria implements Serializable {
     private LongFilter teamId;
 
     private LongFilter skillId;
-
-    public CommentCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -71,6 +67,35 @@ public class CommentCriteria implements Serializable {
 
     public void setSkillId(LongFilter skillId) {
         this.skillId = skillId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final CommentCriteria that = (CommentCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(text, that.text) &&
+            Objects.equals(creationDate, that.creationDate) &&
+            Objects.equals(teamId, that.teamId) &&
+            Objects.equals(skillId, that.skillId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        text,
+        creationDate,
+        teamId,
+        skillId
+        );
     }
 
     @Override

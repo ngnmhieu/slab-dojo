@@ -1,7 +1,8 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { OrganizationComponent } from 'app/entities/organization/organization.component';
@@ -18,7 +19,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [OrganizationComponent],
-                providers: [OrganizationService]
+                providers: [LocalStorageService]
             })
                 .overrideTemplate(OrganizationComponent, '')
                 .compileComponents();
@@ -32,7 +33,7 @@ describe('Component Tests', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
             spyOn(service, 'query').and.returnValue(
-                Observable.of(
+                of(
                     new HttpResponse({
                         body: [new Organization(123)],
                         headers

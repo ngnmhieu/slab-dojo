@@ -1,8 +1,5 @@
 package de.otto.teamdojo.config;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
@@ -11,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
-import org.springframework.boot.web.server.MimeMappings;
-import org.springframework.boot.web.server.WebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.servlet.*;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.EnumSet;
+import java.util.*;
 
 import static java.net.URLDecoder.decode;
 
@@ -38,15 +32,13 @@ import static java.net.URLDecoder.decode;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer {
+public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
     private final Environment env;
 
     private final JHipsterProperties jHipsterProperties;
-
-    private MetricRegistry metricRegistry;
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
 
@@ -60,7 +52,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        initMetrics(servletContext, disps);
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
         }
@@ -145,35 +136,10 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             servletContext.addFilter("cachingHttpHeadersFilter",
                 new CachingHttpHeadersFilter(jHipsterProperties));
 
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
-    }
-
-    /**
-     * Initializes Metrics.
-     */
-    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        log.debug("Initializing Metrics registries");
-        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-            metricRegistry);
-        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-            metricRegistry);
-
-        log.debug("Registering Metrics Filter");
-        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-            new InstrumentedFilter());
-
-        metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
-        metricsFilter.setAsyncSupported(true);
-
-        log.debug("Registering Metrics Servlet");
-        ServletRegistration.Dynamic metricsAdminServlet =
-            servletContext.addServlet("metricsServlet", new MetricsServlet());
-
-        metricsAdminServlet.addMapping("/management/metrics/*");
-        metricsAdminServlet.setAsyncSupported(true);
-        metricsAdminServlet.setLoadOnStartup(2);
     }
 
     @Bean
@@ -189,13 +155,4 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         return new CorsFilter(source);
     }
 
-    @Bean
-    public Filter shallowEtagHeaderFilter() {
-        return new ShallowEtagHeaderFilter();
-    }
-
-    @Autowired(required = false)
-    public void setMetricRegistry(MetricRegistry metricRegistry) {
-        this.metricRegistry = metricRegistry;
-    }
 }

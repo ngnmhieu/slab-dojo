@@ -23,10 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
+
 
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.alwaysUpToDate;
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.awsReady;
@@ -70,11 +72,8 @@ public class LevelResourceIntTest {
     @Autowired
     private LevelRepository levelRepository;
 
-
-
     @Autowired
     private LevelMapper levelMapper;
-
 
     @Autowired
     private LevelService levelService;
@@ -96,6 +95,9 @@ public class LevelResourceIntTest {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private Validator validator;
 
     private MockMvc restLevelMockMvc;
 
@@ -126,7 +128,8 @@ public class LevelResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -272,7 +275,6 @@ public class LevelResourceIntTest {
             .andExpect(jsonPath("$.[*].instantMultiplier").value(hasItem(DEFAULT_INSTANT_MULTIPLIER.doubleValue())))
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
     }
-
 
     @Test
     @Transactional
@@ -572,6 +574,24 @@ public class LevelResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllLevelsByImageIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Image image = ImageResourceIntTest.createEntity(em);
+        em.persist(image);
+        em.flush();
+        level.setImage(image);
+        levelRepository.saveAndFlush(level);
+        Long imageId = image.getId();
+
+        // Get all the levelList where image equals to imageId
+        defaultLevelShouldBeFound("imageId.equals=" + imageId);
+
+        // Get all the levelList where image equals to imageId + 1
+        defaultLevelShouldNotBeFound("imageId.equals=" + (imageId + 1));
+    }
+
+    @Test
+    @Transactional
     public void getAllLevelsBySkillId() throws Exception {
 
         setupTestData();;
@@ -601,6 +621,7 @@ public class LevelResourceIntTest {
         defaultLevelShouldNotBeFound("skillsId.equals=" + (skillsId + 1));
     }
 
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -609,11 +630,17 @@ public class LevelResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(level.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].requiredScore").value(hasItem(DEFAULT_REQUIRED_SCORE.doubleValue())))
             .andExpect(jsonPath("$.[*].instantMultiplier").value(hasItem(DEFAULT_INSTANT_MULTIPLIER.doubleValue())))
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
+
+        // Check, that the count call also returns 1
+        restLevelMockMvc.perform(get("/api/levels/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -625,6 +652,12 @@ public class LevelResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restLevelMockMvc.perform(get("/api/levels/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -680,15 +713,15 @@ public class LevelResourceIntTest {
         // Create the Level
         LevelDTO levelDTO = levelMapper.toDto(level);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLevelMockMvc.perform(put("/api/levels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(levelDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Level in the database
         List<Level> levelList = levelRepository.findAll();
-        assertThat(levelList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(levelList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -699,7 +732,7 @@ public class LevelResourceIntTest {
 
         int databaseSizeBeforeDelete = levelRepository.findAll().size();
 
-        // Get the level
+        // Delete the level
         restLevelMockMvc.perform(delete("/api/levels/{id}", level.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
@@ -772,6 +805,7 @@ public class LevelResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -779,6 +813,7 @@ public class LevelResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -791,6 +826,7 @@ public class LevelResourceIntTest {
         teamSkill.setTeam(team2);
         teamSkill.setSkill(softwareUpdates);
         teamSkill.setCompletedAt(new Date().toInstant());
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team2.addSkills(teamSkill);
         em.persist(team2);

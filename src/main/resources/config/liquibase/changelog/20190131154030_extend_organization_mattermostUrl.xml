@@ -1,0 +1,16 @@
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="mhi" id="20190131154030-1">
+        <addColumn tableName="organization">
+            <column name="mattermost_url" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

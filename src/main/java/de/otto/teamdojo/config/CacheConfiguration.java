@@ -1,28 +1,25 @@
 package de.otto.teamdojo.config;
 
-import io.github.jhipster.config.JHipsterProperties;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.ExpiryPolicyBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
+import java.time.Duration;
+
+import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+
+import io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory;
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.time.Duration;
+import org.springframework.context.annotation.*;
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = {MetricsConfiguration.class})
-@AutoConfigureBefore(value = {WebConfigurer.class, DatabaseConfiguration.class})
 public class CacheConfiguration {
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
 
@@ -67,6 +64,9 @@ public class CacheConfiguration {
             cm.createCache(de.otto.teamdojo.domain.Comment.class.getName(), jcacheConfiguration);
             cm.createCache(de.otto.teamdojo.domain.Activity.class.getName(), jcacheConfiguration);
             cm.createCache(de.otto.teamdojo.domain.Image.class.getName(), jcacheConfiguration);
+            cm.createCache(de.otto.teamdojo.domain.Training.class.getName(), jcacheConfiguration);
+            cm.createCache(de.otto.teamdojo.domain.Training.class.getName() + ".skills", jcacheConfiguration);
+            cm.createCache(de.otto.teamdojo.domain.Skill.class.getName() + ".trainings", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

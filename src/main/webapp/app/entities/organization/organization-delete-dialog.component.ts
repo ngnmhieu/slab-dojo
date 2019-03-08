@@ -15,9 +15,9 @@ export class OrganizationDeleteDialogComponent {
     organization: IOrganization;
 
     constructor(
-        private organizationService: OrganizationService,
+        protected organizationService: OrganizationService,
         public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
+        protected eventManager: JhiEventManager
     ) {}
 
     clear() {
@@ -40,25 +40,25 @@ export class OrganizationDeleteDialogComponent {
     template: ''
 })
 export class OrganizationDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ organization }) => {
+        this.activatedRoute.data.subscribe(({ organization }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(OrganizationDeleteDialogComponent as Component, {
                     size: 'lg',
                     backdrop: 'static'
                 });
-                this.ngbModalRef.componentInstance.organization = organization.body;
+                this.ngbModalRef.componentInstance.organization = organization;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/organization', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/organization', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

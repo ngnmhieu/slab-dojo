@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Image } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 import { ImageComponent } from './image.component';
 import { ImageDetailComponent } from './image-detail.component';
 import { ImageUpdateComponent } from './image-update.component';
 import { ImageDeletePopupComponent } from './image-delete-dialog.component';
+import { IImage } from 'app/shared/model/image.model';
 
-@Injectable()
-export class ImageResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class ImageResolve implements Resolve<IImage> {
     constructor(private service: ImageService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IImage> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Image>) => response.ok),
+                map((image: HttpResponse<Image>) => image.body)
+            );
         }
-        return new Image();
+        return of(new Image());
     }
 }
 
 export const imageRoute: Routes = [
     {
-        path: 'image',
+        path: '',
         component: ImageComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -33,7 +39,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/:id/view',
+        path: ':id/view',
         component: ImageDetailComponent,
         resolve: {
             image: ImageResolve
@@ -45,7 +51,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/new',
+        path: 'new',
         component: ImageUpdateComponent,
         resolve: {
             image: ImageResolve
@@ -57,7 +63,7 @@ export const imageRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'image/:id/edit',
+        path: ':id/edit',
         component: ImageUpdateComponent,
         resolve: {
             image: ImageResolve
@@ -72,7 +78,7 @@ export const imageRoute: Routes = [
 
 export const imagePopupRoute: Routes = [
     {
-        path: 'image/:id/delete',
+        path: ':id/delete',
         component: ImageDeletePopupComponent,
         resolve: {
             image: ImageResolve

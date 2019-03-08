@@ -17,7 +17,6 @@ export class AuditsComponent implements OnInit, OnDestroy {
     fromDate: string;
     itemsPerPage: any;
     links: any;
-    queryCount: number;
     page: number;
     routeData: any;
     predicate: any;
@@ -106,7 +105,7 @@ export class AuditsComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/audits'], {
+        this.router.navigate(['/admin/audits'], {
             queryParams: {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -118,7 +117,6 @@ export class AuditsComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
         this.audits = data;
     }
 

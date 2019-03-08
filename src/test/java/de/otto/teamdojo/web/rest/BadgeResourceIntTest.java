@@ -3,12 +3,15 @@ package de.otto.teamdojo.web.rest;
 import de.otto.teamdojo.TeamdojoApp;
 import de.otto.teamdojo.domain.*;
 import de.otto.teamdojo.repository.BadgeRepository;
+import de.otto.teamdojo.service.ActivityService;
 import de.otto.teamdojo.service.BadgeQueryService;
 import de.otto.teamdojo.service.BadgeService;
 import de.otto.teamdojo.service.BadgeSkillService;
 import de.otto.teamdojo.service.dto.BadgeDTO;
+import de.otto.teamdojo.service.impl.BadgeServiceImpl;
 import de.otto.teamdojo.service.mapper.BadgeMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,17 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Date;
 
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.alwaysUpToDate;
 import static de.otto.teamdojo.test.util.BadgeTestDataProvider.awsReady;
@@ -87,16 +89,13 @@ public class BadgeResourceIntTest {
     private BadgeRepository badgeRepository;
 
     @Mock
-    private BadgeRepository badgeRepositoryMock;
+    private ActivityService activityServiceMock;
 
     @Autowired
     private BadgeMapper badgeMapper;
 
     @Mock
     private BadgeService badgeServiceMock;
-
-    @Autowired
-    private BadgeService badgeService;
 
     @Autowired
     private BadgeQueryService badgeQueryService;
@@ -115,6 +114,9 @@ public class BadgeResourceIntTest {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private Validator validator;
 
     private MockMvc restBadgeMockMvc;
 
@@ -138,12 +140,14 @@ public class BadgeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        BadgeService badgeService = new BadgeServiceImpl(badgeRepository, badgeMapper, activityServiceMock);
         final BadgeResource badgeResource = new BadgeResource(badgeService, badgeQueryService, badgeSkillService);
         this.restBadgeMockMvc = MockMvcBuilders.standaloneSetup(badgeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -165,7 +169,9 @@ public class BadgeResourceIntTest {
     }
 
     @Before
-    public void initTest() { badge = createEntity(em); }
+    public void initTest() {
+        badge = createEntity(em);
+    }
 
     @Test
     @Transactional
@@ -289,6 +295,7 @@ public class BadgeResourceIntTest {
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllBadgesWithEagerRelationshipsIsEnabled() throws Exception {
         BadgeResource badgeResource = new BadgeResource(badgeServiceMock, badgeQueryService, badgeSkillService);
         when(badgeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -305,6 +312,7 @@ public class BadgeResourceIntTest {
         verify(badgeServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
+    @SuppressWarnings({"unchecked"})
     public void getAllBadgesWithEagerRelationshipsIsNotEnabled() throws Exception {
         BadgeResource badgeResource = new BadgeResource(badgeServiceMock, badgeQueryService, badgeSkillService);
         when(badgeServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -746,13 +754,19 @@ public class BadgeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(badge.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].availableUntil").value(hasItem(DEFAULT_AVAILABLE_UNTIL.toString())))
             .andExpect(jsonPath("$.[*].availableAmount").value(hasItem(DEFAULT_AVAILABLE_AMOUNT)))
             .andExpect(jsonPath("$.[*].requiredScore").value(hasItem(DEFAULT_REQUIRED_SCORE.doubleValue())))
             .andExpect(jsonPath("$.[*].instantMultiplier").value(hasItem(DEFAULT_INSTANT_MULTIPLIER.doubleValue())))
             .andExpect(jsonPath("$.[*].completionBonus").value(hasItem(DEFAULT_COMPLETION_BONUS)));
+
+        // Check, that the count call also returns 1
+        restBadgeMockMvc.perform(get("/api/badges/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -764,6 +778,12 @@ public class BadgeResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restBadgeMockMvc.perform(get("/api/badges/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -823,15 +843,15 @@ public class BadgeResourceIntTest {
         // Create the Badge
         BadgeDTO badgeDTO = badgeMapper.toDto(badge);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBadgeMockMvc.perform(put("/api/badges")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(badgeDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Badge in the database
         List<Badge> badgeList = badgeRepository.findAll();
-        assertThat(badgeList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(badgeList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -842,7 +862,7 @@ public class BadgeResourceIntTest {
 
         int databaseSizeBeforeDelete = badgeRepository.findAll().size();
 
-        // Get the badge
+        // Delete the badge
         restBadgeMockMvc.perform(delete("/api/badges/{id}", badge.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
@@ -915,6 +935,7 @@ public class BadgeResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -922,6 +943,7 @@ public class BadgeResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team1);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team1.addSkills(teamSkill);
         em.persist(team1);
@@ -934,6 +956,7 @@ public class BadgeResourceIntTest {
         teamSkill.setTeam(team2);
         teamSkill.setSkill(softwareUpdates);
         teamSkill.setCompletedAt(new Date().toInstant());
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team2.addSkills(teamSkill);
         em.persist(team2);

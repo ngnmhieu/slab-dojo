@@ -5,13 +5,35 @@ import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import { HasAnyAuthorityDirective, JhiLoginModalComponent, TeamdojoSharedCommonModule, TeamdojoSharedLibsModule } from './';
 import { BackgroundComponent } from 'app/shared/background/background.component';
 import { TeamsStatusComponent } from 'app/teams/teams-status.component';
+import { TableFilterComponent } from 'app/shared/table-filter/table-filter.component';
+import { TrainingsAddComponent } from 'app/shared/trainings/trainings-add.component';
 
 @NgModule({
     imports: [TeamdojoSharedLibsModule, TeamdojoSharedCommonModule],
-    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective, BackgroundComponent, TeamsStatusComponent],
+    declarations: [
+        JhiLoginModalComponent,
+        HasAnyAuthorityDirective,
+        BackgroundComponent,
+        TeamsStatusComponent,
+        TableFilterComponent,
+        TrainingsAddComponent
+    ],
     providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
-    entryComponents: [JhiLoginModalComponent],
-    exports: [TeamdojoSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective, BackgroundComponent, TeamsStatusComponent],
+    entryComponents: [JhiLoginModalComponent, TrainingsAddComponent],
+    exports: [
+        TeamdojoSharedCommonModule,
+        JhiLoginModalComponent,
+        HasAnyAuthorityDirective,
+        BackgroundComponent,
+        TeamsStatusComponent,
+        TableFilterComponent
+    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class TeamdojoSharedModule {}
+export class TeamdojoSharedModule {
+    static forRoot() {
+        return {
+            ngModule: TeamdojoSharedModule
+        };
+    }
+}

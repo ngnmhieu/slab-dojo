@@ -1,9 +1,9 @@
 <div>
     <h2 id="page-heading">
-        <span jhiTranslate="teamdojoApp.team.home.title">Teams</span>
+        <span dojoTranslate="teamdojoApp.team.home.title">Teams</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/team/new']">
-            <span class="fa fa-plus"></span>
-            <span  jhiTranslate="teamdojoApp.team.home.createLabel">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  dojoTranslate="teamdojoApp.team.home.createLabel">
             Create new Team
             </span>
         </button>
@@ -13,29 +13,26 @@
     <div class="table-responsive" *ngIf="teams">
         <table class="table table-striped">
             <thead>
-            <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.name">Name</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.shortName">Short Name</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.slogan">Slogan</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.contactPerson">Contact Person</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.participations">Participations</span></th>
-            <th><span jhiTranslate="teamdojoApp.team.image">Image</span></th>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span dojoTranslate="teamdojoApp.global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="name"><span dojoTranslate="teamdojoApp.team.name">Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="shortName"><span dojoTranslate="teamdojoApp.team.shortName">Short Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="slogan"><span dojoTranslate="teamdojoApp.team.slogan">Slogan</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="contactPerson"><span dojoTranslate="teamdojoApp.team.contactPerson">Contact Person</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="validUntil"><span dojoTranslate="teamdojoApp.team.validUntil">Valid Until</span> <span
+                    class="fa fa-sort"></span></th>
+            <th jhiSortBy="imageName"><span dojoTranslate="teamdojoApp.team.image">Image</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let team of teams ;trackBy: trackId">
                 <td><a [routerLink]="['/team', team.id, 'view' ]">{{team.id}}</a></td>
                 <td>{{team.name}}</td>
                 <td>{{team.shortName}}</td>
                 <td>{{team.slogan}}</td>
                 <td>{{team.contactPerson}}</td>
-                <td>
-                    <span *ngFor="let participations of team.participations; let last = last">
-                            <a class="form-control-static" [routerLink]="['../dimension', participations?.id, 'view' ]">{{participations.name}}</a>{{last ? '' : ', '}}
-                        </span>
-                </td>
+                <td>{{team.validUntil | date:'medium'}}</td>
                 <td>
                     <div *ngIf="team.imageId">
                         <a [routerLink]="['../image', team.imageId , 'view' ]" >{{team.imageName}}</a>
@@ -46,22 +43,22 @@
                         <button type="submit"
                                 [routerLink]="['/team', team.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/team', team.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/delete'} }]"
+                                [routerLink]="['/', 'team', { outlets: { popup: team.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>
                 </td>

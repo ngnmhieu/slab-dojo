@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 export class TeamsSelectionComponent implements OnInit {
     highlightedTeam: ITeam = null;
     selectedTeam: ITeam;
-
     teams: ITeam[] = [];
 
     constructor(
@@ -25,7 +24,7 @@ export class TeamsSelectionComponent implements OnInit {
 
     ngOnInit(): void {
         this.teamsService.query().subscribe(teams => {
-            this.teams = teams.body.sort((a, b) => a.shortName.localeCompare(b.shortName));
+            this.teams = teams.body.filter(team => !team.expired).sort((a, b) => a.shortName.localeCompare(b.shortName));
         });
         this.teamsSelectionService.query().subscribe(selectedTeam => {
             this.selectedTeam = this.highlightedTeam = selectedTeam;
@@ -34,12 +33,9 @@ export class TeamsSelectionComponent implements OnInit {
 
     selectTeam(team: ITeam) {
         this.highlightedTeam = team;
-    }
-
-    confirmTeam() {
-        this.teamsSelectionService.selectedTeam = this.highlightedTeam;
+        this.teamsSelectionService.selectedTeam = team;
         this.activeModal.close('Team selected');
-        this.router.navigate(['teams', this.highlightedTeam.shortName]);
+        this.router.navigate(['teams', team.shortName]);
     }
 
     deselectTeam() {
@@ -47,6 +43,11 @@ export class TeamsSelectionComponent implements OnInit {
         this.teamsSelectionService.selectedTeam = null;
         this.activeModal.close('No team selected');
         this.router.navigate(['']);
+    }
+
+    createNewTeam() {
+        this.activeModal.close('Create new Team');
+        this.router.navigate(['/team/new']);
     }
 
     cancelTeamSelection() {

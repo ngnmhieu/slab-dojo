@@ -11,6 +11,10 @@ import { RelevanceCheck, sortLevels } from 'app/shared';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
+import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { AccountService } from 'app/core';
+
+const ROLES_ALLOWED_TO_UPDATE = ['ROLE_ADMIN'];
 
 @Component({
     selector: 'jhi-overview-achievements',
@@ -26,8 +30,14 @@ export class OverviewAchievementsComponent implements OnInit {
     generalBadges: IBadge[];
     activeItemIds: { [key: string]: number };
     expandedDimensions: string[];
+    hasAuthority = false;
 
-    constructor(private route: ActivatedRoute, private dimensionService: DimensionService, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private dimensionService: DimensionService,
+        private router: Router,
+        private accountService: AccountService
+    ) {}
 
     ngOnInit(): void {
         this.dimensions = [];
@@ -62,10 +72,6 @@ export class OverviewAchievementsComponent implements OnInit {
                 dimension.levels = (sortLevels(levelsByDimensionId[dimension.id]) || []).reverse();
                 dimension.badges = badgesByDimensionId[dimension.id] || [];
             });
-
-            this.expandedDimensions = this.dimensions
-                ? this.dimensions.map((dimension: IDimension) => `achievements-dimension-${dimension.id}`)
-                : [];
         });
 
         this.route.queryParamMap.subscribe((params: ParamMap) => {
@@ -79,10 +85,40 @@ export class OverviewAchievementsComponent implements OnInit {
 
             if (levelId) {
                 this.activeItemIds.level = levelId;
+                this.levels
+                    .filter(l => l.id === levelId)
+                    .forEach(l => this.setDimensionPanelActiveState(`achievements-dimension-${l.dimensionId}`, true));
             } else if (badgeId) {
                 this.activeItemIds.badge = badgeId;
+                const foundBadge = this.badges.find(b => b.id === badgeId);
+                if (foundBadge) {
+                    foundBadge.dimensions.forEach(d => this.setDimensionPanelActiveState(`achievements-dimension-${d.id}`, true));
+                }
             }
         });
+
+        setTimeout(() => {
+            this.accountService.identity().then(identity => {
+                this.hasAuthority = this.accountService.hasAnyAuthority(ROLES_ALLOWED_TO_UPDATE);
+            });
+        }, 0);
+    }
+
+    handleDimensionToggle(event: NgbPanelChangeEvent) {
+        this.setDimensionPanelActiveState(event.panelId, event.nextState);
+    }
+
+    setDimensionPanelActiveState(panelId: string, expanded: boolean) {
+        if (expanded) {
+            if (!this.expandedDimensions.includes(panelId)) {
+                this.expandedDimensions.push(panelId);
+            }
+        } else {
+            const idx = this.expandedDimensions.findIndex(d => panelId === d);
+            if (idx !== -1) {
+                this.expandedDimensions.splice(idx, 1);
+            }
+        }
     }
 
     getAchievementProgress(item: ILevel | IBadge) {
@@ -96,7 +132,7 @@ export class OverviewAchievementsComponent implements OnInit {
                 }
             }
         });
-        return baseCount === 0 ? 0 : completedCount / baseCount * 100;
+        return baseCount === 0 ? 0 : (completedCount / baseCount) * 100;
     }
 
     private isLevelOrBadgeCompleted(team: ITeam, item: ILevel | IBadge): boolean {
@@ -127,6 +163,6 @@ export class OverviewAchievementsComponent implements OnInit {
     }
 
     private getParamAsNumber(name: string, params: ParamMap): number {
-        return Number.parseInt(params.get(name));
+        return Number.parseInt(params.get(name), 10);
     }
 }

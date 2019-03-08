@@ -1,19 +1,19 @@
 package de.otto.teamdojo.service.impl;
 
+import de.otto.teamdojo.service.DimensionService;
 import de.otto.teamdojo.domain.Dimension;
 import de.otto.teamdojo.repository.DimensionRepository;
-import de.otto.teamdojo.service.DimensionService;
 import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.service.mapper.DimensionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Dimension.
@@ -50,15 +50,15 @@ public class DimensionServiceImpl implements DimensionService {
     /**
      * Get all the dimensions.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
     @Override
     @Transactional(readOnly = true)
-    public List<DimensionDTO> findAll() {
+    public Page<DimensionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Dimensions");
-        return dimensionRepository.findAll().stream()
-            .map(dimensionMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return dimensionRepository.findAll(pageable)
+            .map(dimensionMapper::toDto);
     }
 
 
@@ -83,7 +83,6 @@ public class DimensionServiceImpl implements DimensionService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Dimension : {}", id);
-        dimensionRepository.deleteById(id);
+        log.debug("Request to delete Dimension : {}", id);        dimensionRepository.deleteById(id);
     }
 }

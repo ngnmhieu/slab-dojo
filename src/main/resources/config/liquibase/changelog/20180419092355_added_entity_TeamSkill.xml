@@ -37,6 +37,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="vote" type="integer">
+                <constraints nullable="false" />
+            </column>
+
             <column name="skill_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -49,7 +53,7 @@
         </createTable>
         <dropDefaultValue tableName="team_skill" columnName="completed_at" columnDataType="datetime"/>
         <dropDefaultValue tableName="team_skill" columnName="verified_at" columnDataType="datetime"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

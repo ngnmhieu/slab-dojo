@@ -13,12 +13,40 @@
         {
             "fieldName": "levelUpScore",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "userMode",
+            "fieldType": "UserMode",
+            "fieldValues": "PERSON,TEAM",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "mattermostUrl",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "pattern"
+            ],
+            "fieldValidateRulesMaxlength": 255,
+            "fieldValidateRulesPattern": "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+        },
+        {
+            "fieldName": "countOfConfirmations",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
         }
     ],
     "changelogDate": "20180517074753",
     "dto": "mapstruct",
+    "searchEngine": false,
     "service": "serviceImpl",
     "entityTableName": "organization",
+    "databaseType": "sql",
     "jpaMetamodelFiltering": false,
     "pagination": "no"
 }

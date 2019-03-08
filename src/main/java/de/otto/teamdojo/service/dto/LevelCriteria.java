@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-
-
-
-
 
 /**
  * Criteria class for the Level entity. This class is used in LevelResource to
@@ -23,8 +19,8 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class LevelCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -45,9 +41,6 @@ public class LevelCriteria implements Serializable {
     private LongFilter skillsId;
 
     private LongFilter imageId;
-
-    public LevelCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -127,6 +120,45 @@ public class LevelCriteria implements Serializable {
 
     public void setImageId(LongFilter imageId) {
         this.imageId = imageId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final LevelCriteria that = (LevelCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(requiredScore, that.requiredScore) &&
+            Objects.equals(instantMultiplier, that.instantMultiplier) &&
+            Objects.equals(completionBonus, that.completionBonus) &&
+            Objects.equals(dimensionId, that.dimensionId) &&
+            Objects.equals(dependsOnId, that.dependsOnId) &&
+            Objects.equals(skillsId, that.skillsId) &&
+            Objects.equals(imageId, that.imageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        description,
+        requiredScore,
+        instantMultiplier,
+        completionBonus,
+        dimensionId,
+        dependsOnId,
+        skillsId,
+        imageId
+        );
     }
 
     @Override

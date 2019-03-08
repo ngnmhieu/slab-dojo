@@ -1,11 +1,9 @@
 package de.otto.teamdojo.service.dto;
-
-import de.otto.teamdojo.domain.enumeration.ActivityType;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.Instant;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
+import de.otto.teamdojo.domain.enumeration.ActivityType;
 
 /**
  * A DTO for the Activity entity.

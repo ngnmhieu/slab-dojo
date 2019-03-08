@@ -10,6 +10,7 @@ import { TeamScore } from 'app/shared/model/team-score.model';
 import 'simplebar';
 import { ISkill } from 'app/shared/model/skill.model';
 import { TeamScoreCalculation } from 'app/shared/util/team-score-calculation';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-overview-teams',
@@ -41,7 +42,7 @@ export class OverviewTeamsComponent implements OnInit {
             this.relevantTeamIds = this.getRelevantTeamIds(relevantTeams);
         });
 
-        for (const team of this.teams) {
+        for (const team of this.teams.filter(t => t.daysUntilExpiration > -90)) {
             this.teamScores.push(new TeamScore(team, this._calcTeamScore(team)));
         }
         this.teamScores = this.teamScores.sort((ts1, ts2) => {
@@ -104,6 +105,10 @@ export class OverviewTeamsComponent implements OnInit {
 
     showAsIrrelevant(team: ITeam): boolean {
         return this.filtered && !this.isRelevant(team);
+    }
+
+    expirationDaysVisible(team: ITeam): boolean {
+        return !team.expired && team.daysUntilExpiration < 31;
     }
 
     private isRelevant(team: ITeam): boolean {
@@ -185,6 +190,6 @@ export class OverviewTeamsComponent implements OnInit {
     }
 
     private getParamAsNumber(name: string, params: ParamMap): number {
-        return Number.parseInt(params.get(name));
+        return Number.parseInt(params.get(name), 10);
     }
 }

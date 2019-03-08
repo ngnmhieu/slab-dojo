@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Organization } from 'app/shared/model/organization.model';
 import { OrganizationService } from './organization.service';
 import { OrganizationComponent } from './organization.component';
 import { OrganizationDetailComponent } from './organization-detail.component';
 import { OrganizationUpdateComponent } from './organization-update.component';
 import { OrganizationDeletePopupComponent } from './organization-delete-dialog.component';
+import { IOrganization } from 'app/shared/model/organization.model';
 
-@Injectable()
-export class OrganizationResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class OrganizationResolve implements Resolve<IOrganization> {
     constructor(private service: OrganizationService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IOrganization> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Organization>) => response.ok),
+                map((organization: HttpResponse<Organization>) => organization.body)
+            );
         }
-        return new Organization();
+        return of(new Organization());
     }
 }
 
 export const organizationRoute: Routes = [
     {
-        path: 'organization',
+        path: '',
         component: OrganizationComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -33,7 +39,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/:id/view',
+        path: ':id/view',
         component: OrganizationDetailComponent,
         resolve: {
             organization: OrganizationResolve
@@ -45,7 +51,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/new',
+        path: 'new',
         component: OrganizationUpdateComponent,
         resolve: {
             organization: OrganizationResolve
@@ -57,7 +63,7 @@ export const organizationRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'organization/:id/edit',
+        path: ':id/edit',
         component: OrganizationUpdateComponent,
         resolve: {
             organization: OrganizationResolve
@@ -72,7 +78,7 @@ export const organizationRoute: Routes = [
 
 export const organizationPopupRoute: Routes = [
     {
-        path: 'organization/:id/delete',
+        path: ':id/delete',
         component: OrganizationDeletePopupComponent,
         resolve: {
             organization: OrganizationResolve

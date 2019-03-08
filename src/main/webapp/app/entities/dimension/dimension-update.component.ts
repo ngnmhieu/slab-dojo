@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { IDimension } from 'app/shared/model/dimension.model';
 import { DimensionService } from './dimension.service';
 import { ITeam } from 'app/shared/model/team.model';
@@ -16,7 +16,7 @@ import { BadgeService } from 'app/entities/badge';
     templateUrl: './dimension-update.component.html'
 })
 export class DimensionUpdateComponent implements OnInit {
-    private _dimension: IDimension;
+    dimension: IDimension;
     isSaving: boolean;
 
     teams: ITeam[];
@@ -24,30 +24,32 @@ export class DimensionUpdateComponent implements OnInit {
     badges: IBadge[];
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private dimensionService: DimensionService,
-        private teamService: TeamService,
-        private badgeService: BadgeService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected dimensionService: DimensionService,
+        protected teamService: TeamService,
+        protected badgeService: BadgeService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ dimension }) => {
-            this.dimension = dimension.body ? dimension.body : dimension;
+        this.activatedRoute.data.subscribe(({ dimension }) => {
+            this.dimension = dimension;
         });
-        this.teamService.query().subscribe(
-            (res: HttpResponse<ITeam[]>) => {
-                this.teams = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.badgeService.query().subscribe(
-            (res: HttpResponse<IBadge[]>) => {
-                this.badges = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.teamService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITeam[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITeam[]>) => response.body)
+            )
+            .subscribe((res: ITeam[]) => (this.teams = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.badgeService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IBadge[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IBadge[]>) => response.body)
+            )
+            .subscribe((res: IBadge[]) => (this.badges = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -63,20 +65,20 @@ export class DimensionUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IDimension>>) {
-        result.subscribe((res: HttpResponse<IDimension>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IDimension>>) {
+        result.subscribe((res: HttpResponse<IDimension>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: IDimension) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -97,12 +99,5 @@ export class DimensionUpdateComponent implements OnInit {
             }
         }
         return option;
-    }
-    get dimension() {
-        return this._dimension;
-    }
-
-    set dimension(dimension: IDimension) {
-        this._dimension = dimension;
     }
 }

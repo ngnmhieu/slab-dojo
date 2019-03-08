@@ -7,14 +7,8 @@ import { Injectable } from '@angular/core';
 import { SkillDetailsComponent } from 'app/teams/skill-details/skill-details.component';
 import { TeamSkillService } from 'app/entities/team-skill';
 import { TeamsSelectionResolve } from 'app/shared/teams-selection/teams-selection.resolve';
-import {
-    AllBadgesResolve,
-    AllCommentsResolve,
-    AllSkillsResolve,
-    AllTeamsResolve,
-    DojoModelResolve,
-    SkillResolve
-} from 'app/shared/common.resolver';
+import { AllCommentsResolve, AllSkillsResolve, AllTrainingsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
+import { flatMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class TeamAndTeamSkillResolve implements Resolve<any> {
@@ -27,16 +21,20 @@ export class TeamAndTeamSkillResolve implements Resolve<any> {
                 .query({
                     'shortName.equals': shortName
                 })
-                .flatMap(teamResponse => {
-                    if (teamResponse.body.length === 0) {
-                        this.router.navigate(['/error']);
-                    }
-                    const team = teamResponse.body[0];
-                    return this.teamSkillService.query({ 'teamId.equals': team.id }).map(teamSkillResponse => {
-                        team.skills = teamSkillResponse.body;
-                        return team;
-                    });
-                });
+                .pipe(
+                    flatMap(teamResponse => {
+                        if (teamResponse.body.length === 0) {
+                            this.router.navigate(['/error']);
+                        }
+                        const team = teamResponse.body[0];
+                        return this.teamSkillService.query({ 'teamId.equals': team.id }).pipe(
+                            map(teamSkillResponse => {
+                                team.skills = teamSkillResponse.body;
+                                return team;
+                            })
+                        );
+                    })
+                );
         }
         return new Team();
     }
@@ -54,7 +52,8 @@ export const TEAMS_ROUTES: Route[] = [
         data: {
             authorities: [],
             pageTitle: 'teamdojoApp.teams.home.title'
-        }
+        },
+        runGuardsAndResolvers: 'always'
     },
     {
         path: 'teams/:shortName/skills/:skillId',
@@ -65,7 +64,8 @@ export const TEAMS_ROUTES: Route[] = [
             skill: SkillResolve,
             skills: AllSkillsResolve,
             comments: AllCommentsResolve,
-            selectedTeam: TeamsSelectionResolve
+            selectedTeam: TeamsSelectionResolve,
+            trainings: AllTrainingsResolve
         },
         data: {
             authorities: [],

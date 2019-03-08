@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,6 +28,7 @@ public class LevelDTO implements Serializable {
     @Min(value = 0)
     private Integer completionBonus;
 
+
     private Long dimensionId;
 
     private String dimensionName;
@@ -40,6 +40,8 @@ public class LevelDTO implements Serializable {
     private Long imageId;
 
     private String imageName;
+
+    private String imageHash;
 
     public Long getId() {
         return id;
@@ -137,6 +139,14 @@ public class LevelDTO implements Serializable {
         this.imageName = imageName;
     }
 
+    public String getImageHash() {
+        return imageHash;
+    }
+
+    public void setImageHash(String imageHash) {
+        this.imageHash = imageHash;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -172,7 +182,8 @@ public class LevelDTO implements Serializable {
             ", dependsOn=" + getDependsOnId() +
             ", dependsOn='" + getDependsOnName() + "'" +
             ", image=" + getImageId() +
-            ", image='" + getImageName() + "'" +
+            ", imageName='" + getImageName() + "'" +
+            ", imageHash='" + getImageHash() + "'" +
             "}";
     }
 }

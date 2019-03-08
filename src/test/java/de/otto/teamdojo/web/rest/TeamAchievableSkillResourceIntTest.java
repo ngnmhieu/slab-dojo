@@ -2,14 +2,22 @@ package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
 import de.otto.teamdojo.domain.*;
+import de.otto.teamdojo.repository.BadgeRepository;
+import de.otto.teamdojo.repository.SkillRepository;
+import de.otto.teamdojo.repository.TeamRepository;
 import de.otto.teamdojo.repository.TeamSkillRepository;
 import de.otto.teamdojo.service.AchievableSkillService;
+import de.otto.teamdojo.service.ActivityService;
+import de.otto.teamdojo.service.OrganizationService;
+import de.otto.teamdojo.service.TeamSkillService;
 import de.otto.teamdojo.service.dto.AchievableSkillDTO;
+import de.otto.teamdojo.service.impl.AchievableSkillServiceImpl;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +51,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = TeamdojoApp.class)
 public class TeamAchievableSkillResourceIntTest {
 
-    @Autowired
     private AchievableSkillService achievableSkillService;
 
     @Autowired
@@ -60,6 +67,24 @@ public class TeamAchievableSkillResourceIntTest {
 
     @Autowired
     private TeamSkillRepository teamSkillRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
+    private BadgeRepository badgeRepository;
+
+    @Autowired
+    private TeamSkillService teamSkillService;
+
+    @Autowired
+    private OrganizationService organizationService;
+
+    @Mock
+    private ActivityService activityServiceMock;
 
     private MockMvc restTeamMockMvc;
 
@@ -78,6 +103,7 @@ public class TeamAchievableSkillResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        achievableSkillService = new AchievableSkillServiceImpl(skillRepository, teamRepository, badgeRepository, teamSkillService, activityServiceMock, organizationService);
         final TeamAchievableSkillResource resource = new TeamAchievableSkillResource(achievableSkillService);
         this.restTeamMockMvc = MockMvcBuilders.standaloneSetup(resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -282,6 +308,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -313,6 +340,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -345,6 +373,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill.setTeam(team);
         teamSkill.setIrrelevant(Boolean.TRUE);
         teamSkill.setSkill(softwareUpdates);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);
@@ -389,6 +418,7 @@ public class TeamAchievableSkillResourceIntTest {
         teamSkill = new TeamSkill();
         teamSkill.setTeam(team);
         teamSkill.setSkill(inputValidation);
+        teamSkill.setVote(1);
         em.persist(teamSkill);
         team.addSkills(teamSkill);
         em.persist(team);

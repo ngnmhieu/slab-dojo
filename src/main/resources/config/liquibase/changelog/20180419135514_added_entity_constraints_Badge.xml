@@ -7,7 +7,7 @@
         Added the constraints for entity Badge.
     -->
     <changeSet id="20180419135514-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="badges_id"
                                  baseTableName="badge_dimensions"
                                  constraintName="fk_badge_dimensions_badges_id"
@@ -18,7 +18,7 @@
                                  constraintName="fk_badge_dimensions_dimensions_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dimension"/>
-        
+
         <addForeignKeyConstraint baseColumnNames="image_id"
                                  baseTableName="badge"
                                  constraintName="fk_badge_image_id"

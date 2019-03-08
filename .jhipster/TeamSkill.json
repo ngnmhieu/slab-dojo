@@ -37,6 +37,17 @@
         {
             "fieldName": "note",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "vote",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "voters",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180419092355",

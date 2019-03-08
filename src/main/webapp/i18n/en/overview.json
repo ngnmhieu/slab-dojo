@@ -2,7 +2,9 @@
     "teamdojoApp": {
         "overview": {
             "teams": {
-                "title": "Teams"
+                "title": "Teams",
+                "preExpiresIn": "expires in",
+                "postExpiresIn": "days"
             },
             "achievements": {
                 "title": "Achievements",
@@ -21,11 +23,21 @@
             "skills": {
                 "title": "Skills"
             },
-            "navigation" : {
-                "text" : "Team overview"
+            "navigation": {
+                "text": "Team overview"
             },
             "total-score": {
                 "title": "Total"
+            }
+        }
+    },
+    "persondojoApp": {
+        "overview": {
+            "teams": {
+                "title": "Persons"
+            },
+            "navigation": {
+                "text": "Person overview"
             }
         }
     }

@@ -1,9 +1,9 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiDataUtils } from 'ng-jhipster';
-
 import { IImage } from 'app/shared/model/image.model';
 import { ImageService } from './image.service';
 
@@ -12,20 +12,20 @@ import { ImageService } from './image.service';
     templateUrl: './image-update.component.html'
 })
 export class ImageUpdateComponent implements OnInit {
-    private _image: IImage;
+    image: IImage;
     isSaving: boolean;
 
     constructor(
-        private dataUtils: JhiDataUtils,
-        private imageService: ImageService,
-        private elementRef: ElementRef,
-        private route: ActivatedRoute
+        protected dataUtils: JhiDataUtils,
+        protected imageService: ImageService,
+        protected elementRef: ElementRef,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ image }) => {
-            this.image = image.body ? image.body : image;
+        this.activatedRoute.data.subscribe(({ image }) => {
+            this.image = image;
         });
     }
 
@@ -58,23 +58,16 @@ export class ImageUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IImage>>) {
-        result.subscribe((res: HttpResponse<IImage>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IImage>>) {
+        result.subscribe((res: HttpResponse<IImage>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: IImage) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
-    }
-    get image() {
-        return this._image;
-    }
-
-    set image(image: IImage) {
-        this._image = image;
     }
 }

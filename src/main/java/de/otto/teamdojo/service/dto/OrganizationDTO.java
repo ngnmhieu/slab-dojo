@@ -1,8 +1,8 @@
 package de.otto.teamdojo.service.dto;
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import de.otto.teamdojo.domain.enumeration.UserMode;
 
 /**
  * A DTO for the Organization entity.
@@ -15,6 +15,17 @@ public class OrganizationDTO implements Serializable {
     private String name;
 
     private Integer levelUpScore;
+
+    @NotNull
+    private UserMode userMode;
+
+    @Size(max = 255)
+    @Pattern(regexp = "^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
+    private String mattermostUrl;
+
+    @Min(value = 0)
+    private Integer countOfConfirmations;
+
 
     public Long getId() {
         return id;
@@ -38,6 +49,30 @@ public class OrganizationDTO implements Serializable {
 
     public void setLevelUpScore(Integer levelUpScore) {
         this.levelUpScore = levelUpScore;
+    }
+
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    public String getMattermostUrl() {
+        return mattermostUrl;
+    }
+
+    public void setMattermostUrl(String mattermostUrl) {
+        this.mattermostUrl = mattermostUrl;
+    }
+
+    public Integer getCountOfConfirmations() {
+        return countOfConfirmations;
+    }
+
+    public void setCountOfConfirmations(Integer countOfConfirmations) {
+        this.countOfConfirmations = countOfConfirmations;
     }
 
     @Override
@@ -67,6 +102,9 @@ public class OrganizationDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", levelUpScore=" + getLevelUpScore() +
+            ", userMode='" + getUserMode() + "'" +
+            ", mattermostUrl='" + getMattermostUrl() + "'" +
+            ", countOfConfirmations=" + getCountOfConfirmations() +
             "}";
     }
 }

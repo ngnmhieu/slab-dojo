@@ -12,7 +12,11 @@ public class AchievableSkillDTO {
     private String title;
     private String description;
     private Instant achievedAt;
+    private Instant verifiedAt;
+    private Integer vote;
+    private String voters;
     private Boolean irrelevant;
+    private Integer score;
     private Double rateScore;
     private Integer rateCount;
 
@@ -26,7 +30,11 @@ public class AchievableSkillDTO {
         String title,
         String description,
         Instant achievedAt,
+        Instant verifiedAt,
+        Integer vote,
+        String voters,
         Boolean irrelevant,
+        Integer score,
         Double rateScore,
         Integer rateCount) {
         this.teamSkillId = teamSkillId;
@@ -34,7 +42,11 @@ public class AchievableSkillDTO {
         this.title = title;
         this.description = description;
         this.achievedAt = achievedAt;
+        this.verifiedAt = verifiedAt;
+        this.vote = vote;
+        this.voters = voters;
         this.irrelevant = irrelevant;
+        this.score = score;
         this.rateScore = rateScore;
         this.rateCount = rateCount;
     }
@@ -75,10 +87,42 @@ public class AchievableSkillDTO {
         this.achievedAt = achievedAt;
     }
 
+    public Instant getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public void setVerifiedAt(Instant verifiedAt) {
+        this.verifiedAt = verifiedAt;
+    }
+
+    public Integer getVote() {
+        return vote;
+    }
+
+    public void setVote(Integer vote) {
+        this.vote = vote;
+    }
+
+    public String getVoters() {
+        return voters;
+    }
+
+    public void setVoters(String voters) {
+        this.voters = voters;
+    }
+
     public Boolean isIrrelevant() { return irrelevant; }
 
     public void setIrrelevant(Boolean irrelevant){
         this.irrelevant = irrelevant;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     public Double getRateScore() {
@@ -96,4 +140,6 @@ public class AchievableSkillDTO {
     public void setRateCount(Integer rateCount) {
         this.rateCount = rateCount;
     }
+
+
 }

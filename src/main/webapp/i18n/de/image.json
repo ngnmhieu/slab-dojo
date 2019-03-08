@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "image" : {
+        "image": {
             "home": {
                 "title": "Images",
                 "createLabel": "Image erstellen",
@@ -19,7 +18,8 @@
             "name": "Name",
             "small": "Small",
             "medium": "Medium",
-            "large": "Large"
+            "large": "Large",
+            "hash": "Hash"
         }
     }
 }

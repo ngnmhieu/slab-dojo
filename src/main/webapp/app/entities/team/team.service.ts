@@ -1,78 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { ITeam } from 'app/shared/model/team.model';
 
-export type EntityResponseType = HttpResponse<ITeam>;
-export type EntityArrayResponseType = HttpResponse<ITeam[]>;
+type EntityResponseType = HttpResponse<ITeam>;
+type EntityArrayResponseType = HttpResponse<ITeam[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TeamService {
-    private resourceUrl = SERVER_API_URL + 'api/teams';
+    public resourceUrl = SERVER_API_URL + 'api/teams';
 
-    constructor(private http: HttpClient) {}
+    constructor(protected http: HttpClient) {}
 
     create(team: ITeam): Observable<EntityResponseType> {
-        const copy = this.convert(team);
+        const copy = this.convertDateFromClient(team);
         return this.http
             .post<ITeam>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     update(team: ITeam): Observable<EntityResponseType> {
-        const copy = this.convert(team);
+        const copy = this.convertDateFromClient(team);
         return this.http
             .put<ITeam>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
         return this.http
             .get<ITeam>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
             .get<ITeam[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: EntityArrayResponseType) => this.convertArrayResponse(res));
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: ITeam = this.convertItemFromServer(res.body);
-        return res.clone({ body });
+    protected convertDateFromClient(team: ITeam): ITeam {
+        const copy: ITeam = Object.assign({}, team, {
+            validUntil: team.validUntil != null && team.validUntil.isValid() ? team.validUntil.toJSON() : null
+        });
+        return copy;
     }
 
-    private convertArrayResponse(res: EntityArrayResponseType): EntityArrayResponseType {
-        const jsonResponse: ITeam[] = res.body;
-        const body: ITeam[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.validUntil = res.body.validUntil != null ? moment(res.body.validUntil) : null;
         }
-        return res.clone({ body });
+        return res;
     }
 
-    /**
-     * Convert a returned JSON object to Team.
-     */
-    private convertItemFromServer(team: ITeam): ITeam {
-        const copy: ITeam = Object.assign({}, team, {});
-        return copy;
-    }
-
-    /**
-     * Convert a Team to a JSON which can be sent to the server.
-     */
-    private convert(team: ITeam): ITeam {
-        const copy: ITeam = Object.assign({}, team, {});
-        return copy;
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((team: ITeam) => {
+                team.validUntil = team.validUntil != null ? moment(team.validUntil) : null;
+            });
+        }
+        return res;
     }
 }

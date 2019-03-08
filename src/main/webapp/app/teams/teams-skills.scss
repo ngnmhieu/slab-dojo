@@ -1,8 +1,8 @@
 @import '~bootstrap/scss/bootstrap';
 @import '../../content/scss/bootstrap-variables';
 @import '../../content/scss/colors';
-@import "../../content/scss/mixins";
-@import '/skill-details/skill-details-rating/skill-details-rating';
+@import '../../content/scss/mixins';
+@import './skill-details/skill-details-rating/skill-details-rating';
 
 .in-skill-details {
     cursor: pointer;
@@ -25,15 +25,17 @@
 }
 
 .teams-skills {
-
     h4 {
         color: $dojo-text-primary;
     }
 
     padding-right: 10px;
-    .skill-search {
+    &-filter {
         color: $dojo-text-primary;
         margin-right: 14px;
+        .skill-sort select {
+            background-color: transparent;
+        }
     }
 
     .teams-skills-list {
@@ -49,6 +51,7 @@
         .skill-title {
             padding: 5px 5px 5px 20px;
             word-break: break-word;
+            flex-grow: 1;
 
             &.irrelevant {
                 opacity: 0.3;
@@ -71,7 +74,13 @@
             padding: 10px;
             background-color: transparent;
             &.completed {
+                background-color: $warning;
+            }
+            &.verified {
                 background-color: $success;
+            }
+            &.unverified {
+                background-color: $danger;
             }
         }
         .skill-action-bar {

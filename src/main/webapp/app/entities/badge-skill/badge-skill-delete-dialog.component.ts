@@ -14,7 +14,11 @@ import { BadgeSkillService } from './badge-skill.service';
 export class BadgeSkillDeleteDialogComponent {
     badgeSkill: IBadgeSkill;
 
-    constructor(private badgeSkillService: BadgeSkillService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+        protected badgeSkillService: BadgeSkillService,
+        public activeModal: NgbActiveModal,
+        protected eventManager: JhiEventManager
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +40,22 @@ export class BadgeSkillDeleteDialogComponent {
     template: ''
 })
 export class BadgeSkillDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ badgeSkill }) => {
+        this.activatedRoute.data.subscribe(({ badgeSkill }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(BadgeSkillDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.badgeSkill = badgeSkill.body;
+                this.ngbModalRef.componentInstance.badgeSkill = badgeSkill;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

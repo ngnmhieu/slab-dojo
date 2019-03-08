@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="training">
+            <h2><span dojoTranslate="teamdojoApp.training.detail.title">Training</span> {{training.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span dojoTranslate="teamdojoApp.training.title">Title</span></dt>
+                <dd>
+                    <span>{{training.title}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.description">Description</span></dt>
+                <dd>
+                    <span>{{training.description}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.contactPerson">Contact Person</span></dt>
+                <dd>
+                    <span>{{training.contactPerson}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.link">Link</span></dt>
+                <dd>
+                    <span>{{training.link}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.validUntil">Valid Until</span></dt>
+                <dd>
+                    <span>{{training.validUntil}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.isOfficial">Is Official</span></dt>
+                <dd>
+                    <span>{{training.isOfficial}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.suggestedBy">Suggested By</span></dt>
+                <dd>
+                    <span>{{training.suggestedBy}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.training.skill">Skill</span></dt>
+                <dd>
+                    <span *ngFor="let skill of training.skills; let last = last">
+                        <a [routerLink]="['/skill', skill?.id, 'view' ]">{{skill.title}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/training', training.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

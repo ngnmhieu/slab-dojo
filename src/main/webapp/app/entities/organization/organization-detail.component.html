@@ -1,30 +1,43 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="organization">
-            <h2><span jhiTranslate="teamdojoApp.organization.detail.title">Organization</span> {{organization.id}}</h2>
+            <h2><span dojoTranslate="teamdojoApp.organization.detail.title">Organization</span> {{organization.id}}</h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="teamdojoApp.organization.name">Name</span></dt>
+                <dt><span dojoTranslate="teamdojoApp.organization.name">Name</span></dt>
                 <dd>
                     <span>{{organization.name}}</span>
                 </dd>
-                <dt><span jhiTranslate="teamdojoApp.organization.levelUpScore">Level Up Score</span></dt>
+                <dt><span dojoTranslate="teamdojoApp.organization.levelUpScore">Level Up Score</span></dt>
                 <dd>
                     <span>{{organization.levelUpScore}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.organization.userMode">User Mode</span></dt>
+                <dd>
+                    <span
+                        dojoTranslate="{{'teamdojoApp.UserMode.' + organization.userMode}}">{{organization.userMode}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.organization.mattermostUrl">Mattermost Url</span></dt>
+                <dd>
+                    <span>{{organization.mattermostUrl}}</span>
+                </dd>
+                <dt><span dojoTranslate="teamdojoApp.organization.countOfConfirmations">Count Of Confirmations</span></dt>
+                <dd>
+                    <span>{{organization.countOfConfirmations}}</span>
                 </dd>
             </dl>
 
             <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
-                <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.back"> Back</span>
             </button>
 
             <button type="button"
                     [routerLink]="['/organization', organization.id, 'edit']"
                     class="btn btn-primary">
-                <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span dojoTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>
     </div>

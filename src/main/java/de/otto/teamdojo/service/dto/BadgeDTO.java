@@ -1,5 +1,4 @@
 package de.otto.teamdojo.service.dto;
-
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -37,9 +36,12 @@ public class BadgeDTO implements Serializable {
     @Min(value = 0)
     private Integer completionBonus;
 
+
     private Set<DimensionDTO> dimensions = new HashSet<>();
 
     private Long imageId;
+
+    private String imageHash;
 
     private String imageName;
 
@@ -123,6 +125,14 @@ public class BadgeDTO implements Serializable {
         this.imageId = imageId;
     }
 
+    public String getImageHash() {
+        return imageHash;
+    }
+
+    public void setImageHash(String imageHash) {
+        this.imageHash = imageHash;
+    }
+
     public String getImageName() {
         return imageName;
     }
@@ -164,7 +174,8 @@ public class BadgeDTO implements Serializable {
             ", instantMultiplier=" + getInstantMultiplier() +
             ", completionBonus=" + getCompletionBonus() +
             ", image=" + getImageId() +
-            ", image='" + getImageName() + "'" +
+            ", imageName='" + getImageName() + "'" +
+            ", imageHash='" + getImageHash() + "'" +
             "}";
     }
 }

@@ -4,12 +4,22 @@
 @import '../../../content/scss/mixins';
 
 .skill-title {
+    font-size: 1.5rem;
+    font-weight: 500;
     margin-bottom: 15px;
     color: $dojo-text-primary;
 }
 .desc-block {
-
     margin-bottom: 35px;
+}
+
+.headline {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.explanation {
+    font-size: 1rem;
 }
 
 .skill-actions {
@@ -73,9 +83,13 @@
     background: rgba($dojo-bg-gradient-from, 0.5);
     padding: 20px;
     @include shadow();
+
+    .skill-desc-block-headline {
+        margin-bottom: 0.3rem;
+    }
 }
 
-.needed-for {
+.skill-metadata {
     margin-top: 55px;
 }
 
@@ -84,12 +98,16 @@
 }
 
 .avatar-team {
+    flex: 0 0 16%;
     box-sizing: border-box;
-    margin: 12px;
+    margin: 2px 0;
 }
 
-.achieved-by-teams, .needed-for-levels, .needed-for-badges {
+.achieved-by-teams,
+.needed-for-levels,
+.needed-for-badges {
     display: flex;
+    flex-wrap: wrap;
     > * {
         display: inline-flex;
     }
@@ -97,4 +115,8 @@
 
 .skill-list-item {
     cursor: pointer;
+}
+
+.training-is-official {
+    display: inline-block;
 }

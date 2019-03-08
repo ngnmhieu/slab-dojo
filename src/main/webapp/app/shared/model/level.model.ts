@@ -1,4 +1,4 @@
-import { ILevelSkill } from './level-skill.model';
+import { ILevelSkill } from 'app/shared/model/level-skill.model';
 
 export interface ILevel {
     id?: number;
@@ -14,6 +14,7 @@ export interface ILevel {
     skills?: ILevelSkill[];
     imageName?: string;
     imageId?: number;
+    imageHash?: string;
 }
 
 export class Level implements ILevel {
@@ -30,6 +31,7 @@ export class Level implements ILevel {
         public dependsOnId?: number,
         public skills?: ILevelSkill[],
         public imageName?: string,
-        public imageId?: number
+        public imageId?: number,
+        public imageHash?: string
     ) {}
 }

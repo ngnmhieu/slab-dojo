@@ -1,6 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-
-
-
-
 
 /**
  * Criteria class for the Image entity. This class is used in ImageResource to
@@ -23,15 +19,14 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class ImageCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
     private StringFilter name;
 
-    public ImageCriteria() {
-    }
+    private StringFilter hash;
 
     public LongFilter getId() {
         return id;
@@ -49,11 +44,45 @@ public class ImageCriteria implements Serializable {
         this.name = name;
     }
 
+    public StringFilter getHash() {
+        return hash;
+    }
+
+    public void setHash(StringFilter hash) {
+        this.hash = hash;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ImageCriteria that = (ImageCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(hash, that.hash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        hash
+        );
+    }
+
     @Override
     public String toString() {
         return "ImageCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (hash != null ? "hash=" + hash + ", " : "") +
             "}";
     }
 

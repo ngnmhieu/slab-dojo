@@ -14,7 +14,11 @@ import { LevelSkillService } from './level-skill.service';
 export class LevelSkillDeleteDialogComponent {
     levelSkill: ILevelSkill;
 
-    constructor(private levelSkillService: LevelSkillService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+        protected levelSkillService: LevelSkillService,
+        public activeModal: NgbActiveModal,
+        protected eventManager: JhiEventManager
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +40,22 @@ export class LevelSkillDeleteDialogComponent {
     template: ''
 })
 export class LevelSkillDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ levelSkill }) => {
+        this.activatedRoute.data.subscribe(({ levelSkill }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(LevelSkillDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.levelSkill = levelSkill.body;
+                this.ngbModalRef.componentInstance.levelSkill = levelSkill;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/level-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/level-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

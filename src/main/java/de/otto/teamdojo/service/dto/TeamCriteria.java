@@ -1,11 +1,11 @@
 package de.otto.teamdojo.service.dto;
 
+import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-import java.io.Serializable;
-
+import io.github.jhipster.service.filter.InstantFilter;
 
 /**
  * Criteria class for the Team entity. This class is used in TeamResource to
@@ -16,8 +16,8 @@ import java.io.Serializable;
  * fix type specific filters.
  */
 public class TeamCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -29,14 +29,13 @@ public class TeamCriteria implements Serializable {
 
     private StringFilter contactPerson;
 
+    private InstantFilter validUntil;
+
     private LongFilter participationsId;
 
     private LongFilter skillsId;
 
     private LongFilter imageId;
-
-    public TeamCriteria() {
-    }
 
     public LongFilter getId() {
         return id;
@@ -78,6 +77,14 @@ public class TeamCriteria implements Serializable {
         this.contactPerson = contactPerson;
     }
 
+    public InstantFilter getValidUntil() {
+        return validUntil;
+    }
+
+    public void setValidUntil(InstantFilter validUntil) {
+        this.validUntil = validUntil;
+    }
+
     public LongFilter getParticipationsId() {
         return participationsId;
     }
@@ -102,6 +109,43 @@ public class TeamCriteria implements Serializable {
         this.imageId = imageId;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final TeamCriteria that = (TeamCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(shortName, that.shortName) &&
+            Objects.equals(slogan, that.slogan) &&
+            Objects.equals(contactPerson, that.contactPerson) &&
+            Objects.equals(validUntil, that.validUntil) &&
+            Objects.equals(participationsId, that.participationsId) &&
+            Objects.equals(skillsId, that.skillsId) &&
+            Objects.equals(imageId, that.imageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        name,
+        shortName,
+        slogan,
+        contactPerson,
+        validUntil,
+        participationsId,
+        skillsId,
+        imageId
+        );
+    }
+
     @Override
     public String toString() {
         return "TeamCriteria{" +
@@ -110,6 +154,7 @@ public class TeamCriteria implements Serializable {
                 (shortName != null ? "shortName=" + shortName + ", " : "") +
                 (slogan != null ? "slogan=" + slogan + ", " : "") +
                 (contactPerson != null ? "contactPerson=" + contactPerson + ", " : "") +
+                (validUntil != null ? "validUntil=" + validUntil + ", " : "") +
                 (participationsId != null ? "participationsId=" + participationsId + ", " : "") +
                 (skillsId != null ? "skillsId=" + skillsId + ", " : "") +
                 (imageId != null ? "imageId=" + imageId + ", " : "") +

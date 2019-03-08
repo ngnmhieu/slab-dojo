@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Skill } from 'app/shared/model/skill.model';
 import { SkillService } from './skill.service';
 import { SkillComponent } from './skill.component';
 import { SkillDetailComponent } from './skill-detail.component';
 import { SkillUpdateComponent } from './skill-update.component';
 import { SkillDeletePopupComponent } from './skill-delete-dialog.component';
+import { ISkill } from 'app/shared/model/skill.model';
 
-@Injectable()
-export class SkillResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class SkillResolve implements Resolve<ISkill> {
     constructor(private service: SkillService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISkill> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Skill>) => response.ok),
+                map((skill: HttpResponse<Skill>) => skill.body)
+            );
         }
-        return new Skill();
+        return of(new Skill());
     }
 }
 
 export const skillRoute: Routes = [
     {
-        path: 'skill',
+        path: '',
         component: SkillComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -33,7 +39,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/:id/view',
+        path: ':id/view',
         component: SkillDetailComponent,
         resolve: {
             skill: SkillResolve
@@ -45,7 +51,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/new',
+        path: 'new',
         component: SkillUpdateComponent,
         resolve: {
             skill: SkillResolve
@@ -57,7 +63,7 @@ export const skillRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'skill/:id/edit',
+        path: ':id/edit',
         component: SkillUpdateComponent,
         resolve: {
             skill: SkillResolve
@@ -72,7 +78,7 @@ export const skillRoute: Routes = [
 
 export const skillPopupRoute: Routes = [
     {
-        path: 'skill/:id/delete',
+        path: ':id/delete',
         component: SkillDeletePopupComponent,
         resolve: {
             skill: SkillResolve

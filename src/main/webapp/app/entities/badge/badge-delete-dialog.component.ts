@@ -14,7 +14,7 @@ import { BadgeService } from './badge.service';
 export class BadgeDeleteDialogComponent {
     badge: IBadge;
 
-    constructor(private badgeService: BadgeService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(protected badgeService: BadgeService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +36,22 @@ export class BadgeDeleteDialogComponent {
     template: ''
 })
 export class BadgeDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ badge }) => {
+        this.activatedRoute.data.subscribe(({ badge }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(BadgeDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.badge = badge.body;
+                this.ngbModalRef.componentInstance.badge = badge;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/badge', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

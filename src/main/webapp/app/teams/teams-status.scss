@@ -6,6 +6,9 @@
     padding-right: 10px;
     .teams-status-avatar {
         text-align: center;
+        .team-logo-wrapper {
+            position: relative;
+        }
         .avatar-image-wrapper {
             width: 31vh;
             height: 41vh;
@@ -39,7 +42,7 @@
                 h6 {
                     font-size: calc(6px + 0.8vh);
                 }
-                .team-slogan {
+                .team-title-with-slogan {
                     margin-top: -1vh;
                 }
                 .team-score {
@@ -71,17 +74,20 @@
             }
         }
     }
-    .teams-status-achievements {
-        .teams-status-achievements-levels {
-            h5 {
-                margin-bottom: 0;
-            }
-            /deep/ .achievement-item {
-                padding-top: 0;
-            }
-        }
-        .teams-status-achievements-badges {
-        }
 
+    .teams-status-achievements-container {
+        height: 29vh;
+    }
+
+    .team-edit-btn {
+        cursor: pointer;
+        position: absolute;
+        right: -5rem;
+        top: 10px;
+        font-size: 1.3em;
+        color: #777;
+        &:hover {
+            color: #000;
+        }
     }
 }

@@ -1,0 +1,29 @@
+{
+    "teamdojoApp": {
+        "training": {
+            "home": {
+                "title": "Trainings",
+                "createLabel": "Create a new Training",
+                "createOrEditLabel": "Create or edit a Training"
+            },
+            "created": "A new Training is created with identifier {{ param }}",
+            "updated": "A Training is updated with identifier {{ param }}",
+            "deleted": "A Training is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Training {{ id }}?"
+            },
+            "detail": {
+                "title": "Training"
+            },
+            "title": "Title",
+            "description": "Description",
+            "contactPerson": "Contact Person",
+            "link": "Link",
+            "validUntil": "Valid Until",
+            "validUntilPlaceholder": "z.B. 2029-01-01T00:00:00+01:00",
+            "isOfficial": "Is Official",
+            "suggestedBy": "Suggested By",
+            "skill": "Skill"
+        }
+    }
+}

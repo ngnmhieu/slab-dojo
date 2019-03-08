@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
@@ -10,11 +10,11 @@ import { ITeamSkill } from 'app/shared/model/team-skill.model';
 export class TeamSkillDetailComponent implements OnInit {
     teamSkill: ITeamSkill;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ teamSkill }) => {
-            this.teamSkill = teamSkill.body ? teamSkill.body : teamSkill;
+        this.activatedRoute.data.subscribe(({ teamSkill }) => {
+            this.teamSkill = teamSkill;
         });
     }
 

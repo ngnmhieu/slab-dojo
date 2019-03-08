@@ -102,7 +102,6 @@ public class BadgeSkillServiceImpl implements BadgeSkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete BadgeSkill : {}", id);
-        badgeSkillRepository.deleteById(id);
+        log.debug("Request to delete BadgeSkill : {}", id);        badgeSkillRepository.deleteById(id);
     }
 }

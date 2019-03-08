@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper, LoginModalService, LoginService, Principal } from 'app/core';
-import { ProfileService } from '../profiles/profile.service';
+import { SessionStorageService } from 'ngx-webstorage';
+
+import { VERSION } from 'app/app.constants';
+import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
 import { TeamsSelectionComponent } from 'app/shared/teams-selection/teams-selection.component';
 import { ITeam, Team } from 'app/shared/model/team.model';
@@ -13,6 +16,9 @@ import { IDimension } from 'app/shared/model/dimension.model';
 import { ISkill } from 'app/shared/model/skill.model';
 import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
 import { IBreadcrumb } from 'app/shared/model/breadcrumb.model';
+import { OrganizationService } from 'app/entities/organization';
+import { IOrganization, Organization } from 'app/shared/model/organization.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'jhi-navbar',
@@ -26,6 +32,7 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     organizationName: string;
     modalRef: NgbModalRef;
+    version: string;
     isTeamSelectionOpen = false;
 
     activeLevel: ILevel;
@@ -39,7 +46,8 @@ export class NavbarComponent implements OnInit {
         private loginService: LoginService,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper,
-        private principal: Principal,
+        private sessionStorage: SessionStorageService,
+        private accountService: AccountService,
         private loginModalService: LoginModalService,
         private teamsSelectionService: TeamsSelectionService,
         private profileService: ProfileService,
@@ -48,6 +56,7 @@ export class NavbarComponent implements OnInit {
         private route: ActivatedRoute,
         private breadcrumbService: BreadcrumbService
     ) {
+        this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
     }
 
@@ -64,7 +73,10 @@ export class NavbarComponent implements OnInit {
         this.profileService.getProfileInfo().then(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
-            this.organizationName = profileInfo.organization.name;
+        });
+
+        this.route.data.subscribe(({ organization }) => {
+            this.organizationName = organization.name;
         });
         this.teamsSelectionService.query().subscribe();
     }
@@ -75,11 +87,11 @@ export class NavbarComponent implements OnInit {
         this.activeDimension = null;
         this.activeTeam = null;
         this.activeSkill = null;
-        this.breadcrumbs = null;
         this.breadcrumbs = this.breadcrumbService.getCurrentBreadcrumb();
     }
 
     changeLanguage(languageKey: string) {
+        this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
 
@@ -88,7 +100,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -106,7 +118,7 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 
     selectTeam(): NgbModalRef {

@@ -1,13 +1,13 @@
 <div class="overviews-teams" >
     <div>
-        <h4 jhiTranslate="teamdojoApp.overview.teams.title"></h4>
+        <h4 dojoTranslate="teamdojoApp.overview.teams.title"></h4>
     </div>
     <div class="additional-functions d-flex align-items-center">
     </div>
     <div class="team-list" data-simplebar="init">
         <div class="team-list-header d-flex justify-content-between mb-3">
             <div class="team-list-header-title d-flex align-items-end">
-                <span jhiTranslate="teamdojoApp.overview.total-score.title"></span>
+                <span dojoTranslate="teamdojoApp.overview.total-score.title"></span>
             </div>
             <div class="team-list-header-scores d-flex flex-row ml-auto justify-content-between align-items-end">
                     <div class="score d-flex flex-column align-items-center">
@@ -35,6 +35,11 @@
                         </div>
                     <div class="team-name">
                         <a href="#" [routerLink]="['/teams', teamScore.team.shortName]">{{teamScore.team.name}}</a>
+                        <div *ngIf="expirationDaysVisible(teamScore.team)" class="expiration-date">
+                            {{'teamdojoApp.overview.teams.preExpiresIn' | translate}}
+                            {{teamScore.team.daysUntilExpiration}}
+                            {{'teamdojoApp.overview.teams.postExpiresIn' | translate}}
+                        </div>
                     </div>
                 </div>
                 <div class="team-scores d-flex flex-row ml-auto justify-content-between">
@@ -43,7 +48,7 @@
                     <span class="score">{{calcCompletedBadges(teamScore.team)}}</span>
                 </div>
                 <div class="team-status" [ngClass]="{complete: showAsComplete(teamScore.team)}">
-                    <i *ngIf="showAsComplete(teamScore.team)" class="fa fa-check fa-inverse"></i>
+                    <fa-icon *ngIf="showAsComplete(teamScore.team)" icon="check" inverse="true"></fa-icon>
                 </div>
             </div>
         </div>

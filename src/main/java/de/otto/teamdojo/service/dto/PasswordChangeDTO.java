@@ -1,7 +1,7 @@
 package de.otto.teamdojo.service.dto;
 
 /**
- * A DTO representing a password change requried data - current and new password.
+ * A DTO representing a password change required data - current and new password.
  */
 public class PasswordChangeDTO {
     private String currentPassword;

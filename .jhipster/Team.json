@@ -47,7 +47,7 @@
                 "pattern"
             ],
             "fieldValidateRulesMinlength": "2",
-            "fieldValidateRulesMaxlength": 6,
+            "fieldValidateRulesMaxlength": 20,
             "fieldValidateRulesPattern": "^[a-zA-Z0-9_-]*$"
         },
         {
@@ -57,6 +57,10 @@
         {
             "fieldName": "contactPerson",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "validUntil",
+            "fieldType": "Instant"
         }
     ],
     "changelogDate": "20180419083624",
@@ -64,5 +68,5 @@
     "service": "serviceImpl",
     "entityTableName": "team",
     "jpaMetamodelFiltering": true,
-    "pagination": "no"
+    "pagination": "infinite-scroll"
 }

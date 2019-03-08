@@ -1,30 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Level } from 'app/shared/model/level.model';
 import { LevelService } from './level.service';
 import { LevelComponent } from './level.component';
 import { LevelDetailComponent } from './level-detail.component';
 import { LevelUpdateComponent } from './level-update.component';
 import { LevelDeletePopupComponent } from './level-delete-dialog.component';
+import { ILevel } from 'app/shared/model/level.model';
 
-@Injectable()
-export class LevelResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class LevelResolve implements Resolve<ILevel> {
     constructor(private service: LevelService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ILevel> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Level>) => response.ok),
+                map((level: HttpResponse<Level>) => level.body)
+            );
         }
-        return new Level();
+        return of(new Level());
     }
 }
 
 export const levelRoute: Routes = [
     {
-        path: 'level',
+        path: '',
         component: LevelComponent,
         data: {
             authorities: ['ROLE_USER'],
@@ -33,7 +39,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/:id/view',
+        path: ':id/view',
         component: LevelDetailComponent,
         resolve: {
             level: LevelResolve
@@ -45,7 +51,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/new',
+        path: 'new',
         component: LevelUpdateComponent,
         resolve: {
             level: LevelResolve
@@ -57,7 +63,7 @@ export const levelRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'level/:id/edit',
+        path: ':id/edit',
         component: LevelUpdateComponent,
         resolve: {
             level: LevelResolve
@@ -72,7 +78,7 @@ export const levelRoute: Routes = [
 
 export const levelPopupRoute: Routes = [
     {
-        path: 'level/:id/delete',
+        path: ':id/delete',
         component: LevelDeletePopupComponent,
         resolve: {
             level: LevelResolve

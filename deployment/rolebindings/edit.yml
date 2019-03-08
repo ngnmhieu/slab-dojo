@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: RoleBinding
+metadata:
+  name: bamboo:deployers
+roleRef:
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: bamboodeployer
+userNames:

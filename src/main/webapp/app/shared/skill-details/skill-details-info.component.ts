@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ITeam } from 'app/shared/model/team.model';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -15,13 +15,16 @@ import { IBadgeSkill } from 'app/shared/model/badge-skill.model';
 import { ILevelSkill } from 'app/shared/model/level-skill.model';
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from 'app/entities/team-skill';
+import { ITraining } from 'app/shared/model/training.model';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TrainingsAddComponent } from 'app/shared/trainings/trainings-add.component';
 
 @Component({
     selector: 'jhi-skill-details-info',
     templateUrl: './skill-details-info.component.html',
     styleUrls: ['./skill-details-info.scss']
 })
-export class SkillDetailsInfoComponent implements OnInit {
+export class SkillDetailsInfoComponent implements OnInit, OnChanges {
     @Input() team: ITeam;
 
     @Input() skill: ISkill;
@@ -42,29 +45,40 @@ export class SkillDetailsInfoComponent implements OnInit {
 
     neededForBadges: IBadge[] = [];
 
+    trainings: ITraining[] = [];
+
+    isTrainingPopupOpen = false;
+
     private _levels: ILevel[] = [];
     private _badges: IBadge[] = [];
     private _teams: ITeam[] = [];
     private _levelSkills: ILevelSkill[] = [];
     private _badgeSkills: IBadgeSkill[] = [];
     private _teamSkills: ITeamSkill[] = [];
+    private _allTrainings: ITraining[] = [];
 
     constructor(
         private route: ActivatedRoute,
         private teamSkillsService: TeamSkillService,
-        private teamsSelectionService: TeamsSelectionService
+        private teamsSelectionService: TeamsSelectionService,
+        private modalService: NgbModal
     ) {}
 
     ngOnInit(): void {
-        this.route.data.subscribe(({ dojoModel: { teams, teamSkills, levels, badges, levelSkills, badgeSkills } }) => {
+        this.route.data.subscribe(({ dojoModel: { teams, teamSkills, levels, badges, levelSkills, badgeSkills }, trainings }) => {
             this._levels = (levels && levels.body ? levels.body : levels) || [];
             this._badges = (badges && badges.body ? badges.body : badges) || [];
             this._teams = (teams && teams.body ? teams.body : teams) || [];
             this._levelSkills = (levelSkills && levelSkills.body ? levelSkills.body : levelSkills) || [];
             this._badgeSkills = (badgeSkills && badgeSkills.body ? badgeSkills.body : badgeSkills) || [];
             this._teamSkills = (teamSkills && teamSkills.body ? teamSkills.body : teamSkills) || [];
+            this._allTrainings = (trainings && trainings.body ? trainings.body : trainings) || [];
             this.loadData();
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.loadData();
     }
 
     loadData() {
@@ -79,6 +93,7 @@ export class SkillDetailsInfoComponent implements OnInit {
         this.neededForBadges = this._badges.filter((badge: IBadge) =>
             this._badgeSkills.some((badgeSkill: IBadgeSkill) => badge.id === badgeSkill.badgeId && badgeSkill.skillId === this.skill.id)
         );
+        this.trainings = (this._allTrainings || []).filter(training => (training.skills || []).find(skill => skill.id === this.skill.id));
     }
 
     onVoteSubmittedFromChild(vote: ISkillRate) {
@@ -131,5 +146,25 @@ export class SkillDetailsInfoComponent implements OnInit {
     isSameTeamSelected() {
         const selectedTeam = this.teamsSelectionService.selectedTeam;
         return selectedTeam && this.team && selectedTeam.id === this.team.id;
+    }
+
+    addTraining(): NgbModalRef {
+        if (this.isTrainingPopupOpen) {
+            return;
+        }
+        this.isTrainingPopupOpen = true;
+        const modalRef = this.modalService.open(TrainingsAddComponent, { size: 'lg' });
+        modalRef.componentInstance.skills = [this.skill];
+        modalRef.result.then(
+            training => {
+                this.isTrainingPopupOpen = false;
+                this._allTrainings = (this._allTrainings || []).concat(training);
+                this.trainings = (this.trainings || []).concat(training);
+            },
+            reason => {
+                this.isTrainingPopupOpen = false;
+            }
+        );
+        return modalRef;
     }
 }

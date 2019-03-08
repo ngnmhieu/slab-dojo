@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: teamdojo-int
+  name: teamdojo-int
+spec:
+  replicas: 1
+  selector:
+    app: teamdojo-int
+    deploymentconfig: teamdojo-int
+  template:
+    metadata:
+      labels:
+        app: teamdojo-int
+        deploymentconfig: teamdojo-int
+    spec:
+      containers:
+      - image: "docker.iteratec.io/teamdojo:develop"
+        imagePullPolicy: Always
+        name: teamdojo-int
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "int,swagger"
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:postgresql://postgres-int:5432/dojo"
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: database-creds
+                key: username
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: database-creds
+                key: password
+          - name: JHIPSTER_SLEEP
+            value: "10" # gives time for the database to boot before the application
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 60
+      imagePullSecrets:
+      - name: registry-dockercfg
+  test: false

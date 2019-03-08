@@ -16,6 +16,7 @@ import { SkillDetailsInfoComponent } from 'app/shared/skill-details/skill-detail
 import { SkillDetailsCommentsComponent } from 'app/shared/skill-details/skill-details-comments.component';
 import { SkillDetailsRatingComponent } from 'app/teams/skill-details/skill-details-rating/skill-details-rating.component';
 import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } from 'app/shared/common.resolver';
+import { TeamsEditComponent } from 'app/teams/teams-edit.component';
 
 @NgModule({
     imports: [TeamdojoSharedModule, RouterModule.forChild(TEAMS_ROUTES), NgbModule],
@@ -24,12 +25,13 @@ import { AllCommentsResolve, AllSkillsResolve, DojoModelResolve, SkillResolve } 
         TeamsAchievementsComponent,
         TeamsSkillsComponent,
         TeamsSelectionComponent,
+        TeamsEditComponent,
         SkillDetailsComponent,
         SkillDetailsInfoComponent,
         SkillDetailsCommentsComponent,
         SkillDetailsRatingComponent
     ],
-    entryComponents: [TeamsSelectionComponent],
+    entryComponents: [TeamsSelectionComponent, TeamsEditComponent],
     providers: [
         DojoModelResolve,
         TeamsService,

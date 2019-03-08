@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "badge" : {
+        "badge": {
             "home": {
                 "title": "Badges",
                 "createLabel": "Create a new Badge",
@@ -24,7 +23,7 @@
             "instantMultiplier": "Skill Score Multiplier",
             "completionBonus": "Badge Completion Bonus",
             "skills": "Skills",
-            "dimensions": "Dimensions",
+            "dimensions": "Topics",
             "image": "Image"
         }
     }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ILevelSkill } from 'app/shared/model/level-skill.model';
 import { LevelSkillService } from './level-skill.service';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -16,7 +16,7 @@ import { LevelService } from 'app/entities/level';
     templateUrl: './level-skill-update.component.html'
 })
 export class LevelSkillUpdateComponent implements OnInit {
-    private _levelSkill: ILevelSkill;
+    levelSkill: ILevelSkill;
     isSaving: boolean;
 
     skills: ISkill[];
@@ -24,30 +24,32 @@ export class LevelSkillUpdateComponent implements OnInit {
     levels: ILevel[];
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private levelSkillService: LevelSkillService,
-        private skillService: SkillService,
-        private levelService: LevelService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected levelSkillService: LevelSkillService,
+        protected skillService: SkillService,
+        protected levelService: LevelService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ levelSkill }) => {
-            this.levelSkill = levelSkill.body ? levelSkill.body : levelSkill;
+        this.activatedRoute.data.subscribe(({ levelSkill }) => {
+            this.levelSkill = levelSkill;
         });
-        this.skillService.query().subscribe(
-            (res: HttpResponse<ISkill[]>) => {
-                this.skills = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.levelService.query().subscribe(
-            (res: HttpResponse<ILevel[]>) => {
-                this.levels = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.skillService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ISkill[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ISkill[]>) => response.body)
+            )
+            .subscribe((res: ISkill[]) => (this.skills = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.levelService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ILevel[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ILevel[]>) => response.body)
+            )
+            .subscribe((res: ILevel[]) => (this.levels = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -63,20 +65,20 @@ export class LevelSkillUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ILevelSkill>>) {
-        result.subscribe((res: HttpResponse<ILevelSkill>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ILevelSkill>>) {
+        result.subscribe((res: HttpResponse<ILevelSkill>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ILevelSkill) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -86,12 +88,5 @@ export class LevelSkillUpdateComponent implements OnInit {
 
     trackLevelById(index: number, item: ILevel) {
         return item.id;
-    }
-    get levelSkill() {
-        return this._levelSkill;
-    }
-
-    set levelSkill(levelSkill: ILevelSkill) {
-        this._levelSkill = levelSkill;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
 
@@ -11,11 +11,11 @@ import { IImage } from 'app/shared/model/image.model';
 export class ImageDetailComponent implements OnInit {
     image: IImage;
 
-    constructor(private dataUtils: JhiDataUtils, private route: ActivatedRoute) {}
+    constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ image }) => {
-            this.image = image.body ? image.body : image;
+        this.activatedRoute.data.subscribe(({ image }) => {
+            this.image = image;
         });
     }
 

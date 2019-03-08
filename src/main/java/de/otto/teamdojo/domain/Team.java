@@ -1,5 +1,6 @@
 package de.otto.teamdojo.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -22,7 +24,7 @@ import java.util.Objects;
 public class Team implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -34,9 +36,9 @@ public class Team implements Serializable {
     private String name;
 
     @NotNull
-    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 20)
     @Pattern(regexp = "^[a-zA-Z0-9_-]*$")
-    @Column(name = "short_name", length = 6, nullable = false)
+    @Column(name = "short_name", length = 20, nullable = false)
     private String shortName;
 
     @Column(name = "slogan")
@@ -45,19 +47,21 @@ public class Team implements Serializable {
     @Column(name = "contact_person")
     private String contactPerson;
 
+    @Column(name = "valid_until")
+    private Instant validUntil;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "team_participations",
-               joinColumns = @JoinColumn(name="teams_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="participations_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "participations_id", referencedColumnName = "id"))
     private Set<Dimension> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "team")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TeamSkill> skills = new HashSet<>();
-
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("teams")
     private Image image;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -119,6 +123,19 @@ public class Team implements Serializable {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public Instant getValidUntil() {
+        return validUntil;
+    }
+
+    public Team validUntil(Instant validUntil) {
+        this.validUntil = validUntil;
+        return this;
+    }
+
+    public void setValidUntil(Instant validUntil) {
+        this.validUntil = validUntil;
     }
 
     public Set<Dimension> getParticipations() {
@@ -213,6 +230,7 @@ public class Team implements Serializable {
             ", shortName='" + getShortName() + "'" +
             ", slogan='" + getSlogan() + "'" +
             ", contactPerson='" + getContactPerson() + "'" +
+            ", validUntil='" + getValidUntil() + "'" +
             "}";
     }
 }

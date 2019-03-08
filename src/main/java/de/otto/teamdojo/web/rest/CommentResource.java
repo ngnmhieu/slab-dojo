@@ -1,21 +1,25 @@
 package de.otto.teamdojo.web.rest;
-
-import com.codahale.metrics.annotation.Timed;
-import de.otto.teamdojo.service.CommentQueryService;
 import de.otto.teamdojo.service.CommentService;
-import de.otto.teamdojo.service.dto.CommentCriteria;
-import de.otto.teamdojo.service.dto.CommentDTO;
 import de.otto.teamdojo.web.rest.errors.BadRequestAlertException;
 import de.otto.teamdojo.web.rest.util.HeaderUtil;
+import de.otto.teamdojo.web.rest.util.PaginationUtil;
+import de.otto.teamdojo.service.dto.CommentDTO;
+import de.otto.teamdojo.service.dto.CommentCriteria;
+import de.otto.teamdojo.service.CommentQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +51,6 @@ public class CommentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/comments")
-    @Timed
     public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", commentDTO);
         if (commentDTO.getId() != null) {
@@ -69,11 +72,10 @@ public class CommentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/comments")
-    @Timed
     public ResponseEntity<CommentDTO> updateComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to update Comment : {}", commentDTO);
         if (commentDTO.getId() == null) {
-            return createComment(commentDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CommentDTO result = commentService.save(commentDTO);
         return ResponseEntity.ok()
@@ -84,15 +86,28 @@ public class CommentResource {
     /**
      * GET  /comments : get all the comments.
      *
+     * @param pageable the pagination information
      * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of comments in body
      */
     @GetMapping("/comments")
-    @Timed
-    public ResponseEntity<List<CommentDTO>> getAllComments(CommentCriteria criteria) {
+    public ResponseEntity<List<CommentDTO>> getAllComments(CommentCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Comments by criteria: {}", criteria);
-        List<CommentDTO> entityList = commentQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Page<CommentDTO> page = commentQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/comments");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+    * GET  /comments/count : count all the comments.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/comments/count")
+    public ResponseEntity<Long> countComments(CommentCriteria criteria) {
+        log.debug("REST request to count Comments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(commentQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -102,7 +117,6 @@ public class CommentResource {
      * @return the ResponseEntity with status 200 (OK) and with body the commentDTO, or with status 404 (Not Found)
      */
     @GetMapping("/comments/{id}")
-    @Timed
     public ResponseEntity<CommentDTO> getComment(@PathVariable Long id) {
         log.debug("REST request to get Comment : {}", id);
         Optional<CommentDTO> commentDTO = commentService.findOne(id);
@@ -116,7 +130,6 @@ public class CommentResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/comments/{id}")
-    @Timed
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         log.debug("REST request to delete Comment : {}", id);
         commentService.delete(id);

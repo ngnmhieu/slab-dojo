@@ -1,0 +1,29 @@
+{
+    "teamdojoApp": {
+        "training": {
+            "home": {
+                "title": "Trainings",
+                "createLabel": "Training erstellen",
+                "createOrEditLabel": "Training erstellen oder bearbeiten"
+            },
+            "created": "Training erstellt mit ID {{ param }}",
+            "updated": "Training aktualisiert mit ID {{ param }}",
+            "deleted": "Training gelöscht mit ID {{ param }}",
+            "delete": {
+                "question": "Soll Training {{ id }} wirklich dauerhaft gelöscht werden?"
+            },
+            "detail": {
+                "title": "Training"
+            },
+            "title": "Titel",
+            "description": "Beschreibung",
+            "contactPerson": "Kontaktperson",
+            "link": "Link",
+            "validUntil": "Gültig bis",
+            "validUntilPlaceholder": "z.B. 2029-01-01T00:00:00+01:00",
+            "isOfficial": "offiziell",
+            "suggestedBy": "Empfohlen von",
+            "skill": "Skill"
+        }
+    }
+}

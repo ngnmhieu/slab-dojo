@@ -1,20 +1,21 @@
 package de.otto.teamdojo.service.impl;
 
-import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.domain.Organization;
+import de.otto.teamdojo.domain.enumeration.UserMode;
 import de.otto.teamdojo.repository.OrganizationRepository;
+import de.otto.teamdojo.service.OrganizationService;
 import de.otto.teamdojo.service.dto.OrganizationDTO;
 import de.otto.teamdojo.service.mapper.OrganizationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Organization.
  */
@@ -27,6 +28,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
 
     private final OrganizationMapper organizationMapper;
+
+    static final String DEFAULT_ORGANIZATION_NAME = "Organization";
 
     public OrganizationServiceImpl(OrganizationRepository organizationRepository, OrganizationMapper organizationMapper) {
         this.organizationRepository = organizationRepository;
@@ -85,5 +88,32 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void delete(Long id) {
         log.debug("Request to delete Organization : {}", id);
         organizationRepository.deleteById(id);
+    }
+
+    @Override
+    public OrganizationDTO getCurrentOrganization() {
+        List<OrganizationDTO> organizations = findAll();
+        if (organizations.isEmpty()) {
+            return getDefaultOrganization();
+        } else {
+            if (organizations.size() > 1) {
+                log.warn("There exists more than one organization");
+            }
+
+            OrganizationDTO organizationDTO = organizations.get(0);
+            if (organizationDTO.getCountOfConfirmations() == null) {
+                organizationDTO.setCountOfConfirmations(0);
+            }
+
+            return organizationDTO;
+        }
+    }
+
+    private OrganizationDTO getDefaultOrganization() {
+        OrganizationDTO organization = new OrganizationDTO();
+        organization.setName(DEFAULT_ORGANIZATION_NAME);
+        organization.setUserMode(UserMode.TEAM);
+        organization.setCountOfConfirmations(0);
+        return organization;
     }
 }

@@ -52,15 +52,15 @@ public class LevelSkillServiceImpl implements LevelSkillService {
     /**
      * Get all the levelSkills.
      *
+     * @param pageable the pagination information
      * @return the list of entities
      */
     @Override
     @Transactional(readOnly = true)
-    public List<LevelSkillDTO> findAll() {
+    public Page<LevelSkillDTO> findAll(Pageable pageable) {
         log.debug("Request to get all LevelSkills");
-        return levelSkillRepository.findAll().stream()
-            .map(levelSkillMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return levelSkillRepository.findAll(pageable)
+            .map(levelSkillMapper::toDto);
     }
 
 
@@ -102,7 +102,6 @@ public class LevelSkillServiceImpl implements LevelSkillService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete LevelSkill : {}", id);
-        levelSkillRepository.deleteById(id);
+        log.debug("Request to delete LevelSkill : {}", id);        levelSkillRepository.deleteById(id);
     }
 }

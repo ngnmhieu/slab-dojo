@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Spring Data JPA repository for the BadgeSkill entity.
+ * Spring Data  repository for the BadgeSkill entity.
  */
 @SuppressWarnings("unused")
 @Repository

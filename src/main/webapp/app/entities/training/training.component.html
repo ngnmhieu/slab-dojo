@@ -1,0 +1,66 @@
+<div>
+    <h2 id="page-heading">
+        <span dojoTranslate="teamdojoApp.training.home.title">Trainings</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-training" [routerLink]="['/training/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  dojoTranslate="teamdojoApp.training.home.createLabel">
+            Create new Training
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="trainings">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span dojoTranslate="teamdojoApp.global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="title"><span dojoTranslate="teamdojoApp.training.title">Title</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="description"><span dojoTranslate="teamdojoApp.training.description">Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="contactPerson"><span dojoTranslate="teamdojoApp.training.contactPerson">Contact Person</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="link"><span dojoTranslate="teamdojoApp.training.link">Link</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="validUntil"><span dojoTranslate="teamdojoApp.training.validUntil">Valid Until</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="isOfficial"><span dojoTranslate="teamdojoApp.training.isOfficial">Is Official</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="suggestedBy"><span dojoTranslate="teamdojoApp.training.suggestedBy">Suggested By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let training of trainings ;trackBy: trackId">
+                <td><a [routerLink]="['/training', training.id, 'view' ]">{{training.id}}</a></td>
+                <td>{{training.title}}</td>
+                <td>{{training.description}}</td>
+                <td>{{training.contactPerson}}</td>
+                <td>{{training.link}}</td>
+                <td>{{training.validUntil | date:'medium'}}</td>
+                <td>{{training.isOfficial}}</td>
+                <td>{{training.suggestedBy}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/training', training.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/training', training.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'training', { outlets: { popup: training.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" dojoTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

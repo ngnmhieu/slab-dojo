@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service Implementation for managing Report.
  */
@@ -83,7 +84,6 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Report : {}", id);
-        reportRepository.deleteById(id);
+        log.debug("Request to delete Report : {}", id);        reportRepository.deleteById(id);
     }
 }

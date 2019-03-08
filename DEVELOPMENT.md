@@ -1,21 +1,20 @@
 # TeamDojo
-This application was generated using JHipster 5.0.0-beta.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0](https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0).
+
+This application was generated using JHipster 5.8.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.8.1](https://www.jhipster.tech/documentation-archive/v5.8.1).
 
 ## Development
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
-1. [Node.js][]: We use Node to run a development web server and build the project.
-   Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-2. [Yarn][]: We use Yarn to manage Node dependencies.
-   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
+1.  [Node.js][]: We use Node to run a development web server and build the project.
+    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    yarn install
+    npm install
 
-We use yarn scripts and [Webpack][] as our build system.
+We use npm scripts and [Webpack][] as our build system.
 And postgresql as our database. For the database we use a standard docker-compose file.
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
@@ -23,68 +22,56 @@ auto-refreshes when files change on your hard drive.
 
     docker-compose -f src/main/docker/postgresql.yml up
     ./gradlew
-    yarn start
+    npm start
 
-[Yarn][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies
-by specifying a newer version in [package.json](package.json). You can also run `yarn update` and `yarn install` to
-manage dependencies. Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
+Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
 
-The `yarn run` command will list all of the scripts available to run for this project.
-
-### Code Formatting
-Install the IntelliJ IDE EditorConfig Plugin and enable EditorConfig support
-
-**Java**
-Format your Java code by using the IntelliJ IDE Default Code Style and organize imports before committing.
-
-**Type Script**
-Run prettier before committing (`npm run prettier:format` or `yarn prettier --write **/*.ts`)
-Install IntelliJ IDE Prettier Plugin and use the action `Reformat with Prettier` to format the code
-
-**Line Separators**
-Configure your IDE to use Unix LF (\n) line separators
-IntelliJ IDE: Line separator (for new files)
+The `npm run` command will list all of the scripts available to run for this project.
 
 ### Service workers
 
 Service workers are commented by default, to enable them please uncomment the following code.
 
-* The service worker registering script in index.html
+-   The service worker registering script in index.html
 
 ```html
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-        .register('./sw.js')
-        .then(function() { console.log('Service Worker Registered'); });
+        navigator.serviceWorker.register('./service-worker.js').then(function() {
+            console.log('Service Worker Registered');
+        });
     }
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generates the `sw.js`
+Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run the following command:
+For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    yarn add --exact leaflet
+    npm install --save --save-exact leaflet
 
-To benefit from TypeScript type definitions from [DefinitelyTyped][] in development, you would run the following command:
+To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    yarn add --dev --exact @types/leaflet
+    npm install --save-dev --save-exact @types/leaflet
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] can pick them up:
+Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
+Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
 
-Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts):
-~~~
+```
 import 'leaflet/dist/leaflet.js';
-~~~
+```
 
-Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css):
-~~~
+Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css) file:
+
+```
 @import '~leaflet/dist/leaflet.css';
-~~~
-Note: there are still a few other things remaining to do for Leaflet that we won't detail here.
+```
+
+Note: there are still few other things remaining to do for Leaflet that we won't detail here.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
@@ -96,35 +83,33 @@ For example, the following command:
 
     ng generate component my-component
 
-will generate changes in these files:
+will generate few files:
 
     create src/main/webapp/app/my-component/my-component.component.html
     create src/main/webapp/app/my-component/my-component.component.ts
     update src/main/webapp/app/app.module.ts
 
-### Doing API-First development using swagger-codegen
+### Doing API-First development using openapi-generator
 
-[Swagger-Codegen]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml`
-definition file by running:
+[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+
 ```bash
-./gradlew swagger
+./gradlew openApiGenerate
 ```
-Then implement the generated interfaces with `@RestController` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the
-swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will
-then be located at [http://localhost:7742](http://localhost:7742).
+Then implements the generated delegate classes with `@Service` classes.
+
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
 Refer to [Doing API-First development][] for more details.
 
 ## Building for production
 
-To optimize the TeamDojo application for production, run:
+To optimize the teamdojo application for production, run:
 
     ./gradlew -Pprod clean bootWar
 
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references
-these new files.
+This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
 
     java -jar build/libs/*.war
@@ -141,17 +126,31 @@ To launch your application's tests, run:
 
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/)
-and can be run with:
+Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
 
-    yarn test
+    npm test
 
 For more information, refer to the [Running tests page][].
 
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Then, run a Sonar analysis:
+
+```
+./gradlew -Pprod clean test sonarqube
+```
+
+For more information, refer to the [Code quality page][].
+
 ## Using Docker to simplify development (optional)
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configurations are
-available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
 For example, to start a postgresql database in a docker container, run:
 
@@ -164,42 +163,70 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    ./gradlew bootWar -Pprod buildDocker
+    ./gradlew bootWar -Pprod jibDockerBuild
 
 Then run:
 
     docker-compose -f src/main/docker/app.yml up -d
 
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the
-docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configuration files for one
-or several JHipster applications.
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate
-configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][]
-page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 5.0.0-beta.0 archive]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0
+## Working with Liquibase
 
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/running-tests/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/setting-up-ci/
+Liquibase is used to keep the database structure in sync with the application code.
 
+Every change made to the entity classes have to come along with a migration script for Liquibase.
+This script contains all the instructions (in XML-syntax) that have to be made in the database to overcome the delta
+between its current and the desired structure.
+These migration scripts have to be placed in folder 'src/main/resources/config/liquibase/changelog/'. They are sequenced
+and applied by Liquibase in the ascending order of the date declaration in their name.
 
-[Node.js]: https://nodejs.org/
-[Yarn]: https://yarnpkg.org/
-[Webpack]: https://webpack.github.io/
-[Angular CLI]: https://cli.angular.io/
-[BrowserSync]: http://www.browsersync.io/
-[Karma]: http://karma-runner.github.io/
-[Jasmine]: http://jasmine.github.io/2.0/introduction.html
-[Protractor]: https://angular.github.io/protractor/
-[Leaflet]: http://leafletjs.com/
-[DefinitelyTyped]: http://definitelytyped.org/
-[Swagger-Codegen]: https://github.com/swagger-api/swagger-codegen
-[Swagger-Editor]: http://editor.swagger.io
-[Doing API-First development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.0/doing-api-first-development/
+The custom gradle task 'liquibaseDataImportFromYaml' creates a liquibase script out of \*.yaml files, placed in folder 'skills'.
+This can be useful to load test data into a database instance.
+
+## i18n handling for person- & team-mode
+
+The application can be run in 2 different modes. One for teams & one for individuals/persons. These 2 mode differentiate
+in the usage of i18n-files in folder ./src/main/webapp/i18n. See the usage of the MergeJsonWebpackPlugin in
+webpack.common.js file.
+These files have to kept in sync. The following script can help with that.
+
+    #!/bin/bash
+
+    dir=$1
+    from=$2
+    to=$3
+    cd $dir
+    for file in $(echo $dir'/src/main/webapp/i18n/'$from'/*.json')
+    do
+    git diff --no-prefix dev $file > patch.patch
+    patch $( echo $file | sed -e 's/\/'$from'\//\/'$to'\//g') patch.patch
+    done
+    rm patch.patch
+
+    command for example: $./i18n.sh ~/projects/slab-dojo en en_person
+
+[jhipster homepage and latest documentation]: https://www.jhipster.tech
+[jhipster 5.8.1 archive]: https://www.jhipster.tech/documentation-archive/v5.8.1
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v5.8.1/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v5.8.1/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v5.8.1/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v5.8.1/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v5.8.1/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v5.8.1/setting-up-ci/
+[node.js]: https://nodejs.org/
+[webpack]: https://webpack.github.io/
+[angular cli]: https://cli.angular.io/
+[browsersync]: http://www.browsersync.io/
+[jest]: https://facebook.github.io/jest/
+[jasmine]: http://jasmine.github.io/2.0/introduction.html
+[protractor]: https://angular.github.io/protractor/
+[leaflet]: http://leafletjs.com/
+[definitelytyped]: http://definitelytyped.org/
+[openapi-generator]: https://openapi-generator.tech
+[swagger-editor]: http://editor.swagger.io
+[doing api-first development]: https://www.jhipster.tech/documentation-archive/v5.8.1/doing-api-first-development/

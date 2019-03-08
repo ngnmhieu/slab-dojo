@@ -1,7 +1,6 @@
-
 {
     "teamdojoApp": {
-        "level" : {
+        "level": {
             "home": {
                 "title": "Levels",
                 "createLabel": "Level erstellen",
@@ -17,12 +16,12 @@
                 "title": "Level"
             },
             "name": "Name",
-            "description": "Description",
-            "requiredScore": "Required Score",
-            "instantMultiplier": "Skill Score Multiplier",
-            "completionBonus": "Level Completion Bonus",
-            "dimension": "Dimension",
-            "dependsOn": "Depends On",
+            "description": "Beschreibung",
+            "requiredScore": "Benötigte Punktzahl",
+            "instantMultiplier": "Skill Score Multiplikator",
+            "completionBonus": "Level Vollendungsbonus",
+            "dimension": "Themengebiet",
+            "dependsOn": "Abhängig von",
             "skills": "Skills",
             "image": "Image"
         }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { TeamSkillService } from './team-skill.service';
 import { ISkill } from 'app/shared/model/skill.model';
@@ -18,7 +18,7 @@ import { TeamService } from 'app/entities/team';
     templateUrl: './team-skill-update.component.html'
 })
 export class TeamSkillUpdateComponent implements OnInit {
-    private _teamSkill: ITeamSkill;
+    teamSkill: ITeamSkill;
     isSaving: boolean;
 
     skills: ISkill[];
@@ -28,30 +28,34 @@ export class TeamSkillUpdateComponent implements OnInit {
     verifiedAt: string;
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private teamSkillService: TeamSkillService,
-        private skillService: SkillService,
-        private teamService: TeamService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected teamSkillService: TeamSkillService,
+        protected skillService: SkillService,
+        protected teamService: TeamService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ teamSkill }) => {
-            this.teamSkill = teamSkill.body ? teamSkill.body : teamSkill;
+        this.activatedRoute.data.subscribe(({ teamSkill }) => {
+            this.teamSkill = teamSkill;
+            this.completedAt = this.teamSkill.completedAt != null ? this.teamSkill.completedAt.format(DATE_TIME_FORMAT) : null;
+            this.verifiedAt = this.teamSkill.verifiedAt != null ? this.teamSkill.verifiedAt.format(DATE_TIME_FORMAT) : null;
         });
-        this.skillService.query().subscribe(
-            (res: HttpResponse<ISkill[]>) => {
-                this.skills = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.teamService.query().subscribe(
-            (res: HttpResponse<ITeam[]>) => {
-                this.teams = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.skillService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ISkill[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ISkill[]>) => response.body)
+            )
+            .subscribe((res: ISkill[]) => (this.skills = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.teamService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<ITeam[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ITeam[]>) => response.body)
+            )
+            .subscribe((res: ITeam[]) => (this.teams = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -60,8 +64,8 @@ export class TeamSkillUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.teamSkill.completedAt = moment(this.completedAt, DATE_TIME_FORMAT);
-        this.teamSkill.verifiedAt = moment(this.verifiedAt, DATE_TIME_FORMAT);
+        this.teamSkill.completedAt = this.completedAt != null ? moment(this.completedAt, DATE_TIME_FORMAT) : null;
+        this.teamSkill.verifiedAt = this.verifiedAt != null ? moment(this.verifiedAt, DATE_TIME_FORMAT) : null;
         if (this.teamSkill.id !== undefined) {
             this.subscribeToSaveResponse(this.teamSkillService.update(this.teamSkill));
         } else {
@@ -69,20 +73,20 @@ export class TeamSkillUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ITeamSkill>>) {
-        result.subscribe((res: HttpResponse<ITeamSkill>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ITeamSkill>>) {
+        result.subscribe((res: HttpResponse<ITeamSkill>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ITeamSkill) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -92,14 +96,5 @@ export class TeamSkillUpdateComponent implements OnInit {
 
     trackTeamById(index: number, item: ITeam) {
         return item.id;
-    }
-    get teamSkill() {
-        return this._teamSkill;
-    }
-
-    set teamSkill(teamSkill: ITeamSkill) {
-        this._teamSkill = teamSkill;
-        this.completedAt = moment(teamSkill.completedAt).format();
-        this.verifiedAt = moment(teamSkill.verifiedAt).format();
     }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IActivity } from 'app/shared/model/activity.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { ActivityService } from './activity.service';
@@ -21,16 +21,15 @@ export class ActivityComponent implements OnInit, OnDestroy {
     links: any;
     page: any;
     predicate: any;
-    queryCount: any;
     reverse: any;
     totalItems: number;
 
     constructor(
-        private activityService: ActivityService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
-        private principal: Principal
+        protected activityService: ActivityService,
+        protected jhiAlertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected parseLinks: JhiParseLinks,
+        protected accountService: AccountService
     ) {
         this.activities = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -68,7 +67,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then(account => {
+        this.accountService.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInActivities();
@@ -94,7 +93,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateActivities(data: IActivity[], headers: HttpHeaders) {
+    protected paginateActivities(data: IActivity[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
@@ -102,7 +101,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
         }
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }

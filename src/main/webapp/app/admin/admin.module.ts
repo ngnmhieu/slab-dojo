@@ -7,29 +7,18 @@ import { TeamdojoSharedModule } from 'app/shared';
 
 import {
     adminState,
-    AuditResolvePagingParams,
     AuditsComponent,
-    UserDeleteDialogComponent,
     UserMgmtComponent,
     UserMgmtDetailComponent,
     UserMgmtUpdateComponent,
     UserMgmtDeleteDialogComponent,
     LogsComponent,
-    JhiMetricsMonitoringModalComponent,
     JhiMetricsMonitoringComponent,
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
     JhiDocsComponent,
-    AuditsService,
-    JhiConfigurationService,
-    JhiHealthService,
-    JhiMetricsService,
-    JhiTrackerComponent,
-    LogsService,
-    UserResolvePagingParams,
-    UserMgmtResolve,
-    UserResolve
+    JhiTrackerComponent
 } from './';
 
 @NgModule({
@@ -40,7 +29,6 @@ import {
     ],
     declarations: [
         AuditsComponent,
-        UserDeleteDialogComponent,
         UserMgmtComponent,
         UserMgmtDetailComponent,
         UserMgmtUpdateComponent,
@@ -51,25 +39,18 @@ import {
         JhiHealthModalComponent,
         JhiDocsComponent,
         JhiTrackerComponent,
-        JhiMetricsMonitoringComponent,
-        JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringComponent
     ],
-    entryComponents: [UserMgmtUpdateComponent, UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
-    providers: [
-        AuditResolvePagingParams,
-        AuditsService,
-        JhiConfigurationService,
-        JhiHealthService,
-        JhiMetricsService,
-        LogsService,
-        UserResolvePagingParams,
-        UserResolve,
-        UserMgmtResolve
-    ],
+    providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
+    entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TeamdojoAdminModule {
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
     }
 }

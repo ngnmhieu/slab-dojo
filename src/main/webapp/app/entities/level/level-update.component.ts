@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
-
 import { ILevel } from 'app/shared/model/level.model';
 import { LevelService } from './level.service';
 import { IDimension } from 'app/shared/model/dimension.model';
@@ -16,7 +16,7 @@ import { ImageService } from 'app/entities/image';
     templateUrl: './level-update.component.html'
 })
 export class LevelUpdateComponent implements OnInit {
-    private _level: ILevel;
+    level: ILevel;
     isSaving: boolean;
 
     dimensions: IDimension[];
@@ -26,45 +26,57 @@ export class LevelUpdateComponent implements OnInit {
     images: IImage[];
 
     constructor(
-        private jhiAlertService: JhiAlertService,
-        private levelService: LevelService,
-        private dimensionService: DimensionService,
-        private imageService: ImageService,
-        private route: ActivatedRoute
+        protected jhiAlertService: JhiAlertService,
+        protected levelService: LevelService,
+        protected dimensionService: DimensionService,
+        protected imageService: ImageService,
+        protected activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ level }) => {
-            this.level = level.body ? level.body : level;
+        this.activatedRoute.data.subscribe(({ level }) => {
+            this.level = level;
         });
-        this.dimensionService.query().subscribe(
-            (res: HttpResponse<IDimension[]>) => {
-                this.dimensions = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.levelService.query({ filter: 'level-is-null' }).subscribe(
-            (res: HttpResponse<ILevel[]>) => {
-                if (!this.level.dependsOnId) {
-                    this.dependsons = res.body;
-                } else {
-                    this.levelService.find(this.level.dependsOnId).subscribe(
-                        (subRes: HttpResponse<ILevel>) => {
-                            this.dependsons = [subRes.body].concat(res.body);
-                        },
-                        (subRes: HttpErrorResponse) => this.onError(subRes.message)
-                    );
-                }
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-        this.imageService.query().subscribe(
-            (res: HttpResponse<IImage[]>) => {
-                this.images = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.dimensionService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IDimension[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IDimension[]>) => response.body)
+            )
+            .subscribe((res: IDimension[]) => (this.dimensions = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.levelService
+            .query({ 'levelId.specified': 'false' })
+            .pipe(
+                filter((mayBeOk: HttpResponse<ILevel[]>) => mayBeOk.ok),
+                map((response: HttpResponse<ILevel[]>) => response.body)
+            )
+            .subscribe(
+                (res: ILevel[]) => {
+                    if (!this.level.dependsOnId) {
+                        this.dependsons = res;
+                    } else {
+                        this.levelService
+                            .find(this.level.dependsOnId)
+                            .pipe(
+                                filter((subResMayBeOk: HttpResponse<ILevel>) => subResMayBeOk.ok),
+                                map((subResponse: HttpResponse<ILevel>) => subResponse.body)
+                            )
+                            .subscribe(
+                                (subRes: ILevel) => (this.dependsons = [subRes].concat(res)),
+                                (subRes: HttpErrorResponse) => this.onError(subRes.message)
+                            );
+                    }
+                },
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
+        this.imageService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IImage[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IImage[]>) => response.body)
+            )
+            .subscribe((res: IImage[]) => (this.images = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -80,20 +92,20 @@ export class LevelUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<ILevel>>) {
-        result.subscribe((res: HttpResponse<ILevel>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<ILevel>>) {
+        result.subscribe((res: HttpResponse<ILevel>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: ILevel) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
     }
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
@@ -107,12 +119,5 @@ export class LevelUpdateComponent implements OnInit {
 
     trackImageById(index: number, item: IImage) {
         return item.id;
-    }
-    get level() {
-        return this._level;
-    }
-
-    set level(level: ILevel) {
-        this._level = level;
     }
 }

@@ -9,6 +9,11 @@ import { ITeamSkill } from 'app/shared/model/team-skill.model';
 import { ISkill } from 'app/shared/model/skill.model';
 import { TeamScoreCalculation } from 'app/shared/util/team-score-calculation';
 import { OrganizationService } from 'app/entities/organization';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TeamsEditComponent } from 'app/teams/teams-edit.component';
+import { BreadcrumbService } from 'app/layouts/navbar/breadcrumb.service';
+import { TeamsSelectionService } from 'app/shared/teams-selection/teams-selection.service';
+import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-teams-status',
@@ -24,14 +29,21 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     highestAchievedLevels: IHighestLevel[];
     teamScore: number;
     levelUpScore: number;
+    isTeamEditOpen: boolean;
 
-    constructor(private organizationService: OrganizationService, private router: Router) {}
+    constructor(
+        private organizationService: OrganizationService,
+        private router: Router,
+        private breadcrumbService: BreadcrumbService,
+        private teamSelectionService: TeamsSelectionService,
+        private modalService: NgbModal
+    ) {}
 
     ngOnInit(): void {
         this.team.skills = this.teamSkills;
         this.organizationService
             .query()
-            .take(1)
+            .pipe(take(1))
             .subscribe(res => {
                 this.levelUpScore = res && res.body[0] ? res.body[0].levelUpScore : 0;
             });
@@ -41,6 +53,27 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.team.skills = this.teamSkills;
         this.calculateStatus();
+    }
+
+    editTeam(): NgbModalRef {
+        if (this.isTeamEditOpen) {
+            return;
+        }
+        this.isTeamEditOpen = true;
+        const modalRef = this.modalService.open(TeamsEditComponent, { size: 'lg' });
+        (<TeamsEditComponent>modalRef.componentInstance).team = Object.assign({}, this.team);
+        modalRef.result.then(
+            team => {
+                this.team = team;
+                this.isTeamEditOpen = false;
+                this.teamSelectionService.query().subscribe();
+                this.router.navigate(['/teams/', (<ITeam>team).shortName]);
+            },
+            reason => {
+                this.isTeamEditOpen = false;
+            }
+        );
+        return modalRef;
     }
 
     private hasTeamChanged(team: any) {
@@ -57,6 +90,11 @@ export class TeamsStatusComponent implements OnInit, OnChanges {
         this.router.navigate(['teams', this.team.shortName], {
             queryParams: { [itemType]: id }
         });
+    }
+
+    isSameTeamSelected() {
+        const selectedTeam = this.teamSelectionService.selectedTeam;
+        return selectedTeam && selectedTeam.id === this.team.id;
     }
 
     private getCompletedBadges() {

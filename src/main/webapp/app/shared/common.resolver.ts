@@ -5,13 +5,20 @@ import { TeamSkillService } from 'app/entities/team-skill';
 import { SkillService } from 'app/entities/skill';
 import { LevelService } from 'app/entities/level';
 import { LevelSkillService } from 'app/entities/level-skill';
-import { Observable } from 'rxjs/Observable';
+import { combineLatest } from 'rxjs';
 import { BadgeSkillService } from 'app/entities/badge-skill';
 import { Skill } from 'app/shared/model/skill.model';
 import { CommentService } from 'app/entities/comment';
 import { TeamService } from 'app/entities/team';
 import { Injectable } from '@angular/core';
-import { TeamsService } from 'app/teams/teams.service';
+import { TrainingService } from 'app/entities/training';
+import { filter, map, take } from 'rxjs/operators';
+import { IOrganization } from 'app/shared/model/organization.model';
+import { HttpResponse } from '@angular/common/http';
+import { OrganizationService } from 'app/entities/organization';
+import { mergeMap } from 'rxjs/operators';
+import { ServerInfoService } from 'app/server-info';
+import { IServerInfo } from 'app/shared/model/server-info.model';
 
 @Injectable()
 export class AllTeamsResolve implements Resolve<any> {
@@ -34,71 +41,73 @@ export class DojoModelResolve implements Resolve<any> {
     ) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return Observable.combineLatest(
+        return combineLatest(
             this.teamService.query(),
             this.teamSkillService.query(),
             this.levelService.query(),
             this.levelSkillService.query(),
             this.badgeService.query(),
             this.badgeSkillService.query()
-        ).map(([teamsRes, teamSkillsRes, levelsRes, levelSkillsRes, badgesRes, badgeSkillsRes]) => {
-            const teams = teamsRes.body || [];
-            const teamSkills = teamSkillsRes.body || [];
-            const levels = levelsRes.body || [];
-            const levelSkills = levelSkillsRes.body || [];
-            const badges = badgesRes.body || [];
-            const badgeSkills = badgeSkillsRes.body || [];
+        ).pipe(
+            map(([teamsRes, teamSkillsRes, levelsRes, levelSkillsRes, badgesRes, badgeSkillsRes]) => {
+                const teams = teamsRes.body || [];
+                const teamSkills = teamSkillsRes.body || [];
+                const levels = levelsRes.body || [];
+                const levelSkills = levelSkillsRes.body || [];
+                const badges = badgesRes.body || [];
+                const badgeSkills = badgeSkillsRes.body || [];
 
-            const groupedTeamSkills = {};
-            teamSkills.forEach(teamSkill => {
-                groupedTeamSkills[teamSkill.teamId] = groupedTeamSkills[teamSkill.teamId] || [];
-                groupedTeamSkills[teamSkill.teamId].push(Object.assign(teamSkill));
-            });
+                const groupedTeamSkills = {};
+                teamSkills.forEach(teamSkill => {
+                    groupedTeamSkills[teamSkill.teamId] = groupedTeamSkills[teamSkill.teamId] || [];
+                    groupedTeamSkills[teamSkill.teamId].push(Object.assign(teamSkill));
+                });
 
-            const groupedLevelSkills = {};
-            levelSkills.forEach(levelSkill => {
-                groupedLevelSkills[levelSkill.levelId] = groupedLevelSkills[levelSkill.levelId] || [];
-                groupedLevelSkills[levelSkill.levelId].push(Object.assign(levelSkill));
-            });
+                const groupedLevelSkills = {};
+                levelSkills.forEach(levelSkill => {
+                    groupedLevelSkills[levelSkill.levelId] = groupedLevelSkills[levelSkill.levelId] || [];
+                    groupedLevelSkills[levelSkill.levelId].push(Object.assign(levelSkill));
+                });
 
-            const groupedLevels = {};
-            levels.forEach(level => {
-                groupedLevels[level.dimensionId] = groupedLevels[level.dimensionId] || [];
-                groupedLevels[level.dimensionId].push(Object.assign(level, { skills: groupedLevelSkills[level.id] }));
-            });
-            for (const dimensionId in groupedLevels) {
-                if (groupedLevels.hasOwnProperty(dimensionId)) {
-                    groupedLevels[dimensionId] = sortLevels(groupedLevels[dimensionId]).reverse();
+                const groupedLevels = {};
+                levels.forEach(level => {
+                    groupedLevels[level.dimensionId] = groupedLevels[level.dimensionId] || [];
+                    groupedLevels[level.dimensionId].push(Object.assign(level, { skills: groupedLevelSkills[level.id] }));
+                });
+                for (const dimensionId in groupedLevels) {
+                    if (groupedLevels.hasOwnProperty(dimensionId)) {
+                        groupedLevels[dimensionId] = sortLevels(groupedLevels[dimensionId]).reverse();
+                    }
                 }
-            }
 
-            const groupedBadgeSkills = {};
-            badgeSkills.forEach(badgeSkill => {
-                groupedBadgeSkills[badgeSkill.badgeId] = groupedBadgeSkills[badgeSkill.badgeId] || [];
-                groupedBadgeSkills[badgeSkill.badgeId].push(Object.assign(badgeSkill));
-            });
-
-            badges.forEach(badge => {
-                badge.skills = groupedBadgeSkills[badge.id] || [];
-            });
-
-            const groupedBadges = {};
-            badges.forEach(badge => {
-                (badge.dimensions || []).forEach(dimension => {
-                    groupedBadges[dimension.id] = groupedBadges[dimension.id] || [];
-                    groupedBadges[dimension.id].push(Object.assign(badge, { skills: groupedBadgeSkills[badge.id] }));
+                const groupedBadgeSkills = {};
+                badgeSkills.forEach(badgeSkill => {
+                    groupedBadgeSkills[badgeSkill.badgeId] = groupedBadgeSkills[badgeSkill.badgeId] || [];
+                    groupedBadgeSkills[badgeSkill.badgeId].push(Object.assign(badgeSkill));
                 });
-            });
 
-            teams.forEach(team => {
-                team.skills = groupedTeamSkills[team.id] || [];
-                team.participations.forEach(dimension => {
-                    dimension.levels = groupedLevels[dimension.id] || [];
-                    dimension.badges = groupedBadges[dimension.id] || [];
+                badges.forEach(badge => {
+                    badge.skills = groupedBadgeSkills[badge.id] || [];
                 });
-            });
-            return { teams, teamSkills, levels, levelSkills, badges, badgeSkills };
-        });
+
+                const groupedBadges = {};
+                badges.forEach(badge => {
+                    (badge.dimensions || []).forEach(dimension => {
+                        groupedBadges[dimension.id] = groupedBadges[dimension.id] || [];
+                        groupedBadges[dimension.id].push(Object.assign(badge, { skills: groupedBadgeSkills[badge.id] }));
+                    });
+                });
+
+                teams.forEach(team => {
+                    team.skills = groupedTeamSkills[team.id] || [];
+                    team.participations.forEach(dimension => {
+                        dimension.levels = groupedLevels[dimension.id] || [];
+                        dimension.badges = groupedBadges[dimension.id] || [];
+                    });
+                });
+                return { teams, teamSkills, levels, levelSkills, badges, badgeSkills };
+            })
+        );
     }
 }
 
@@ -167,18 +176,44 @@ export class AllCommentsResolve implements Resolve<any> {
 
 @Injectable()
 export class SkillResolve implements Resolve<any> {
-    constructor(private skillService: SkillService, private router: Router) {}
+    constructor(private skillService: SkillService, private serverInfoService: ServerInfoService, private router: Router) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const skillId = route.params['skillId'] ? route.params['skillId'] : null;
         if (skillId) {
-            return this.skillService.query({ 'id.equals': skillId }).map(res => {
-                if (res.body.length === 0) {
-                    this.router.navigate(['/error']);
-                }
-                return res.body[0];
-            });
+            return this.skillService.query({ 'id.equals': skillId }).pipe(
+                map(res => {
+                    if (res.body.length === 0) {
+                        this.router.navigate(['/error']);
+                    }
+                    return res.body[0];
+                })
+            );
         }
         return new Skill();
+    }
+}
+
+@Injectable()
+export class AllTrainingsResolve implements Resolve<any> {
+    constructor(private trainingService: TrainingService, private serverInfoService: ServerInfoService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.serverInfoService
+            .query()
+            .pipe(mergeMap((serverInfo: IServerInfo) => this.trainingService.query({ 'validUntil.greaterThan': serverInfo.time })));
+    }
+}
+
+@Injectable()
+export class OrganizationResolve implements Resolve<any> {
+    constructor(private organizationService: OrganizationService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this.organizationService.findCurrent().pipe(
+            filter((response: HttpResponse<IOrganization>) => response.ok),
+            take(1),
+            map((organization: HttpResponse<IOrganization>) => organization.body)
+        );
     }
 }

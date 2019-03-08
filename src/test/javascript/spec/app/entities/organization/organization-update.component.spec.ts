@@ -1,7 +1,8 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { TeamdojoTestModule } from '../../../test.module';
 import { OrganizationUpdateComponent } from 'app/entities/organization/organization-update.component';
@@ -18,7 +19,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [TeamdojoTestModule],
                 declarations: [OrganizationUpdateComponent],
-                providers: [OrganizationService]
+                providers: [LocalStorageService]
             })
                 .overrideTemplate(OrganizationUpdateComponent, '')
                 .compileComponents();
@@ -29,39 +30,33 @@ describe('Component Tests', () => {
         });
 
         describe('save', () => {
-            it(
-                'Should call update service on save for existing entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const entity = new Organization(123);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
-                    comp.organization = entity;
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+            it('Should call update service on save for existing entity', fakeAsync(() => {
+                // GIVEN
+                const entity = new Organization(123);
+                spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
+                comp.organization = entity;
+                // WHEN
+                comp.save();
+                tick(); // simulate async
 
-                    // THEN
-                    expect(service.update).toHaveBeenCalledWith(entity);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(service.update).toHaveBeenCalledWith(entity);
+                expect(comp.isSaving).toEqual(false);
+            }));
 
-            it(
-                'Should call create service on save for new entity',
-                fakeAsync(() => {
-                    // GIVEN
-                    const entity = new Organization();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({ body: entity })));
-                    comp.organization = entity;
-                    // WHEN
-                    comp.save();
-                    tick(); // simulate async
+            it('Should call create service on save for new entity', fakeAsync(() => {
+                // GIVEN
+                const entity = new Organization();
+                spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
+                comp.organization = entity;
+                // WHEN
+                comp.save();
+                tick(); // simulate async
 
-                    // THEN
-                    expect(service.create).toHaveBeenCalledWith(entity);
-                    expect(comp.isSaving).toEqual(false);
-                })
-            );
+                // THEN
+                expect(service.create).toHaveBeenCalledWith(entity);
+                expect(comp.isSaving).toEqual(false);
+            }));
         });
     });
 });

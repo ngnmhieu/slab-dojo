@@ -14,7 +14,11 @@ import { TeamSkillService } from './team-skill.service';
 export class TeamSkillDeleteDialogComponent {
     teamSkill: ITeamSkill;
 
-    constructor(private teamSkillService: TeamSkillService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+        protected teamSkillService: TeamSkillService,
+        public activeModal: NgbActiveModal,
+        protected eventManager: JhiEventManager
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -36,22 +40,22 @@ export class TeamSkillDeleteDialogComponent {
     template: ''
 })
 export class TeamSkillDeletePopupComponent implements OnInit, OnDestroy {
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
-    constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected modalService: NgbModal) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ teamSkill }) => {
+        this.activatedRoute.data.subscribe(({ teamSkill }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(TeamSkillDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.teamSkill = teamSkill.body;
+                this.ngbModalRef.componentInstance.teamSkill = teamSkill;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate(['/team-skill', { outlets: { popup: null } }]);
                         this.ngbModalRef = null;
                     }
                 );

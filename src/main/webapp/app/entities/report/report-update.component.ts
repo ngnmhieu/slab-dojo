@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
-
 import { IReport } from 'app/shared/model/report.model';
 import { ReportService } from './report.service';
 
@@ -13,16 +12,17 @@ import { ReportService } from './report.service';
     templateUrl: './report-update.component.html'
 })
 export class ReportUpdateComponent implements OnInit {
-    private _report: IReport;
+    report: IReport;
     isSaving: boolean;
     creationDate: string;
 
-    constructor(private reportService: ReportService, private route: ActivatedRoute) {}
+    constructor(protected reportService: ReportService, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ report }) => {
-            this.report = report.body ? report.body : report;
+        this.activatedRoute.data.subscribe(({ report }) => {
+            this.report = report;
+            this.creationDate = this.report.creationDate != null ? this.report.creationDate.format(DATE_TIME_FORMAT) : null;
         });
     }
 
@@ -32,7 +32,7 @@ export class ReportUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.report.creationDate = moment(this.creationDate, DATE_TIME_FORMAT);
+        this.report.creationDate = this.creationDate != null ? moment(this.creationDate, DATE_TIME_FORMAT) : null;
         if (this.report.id !== undefined) {
             this.subscribeToSaveResponse(this.reportService.update(this.report));
         } else {
@@ -40,24 +40,16 @@ export class ReportUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IReport>>) {
-        result.subscribe((res: HttpResponse<IReport>) => this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<IReport>>) {
+        result.subscribe((res: HttpResponse<IReport>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: IReport) {
+    protected onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }
 
-    private onSaveError() {
+    protected onSaveError() {
         this.isSaving = false;
-    }
-    get report() {
-        return this._report;
-    }
-
-    set report(report: IReport) {
-        this._report = report;
-        this.creationDate = moment(report.creationDate).format();
     }
 }

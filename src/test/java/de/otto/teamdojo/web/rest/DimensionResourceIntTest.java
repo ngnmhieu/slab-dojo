@@ -1,16 +1,18 @@
-package de.otto.teamdojo.web.rest;
+    package de.otto.teamdojo.web.rest;
 
 import de.otto.teamdojo.TeamdojoApp;
-import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.domain.Dimension;
-import de.otto.teamdojo.domain.Level;
 import de.otto.teamdojo.domain.Team;
+import de.otto.teamdojo.domain.Level;
+import de.otto.teamdojo.domain.Badge;
 import de.otto.teamdojo.repository.DimensionRepository;
-import de.otto.teamdojo.service.DimensionQueryService;
 import de.otto.teamdojo.service.DimensionService;
+import de.otto.teamdojo.service.TeamService;
 import de.otto.teamdojo.service.dto.DimensionDTO;
 import de.otto.teamdojo.service.mapper.DimensionMapper;
 import de.otto.teamdojo.web.rest.errors.ExceptionTranslator;
+import de.otto.teamdojo.service.DimensionQueryService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -52,10 +55,8 @@ public class DimensionResourceIntTest {
     @Autowired
     private DimensionRepository dimensionRepository;
 
-
     @Autowired
     private DimensionMapper dimensionMapper;
-
 
     @Autowired
     private DimensionService dimensionService;
@@ -75,9 +76,16 @@ public class DimensionResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restDimensionMockMvc;
 
     private Dimension dimension;
+
+    @Autowired
+    private TeamService teamService;
+
 
     @Before
     public void setup() {
@@ -87,7 +95,8 @@ public class DimensionResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -181,7 +190,6 @@ public class DimensionResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
-
 
     @Test
     @Transactional
@@ -340,8 +348,14 @@ public class DimensionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(dimension.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restDimensionMockMvc.perform(get("/api/dimensions/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -353,6 +367,12 @@ public class DimensionResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDimensionMockMvc.perform(get("/api/dimensions/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -402,15 +422,15 @@ public class DimensionResourceIntTest {
         // Create the Dimension
         DimensionDTO dimensionDTO = dimensionMapper.toDto(dimension);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDimensionMockMvc.perform(put("/api/dimensions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(dimensionDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Dimension in the database
         List<Dimension> dimensionList = dimensionRepository.findAll();
-        assertThat(dimensionList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(dimensionList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -421,7 +441,7 @@ public class DimensionResourceIntTest {
 
         int databaseSizeBeforeDelete = dimensionRepository.findAll().size();
 
-        // Get the dimension
+        // Delete the dimension
         restDimensionMockMvc.perform(delete("/api/dimensions/{id}", dimension.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

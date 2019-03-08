@@ -1,5 +1,6 @@
 package de.otto.teamdojo.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -22,7 +23,7 @@ import java.util.Objects;
 public class Level implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -63,9 +64,8 @@ public class Level implements Serializable {
     @OneToMany(mappedBy = "level")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LevelSkill> skills = new HashSet<>();
-
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("levels")
     private Image image;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

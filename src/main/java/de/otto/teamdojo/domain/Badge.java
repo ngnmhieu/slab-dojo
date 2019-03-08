@@ -1,5 +1,6 @@
 package de.otto.teamdojo.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -23,7 +24,7 @@ import java.util.Objects;
 public class Badge implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -62,16 +63,15 @@ public class Badge implements Serializable {
     @OneToMany(mappedBy = "badge")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BadgeSkill> skills = new HashSet<>();
-
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "badge_dimensions",
-               joinColumns = @JoinColumn(name="badges_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="dimensions_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "badge_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "dimensions_id", referencedColumnName = "id"))
     private Set<Dimension> dimensions = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("badges")
     private Image image;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

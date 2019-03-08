@@ -12,10 +12,8 @@ import de.otto.teamdojo.service.dto.ImageCriteria;
 import de.otto.teamdojo.service.ImageQueryService;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +25,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.ArrayList;
 
 import static de.otto.teamdojo.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,32 +45,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = TeamdojoApp.class)
 public class ImageResourceIntTest {
 
+    private static final byte[] JPG_BLACK = new byte[] { -1, -40, -1, -32, 0, 16, 74, 70, 73, 70, 0, 1, 1, 1, 1, 44, 1, 44, 0, 0, -1, -37, 0, 67, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -37, 0, 67, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -64, 0, 17, 8, 0, 1, 0, 1, 3, 1, 17, 0, 2, 17, 1, 3, 17, 1, -1, -60, 0, 20, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, -1, -60, 0, 20, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -60, 0, 20, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -60, 0, 20, 17, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -38, 0, 12, 3, 1, 0, 2, 17, 3, 17, 0, 63, 0, 48, 127, -1, -39 };
+    private static final byte[] JPG_WHITE = new byte[] { -1, -40, -1, -32, 0, 16, 74, 70, 73, 70, 0, 1, 1, 1, 1, 44, 1, 44, 0, 0, -1, -37, 0, 67, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -37, 0, 67, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -64, 0, 17, 8, 0, 1, 0, 1, 3, 1, 17, 0, 2, 17, 1, 3, 17, 1, -1, -60, 0, 20, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, -1, -60, 0, 20, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -60, 0, 20, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -60, 0, 20, 17, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -38, 0, 12, 3, 1, 0, 2, 17, 3, 17, 0, 63, 0, 64, 127, -1, -39 };
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final byte[] DEFAULT_SMALL = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_SMALL = TestUtil.createByteArray(2, "1");
+    private static final byte[] DEFAULT_SMALL = JPG_BLACK;
+    private static final byte[] UPDATED_SMALL = JPG_WHITE;
     private static final String DEFAULT_SMALL_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_SMALL_CONTENT_TYPE = "image/png";
+    private static final String UPDATED_SMALL_CONTENT_TYPE = "image/jpg";
 
-    private static final byte[] DEFAULT_MEDIUM = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_MEDIUM = TestUtil.createByteArray(2, "1");
+    private static final byte[] DEFAULT_MEDIUM = JPG_BLACK;
+    private static final byte[] UPDATED_MEDIUM = JPG_WHITE;
     private static final String DEFAULT_MEDIUM_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_MEDIUM_CONTENT_TYPE = "image/png";
+    private static final String UPDATED_MEDIUM_CONTENT_TYPE = "image/jpg";
 
-    private static final byte[] DEFAULT_LARGE = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_LARGE = TestUtil.createByteArray(2, "1");
+    private static final byte[] DEFAULT_LARGE = JPG_BLACK;
+    private static final byte[] UPDATED_LARGE = JPG_WHITE;
     private static final String DEFAULT_LARGE_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_LARGE_CONTENT_TYPE = "image/png";
+    private static final String UPDATED_LARGE_CONTENT_TYPE = "image/jpg";
+
+    private static final byte[] EXPECTED_IMAGE_BLACK = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0, -112, 119, 83, -34, 0, 0, 0, 12, 73, 68, 65, 84, 120, -38, 99, 96, 100, 100, 4, 0, 0, 10, 0, 4, 89, -118, 90, -125, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126 };
+    private static final byte[] EXPECTED_IMAGE_WHITE = new byte[] { -119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0, -112, 119, 83, -34, 0, 0, 0, 12, 73, 68, 65, 84, 120, -38, 99, -8, -1, -1, 63, 0, 5, -2, 2, -2, 51, 18, -107, 20, 0, 0, 0, 0, 73, 69, 78, 68, -82, 66, 96, -126 };
+    private static final String EXPECTED_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_HASH = "A2021C9ED42E09243D51F00D17862BE3";
+    private static final String UPDATED_HASH = "08332C69A77B3D73376DF2FC43D9B0C0";
 
     @Autowired
     private ImageRepository imageRepository;
 
-
-
     @Autowired
     private ImageMapper imageMapper;
-
 
     @Autowired
     private ImageService imageService;
@@ -92,6 +97,9 @@ public class ImageResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc restImageMockMvc;
 
     private Image image;
@@ -104,7 +112,8 @@ public class ImageResourceIntTest {
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
@@ -121,7 +130,8 @@ public class ImageResourceIntTest {
             .medium(DEFAULT_MEDIUM)
             .mediumContentType(DEFAULT_MEDIUM_CONTENT_TYPE)
             .large(DEFAULT_LARGE)
-            .largeContentType(DEFAULT_LARGE_CONTENT_TYPE);
+            .largeContentType(DEFAULT_LARGE_CONTENT_TYPE)
+            .hash(DEFAULT_HASH);
         return image;
     }
 
@@ -131,7 +141,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void createImage() throws Exception {
         int databaseSizeBeforeCreate = imageRepository.findAll().size();
@@ -148,12 +157,13 @@ public class ImageResourceIntTest {
         assertThat(imageList).hasSize(databaseSizeBeforeCreate + 1);
         Image testImage = imageList.get(imageList.size() - 1);
         assertThat(testImage.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testImage.getSmall()).isEqualTo(DEFAULT_SMALL);
-        assertThat(testImage.getSmallContentType()).isEqualTo(DEFAULT_SMALL_CONTENT_TYPE);
-        assertThat(testImage.getMedium()).isEqualTo(DEFAULT_MEDIUM);
-        assertThat(testImage.getMediumContentType()).isEqualTo(DEFAULT_MEDIUM_CONTENT_TYPE);
-        assertThat(testImage.getLarge()).isEqualTo(DEFAULT_LARGE);
-        assertThat(testImage.getLargeContentType()).isEqualTo(DEFAULT_LARGE_CONTENT_TYPE);
+        assertThat(testImage.getSmall()).containsExactly(EXPECTED_IMAGE_BLACK);
+        assertThat(testImage.getSmallContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getMedium()).containsExactly(EXPECTED_IMAGE_BLACK);
+        assertThat(testImage.getMediumContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getLarge()).containsExactly(EXPECTED_IMAGE_BLACK);
+        assertThat(testImage.getLargeContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getHash()).isEqualTo(DEFAULT_HASH);
     }
 
     @Test
@@ -177,7 +187,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = imageRepository.findAll().size();
@@ -213,10 +222,10 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.[*].mediumContentType").value(hasItem(DEFAULT_MEDIUM_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].medium").value(hasItem(Base64Utils.encodeToString(DEFAULT_MEDIUM))))
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
+            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))))
+            .andExpect(jsonPath("$.[*].hash").value(hasItem(DEFAULT_HASH.toString())));
     }
-
-
+    
     @Test
     @Transactional
     public void getImage() throws Exception {
@@ -234,7 +243,8 @@ public class ImageResourceIntTest {
             .andExpect(jsonPath("$.mediumContentType").value(DEFAULT_MEDIUM_CONTENT_TYPE))
             .andExpect(jsonPath("$.medium").value(Base64Utils.encodeToString(DEFAULT_MEDIUM)))
             .andExpect(jsonPath("$.largeContentType").value(DEFAULT_LARGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.large").value(Base64Utils.encodeToString(DEFAULT_LARGE)));
+            .andExpect(jsonPath("$.large").value(Base64Utils.encodeToString(DEFAULT_LARGE)))
+            .andExpect(jsonPath("$.hash").value(DEFAULT_HASH.toString()));
     }
 
     @Test
@@ -275,6 +285,45 @@ public class ImageResourceIntTest {
         // Get all the imageList where name is null
         defaultImageShouldNotBeFound("name.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsEqualToSomething() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash equals to DEFAULT_HASH
+        defaultImageShouldBeFound("hash.equals=" + DEFAULT_HASH);
+
+        // Get all the imageList where hash equals to UPDATED_HASH
+        defaultImageShouldNotBeFound("hash.equals=" + UPDATED_HASH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsInShouldWork() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash in DEFAULT_HASH or UPDATED_HASH
+        defaultImageShouldBeFound("hash.in=" + DEFAULT_HASH + "," + UPDATED_HASH);
+
+        // Get all the imageList where hash equals to UPDATED_HASH
+        defaultImageShouldNotBeFound("hash.in=" + UPDATED_HASH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllImagesByHashIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        imageRepository.saveAndFlush(image);
+
+        // Get all the imageList where hash is not null
+        defaultImageShouldBeFound("hash.specified=true");
+
+        // Get all the imageList where hash is null
+        defaultImageShouldNotBeFound("hash.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -283,13 +332,20 @@ public class ImageResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(image.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].smallContentType").value(hasItem(DEFAULT_SMALL_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].small").value(hasItem(Base64Utils.encodeToString(DEFAULT_SMALL))))
             .andExpect(jsonPath("$.[*].mediumContentType").value(hasItem(DEFAULT_MEDIUM_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].medium").value(hasItem(Base64Utils.encodeToString(DEFAULT_MEDIUM))))
             .andExpect(jsonPath("$.[*].largeContentType").value(hasItem(DEFAULT_LARGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))));
+            .andExpect(jsonPath("$.[*].large").value(hasItem(Base64Utils.encodeToString(DEFAULT_LARGE))))
+            .andExpect(jsonPath("$.[*].hash").value(hasItem(DEFAULT_HASH)));
+
+        // Check, that the count call also returns 1
+        restImageMockMvc.perform(get("/api/images/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -301,6 +357,12 @@ public class ImageResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restImageMockMvc.perform(get("/api/images/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -313,7 +375,6 @@ public class ImageResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void updateImage() throws Exception {
         // Initialize the database
@@ -332,7 +393,8 @@ public class ImageResourceIntTest {
             .medium(UPDATED_MEDIUM)
             .mediumContentType(UPDATED_MEDIUM_CONTENT_TYPE)
             .large(UPDATED_LARGE)
-            .largeContentType(UPDATED_LARGE_CONTENT_TYPE);
+            .largeContentType(UPDATED_LARGE_CONTENT_TYPE)
+            .hash(UPDATED_HASH);
         ImageDTO imageDTO = imageMapper.toDto(updatedImage);
 
         restImageMockMvc.perform(put("/api/images")
@@ -345,16 +407,16 @@ public class ImageResourceIntTest {
         assertThat(imageList).hasSize(databaseSizeBeforeUpdate);
         Image testImage = imageList.get(imageList.size() - 1);
         assertThat(testImage.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testImage.getSmall()).isEqualTo(UPDATED_SMALL);
-        assertThat(testImage.getSmallContentType()).isEqualTo(UPDATED_SMALL_CONTENT_TYPE);
-        assertThat(testImage.getMedium()).isEqualTo(UPDATED_MEDIUM);
-        assertThat(testImage.getMediumContentType()).isEqualTo(UPDATED_MEDIUM_CONTENT_TYPE);
-        assertThat(testImage.getLarge()).isEqualTo(UPDATED_LARGE);
-        assertThat(testImage.getLargeContentType()).isEqualTo(UPDATED_LARGE_CONTENT_TYPE);
+        assertThat(testImage.getSmall()).isEqualTo(EXPECTED_IMAGE_WHITE);
+        assertThat(testImage.getSmallContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getMedium()).containsExactly(EXPECTED_IMAGE_WHITE);
+        assertThat(testImage.getMediumContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getLarge()).isEqualTo(EXPECTED_IMAGE_WHITE);
+        assertThat(testImage.getLargeContentType()).isEqualTo(EXPECTED_CONTENT_TYPE);
+        assertThat(testImage.getHash()).isEqualTo(UPDATED_HASH);
     }
 
     @Test
-    @Ignore
     @Transactional
     public void updateNonExistingImage() throws Exception {
         int databaseSizeBeforeUpdate = imageRepository.findAll().size();
@@ -362,15 +424,15 @@ public class ImageResourceIntTest {
         // Create the Image
         ImageDTO imageDTO = imageMapper.toDto(image);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restImageMockMvc.perform(put("/api/images")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(imageDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Image in the database
         List<Image> imageList = imageRepository.findAll();
-        assertThat(imageList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(imageList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -381,7 +443,7 @@ public class ImageResourceIntTest {
 
         int databaseSizeBeforeDelete = imageRepository.findAll().size();
 
-        // Get the image
+        // Delete the image
         restImageMockMvc.perform(delete("/api/images/{id}", image.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

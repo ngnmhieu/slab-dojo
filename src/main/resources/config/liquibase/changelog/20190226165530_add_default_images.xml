@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="mhi" id="20190226165530-1" context="!test">
+        <insert tableName="image">
+            <column name="id" valueNumeric="8001"/>
+            <column name="name" value="Default_Badge"/>
+
+            <column name="small" valueBlobFile="../initial-images/badge/Default_Badge.png"/>
+            <column name="small_content_type" value="image/png"/>
+
+            <column name="medium" valueBlobFile="../initial-images/badge/Default_Badge.png"/>
+            <column name="medium_content_type" value="image/png"/>
+
+            <column name="large" valueBlobFile="../initial-images/badge/Default_Badge.png"/>
+            <column name="large_content_type" value="image/png"/>
+        </insert>
+
+        <insert tableName="image">
+            <column name="id" valueNumeric="8002"/>
+            <column name="name" value="Default_Level"/>
+
+            <column name="small" valueBlobFile="../initial-images/level/Default_Level.png"/>
+            <column name="small_content_type" value="image/png"/>
+
+            <column name="medium" valueBlobFile="../initial-images/level/Default_Level.png"/>
+            <column name="medium_content_type" value="image/png"/>
+
+            <column name="large" valueBlobFile="../initial-images/level/Default_Level.png"/>
+            <column name="large_content_type" value="image/png"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>
